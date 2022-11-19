@@ -9,5 +9,5 @@ Dependencies:
 
 Sample screenshot:
 
-![image](https://user-images.githubusercontent.com/11378310/202828211-5d4faac7-1af1-4427-9d9a-60c89232b973.png)
+![image](https://user-images.githubusercontent.com/11378310/202876263-879be3c9-fc74-438e-b661-8e69347a4717.png)
 
