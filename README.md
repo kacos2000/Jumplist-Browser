@@ -11,3 +11,11 @@ Sample screenshot:
 
 ![image](https://user-images.githubusercontent.com/11378310/202876263-879be3c9-fc74-438e-b661-8e69347a4717.png)
 
+
+
+
+
+- **Note:** *Uses the following Libraries:*
+   - [ShellLink .NET Class Library](https://github.com/securifybv/ShellLink) and
+   - [PropertyStore .NET Class Library](https://github.com/securifybv/PropertyStore)
+
