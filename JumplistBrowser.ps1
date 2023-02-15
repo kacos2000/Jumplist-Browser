@@ -93,6 +93,7 @@ function Show-MainForm_psf
 	$OpenFileWith = New-Object 'System.Windows.Forms.ToolStripMenuItem'
 	$CopyFullFilePath = New-Object 'System.Windows.Forms.ToolStripMenuItem'
 	$CopyNode2Tag = New-Object 'System.Windows.Forms.ToolStripMenuItem'
+	$SaveStreamToFile = New-Object 'System.Windows.Forms.ToolStripMenuItem'
 	$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
 	#endregion Generated Form Objects
 
@@ -370,6 +371,434 @@ function Show-MainForm_psf
 		}
 	}
 	
+	function Populate-SPS1
+	{
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[System.Windows.Forms.TreeNode]$Node,
+			[Parameter(Mandatory = $true)]
+			$SPS1properties
+		)
+		
+		if ($SPS1properties.Count -ge 1)
+		{
+			for ($ps = 0; $ps -lt $SPS1properties.Count; $ps++)
+			{
+				# Add Serialised Property Node
+				if ($SPS1properties.Count -gt 1)
+				{
+					$SPS1Node = $Node.Nodes.Add("Entension$($ps)", "Serialised Property #$($ps)")
+				}
+				else
+				{
+					$SPS1Node = $Node.Nodes.Add("Entension$($ps)", "Serialised Property")
+				}
+				$SPS1Node.ForeColor = 'Gold'
+				# Add SPS1 entry info
+				$null = $SPS1Node.Nodes.Add("Storage Size", "Storage Size: $($SPS1properties[$ps].'Storage Size')")
+				$null = $SPS1Node.Nodes.Add("FormatID", "Format ID: $($SPS1properties[$ps].FormatID)")
+				
+				if ($SPS1properties[$ps].TypedProperty.count -ge 1)
+				{
+					for ($t = 0; $t -lt $SPS1properties[$ps].TypedProperty.count; $t++)
+					{
+						if ($SPS1properties[$ps].TypedProperty.count -gt 1)
+						{
+							$TypedPropertyNodes = $SPS1Node.Nodes.Add("TypedProperty$($t)", "TypedProperty Entry #$($t)")
+						}
+						else
+						{
+							$TypedPropertyNodes = $SPS1Node.Nodes.Add("TypedProperty$($t)", "TypedProperty Entry")
+						}
+						$TypedPropertyNodes.ForeColor = 'Plum'
+						if ($null -ne $SPS1properties[$ps].TypedProperty[$t].ID)
+						{
+							$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyTypeID$($t)", "ID: $($SPS1properties[$ps].TypedProperty[$t].ID)")
+						}
+						$null = $TypedPropertyNodes.Nodes.Add("ValueSize$($t)", "ValueSize: $($SPS1properties[$ps].TypedProperty[$t].ValueSize)")
+						if ($SPS1properties[$ps].TypedProperty[$t].NameSize -gt 0)
+						{
+							$null = $TypedPropertyNodes.Nodes.Add("NameSize$($t)", "NameSize: $($SPS1properties[$ps].TypedProperty[$t].NameSize)")
+							$null = $TypedPropertyNodes.Nodes.Add("Name$($t)", "Name: $($SPS1properties[$ps].TypedProperty[$t].Name)")
+							$TypedPropertyNodes.Nodes["Name$($t)"].ForeColor = 'LightGreen'
+						}
+						$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyType$($t)", "Type: $($SPS1properties[$ps].TypedProperty[$t].TypedProp.Type)")
+						<#if (!!$extension.TypedProperty[$t].TypedProperty.Blob)
+						{
+							$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyLink$($t)", "Blob: $($extension.TypedProperty[$t].TypedProperty.Blob)")
+						}#>
+						if (!$SPS1properties[$ps].TypedProperty[$t].TypedProp.Raw)
+						{
+							$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyValue$($t)", "Value: $($SPS1properties[$ps].TypedProperty[$t].TypedProp.Value)")
+						}
+						else
+						{
+							$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyValue$($t)", "Raw (Hex) Value")
+							$TypedPropertyNodes.Nodes["TypedPropertyValue$($t)"].Tag = @($SPS1properties[$ps].TypedProperty[$t].TypedProp.Raw)
+							$TypedPropertyNodes.Nodes["TypedPropertyValue$($t)"].ToolTipText = "Right click to copy the raw (Hex) data ($($SPS1properties[$ps].TypedProperty[$t].TypedProp.Raw.length))"
+							$TypedPropertyNodes.Nodes["TypedPropertyValue$($t)"].ForeColor = 'Peru'
+						}
+					}
+				}
+			} #end for each SPS entry
+		}
+	} # end Populate-SPS1
+	
+	function Populate-ItemIdListItems
+	{
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[System.Windows.Forms.TreeNode]$ItemIDListNode,
+			[Parameter(Mandatory = $true)]
+			$ItemIdList
+		)
+		
+		if ($ItemIdList)
+		{
+			$IDListItemsNode = $ItemIDListNode.Nodes.Add("$('IDList Items')", "IDList Items")
+			for ($ic = 0; $ic -lt $ItemIdList.count; $ic++)
+			{
+				$IDListEntry = $IDListItemsNode.Nodes.Add("IDListItem$($ic)", "IDList Entry #$($ic.ToString('D3')) [$($ItemIdList[$ic].ItemIDType)]")
+				$IDListEntry.ForeColor = 'Red'
+				$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Size", "ItemID Size: $($ItemIdList[$ic].ItemIDSize)")
+				$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ItemIDType", "ItemID Type: $($ItemIdList[$ic].ItemIDType)")
+				$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["ItemIDType"].ForeColor = 'Violet'
+				if ($null -ne $ItemIdList[$ic].DisplayName)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("DisplayName", "ItemID Display Name: $($ItemIdList[$ic].DisplayName)")
+				}
+				if ($null -ne $ItemIdList[$ic].Signature)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Signature", "Signature: $($ItemIdList[$ic].Signature)")
+				}
+				if ($null -ne $ItemIdList[$ic].CPcategory)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("CPcategory", "Control Panel Category: $($ItemIdList[$ic].CPcategory)")
+				}
+				if ($null -ne $ItemIdList[$ic].DriveLetter)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("DriveLetter", "Drive Letter: $($ItemIdList[$ic].DriveLetter)")
+				}
+				if ($null -ne $ItemIdList[$ic].URI)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("URI", "URI: $($ItemIdList[$ic].URI)")
+				}
+				if ($null -ne $ItemIdList[$ic].'SortOrderIndex')
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("SortOrderIndex", "Sort Order Index: $($ItemIdList[$ic].'SortOrderIndex')")
+				}
+				if ($null -ne $ItemIdList[$ic].GUID)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("GUID", "GUID: $($ItemIdList[$ic].GUID)")
+				}
+				if ($null -ne $ItemIdList[$ic].CLSID)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("CLSID", "CLSID: $($ItemIdList[$ic].CLSID)")
+				}
+				if ($null -ne $ItemIdList[$ic].ShellName)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ShellName", "Shell Name: $($ItemIdList[$ic].ShellName)")
+				}
+				if ($null -ne $ItemIdList[$ic].Filesize)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Filesize", "File Size: $($ItemIdList[$ic].Filesize)")
+				}
+				if ($null -ne $ItemIdList[$ic].Attributes)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Attributes", "Attributes: $($ItemIdList[$ic].Attributes)")
+				}
+				if ($null -ne $ItemIdList[$ic].TargetAttributes)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("TargetAttributes", "Target Attributes: $($ItemIdList[$ic].TargetAttributes)")
+				}
+				if ($null -ne $ItemIdList[$ic].Host)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("HostOS", "Host OS: $($ItemIdList[$ic].Host)")
+				}
+				if ($null -ne $ItemIdList[$ic].Ansi_Name)
+				{
+					$Ansi_Name = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Ansi_Name", "Ansi Name: $($ItemIdList[$ic].Ansi_Name)")
+					$Ansi_Name.ForeColor = 'PaleGreen'
+				}
+				if ($null -ne $ItemIdList[$ic].w32Modified)
+				{
+					$w32Modifiednode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("w32Modified", "Modified (UTC): $($ItemIdList[$ic].w32Modified)")
+					$w32Modifiednode.ForeColor = 'Cyan'
+				}
+				if (!!$ItemIdList[$ic].ItemIdExtensions -and $ItemIdList[$ic].ItemIdExtensions.count -ge 1)
+				{
+					$x = 0
+					Foreach ($extension in $ItemIdList[$ic].ItemIdExtensions)
+					{
+						if (!!$extension.itemIdExtType)
+						{
+							$extensionNode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("itemIdExtType$($x)", "Extension #$($x) Type: [$($extension.itemIdExtType)]")
+						}
+						else
+						{
+							$extensionNode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("itemIdExtType$($x)", "Extension #$($x)")
+						}
+						$extensionNode.ForeColor = 'Tomato'
+						if ($null -ne $extension.extLength)
+						{
+							$null = $extensionNode.Nodes.Add("ExtentionSize", "Extension Size: $($extension.extLength)")
+						}
+						if ($null -ne $extension.extversion)
+						{
+							$null = $extensionNode.Nodes.Add("ExtentionVersion", "Extension Version: $($extension.extversion)")
+						}
+						if ($null -ne $extension.TargetPath)
+						{
+							$null = $extensionNode.Nodes.Add("TargetPath", "Target Path: $($extension.TargetPath)")
+						}
+						if ($null -ne $extension.Component)
+						{
+							$null = $extensionNode.Nodes.Add("Component", "Component: $($extension.Component)")
+						}
+						if ($null -ne $extension.ComponentParameters)
+						{
+							$null = $extensionNode.Nodes.Add("ComponentParameters", "Component Parameters: $($extension.ComponentParameters)")
+						}
+						if ($null -ne $extension.ExtraPath)
+						{
+							$null = $extensionNode.Nodes.Add("ExtraPath", "Target Path: $($extension.ExtraPath)")
+						}
+						if ($null -ne $extension.Unicode_Name)
+						{
+							$Unicode_Name = $extensionNode.Nodes.Add("Unicode_Name", "Unicode Name: $($extension.Unicode_Name)")
+							$Unicode_Name.ForeColor = 'PaleGreen'
+						}
+						if ($null -ne $extension.Application)
+						{
+							$null = $extensionNode.Nodes.Add("Application", "Application: $($extension.Application)")
+						}
+						if ($null -ne $extension.DocumentType)
+						{
+							$null = $extensionNode.Nodes.Add("DocumentType", "Document Type: $($extension.DocumentType)")
+						}
+						if ($null -ne $extension.Attributes)
+						{
+							$null = $extensionNode.Nodes.Add("Attributes", "Attributes: $($extension.Attributes)")
+						}
+						if ($null -ne $extension.TargetCreated)
+						{
+							$null = $extensionNode.Nodes.Add("TargetCreated", "Target Created: $($extension.TargetCreated)")
+							$extensionNode.Nodes["TargetCreated"].ForeColor = 'Cyan'
+						}
+						if ($null -ne $extension.TargetAccessed)
+						{
+							$null = $extensionNode.Nodes.Add("TargetAccessed", "Target Accessed: $($extension.TargetAccessed)")
+							$extensionNode.Nodes["TargetAccessed"].ForeColor = 'Cyan'
+						}
+						if ($null -ne $extension.ShortCutCreated)
+						{
+							$null = $extensionNode.Nodes.Add("ShortCutCreated", "LNK Created: $($extension.ShortCutCreated)")
+							$extensionNode.Nodes["ShortCutCreated"].ForeColor = 'Cyan'
+						}
+						if ($null -ne $extension.Created)
+						{
+							$CreatedNode = $extensionNode.Nodes.Add("Created", "Created (UTC): $($extension.Created)")
+							$CreatedNode.ForeColor = 'Cyan'
+						}
+						if ($null -ne $extension.Modified)
+						{
+							$ModifiedNode = $extensionNode.Nodes.Add("Modified", "Modified (UTC): $($extension.Modified)")
+							$ModifiedNode.ForeColor = 'Cyan'
+						}
+						if ($null -ne $extension.Accessed)
+						{
+							$AccessedNode = $extensionNode.Nodes.Add("Accessed", "Accessed (UTC): $($extension.Accessed)")
+							$AccessedNode.ForeColor = 'Cyan'
+						}
+						if ($null -ne $extension.w32Created)
+						{
+							$w32CreatedNode = $extensionNode.Nodes.Add("w32Created", "Created (UTC): $($extension.w32Created)")
+							$w32CreatedNode.ForeColor = 'Cyan'
+						}
+						if ($null -ne $extension.w32Accessed)
+						{
+							$w32AccessedNode = $extensionNode.Nodes.Add("w32Accessed", "Accessed (UTC): $($extension.w32Accessed)")
+							$w32AccessedNode.ForeColor = 'Cyan'
+						}
+						if ($null -ne $extension.MFTRecordNr)
+						{
+							$MFTRecordNrNode = $extensionNode.Nodes.Add("MFTRecordNr", "MFT Record Nr: $($extension.MFTRecordNr)")
+							$MFTRecordNrNode.ForeColor = 'Orange'
+							$MFTRecordSeqNr = $extensionNode.Nodes.Add("MFTRecordSeqNr", "MFT Record Sequence Nr: $($extension.MFTRecordSeqNr)")
+							$MFTRecordSeqNr.ForeColor = 'Orange'
+						}
+						if ($null -ne $extension.Unknown -and $extension.Unknown -ne '0x00000000')
+						{
+							$null = $extensionNode.Nodes.Add("Unknown", "Unknown value: $($extension.Unknown)")
+						}
+						if ($null -ne $extension.EntryNr)
+						{
+							$null = $extensionNode.Nodes.Add("EntryNr", "Entry Nr: #$($extension.EntryNr)")
+						}
+						if ($null -ne $extension.PropertyStoreEntries)
+						{
+							Populate-SPS1 -Node $extensionNode -SPS1properties $extension.PropertyStoreEntries
+						}
+						if ($null -ne $extension.extData)
+						{
+							$rawext = $extensionNode.Nodes.Add("extData", "Extension Data")
+							$rawext.Tag = @($extension.extData)
+							$rawext.ToolTipText = "Right click to copy the raw (Hex) data ($($extension.extData.length))"
+							$rawext.ForeColor = 'Peru'
+						}
+						$x++
+					}
+				}
+				if ($null -ne $ItemIdList[$ic].PropertyStoreEntries)
+				{
+					Populate-SPS1 -Node $IDListItemsNode.Nodes["IDListItem$($ic)"] -SPS1properties $ItemIdList[$ic].PropertyStoreEntries
+				}
+				if ($null -ne $ItemIdList[$ic].EmbeddedIdList)
+				{
+					Populate-ItemIdListItems -ItemIDListNode $IDListItemsNode.Nodes["IDListItem$($ic)"] -ItemIdList $ItemIdList[$ic].EmbeddedIdList
+				}
+				if ($null -ne $ItemIdList[$ic].ExtType)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ExtType", "Extension Type: $($ItemIdList[$ic].ExtType)")
+				}
+				if ($null -ne $ItemIdList[$ic].TargetCreated)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("TargetCreated", "Target Created: $($ItemIdList[$ic].TargetCreated)")
+					$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["TargetCreated"].ForeColor = 'Cyan'
+				}
+				if ($null -ne $ItemIdList[$ic].TargetAccessed)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("TargetAccessed", "Target Accessed: $($ItemIdList[$ic].TargetAccessed)")
+					$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["TargetAccessed"].ForeColor = 'Cyan'
+				}
+				if ($null -ne $ItemIdList[$ic].ShortCutCreated)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ShortCutCreated", "LNK Created: $($ItemIdList[$ic].ShortCutCreated)")
+					$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["ShortCutCreated"].ForeColor = 'Cyan'
+				}
+				if ($null -ne $ItemIdList[$ic].Timestamp)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Timestamp", "Timestamp: $($ItemIdList[$ic].Timestamp)")
+					$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["Timestamp"].ForeColor = 'Cyan'
+				}
+				if ($null -ne $ItemIdList[$ic].ZipIndex)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ZipIndex", "ZipIndex: $($ItemIdList[$ic].ZipIndex)")
+				}
+				if ($null -ne $ItemIdList[$ic].NameLength -and $ItemIdList[$ic].NameLength -gt 0)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("NameLength", "Name Length: $($ItemIdList[$ic].NameLength)")
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Name", "Name: $($ItemIdList[$ic].Name)")
+					$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["Name"].ForeColor = 'Yellow'
+				}
+				if ($null -ne $ItemIdList[$ic].ParentLength -and $ItemIdList[$ic].ParentLength -gt 0)
+				{
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ParentLength", "Parent Name Length: $($ItemIdList[$ic].ParentLength)")
+					$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Parent", "Parent Name: $($ItemIdList[$ic].Parent)")
+					$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["Parent"].ForeColor = 'PaleGreen'
+				}
+				
+				if (!!$ItemIdList[$ic].EmbeddedItems -and $ItemIdList[$ic].EmbeddedItems.count -ge 1)
+				{
+					$e = 0
+					foreach ($embeddeditem in $ItemIdList[$ic].EmbeddedItems)
+					{
+						$embedded = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("EmbeddedItem$($e)", "Embedded Item: #$($e) Type: [$($embeddeditem.ItemIDType)]")
+						$embedded.ForeColor = 'Violet'
+						foreach ($embeddedproperty in $embeddeditem.psobject.Properties)
+						{
+							if ($embeddedproperty.Name -eq 'ItemIdExtensions')
+							{
+								$x = 0
+								Foreach ($extension in $embeddedproperty.Value)
+								{
+									$extensionNode = $embedded.Nodes.Add("itemIdExtType", "Extension #$($x) Type: [$($extension.itemIdExtType)]")
+									$extensionNode.ForeColor = 'Plum'
+									$null = $extensionNode.Nodes.Add("ExtentionSize", "Extension Size: $($extension.extLength)")
+									$null = $extensionNode.Nodes.Add("ExtentionVersion", "Extension Version: $($extension.extversion)")
+									if ($null -ne $extension.Unicode_Name)
+									{
+										$Unicode_Name = $extensionNode.Nodes.Add("Unicode_Name", "Unicode Name: $($extension.Unicode_Name)")
+										$Unicode_Name.ForeColor = 'PaleGreen'
+									}
+									if ($null -ne $extension.DocumentType)
+									{
+										$null = $extensionNode.Nodes.Add("DocumentType", "Document Type: $($extension.DocumentType)")
+									}
+									if ($null -ne $extension.w32Created)
+									{
+										$w32CreatedNode = $extensionNode.Nodes.Add("w32Created", "Created (UTC): $($extension.w32Created)")
+										$w32CreatedNode.ForeColor = 'Cyan'
+									}
+									if ($null -ne $extension.w32Accessed)
+									{
+										$w32AccessedNode = $extensionNode.Nodes.Add("w32Accessed", "Accessed (UTC): $($extension.w32Accessed)")
+										$w32AccessedNode.ForeColor = 'Cyan'
+									}
+									if ($null -ne $extension.MFTRecordNr)
+									{
+										$MFTRecordNrNode = $extensionNode.Nodes.Add("MFTRecordNr", "MFT Record Nr: $($extension.MFTRecordNr)")
+										$MFTRecordNrNode.ForeColor = 'Orange'
+										$MFTRecordSeqNr = $extensionNode.Nodes.Add("MFTRecordSeqNr", "MFT Record Sequence Nr: $($extension.MFTRecordSeqNr)")
+										$MFTRecordSeqNr.ForeColor = 'Orange'
+									}
+									if ($null -ne $extension.Unknown -and $extension.Unknown -ne '0x00000000')
+									{
+										$null = $extensionNode.Nodes.Add("Unknown", "Unknown value: $($extension.Unknown)")
+									}
+									$x++
+								}
+							}
+							
+							elseif ($embeddedproperty.Name -eq 'Timestamp')
+							{
+								$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
+								$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'Cyan'
+							}
+							elseif ($embeddedproperty.Name -eq 'Parent')
+							{
+								$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
+								$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'PaleGreen'
+							}
+							elseif ($embeddedproperty.Name -eq 'Name')
+							{
+								$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
+								$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'Yellow'
+							}
+							elseif ($embeddedproperty.Name -eq 'w32Modified')
+							{
+								$w32Modifiednode = $embedded.Nodes.Add("w32Modified", "Modified (UTC): $($embeddedproperty.Value)")
+								$w32Modifiednode.ForeColor = 'Cyan'
+							}
+							elseif ($embeddedproperty.Name -eq 'Data')
+							{
+								$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "Embedded Item $($embeddedproperty.Name)")
+								$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'Peru'
+								$embedded.Nodes["$($embeddedproperty.Name)"].Tag = @($embeddedproperty.Value)
+								$embedded.Nodes["$($embeddedproperty.Name)"].ToolTipText = "Right click to copy the raw (Hex) data ($($embeddedproperty.Value.length))"
+							}
+							elseif ($embeddedproperty.Name -eq 'Filesize' -and $embeddedproperty.Value -eq $null)
+							{
+								continue
+							}
+							else
+							{
+								$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
+								if ($embeddedproperty.Name -eq 'Ansi_Name') { $embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'PaleGreen' }
+							}
+						}
+						$e++
+					}
+				}
+				$raw = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("RawHexData", "ItemID Data") # : $($ItemIdList[$ic].Data)
+				$raw.Tag = @($ItemIdList[$ic].Data)
+				$raw.ToolTipText = "Right click to copy the raw (Hex) data ($($ItemIdList[$ic].Data.length))"
+				$raw.ForeColor = 'Peru'
+			}
+		}
+	}
 	
 	<#
 		.SYNOPSIS
@@ -572,6 +1001,7 @@ function Show-MainForm_psf
 		"10" = "Security Center"
 		"11" = "Mobile PC"
 	}
+	
 	function Get-Attributes
 	{
 		param
@@ -625,8 +1055,7 @@ function Show-MainForm_psf
 					
 			Return $Name
 		} # End Get-MyCompCLSISD
-		
-		
+			
 		try
 		{
 			$Registry = [Microsoft.Win32.RegistryKey]::OpenBaseKey([Microsoft.Win32.RegistryHive]::LocalMachine, [Microsoft.Win32.RegistryView]::Default)
@@ -686,14 +1115,449 @@ function Show-MainForm_psf
 				$registrykey.Close()
 				$registrykey.Dispose()
 			}
-			else { $Name = $CLSIDstring }
+			else
+			{
+				$registrykey = $Registry.OpenSubKey('Software\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes')
+				$registrySubKeyNames = $registrykey.GetSubKeyNames()
+				$registrykey.Close()
+				$registrykey.Dispose()
+				$CLSID = $registrySubKeyNames.Where{ $_ -match $CLSIDstring }
+				if (!!$CLSID)
+				{
+					$registrykey = $Registry.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\$($CLSID)")
+					$Name = "$($registrykey.GetValue('CanonicalName')) [$($CLSIDstring)]"
+					$registrykey.Close()
+					$registrykey.Dispose()
+				}
+				else
+				{ $Name = $CLSIDstring }
+			}
 			
 			$Registry.Close()
 			$Registry.Dispose()
 			
 			return $Name
 		}
-		catch{$null}
+		catch { $null }
+	}
+	
+	function Get-Ext_00 # Variant
+	{
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[AllowEmptyString()]
+			[AllowNull()]
+			[System.Byte[]]$ByteArray
+		)
+		
+		$ItemIdListProperties = [PSCustomObject]::new()
+		$ItemIDType = [System.BitConverter]::ToString($ByteArray[0])
+		$ItemIDSize = $ByteArray.Count
+		
+		$Signature = [System.BitConverter]::ToString($ByteArray[2 .. 5]) -replace '-', ''
+		if ($Signature -eq '47465349') # GFSI
+		{
+			$CLSID = if ($ByteArray -ge 22) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[6 .. 21]))" }
+			else { $null }
+			
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize' = $ItemIDSize
+				'ItemIDType' = $ItemIDType
+				'Signature'  = "0x$($Signature)"
+				'CLSID'	     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
+				'Data'	     = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
+			}
+		}
+		elseif ($Signature -eq '4175674D') # Embedded ITemID items
+		{
+			
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize' = $ItemIDSize
+				'ItemIDType' = $ItemIDType
+				'Signature'  = "0x$($Signature)"
+				'CLSID'	     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
+				'Data'	     = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
+			}
+			
+			if ($ItemIdListItem.ItemIDSize -ge 18)
+			{
+				$EmbeddedItemIDs = [System.Collections.ArrayList]::new()
+				$idx = 14
+				while ($idx -lt ($ItemIdListItem.ItemIDSize - 14))
+				{
+					$itemSize = [Bitconverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
+					if ($itemSize -eq 0) { break }
+					$null = $EmbeddedItemIDs.Add([ShellLink.Structures.ItemID]::FromByteArray($ByteArray[$idx .. ($idx + $itemSize - 1)]))
+					$idx = $idx + $itemSize + 2
+					if ($idx -ge ($ItemIdListItem.ItemIDSize - 14)) { break }
+				}
+				if ($EmbeddedItemIDs.Count -ge 1)
+				{
+					$EmbeddedIdList = [System.Collections.ArrayList]::new()
+					foreach ($EmbeddedItemID in $EmbeddedItemIDs)
+					{
+						$linkItem = Get-LinkTargetIDList -ItemIdListItem $EmbeddedItemID
+						$null = $EmbeddedIdList.Add($linkItem)
+					}
+					$ItemIdListProperties| Add-Member -MemberType NoteProperty -Name 'EmbeddedIdList' -Value $EmbeddedIdList
+				}
+			}
+			
+		}
+		elseif (([System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', '') -eq '338B0123') # PropertyStore 1
+		{
+			$Signature = [System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', ''
+			$CLSID = if ($ByteArray -ge 28) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[12 .. 27]))" }
+			else { $null }
+			$CLSID0 = if ($ByteArray -ge 43) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[28 .. 43]))" }
+			else { $null }
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize' = $ItemIDSize
+				'ItemIDType' = $ItemIDType
+				'Signature'  = "0x$($Signature)"
+				'GUID'	     = if ($CLSID0) { Get-CLSID -CLSIDstring $CLSID0 }else { $null }
+				'CLSID'	     = if ($CLSID) { Get-FolderDescription -CLSIDstring $CLSID }else { $null }
+				'Data'	     = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
+			}
+			if ($ByteArray.count -ge 56 -and [System.Text.Encoding]::ASCII.GetString($ByteArray[52..55]) -eq '1SPS')
+			{
+				$ExtraData = $ByteArray[44 .. ($ByteArray.count - 1)]
+				$PropertyStoreEntries = [System.Collections.ArrayList]::new()
+				$Items = Get-Ext_SPS1 -ByteArray $ExtraData
+				foreach ($property in $items)
+				{
+					$PropertyStoreEntry = [PSCustomObject]::new()
+					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+					$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
+				}
+				$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "PropertyStoreEntries" -Value $PropertyStoreEntries
+			}
+		}
+		elseif (([System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', '') -eq '81191410') # PropertyStore 2
+		{
+			$Signature = [System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', ''
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize' = $ItemIDSize
+				'ItemIDType' = $ItemIDType
+				'Signature'  = "0x$($Signature)"
+				'Data'	     = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
+			}
+			if ($ItemIdListItem.ItemIDSize -gt 48)
+			{
+				$ExtraData = $ByteArray[40 .. ($ByteArray.count - 1)]
+				$PropertyStoreEntries = [System.Collections.ArrayList]::new()
+				$Items = Get-Ext_SPS1 -ByteArray $ExtraData
+				foreach ($property in $items)
+				{
+					$PropertyStoreEntry = [PSCustomObject]::new()
+					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+					$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
+				}
+				$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "PropertyStoreEntries" -Value $PropertyStoreEntries
+			}
+			
+		}
+		elseif (([System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', '') -eq '1F00A104') # PropertyStore 3
+		{
+			$Signature = [System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', ''
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize' = $ItemIDSize
+				'ItemIDType' = $ItemIDType
+				'Signature'  = "0x$($Signature)"
+				'Data'	     = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
+			}
+			
+			if ($ItemIdListItem.ItemIDSize -gt 27)
+			{
+				$ExtraData = $ByteArray[16 .. ($ByteArray.count - 1)]
+				$PropertyStoreEntries = [System.Collections.ArrayList]::new()
+				$Items = Get-Ext_SPS1 -ByteArray $ExtraData
+				foreach ($property in $items)
+				{
+					$PropertyStoreEntry = [PSCustomObject]::new()
+					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+					$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
+				}
+				$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "PropertyStoreEntries" -Value $PropertyStoreEntries
+			}
+		}
+		elseif (([System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', '') -eq 'EEBBFE23' -and [System.BitConverter]::ToString($ByteArray[2]) -eq '1A')
+		{
+			$Class = if ($SortOrderIndex[[String]$ClassType]) { "$($SortOrderIndex[[String]$ClassType]) [$($ClassType)]" }
+			else { $ClassType }
+			$Signature = [System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', ''
+			$Attributes = Get-Attributes -Bytes $ByteArray[10..11]
+			$CLSID0 = if ($ItemIdListItem.ItemIDSize -ge 27) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[12 .. 27]))" }else { $null }
+			
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize'	 = $ItemIDSize
+				'ItemIDType'	 = $ItemIDType
+				'SortOrderIndex' = $Class
+				'Signature'	     = "0x$($Signature)"
+				'Atrributes'	 = $Attributes
+				'GUID'		     = if ($CLSID0) { Get-FolderDescription -CLSIDstring $CLSID0 }else { $null }
+				'Data'		     = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
+			}
+			if ($ByteArray.Count -gt 32)
+			{
+				$idx = 30
+				# Get the extension(s)
+				$ItemIdExtensions = [System.Collections.ArrayList]::new()
+				while ($ByteArray.Count -gt $idx)
+				{
+					$extstart = $idx
+					$extLength = [System.BitConverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
+					$extversion = [System.BitConverter]::ToUInt16($ByteArray[($idx + 2) .. ($idx + 3)], 0)
+					$itemIdExtType = [System.BitConverter]::ToString($ByteArray[($idx + 7) .. ($idx + 4)]) -replace '-', ''
+					
+					$ItemIdExtension = [PSCustomObject]::new()
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extLength" -Value $extLength
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extversion" -Value $extversion
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "itemIdExtType" -Value $itemIdExtType
+					$idx = $idx + 8
+					
+					if ($itemIdExtType -eq 'BEEF0026')
+					{
+						try
+						{
+							$Attributes = Get-Attributes -Bytes $ByteArray[($idx) .. ($idx + 3)]
+							try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 4) .. ($idx + 11)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+							catch { $Created = $null }
+							try { $Modified = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 12) .. ($idx + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+							catch { $Modified = $null }
+							try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 20) .. ($idx + 27)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+							catch { $Accessed = $null }
+							$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Modified" -Value $Modified
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+							
+						} # end try
+						catch
+						{
+							$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+						} #end catch
+					} # End BEEF0026
+					elseif ($itemIdExtType -eq 'BEEF0019')
+					{
+						try
+						{
+							$CLSID = if ($ByteArray.count -ge 24) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[$idx .. ($idx + 15)]))" }
+							else { $null }
+							$CLSID0 = if ($ByteArray.count -ge 40) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[($idx + 16) .. ($idx + 31)]))" }
+							else { $null }
+							
+							$ItemIdListProperties = [PSCustomObject]@{
+								'ItemIDSize' = $ByteArray.Count
+								'ItemIDType' = $ItemIDType
+								'Class Type' = $ClassType
+								'GUID'	     = if (!!$CLSID0) { Get-CLSID -CLSIDstring $CLSID0 }else{ $CLSID0 }
+								'CLSID'	     = if (!!$CLSID) { Get-FolderDescription -CLSIDstring $CLSID }else{ $CLSID }
+							}
+							$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+						} # End Try
+						catch
+						{
+							$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+						} #end catch
+					} # end BEEF0019
+					elseif ($itemIdExtType -eq 'BEEF0000') # Remove extension
+					{
+						try
+						{
+							$ItemIdExtension.itemIdExtType = "Removed Extension Block [$($itemIdExtType)]"
+							$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+						} # end try
+						catch
+						{
+							$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+						} # end catch
+					} # End BEEF0000
+					else
+					{
+						$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+					} # End Else
+					$null = $ItemIdExtensions.Add($ItemIdExtension)
+					
+					if (($ByteArray.Count - ($extstart + $extLength)) -le 4) { break }
+					$idx = $extStart + $extLength
+				} # End While
+				$ItemIdListProperties| Add-Member -MemberType NoteProperty -Name 'ItemIdExtensions' -Value $ItemIdExtensions
+			} # end if 
+		} # End of 0x1A
+		elseif ($Signature -eq '00000000' -and $ByteArray[18 .. 19].Contains([byte]16)) # if Attribute => Directory
+		{
+			$type = [System.BitConverter]::ToUInt16($ByteArray[18 .. 19], 0)
+			$Attributes = Get-Attributes -Bytes $ByteArray[18..21]
+			$Timestamp = [System.Text.Encoding]::Unicode.GetString($ByteArray[22 .. 53])
+			$ZipIndex = [System.BitConverter]::ToUInt16($ByteArray[54 .. 55], 0)
+			$ParentLength = [System.BitConverter]::ToUInt16($ByteArray[62 .. 63], 0)
+			$NameLength = [System.BitConverter]::ToUInt16($ByteArray[58 .. 59], 0)
+			$Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[66 .. (66 + $NameLength * 2 - 1)])
+			$pidx = 66 + $NameLength * 2 + 2
+			$Parent = if ($ParentLength -gt 0)
+			{
+				[System.Text.Encoding]::Unicode.GetString($ByteArray[$pidx .. ($pidx + $ParentLength * 2 - 1)])
+			}
+			else { $null }
+			
+			$idx = $pidx + $ParentLength * 2 + 2
+			if ($idx -ge $ByteArray.Length) { break }
+			$extLength = [System.BitConverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
+			$extversion = [System.BitConverter]::ToUInt16($ByteArray[($idx + 2) .. ($idx + 3)], 0)
+			$exttype = [System.BitConverter]::ToString($ByteArray[($idx + 7) .. ($idx + 4)]) -replace '-', ''
+			$findindex = [System.BitConverter]::ToUInt16($ByteArray[($idx + 8) .. ($idx + 9)], 0)
+			
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize'   = $ItemIDSize
+				'ItemIDType'   = $ItemIDType
+				'DisplayName'  = $ItemIdListItem.DisplayName
+				'Type'		   = $type
+				'Attributes'   = $Attributes
+				'Timestamp'    = $Timestamp
+				'ZipIndex'	   = $ZipIndex
+				'ParentLength' = $ParentLength
+				'NameLength'   = $NameLength
+				'Name'		   = $Name
+				'Parent'	   = $Parent
+				'extLength'    = $extLength
+				'exttype'	   = $exttype
+				'Data'		   = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
+			}
+			
+			if ($extLength -gt 0 -and $exttype -eq 'BEEF0005')
+			{
+				$EmbeddedIdList = [System.Collections.ArrayList]::new()
+				$idx = $idx + 10 + 14
+				
+				While ($idx -lt $ByteArray.Length)
+				{
+					$XtSize = [System.BitConverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
+					if ($XtSize -eq 0)
+					{
+						break
+					}
+					$xtType = [System.BitConverter]::ToString($ByteArray[($idx + 2)])
+					$xtData = $ByteArray[($idx + 2) .. ($idx + 2 + $XtSize - 1)]
+					$XtList = [PSCustomObject]@{
+						'XtSize' = $XtSize
+						'xtType' = $xtType
+						'xtData' = $xtData
+					}
+					$null = $EmbeddedIdList.Add($XtList)
+					$idx = $idx + $XtSize
+				} # end While
+				
+				# Parse the extension
+				if ($EmbeddedIdList.Count -ge 1)
+				{
+					$EmbeddedItems = [System.Collections.ArrayList]::new()
+					foreach ($XTitem in $EmbeddedIdList)
+					{
+						if ($XTitem.XtType -eq '1F')
+						{
+							try
+							{
+								$EmbeddedItemProperties = [PSCustomObject]@{ }
+								$XtItems = Get-Ext_1F -ByteArray $XTitem.xtData
+								foreach ($property in $XtItems.psobject.Properties)
+								{
+									$EmbeddedItemProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
+								}
+								$null = $EmbeddedItems.Add($EmbeddedItemProperties)
+							}
+							catch
+							{
+								$EmbeddedItemProperties = [PSCustomObject]@{
+									'ItemIDSize' = $XTitem.XtSize
+									'ItemIDType' = $XTitem.XtType
+									'Data'	     = $XTitem.xtData
+								}
+							}
+						} # End '1F'
+						elseif ($XTitem.XtType -in ('0F', '09', '16', '52'))
+						{
+							try
+							{
+								$EmbeddedItemProperties = [PSCustomObject]@{ }
+								$XtItems = Get-Compressed_w32 -ByteArray $XTitem.xtData
+								foreach ($property in $XtItems.psobject.Properties)
+								{
+									$EmbeddedItemProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
+								}
+								$null = $EmbeddedItems.Add($EmbeddedItemProperties)
+							}
+							catch
+							{
+								$EmbeddedItemProperties = [PSCustomObject]@{
+									'ItemIDSize' = $XTitem.XtSize
+									'ItemIDType' = $XTitem.XtType
+									'Data'	     = $XTitem.xtData
+								}
+							}
+						}
+						elseif ($XTitem.XtType -in ('31', '32')) # Folder / File
+						{
+							try
+							{
+								$EmbeddedItemProperties = [PSCustomObject]@{ }
+								$XtItems = Get-Ext_31_32 -ByteArray $XTitem.xtData[0..($XTitem.xtData.count - 3)]
+								foreach ($property in $XtItems.psobject.Properties)
+								{
+									$EmbeddedItemProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
+								}
+								$null = $EmbeddedItems.Add($EmbeddedItemProperties)
+							}
+							catch
+							{
+								$EmbeddedItemProperties = [PSCustomObject]@{
+									'ItemIDSize' = $XTitem.XtSize
+									'ItemIDType' = $XTitem.XtType
+									'Data'	     = $XTitem.xtData
+								}
+							}
+						}
+						else
+						{
+							$EmbeddedItemProperties = [PSCustomObject]@{
+								'ItemIDSize' = $XTitem.XtSize
+								'ItemIDType' = $XTitem.XtType
+								'Data'	     = $XTitem.xtData
+							}
+							$null = $EmbeddedItems.Add($EmbeddedItemProperties)
+						}
+					} # end foreach
+					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'EmbeddedItems' -Value $EmbeddedItems
+				} # end extension items 
+			} # End extension
+		}
+		else
+		{
+			$Signature = [System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', ''
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize' = $ItemIDSize
+				'ItemIDType' = $ItemIDType
+				'Signature'  = "0x$($Signature)"
+				'Data'	     = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
+			}
+		}
+		
+		return $ItemIdListProperties
 	}
 	
 	function Get-Ext_1F # GUID
@@ -726,10 +1590,418 @@ function Show-MainForm_psf
 				'50'{
 					$Class = if ($SortOrderIndex[[String]$ClassType]) { "$($SortOrderIndex[[String]$ClassType]) [$($ClassType)]" }
 					else { $ClassType }
-					$CLSID = if ($ByteArray.length -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }
+					$CLSID = if ($ByteArray.Count -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }
 					else { $null }
 					$ItemIdListProperties = [PSCustomObject]@{
-						'ItemIDSize'	 = $ByteArray.Length
+						'ItemIDSize'	 = $ByteArray.count
+						'ItemIDType'	 = $ItemIDType
+						'SortOrderIndex' = $Class
+						'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
+						'Data'		     = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
+					}
+				} # End of 50
+				'00'{
+					if ([System.BitConverter]::ToString($ByteArray[2]) -eq '2F')
+					{
+						$Signature = [System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', ''
+						$ItemIDType2 = [System.BitConverter]::ToString($ByteArray[8])
+						$ClassType2 = [System.BitConverter]::ToString($ByteArray[9])
+						$DriveLetter = [System.Text.Encoding]::UTF8.GetString($ByteArray[11 .. 13])
+						$idx = 14 + 37
+						$CLSID = if ($ByteArray.count -ge 66) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[$idx .. ($idx + 15)]))" }
+						else { $null }
+						$CLSID0 = if ($ByteArray.count -ge 83) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[($idx + 16) .. ($idx + 31)]))" }
+						else { $null }
+						
+						$ItemIdListProperties = [PSCustomObject]@{
+							'ItemIDSize' = $ByteArray.Count
+							'ItemIDType' = $ItemIDType
+							'Class Type' = $ClassType
+							'Signature'  = if ($Signature) { "0x$($Signature)" }else { $null }
+							'DriveLetter' = $DriveLetter
+							'GUID'	     = if (!!$CLSID0) { Get-CLSID -CLSIDstring $CLSID0 }else{ $CLSID0 }
+							'CLSID'	     = if (!!$CLSID) { Get-FolderDescription -CLSIDstring $CLSID }else{ $CLSID }
+						}
+					} # End of 0x2F
+					elseif ([System.BitConverter]::ToString($ByteArray[24..25]) -eq 'EF-BE')
+					{
+						$Class = if ($SortOrderIndex[[String]$ClassType]) { "$($SortOrderIndex[[String]$ClassType]) [$($ClassType)]" }else { $ClassType }
+						$CLSID = if ($ByteArray.count -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }	else { $null }
+						$ItemIdListProperties = [PSCustomObject]@{
+							'ItemIDSize'	 = $ByteArray.count
+							'ItemIDType'	 = $ItemIDType
+							'SortOrderIndex' = $Class
+							'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
+						}
+						$1stextensionlength = [System.BitConverter]::ToUInt16($ByteArray[18 .. 19], 0)
+						if ($1stextensionlength -ne 0)
+						{
+							$idx = 18
+							# Get the extension(s)
+							$ItemIdExtensions = [System.Collections.ArrayList]::new()
+							while ($ByteArray.Count -gt $idx)
+							{
+								$extstart = $idx
+								$extLength = [System.BitConverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
+								$extversion = [System.BitConverter]::ToUInt16($ByteArray[($idx + 2) .. ($idx + 3)], 0)
+								$itemIdExtType = [System.BitConverter]::ToString($ByteArray[($idx + 7) .. ($idx + 4)]) -replace '-', ''
+								
+								$ItemIdExtension = [PSCustomObject]::new()
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extLength" -Value $extLength
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extversion" -Value $extversion
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "itemIdExtType" -Value $itemIdExtType
+								$idx = $idx + 8
+								if ($itemIdExtType -eq 'BEEF0026')
+								{
+									try
+									{
+										$Attributes = Get-Attributes -Bytes $ByteArray[($idx) .. ($idx + 3)]
+										try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 4) .. ($idx + 11)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+										catch { $Created = $null }
+										try { $Modified = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 12) .. ($idx + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+										catch { $Modified = $null }
+										try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 20) .. ($idx + 27)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+										catch { $Accessed = $null }
+										$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Modified" -Value $Modified
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+									}
+									catch
+									{
+										$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+									}
+								}
+								elseif ($itemIdExtType -eq 'BEEF0025')
+								{
+									try
+									{
+										$Attributes = Get-Attributes -Bytes $ByteArray[($idx) .. ($idx + 3)]
+										try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 4) .. ($idx + 11)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+										catch { $Created = $null }
+										try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 12) .. ($idx + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+										catch { $Accessed = $null }
+										
+										$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+									}
+									catch
+									{
+										$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+									}
+								}
+								else
+								{
+									$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+								}
+								$null = $ItemIdExtensions.Add($ItemIdExtension)
+								if (($ByteArray.Count - ($extstart + $extLength)) -le 4) { break }
+								$idx = $extStart + $extLength
+							} # End While
+						} # End extentions
+					} # End of 0x05
+					else
+					{
+						$CLSID = if ($ByteArray.count -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }	else { $null }
+						$ItemIdListProperties = [PSCustomObject]@{
+							'ItemIDSize'	 = $ByteArray.count
+							'ItemIDType'	 = $ItemIDType
+							'SortOrderIndex' = $Class
+							'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
+						}
+					}
+				} # End of 00
+				{ $_ -in ('44', '48') }{
+					
+					$Class = if ($SortOrderIndex[[String]$ClassType]) { "$($SortOrderIndex[[String]$ClassType]) [$($ClassType)]" }
+					else { $ClassType }
+					$CLSID = if ($ByteArray.Count -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }
+					else { $null }
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'	 = $ByteArray.count
+						'ItemIDType'	 = $ItemIDType
+						'SortOrderIndex' = $Class
+						'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
+					}
+					$1stextensionlength = [System.BitConverter]::ToUInt16($ByteArray[18 .. 19], 0)
+					if ($1stextensionlength -ne 0)
+					{
+						$idx = 18
+						# Get the extension(s)
+						$ItemIdExtensions = [System.Collections.ArrayList]::new()
+						while ($ByteArray.Count -gt $idx)
+						{
+							
+							$extstart = $idx
+							$extLength = [System.BitConverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
+							$extversion = [System.BitConverter]::ToUInt16($ByteArray[($idx + 2) .. ($idx + 3)], 0)
+							$itemIdExtType = [System.BitConverter]::ToString($ByteArray[($idx + 7) .. ($idx + 4)]) -replace '-', ''
+							
+							$ItemIdExtension = [PSCustomObject]::new()
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extLength" -Value $extLength
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extversion" -Value $extversion
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "itemIdExtType" -Value $itemIdExtType
+							$idx = $idx + 8
+							if ($itemIdExtType -eq 'BEEF0026')
+							{
+								try
+								{
+									$Attributes = Get-Attributes -Bytes $ByteArray[($idx) .. ($idx + 3)]
+									try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 4) .. ($idx + 11)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+									catch { $Created = $null }
+									try { $Modified = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 12) .. ($idx + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+									catch { $Modified = $null }
+									try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 20) .. ($idx + 27)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+									catch { $Accessed = $null }
+									$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Modified" -Value $Modified
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+									
+								}
+								catch
+								{
+									$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+								}
+							}
+							elseif ($itemIdExtType -eq 'BEEF0025')
+							{
+								try
+								{
+									$Attributes = Get-Attributes -Bytes $ByteArray[($idx) .. ($idx + 3)]
+									try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 4) .. ($idx + 11)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+									catch { $Created = $null }
+									try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 12) .. ($idx + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+									catch { $Accessed = $null }
+									
+									$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+								}
+								catch
+								{
+									$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+								}
+							}
+							else
+							{
+								$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+							}
+							$null = $ItemIdExtensions.Add($ItemIdExtension)
+							if (($ByteArray.Count - ($extstart + $extLength)) -le 4) { break }
+							$idx = $extStart + $extLength
+						} # End While
+					} # End extentions
+				} # End of 44/48
+				default {
+					try
+					{
+						$CLSID = if ($ByteArray.Count -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }	else { $null }
+					}
+					catch { $CLSID = $null }
+					
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'	 = $ByteArray.count
+						'ItemIDType'	 = $ItemIDType
+						'SortOrderIndex' = $Class
+						'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
+					}
+				}
+			} # End Switch
+		} # end else
+		
+		$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "ItemIdExtensions" -Value @($ItemIdExtensions)
+		$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "Data" -Value "$([System.BitConverter]::ToString($ByteArray) -replace '-', '')"
+		
+		return $ItemIdListProperties
+	} # End Get-Ext_1F
+	
+	function Get-Ext_2E_2F # Dates
+	{
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[AllowEmptyString()]
+			[AllowNull()]
+			[System.Byte[]]$ByteArray
+		)
+		
+		$ItemIDType = [System.BitConverter]::ToString($ByteArray[0])
+		$ItemIDSize = $ByteArray.Count
+		
+		if ($ItemIDType -eq '2F') # Driveletter
+		{
+			try
+			{
+				$DriveLetter = [System.Text.Encoding]::UTF8.GetString($ByteArray[1 .. 4])
+				$CLSID0 = if ($ItemIDSize -ge 20 -and ![System.Text.RegularExpressions.Regex]::IsMatch(($ByteArray[5 .. 19] -join ''), '[(0){16}]')) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[5 .. 19]))" }	else { $null }
+				$CLSID = if ($ItemIDSize -ge 39) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[23 .. 39]))" }	else { $null }
+				
+				$ItemIdListProperties = [PSCustomObject]@{
+					'ItemIDSize'   = $ItemIDSize
+					'ItemIDType'   = $ItemIDType
+					'DriveLetter'  = $DriveLetter
+				}
+				if ($null -ne $CLSID0)
+				{
+					$ItemIdListProperties| Add-Member -MemberType NoteProperty -Name 'GUID' -Value (Get-FolderDescription -CLSIDstring $CLSID0)
+				}
+				if ($null -ne $CLSID)
+				{
+					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'CLSID' -Value (Get-FolderDescription -CLSIDstring $CLSID)
+				}
+			}
+			catch { $null }
+		}
+		elseif ($ItemIDType -eq '2E')
+		{
+			try
+			{
+				$Signature = [System.BitConverter]::ToString($ByteArray[4..7]) -replace '-', ''
+				if ($Signature -eq '06203108') # Shell Ext Volume (Portable Volume)
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize' = $ItemIDSize
+						'ItemIDType' = $ItemIDType
+					}
+				}
+				else
+				{
+					$CLSID0 = if ($ItemIDSize -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }	else { $null }
+					
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize' = $ItemIDSize
+						'ItemIDType' = $ItemIDType
+						'GUID'	     = if ($CLSID0) { Get-CLSID -CLSIDstring $CLSID0 }else { $null }
+					}
+					
+					if ($ItemIDSize -ge 25)
+					{
+						# Get the extension(s)
+						$ItemIdExtensions = [System.Collections.ArrayList]::new()
+						$idx = 18
+						While ($ItemIDSize -gt $idx)
+						{
+							$extStart = $idx
+							$extLength = [System.BitConverter]::ToUInt16($ByteArray[($extStart) .. ($extStart + 1)], 0)
+							$extversion = [System.BitConverter]::ToUInt16($ByteArray[($extStart + 2) .. ($extStart + 3)], 0)
+							$itemIdExtType = [System.BitConverter]::ToString($ByteArray[($extStart + 7) .. ($extStart + 4)]) -replace '-', ''
+							
+							$ItemIdExtension = [PSCustomObject]::new()
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extLength" -Value $extLength
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extversion" -Value $extversion
+							$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "itemIdExtType" -Value $itemIdExtType
+							
+							if ($extLength -gt 0 -and $itemIdExtType -eq 'BEEF0025') # Little Endian
+							{
+								$TargetAttributes = Get-Attributes -Bytes $ByteArray[($extStart + 8)..($extStart + 11)]
+								$TargetCreated = [datetime]::FromFileTimeUtc("0x$([System.BitConverter]::ToString($ByteArray[($extStart + 19) .. ($extStart + 12)]) -replace '-', '')").ToString("dd/MM/yyyy HH:mm:ss.fffffff")
+								$TargetAccessed = [datetime]::FromFileTimeUtc("0x$([System.BitConverter]::ToString($ByteArray[($extStart + 27) .. ($extStart + 20)]) -replace '-', '')").ToString("dd/MM/yyyy HH:mm:ss.fffffff")
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "TargetAttributes" -Value $TargetAttributes
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "TargetCreated" -Value $TargetCreated
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "TargetAccessed" -Value $TargetAccessed
+								
+								$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+							}
+							elseif ($extLength -gt 0 -and $itemIdExtType -eq 'BEEF0026') #Big Endian
+							{
+								$Attributes = Get-Attributes -Bytes $ByteArray[($extStart + 8) .. ($extStart + 11)]
+								try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($extStart + 12) .. ($extStart + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+								catch { $Created = $null }
+								try { $Modified = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($extStart + 20) .. ($extStart + 27)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+								catch { $Modified = $null }
+								try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($extStart + 28) .. ($extStart + 35)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+								catch { $Accessed = $null }
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Modified" -Value $Modified
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
+								
+								$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+							}
+							$null = $ItemIdExtensions.Add($ItemIdExtension)
+							
+							if (($ByteArray.Count - ($extstart + $extLength)) -le 4) { break }
+							$idx = $extStart + $extLength
+						} # End While
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "ItemIdExtensions" -Value $ItemIdExtensions
+					} # end if
+				}
+			}
+			catch
+			{
+				$ItemIdListProperties = [PSCustomObject]@{
+					'ItemIDSize' = $ItemIDSize
+					'ItemIDType' = $ItemIDType
+				}
+			}
+		}
+		else
+		{
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize' = $ItemIDSize
+				'ItemIDType' = $ItemIDType
+			}
+		}
+		
+		
+		$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "Data" -Value "$([System.BitConverter]::ToString($ByteArray) -replace '-', '')"
+		
+		return $ItemIdListProperties
+		
+	} # End Get-Ext_2
+	
+	function Get-Ext_1F_old # GUID
+	{
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[AllowEmptyString()]
+			[AllowNull()]
+			[System.Byte[]]$ByteArray
+		)
+		
+		$ItemIDType = [System.BitConverter]::ToString($ByteArray[0])
+		$ClassType = [System.BitConverter]::ToString($ByteArray[1])
+		
+		if ($ByteArray.Count -eq 18)
+		{
+			$CLSID0 = Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))"
+			
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize' = $ByteArray.Count
+				'ItemIDType' = $ItemIDType
+				'GUID'	     = if (!!$CLSID0) { Get-CLSID -CLSIDstring $CLSID0 }else{ $CLSID0 }
+			}
+		}
+		else
+		{
+			Switch ($ClassType)
+			{
+				'50'{
+					$Class = if ($SortOrderIndex[[String]$ClassType]) { "$($SortOrderIndex[[String]$ClassType]) [$($ClassType)]" }
+					else { $ClassType }
+					$CLSID = if ($ByteArray.Count -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }
+					else { $null }
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'	 = $ByteArray.count
 						'ItemIDType'	 = $ItemIDType
 						'SortOrderIndex' = $Class
 						'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
@@ -759,9 +2031,9 @@ function Show-MainForm_psf
 					elseif ([System.BitConverter]::ToString($ByteArray[(18 + 7)]) -eq 'BE')
 					{
 						$Class = if ($SortOrderIndex[[String]$ClassType]) { "$($SortOrderIndex[[String]$ClassType]) [$($ClassType)]" }	else { $ClassType }
-						$CLSID = if ($ByteArray.length -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }	else { $null }
+						$CLSID = if ($ByteArray.Count -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }	else { $null }
 						$ItemIdListProperties = [PSCustomObject]@{
-							'ItemIDSize'	 = $ByteArray.Length
+							'ItemIDSize'	 = $ByteArray.count
 							'ItemIDType'	 = $ItemIDType
 							'SortOrderIndex' = $Class
 							'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
@@ -772,7 +2044,7 @@ function Show-MainForm_psf
 							$idx = 18
 							# Get the extension(s)
 							$ItemIdExtensions = [System.Collections.ArrayList]::new()
-							while ($ByteArray.Length -gt $idx)
+							while ($ByteArray.Count -gt $idx)
 							{
 								$extstart = $idx
 								$extLength = [System.BitConverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
@@ -788,7 +2060,7 @@ function Show-MainForm_psf
 								{
 									try
 									{
-										$unknown = "0x$([System.BitConverter]::ToString($ByteArray[($idx) .. ($idx + 3)]) -replace '-', '')"
+										$Attributes = Get-Attributes -Bytes $ByteArray[($idx) .. ($idx + 3)]
 										try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 4) .. ($idx + 11)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
 										catch { $Created = $null }
 										try { $Modified = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 12) .. ($idx + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
@@ -796,9 +2068,32 @@ function Show-MainForm_psf
 										try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 20) .. ($idx + 27)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
 										catch { $Accessed = $null }
 										$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
-										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "unknown" -Value $unknown
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
 										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
 										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Modified" -Value $Modified
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+										
+									}
+									catch
+									{
+										$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+									}
+								}
+								elseif ($itemIdExtType -eq 'BEEF0025')
+								{
+									try
+									{
+										$Attributes = Get-Attributes -Bytes $ByteArray[($idx) .. ($idx + 3)]
+										try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 4) .. ($idx + 11)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+										catch { $Created = $null }
+										try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 12) .. ($idx + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+										catch { $Accessed = $null }
+	
+										$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
+										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
 										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
 										$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 										
@@ -815,7 +2110,7 @@ function Show-MainForm_psf
 									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 								}
 								$null = $ItemIdExtensions.Add($ItemIdExtension)
-								if (($ByteArray.Length - ($extstart + $extLength)) -le 4) { break }
+								if (($ByteArray.Count - ($extstart + $extLength)) -le 4) { break }
 								$idx = $extStart + $extLength
 							} # End While
 						} # End extentions
@@ -824,10 +2119,10 @@ function Show-MainForm_psf
 				{ $_ -in ('44', '48') }{
 					$Class = if ($SortOrderIndex[[String]$ClassType]) { "$($SortOrderIndex[[String]$ClassType]) [$($ClassType)]" }
 					else { $ClassType }
-					$CLSID = if ($ByteArray.length -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }
+					$CLSID = if ($ByteArray.Count -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }
 					else { $null }
 					$ItemIdListProperties = [PSCustomObject]@{
-						'ItemIDSize'	 = $ByteArray.Length
+						'ItemIDSize'	 = $ByteArray.count
 						'ItemIDType'	 = $ItemIDType
 						'SortOrderIndex' = $Class
 						'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
@@ -838,7 +2133,7 @@ function Show-MainForm_psf
 						$idx = 18
 						# Get the extension(s)
 						$ItemIdExtensions = [System.Collections.ArrayList]::new()
-						while ($ByteArray.Length -gt $idx)
+						while ($ByteArray.Count -gt $idx)
 						{
 							
 							$extstart = $idx
@@ -855,7 +2150,7 @@ function Show-MainForm_psf
 							{
 								try
 								{
-									$unknown = "0x$([System.BitConverter]::ToString($ByteArray[($idx) .. ($idx + 3)]) -replace '-', '')"
+									$Attributes = Get-Attributes -Bytes $ByteArray[($idx) .. ($idx + 3)]
 									try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 4) .. ($idx + 11)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
 									catch { $Created = $null }
 									try { $Modified = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 12) .. ($idx + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
@@ -863,12 +2158,33 @@ function Show-MainForm_psf
 									try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 20) .. ($idx + 27)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
 									catch { $Accessed = $null }
 									$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
-									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "unknown" -Value $unknown
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
 									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
 									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Modified" -Value $Modified
 									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
 									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+								}
+								catch
+								{
+									$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+								}
+							}
+							elseif ($itemIdExtType -eq 'BEEF0025')
+							{
+								try
+								{
+									$Attributes = Get-Attributes -Bytes $ByteArray[($idx) .. ($idx + 3)]
+									try { $Created = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 4) .. ($idx + 11)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+									catch { $Created = $null }
+									try { $Accessed = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 12) .. ($idx + 19)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+									catch { $Accessed = $null }
 									
+									$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Attributes" -Value $Attributes
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Created" -Value $Created
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Accessed" -Value $Accessed
+									$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 								}
 								catch
 								{
@@ -882,18 +2198,18 @@ function Show-MainForm_psf
 								$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 							}
 							$null = $ItemIdExtensions.Add($ItemIdExtension)
-							if (($ByteArray.Length - ($extstart + $extLength)) -le 4) { break }
+							if (($ByteArray.Count - ($extstart + $extLength)) -le 4) { break }
 							$idx = $extStart + $extLength
 						} # End While
 					} # End extentions
 				} # End of 44/48
 				default {
-					try { $CLSID = if ($ByteArray.length -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }
+					try { $CLSID = if ($ByteArray.Count -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }
 						else { $null } }
 					catch { $CLSID = $null }
 					
 					$ItemIdListProperties = [PSCustomObject]@{
-						'ItemIDSize'	 = $ByteArray.Length
+						'ItemIDSize'	 = $ByteArray.count
 						'ItemIDType'	 = $ItemIDType
 						'SortOrderIndex' = $Class
 						'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
@@ -921,7 +2237,7 @@ function Show-MainForm_psf
 		)
 		$ItemIdListProperties = [PSCustomObject]::new()
 		$ItemIDType = [System.BitConverter]::ToString($ByteArray[0])
-		$ItemIDSize = $ByteArray.Length
+		$ItemIDSize = $ByteArray.Count
 		
 		if ($ItemIDType -eq '32')
 		{
@@ -968,7 +2284,7 @@ function Show-MainForm_psf
 		
 		# Get the extension(s)
 		$ItemIdExtensions = [System.Collections.ArrayList]::new()
-		While ($ByteArray.Length -gt $idx)
+		While ($ByteArray.Count -gt $idx)
 		{
 			$extStart = $idx
 			$extLength = [System.BitConverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
@@ -1041,12 +2357,113 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				}
 			}
+			elseif ($itemIdExtType -eq 'BEEF000A')
+			{
+				try
+				{
+					$EntryNr = [System.BitConverter]::ToInt32($ByteArray[($extStart + 8) .. ($extStart + 11)],0)
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "EntryNr" -Value $EntryNr
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+				catch
+				{
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+			}
 			elseif ($itemIdExtType -eq 'BEEF001A')
 			{
 				try
 				{
 					$DocumentType = [System.Text.Encoding]::Unicode.GetString($ByteArray[($extStart + 10) .. ($extStart + $extLength - 5)])
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "DocumentType" -Value $DocumentType
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+				catch
+				{
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+			}
+			elseif ($itemIdExtType -eq 'BEEF000B')
+			{
+				try
+				{
+					# Target Path		
+					$TargetUnicodeHex = [System.Text.Encoding]::GetEncoding(28591).GetString($ByteArray[($extStart + 16) .. ($extStart + $extLength - 1)])
+					$UnicodeEnd = [System.Text.RegularExpressions.Regex]::Match($TargetUnicodeHex, "(\x00\x00)").index + 1
+					
+					if ((($extStart + 16) .. ($extStart + 16 + $UnicodeEnd)).count % 2 -eq 0)
+					{
+						$TargetPath = [System.Text.Encoding]::Unicode.GetString($ByteArray[($extStart + 16) .. ($extStart + 16 + $UnicodeEnd)])
+						$idx = $extStart + 16 + $UnicodeEnd + 2 + 1
+					}
+					else
+					{
+						$TargetPath = [System.Text.Encoding]::Unicode.GetString($ByteArray[($extStart + 16) .. ($extStart + 16 + $UnicodeEnd - 1)])
+						$idx = $extStart + 16 + $UnicodeEnd + 2
+					}
+					$idx = $idx + 4
+					
+					# Component
+					$TargetUnicodeHex = [System.Text.Encoding]::GetEncoding(28591).GetString($ByteArray[($idx) .. ($extStart + $extLength - 1)])
+					$UnicodeEnd = [System.Text.RegularExpressions.Regex]::Match($TargetUnicodeHex, "(\x00\x00)").index + 1
+					if ((($idx) .. ($idx + $UnicodeEnd)).count % 2 -eq 0)
+					{
+						$Component = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + $UnicodeEnd)])
+						$idx = $idx + $UnicodeEnd + 2 + 1
+					}
+					else
+					{
+						$Component = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + $UnicodeEnd - 1)])
+						$idx = $idx + $UnicodeEnd + 2
+					}
+					
+					
+					# Component Parameters
+					$TargetUnicodeHex = [System.Text.Encoding]::GetEncoding(28591).GetString($ByteArray[($idx) .. ($extStart + $extLength - 1)])
+					$UnicodeEnd = [System.Text.RegularExpressions.Regex]::Match($TargetUnicodeHex, "(\x00\x00)").index + 1
+					if ((($idx) .. ($idx + $UnicodeEnd)).count % 2 -eq 0)
+					{
+						$ComponentParameters = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + $UnicodeEnd)])
+						$idx = $idx + $UnicodeEnd + 2 + 1
+					}
+					else
+					{
+						$ComponentParameters = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + $UnicodeEnd - 1)])
+						$idx = $idx + $UnicodeEnd + 2
+					}
+					
+					try { $TargetCreated = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx) .. ($idx + 7)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+					catch { $TargetCreated = $null }
+					try { $ShortCutCreated = [datetime]::FromFileTimeUtc([System.BitConverter]::ToUInt64($ByteArray[($idx + 8) .. ($idx + 15)], 0)).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
+					catch { $ShortCutCreated = $null }
+					
+					$idx = $idx + 16 + (16 - (($idx + 16) % 16))
+					
+					# Extra Path
+					$TargetUnicodeHex = [System.Text.Encoding]::GetEncoding(28591).GetString($ByteArray[($idx) .. ($extStart + $extLength - 1)])
+					$UnicodeEnd = [System.Text.RegularExpressions.Regex]::Match($TargetUnicodeHex, "(\x00\x00)").index + 1
+					if ((($idx) .. ($idx + $UnicodeEnd)).count % 2 -eq 0)
+					{
+						$ExtraPath = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + $UnicodeEnd)])
+						$idx = $idx + $UnicodeEnd + 2 + 1
+					}
+					else
+					{
+						$ExtraPath = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + $UnicodeEnd - 1)])
+						$idx = $idx + $UnicodeEnd + 2
+					}
+					
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "TargetPath" -Value $TargetPath
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Component" -Value $Component
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "ComponentParameters" -Value $ComponentParameters
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "TargetCreated" -Value $TargetCreated
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "ShortCutCreated" -Value $ShortCutCreated
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "ExtraPath" -Value $ExtraPath
+					
 					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				}
@@ -1079,16 +2496,17 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				
 					$ExtraData = [System.Byte[]](1, 0, 0, 0) + $ByteArray[($extStart + 8) .. ($extStart + $extLength - 1)]
+					$PropertyStoreEntries = [System.Collections.ArrayList]::new()
 					$Items = Get-Ext_SPS1 -ByteArray $ExtraData
 					foreach ($property in $items)
 					{
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'ValueSize' -Value $property.ValueSize
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'ID' -Value $property.ID
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.TypedProperty
-					#	$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'RawData' -Value $property.Data
+						$PropertyStoreEntry = [PSCustomObject]::new()
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+						$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
 					}
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "PropertyStoreEntries" -Value $PropertyStoreEntries
 				}
 				catch
 				{
@@ -1104,16 +2522,17 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 					
 					$ExtraData = [System.Byte[]](1, 0, 0, 0) + $ByteArray[($extStart + 8) .. ($extStart + $extLength - 1)]
+					$PropertyStoreEntries = [System.Collections.ArrayList]::new()
 					$Items = Get-Ext_SPS1 -ByteArray $ExtraData
 					foreach ($property in $items)
 					{
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'ValueSize' -Value $property.ValueSize
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'ID' -Value $property.ID
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.TypedProperty
-					#	$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'RawData' -Value $property.Data
+						$PropertyStoreEntry = [PSCustomObject]::new()
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+						$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
 					}
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "PropertyStoreEntries" -Value $PropertyStoreEntries
 				}
 				catch
 				{
@@ -1127,7 +2546,7 @@ function Show-MainForm_psf
 				$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 			}
 			$null = $ItemIdExtensions.Add($ItemIdExtension)
-			if (($ByteArray.Length - ($extstart + $extLength)) -le 4) { break }
+			if (($ByteArray.Count - ($extstart + $extLength)) -le 4) { break }
 			$idx = $extStart + $extLength
 		} # End While
 		
@@ -1148,7 +2567,7 @@ function Show-MainForm_psf
 		)
 		$ItemIdListProperties = [PSCustomObject]::new()
 		$ItemIDType = [System.BitConverter]::ToString($ByteArray[0])
-		$ItemIDSize = $ByteArray.Length
+		$ItemIDSize = $ByteArray.Count
 		
 		$w32Modified = DosDateTime-FromHex -Hex ([System.BitConverter]::ToString($ByteArray[9 .. 6]) -replace '-', '')
 		$Attributes = Get-Attributes -Bytes $ByteArray[10..11]
@@ -1171,7 +2590,7 @@ function Show-MainForm_psf
 		
 		# Get the extension(s)
 		$ItemIdExtensions = [System.Collections.ArrayList]::new()
-		While ($ByteArray.Length -gt $idx)
+		While ($ByteArray.Count -gt $idx)
 		{
 			$extStart = $idx
 			$extLength = [System.BitConverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
@@ -1244,6 +2663,21 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				}
 			}
+			elseif ($itemIdExtType -eq 'BEEF000A')
+			{
+				try
+				{
+					$EntryNr = [System.BitConverter]::ToInt32($ByteArray[($extStart + 8) .. ($extStart + 11)], 0)
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "EntryNr" -Value $EntryNr
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+				catch
+				{
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+			}
 			elseif ($itemIdExtType -eq 'BEEF001A')
 			{
 				try
@@ -1282,16 +2716,17 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 					
 					$ExtraData = [System.Byte[]](1, 0, 0, 0) + $ByteArray[($extStart + 8) .. ($extStart + $extLength - 1)]
+					$PropertyStoreEntries = [System.Collections.ArrayList]::new()
 					$Items = Get-Ext_SPS1 -ByteArray $ExtraData
 					foreach ($property in $items)
 					{
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'ValueSize' -Value $property.ValueSize
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'ID' -Value $property.ID
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.TypedProperty
-						#	$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'RawData' -Value $property.Data
+						$PropertyStoreEntry = [PSCustomObject]::new()
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+						$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
 					}
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "PropertyStoreEntries" -Value $PropertyStoreEntries
 				}
 				catch
 				{
@@ -1307,16 +2742,17 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 					
 					$ExtraData = [System.Byte[]](1, 0, 0, 0) + $ByteArray[($extStart + 8) .. ($extStart + $extLength - 1)]
+					$PropertyStoreEntries = [System.Collections.ArrayList]::new()
 					$Items = Get-Ext_SPS1 -ByteArray $ExtraData
 					foreach ($property in $items)
 					{
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'ValueSize' -Value $property.ValueSize
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'ID' -Value $property.ID
-						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.TypedProperty
-						#	$ItemIdExtension | Add-Member -MemberType NoteProperty -Name 'RawData' -Value $property.Data
+						$PropertyStoreEntry = [PSCustomObject]::new()
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+						$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+						$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
 					}
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "PropertyStoreEntries" -Value $PropertyStoreEntries
 				}
 				catch
 				{
@@ -1330,7 +2766,7 @@ function Show-MainForm_psf
 				$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 			}
 			$null = $ItemIdExtensions.Add($ItemIdExtension)
-			if (($ByteArray.Length - ($extstart + $extLength)) -le 4) { break }
+			if (($ByteArray.Count - ($extstart + $extLength)) -le 4) { break }
 			$idx = $extStart + $extLength
 		} # End While
 		
@@ -1430,6 +2866,90 @@ function Show-MainForm_psf
 		return $ItemIdListProperties
 	} # End Get-Ext_61
 	
+	function Get-Ext_71
+	{
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[AllowEmptyString()]
+			[AllowNull()]
+			[System.Byte[]]$ByteArray
+		)
+		
+		$ItemIdListProperties = [PSCustomObject]::new()
+		$ItemIDType = [System.BitConverter]::ToString($ByteArray[0])
+		$ItemIDSize = $ByteArray.Count
+		
+		$CLSID = if ($ItemIDSize -ge 28) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[12 .. 27]))" }
+		else { $null }
+		$ItemIdListProperties = [PSCustomObject]@{
+			'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+			'ItemIDType'  = $ItemIDType
+			'DisplayName' = $ItemIdListItem.DisplayName
+			'CLSID'	      = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
+		}
+		
+		if ($ItemIDSize -ge 36)
+		{
+			$idx = 28
+			# Get the extension(s)
+			$ItemIdExtensions = [System.Collections.ArrayList]::new()
+			While ($ItemIDSize -gt $idx)
+			{
+				$extStart = $idx
+				$extLength = [System.BitConverter]::ToUInt16($ByteArray[($idx) .. ($idx + 1)], 0)
+				$extversion = [System.BitConverter]::ToUInt16($ByteArray[($extStart + 2) .. ($extStart + 3)], 0)
+				$itemIdExtType = [System.BitConverter]::ToString($ByteArray[($extStart + 7) .. ($extStart + 4)]) -replace '-', ''
+				
+				$ItemIdExtension = [PSCustomObject]::new()
+				$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extLength" -Value $extLength
+				$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extversion" -Value $extversion
+				$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "itemIdExtType" -Value $itemIdExtType
+				if ($itemIdExtType -eq 'BEEF0010')
+				{
+					try
+					{
+						$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+						
+						$ExtraData = [System.Byte[]](1, 0, 0, 0) + $ByteArray[($extStart + 16) .. ($extStart + $extLength - 1)]
+						$PropertyStoreEntries = [System.Collections.ArrayList]::new()
+						$Items = Get-Ext_SPS1 -ByteArray $ExtraData
+						foreach ($property in $items)
+						{
+							$PropertyStoreEntry = [PSCustomObject]::new()
+							$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+							$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+							$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+							$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
+						}
+						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "PropertyStoreEntries" -Value $PropertyStoreEntries
+					}
+					catch
+					{
+						$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+					}
+				}
+				else
+				{
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+				$null = $ItemIdExtensions.Add($ItemIdExtension)
+				if (($ItemIdListItem.Data.Length - ($extstart + $extLength)) -le 4) { break }
+				$idx = $extStart + $extLength
+			} # End While
+			
+			$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "ItemIdExtensions" -Value @($ItemIdExtensions)
+		}
+		
+		$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "Data" -Value "$([System.BitConverter]::ToString($ByteArray) -replace '-', '')"
+	
+		
+		return $ItemIdListProperties
+	} # End Get-Ext_71
+	
 	function Get-Ext_SPS1 # Serialized Property Store 
 	{
 		param
@@ -1443,75 +2963,161 @@ function Show-MainForm_psf
 		# Property types:
 		# https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/2a4589eb-9a23-4a8b-adbd-3e368233c099
 		# https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-propstore/3453fb82-0e4f-4c2c-bc04-64b4bd2c51ec
-		
-		$pc = [PropertyStore.SerializedPropertyStore]::FromByteArray($ByteArray)
-		$ItemIdExtensions = [System.Collections.ArrayList]::new()
-		
-		if ($pc.PropertyStorage.Count -ge 1)
+		try
 		{
+			$pc = [PropertyStore.SerializedPropertyStore]::FromByteArray($ByteArray)
+			$ItemIdExtensions = [System.Collections.ArrayList]::new()
 			
-			for ($t = 0; $t -lt $pc.PropertyStorage.Count; $t++)
+			$FormatIdentifiers = [System.Collections.Hashtable]@{
+				'F29F85E0-4FF9-1068-AB91-08002B27B3D9' = 'SummaryInformation'
+				'D5CDD502-2E9C-101B-9397-08002B2CF9AE' = 'DocSummaryInformation'
+				'D5CDD505-2E9C-101B-9397-08002B2CF9AE' = 'UserDefinedProperties'
+			}
+					
+			if ($pc.PropertyStorage.Count -ge 1)
 			{
-				$TypedProperty = [System.Collections.ArrayList]::new()
-				$sproperty = $pc.PropertyStorage[$t]
-				$ItemIdExtension = [PSCustomObject]@{
-					'Storage Size'  = $sproperty.StorageSize
-					'FormatID'	    = $sproperty.FormatID
-					'ID'		    = $sproperty.PropertyStorage.ID
-					'TypedProperty' = $TypedProperty
-				}
-				
-				if ($sproperty.PropertyStorage.Count -ge 1)
+				for ($t = 0; $t -lt $pc.PropertyStorage.Count; $t++)
 				{
-					for ($p = 0; $p -lt $sproperty.PropertyStorage.Count; $p++)
+					$SPropertyStore = [System.Collections.ArrayList]::new()
+					$sproperty = $pc.PropertyStorage[$t]
+									
+					if ($sproperty.PropertyStorage.Count -ge 1)
 					{
-						
-						$typed = $sproperty.PropertyStorage[$p].TypedPropertyValue
-						# https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/f122b9d7-e5cf-4484-8466-83f6fd94b3cc
-						if ($typed.Type -eq 'VT_BSTR')
+						for ($p = 0; $p -lt $sproperty.PropertyStorage.Count; $p++)
 						{
-							try
+							$typed = $sproperty.PropertyStorage[$p].TypedPropertyValue
+							if ($typed.Type.ToString().Contains('VT_BSTR') )
 							{
-								$vl = [Bitconverter]::ToUInt32($typed[$p].Value[0 .. 3], 0)
-								if (($vl + 4) -le $typed.Value.length)
+								try
 								{
-									$tpvalue = [System.Text.Encoding]::Unicode.GetString($typed.Value[4 .. (4 + $vl - 1)])
+									$vl = [Bitconverter]::ToUInt32($typed.Value[0 .. 3], 0)
+									if (($vl + 4) -le $typed.Value.length)
+									{
+										$tpvalue = [System.Text.Encoding]::Unicode.GetString($typed.Value[4 .. (4 + $vl - 1)])
+										$tpraw = $null
+									}
+									else
+									{
+										$tpvalue = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
+										$tpraw = $null
+									}
+								}
+								catch
+								{
+									$tpvalue = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
+									$tpraw = $null
+								}
+							}
+							elseif ($typed.Type.ToString().Contains('VT_VERSIONED_STREAM') -or $typed.Type.ToString().Contains('VT_LPWSTR, VT_VECTOR'))
+							{
+								if ($typed.Value.length -gt 8)
+								{
+									try
+									{
+										$tpvalue = [System.Text.Encoding]::Unicode.GetString($typed.Value[8 .. ($typed.Value.length - 5)])
+										$tpraw = $null
+									}
+									catch
+									{
+										$tpvalue = $null
+										$tpraw = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
+									}
 								}
 								else
 								{
 									$tpvalue = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
+									$tpraw = $null
 								}
 							}
-							catch
+							elseif ($typed.Value.GetType().FullName -eq 'System.DateTime')
 							{
-								$tpvalue = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
+								try
+								{
+									$utc = $typed.Value.ToFileTimeUtc()
+									$tpvalue = [datetime]::FromFileTimeUtc($utc).ToString("dd/MM/yyyy HH:mm:ss.fffffff")
+								}
+								catch
+								{
+									$tpvalue = $typed.Value
+									$tpraw = $null
+								}
 							}
-						}
-						elseif ($typed.Type.ToString().Contains('VT_BLOB'))
-						{
-							$tpvalue = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
-						}
-						else
-						{
-							$tpvalue = $typed.Value
-						}
-						
-						$ItemIdExtensionValues = [PSCustomObject]@{
-							'ValueSize'		    = $sproperty.PropertyStorage[$p].ValueSize
-							'NameSize'		    = $sproperty.PropertyStorage[$p].NameSize
-							'Name'			    = $sproperty.PropertyStorage[$p].Name
-							'TypedPropertyType' = $sproperty.PropertyStorage[$p].TypedPropertyValue.Type
-						}
-						$ItemIdExtensionValues | Add-Member -MemberType NoteProperty -Name "TypedPropertyValue" -Value $tpvalue
-						
-						$null = $TypedProperty.Add($ItemIdExtensionValues)
-					} # End for
-				} # end if
-			} # end for
-			$null = $ItemIdExtensions.Add($ItemIdExtension)
-		} #end if PC >= 1
-		
+							elseif ($typed.Value.GetType().FullName -eq 'System.Byte[]')
+							{
+								$tpvalue = $null
+								$tpraw = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
+							}
+							elseif ($typed.Type.ToString().Contains('VT_CLSID'))
+							{
+								if ($typed.Value.length -gt 8)
+								{
+									try
+									{
+										$tpvalue = [System.Text.Encoding]::Unicode.GetString($typed.Value[8 .. ($typed.Value.length - 5)])
+										$tpraw = $null
+									}
+									catch
+									{
+										$tpvalue = $null
+										$tpraw = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
+									}
+								}
+								else
+								{
+									$tpvalue = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
+									$tpraw = $null
+								}
+							}
+							elseif ($typed.Type.ToString().Contains('VT_BLOB') -or $typed.Type.ToString().Contains('VT_STORAGE'))
+							{
+								$tpvalue = $null
+								$tpraw = [System.BitConverter]::ToString($typed.Value) -replace '-', ''
+							<#try { $blob = [ShellLink.Structures.ItemID]::FromByteArray($typed.Value[4 .. ($typed.Value.Count - 1)]) }
+							catch{$null}#>
+							}
+							else
+							{
+								$tpvalue = $typed.Value
+								$tpraw = $null
+							}
+							
+							$TProperty = [PSCustomObject]@{
+								'Type'  = "$($typed.Type) [0x$($typed.Type.value__.ToString('X4'))]"
+								'Value' = $tpvalue
+								#	'Blob'  = $blob
+								'Raw'   = $tpraw
+							}
+							
+							$PropertyStoreValues = [PSCustomObject]@{
+								'ValueSize' = $sproperty.PropertyStorage[$p].ValueSize
+								'NameSize'  = $sproperty.PropertyStorage[$p].NameSize
+								'Name'	    = $sproperty.PropertyStorage[$p].Name
+								'ID'	    = $sproperty.PropertyStorage[$p].ID
+								'TypedProp' = $TProperty
+							}
+							
+							$null = $SPropertyStore.Add($PropertyStoreValues)
+						} # End for
+					} # end if
+					
+					$formatID = if (!!$FormatIdentifiers[$sproperty.FormatID.Guid.ToUpper()]) {"$($FormatIdentifiers[$sproperty.FormatID.Guid.ToUpper()]) [$($sproperty.FormatID.Guid.ToUpper())]" }
+					else{ $sproperty.FormatID}
+					
+					
+					$ItemIdExtension = [PSCustomObject]@{
+						'Storage Size'  = $sproperty.StorageSize
+						'FormatID'	    = $formatID
+						'PropertyStore' = $SPropertyStore
+					}
+					
+					$null = $ItemIdExtensions.Add($ItemIdExtension)
+				} # end for
+				
+			} #end if PC >= 1
+		}
+		catch{ $ItemIdExtensions = $null}
 		return $ItemIdExtensions
+		
 	} # Get-Ext_SPS1
 	
 	function Get-Compressed_w32 # Compressed 
@@ -1525,7 +3131,7 @@ function Show-MainForm_psf
 		)
 		
 		$ItemIDType = [System.BitConverter]::ToString($ByteArray[0])
-		$ItemIDSize = $ByteArray.Length
+		$ItemIDSize = $ByteArray.Count
 		$type = [System.BitConverter]::ToUInt16($ByteArray[18 .. 19], 0)
 		$Attributes = Get-Attributes -Bytes $ByteArray[18..21]
 		$Timestamp = [System.Text.Encoding]::Unicode.GetString($ByteArray[22 .. 53])
@@ -1557,6 +3163,280 @@ function Show-MainForm_psf
 		
 	} # End Get-Compressed_w32
 	
+	function Get-LinkTargetIdList
+	{
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[AllowEmptyString()]
+			[AllowNull()]
+			[ShellLink.Structures.ItemID]$ItemIdListItem
+		)
+		
+		$ItemIDType = if ($ItemIdListItem.Data) { [System.BitConverter]::ToString($ItemIdListItem.Data[0]) }else { $null }
+		
+		try
+		{
+			if ($ItemIDType -eq '01') # Control Panel Category
+			{
+				$Signature = if ($ItemIdListItem.Data.length -ge 5) { [System.BitConverter]::ToString($ItemIdListItem.Data[2 .. 5]) -replace '-', '' }
+				else { $null }
+				$CP = [System.BitConverter]::ToString($ItemIdListItem.Data[6])
+				$CPcategory = if (!!$CPitems[[System.String]$CP]) { "$($CPitems[[System.String]$CP]) [$0x$($CP)]" }
+				else { "$0x$($CP)" }
+				$ItemIdListProperties = [PSCustomObject]@{
+					'ItemIDSize' = $ItemIdListItem.ItemIDSize
+					'ItemIDType' = $ItemIDType
+					'Signature'  = if ($Signature) { "0x$($Signature)" }else { $null }
+					'CPcategory' = $CPcategory
+					'Data'	     = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+				}
+			}
+			elseif ($ItemIDType -eq '1F') # Root Shell item
+			{
+				try
+				{
+					$ItemIdListProperties = [PSCustomObject]@{ }
+					$Items = Get-Ext_1F -ByteArray $ItemIdListItem.Data
+					foreach ($property in $items.psobject.Properties)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
+					}
+				}
+				catch
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+						'ItemIDType'  = $ItemIDType
+						'DisplayName' = $ItemIdListItem.DisplayName
+						'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+				}
+			}
+			elseif ($ItemIDType.Startswith('2')) # -in ('2E', '2F')) # Volume shell item
+			{
+				try
+				{
+					$ItemIdListProperties = [PSCustomObject]@{ }
+					$Items = Get-Ext_2E_2F -ByteArray $ItemIdListItem.Data
+					foreach ($property in $items.psobject.Properties)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value @($property.Value)
+					}
+				}
+				catch
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+						'ItemIDType'  = $ItemIDType
+						'DisplayName' = $ItemIdListItem.DisplayName
+						'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+				}
+			}
+			elseif ($ItemIDType -in ('31', '32')) # Folder / File
+			{
+				try
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'DisplayName' = $ItemIdListItem.DisplayName
+						#   'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+					$Items = Get-Ext_31_32 -ByteArray $ItemIdListItem.Data
+					foreach ($property in $items.psobject.Properties)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value @($property.Value)
+					}
+				}
+				catch
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+						'ItemIDType'  = $ItemIDType
+						'DisplayName' = $ItemIdListItem.DisplayName
+						'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+				}
+			}
+			elseif ($ItemIDType -in ('35', '36')) # Folder / File with Unicode ANSI name
+			{
+				try
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'DisplayName' = $ItemIdListItem.DisplayName
+						#   'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+					$Items = Get-Ext_35_36 -ByteArray $ItemIdListItem.Data
+					foreach ($property in $items.psobject.Properties)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value @($property.Value)
+					}
+				}
+				catch
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+						'ItemIDType'  = $ItemIDType
+						'DisplayName' = $ItemIdListItem.DisplayName
+						'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+				}
+			}
+			elseif ($ItemIDType -eq '61') # CLSID_Internet - URI shell item
+			{
+				try
+				{
+					$ItemIdListProperties = [PSCustomObject]@{ }
+					$Items = Get-Ext_61 -ByteArray $ItemIdListItem.Data
+					foreach ($property in $items.psobject.Properties)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value @($property.Value)
+					}
+				}
+				catch
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+						'ItemIDType'  = $ItemIDType
+						'DisplayName' = $ItemIdListItem.DisplayName
+						'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+				}
+			}
+			elseif ($ItemIDType -eq '71') # GUID
+			{
+				try
+				{
+					$ItemIdListProperties = [PSCustomObject]@{ }
+					$Items = Get-Ext_71 -ByteArray $ItemIdListItem.Data
+					foreach ($property in $items.psobject.Properties)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value @($property.Value)
+					}
+				}
+				catch
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+						'ItemIDType'  = $ItemIDType
+						'DisplayName' = $ItemIdListItem.DisplayName
+						'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+				}
+			}
+			elseif ($ItemIDType -eq '74') # Network location shell item - Compound
+			{
+				$Signature = [System.BitConverter]::ToString($ItemIdListItem.Data[4 .. 7]) -replace '-', ''
+				$ItemIdListProperties = [PSCustomObject]@{
+					'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+					'ItemIDType'  = $ItemIDType
+					'DisplayName' = $ItemIdListItem.DisplayName
+					'Signature'   = "0x$($Signature)"
+					'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+				}
+				
+				if ($Signature -eq '43465346') # CFSF
+				{
+					$embsize = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[8 .. 9], 0)
+					$embtype = [System.BitConverter]::ToString($ItemIdListItem.Data[10])
+					
+					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'Embedded Type' -Value $embtype
+					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'Embedded Size' -Value $embsize
+					
+					if ($embtype -in ('31', '32')) # file/folder
+					{
+						try
+						{
+							$Items = Get-Ext_31_32 -ByteArray $ItemIdListItem.Data[10..($ItemIdListItem.ItemIDSize - 7)]
+							foreach ($property in $items.psobject.Properties)
+							{
+								if ($property.Name -in ('Data', 'ItemIDSize', 'ItemIDType')) { continue }
+								$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
+							}
+						}
+						catch
+						{ $null }
+					}
+					elseif ($embtype -in ('35', '36')) # file/folder
+					{
+						try
+						{
+							$Items = Get-Ext_35_36 -ByteArray $ItemIdListItem.Data[10..($ItemIdListItem.ItemIDSize - 7)]
+							foreach ($property in $items.psobject.Properties)
+							{
+								if ($property.Name -in ('Data', 'ItemIDSize', 'ItemIDType')) { continue }
+								$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
+							}
+						}
+						catch
+						{ $null }
+					}
+				}
+				else { $null }
+			}
+			elseif ($ItemIDType -in ('0F', '09', '16', '52') -and $ItemIdListItem.Data[18 .. 19].Contains([byte]16))
+			{
+				try
+				{
+					$ItemIdListProperties = [PSCustomObject]@{ }
+					$Items = Get-Compressed_w32 -ByteArray $ItemIdListItem.Data
+					foreach ($property in $items.psobject.Properties)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
+					}
+				}
+				catch
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+						'ItemIDType'  = $ItemIDType
+						'DisplayName' = $ItemIdListItem.DisplayName
+						'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+				}
+			}
+			elseif ($ItemIDType -eq '00')
+			{
+				try
+				{
+					$ItemIdListProperties = [PSCustomObject]@{ }
+					$Items = Get-Ext_00 -ByteArray $ItemIdListItem.Data
+					foreach ($property in $items.psobject.Properties)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
+					}
+				}
+				catch
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+						'ItemIDType'  = $ItemIDType
+						'DisplayName' = $ItemIdListItem.DisplayName
+						'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+				}
+			}
+			else
+			{
+				$ItemIdListProperties = [PSCustomObject]@{
+					'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+					'ItemIDType'  = $ItemIDType
+					'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+				}
+			}
+		}
+		catch
+		{
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize'  = $ItemIdListItem.ItemIDSize
+				'ItemIDType'  = $ItemIDType
+				'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+			}
+		}
+		
+		return $ItemIdListProperties
+	}
+	
 	function Get-ShellLinkfrombyteArray
 	{
 		[OutputType([string])]
@@ -1570,7 +3450,7 @@ function Show-MainForm_psf
 		{
 			[System.Console]::Beep(500,150)
 			Show-ErrorMessage -ErrorMessage "The LNK Header Size is not 76"
-			$ShotcutInfo = $null
+			$ShortcutInfo = $null
 			return
 		}
 		
@@ -1615,25 +3495,25 @@ function Show-MainForm_psf
 			$null = $DeflatedStream.Read($UncompressedFileBytes, 0, 80384)
 			$null = [Reflection.Assembly]::Load($UncompressedFileBytes)
 		}
-		try { $ShotcutInfo = [ShellLink.Shortcut]::FromByteArray($ByteArray) }
+		try { $ShortcutInfo = [ShellLink.Shortcut]::FromByteArray($ByteArray) }
 		catch [System.Management.Automation.MethodInvocationException]{
 				Show-ErrorMessage -ErrorMessage $Error[0].Exception.InnerException.Message
-				$ShotcutInfo = $null
+				$ShortcutInfo = $null
 				return
 			}
 		catch {
 				[System.Console]::Beep(500, 150)
 				Show-ErrorMessage -ErrorMessage "Invalid LNK"
-				$ShotcutInfo = $null
+				$ShortcutInfo = $null
 				return
 			}
 			
 		# LNK Header Size must be 76 ############		
-		if ($ShotcutInfo.HeaderSize -ne 76)
+		if ($ShortcutInfo.HeaderSize -ne 76)
 		{
 				[System.Console]::Beep(500, 150)
 				Show-ErrorMessage -ErrorMessage "The LNK Header Size is not 76"
-				$ShotcutInfo = $null
+				$ShortcutInfo = $null
 				return 
 		}
 		# Get Shell Folders
@@ -1661,45 +3541,45 @@ function Show-MainForm_psf
 		}
 			
 		# Get Shotcut Flags
-		$LinkFlags = $ShotcutInfo.LinkFlags.ToString()
+		$LinkFlags = $ShortcutInfo.LinkFlags.ToString()
 		
 		# Header - Timestamps are stored in UTC
-		$fileattributes = if ($ShotcutInfo.FileAttributes -ne 0) { $ShotcutInfo.FileAttributes.ToString().split(',').foreach{ $_.replace('FILE_ATTRIBUTE_', '') } }	else { $null }
-		$creation = if ($ShotcutInfo.creationTime -ne 0) { [DateTime]::FromFileTimeUtc($ShotcutInfo.creationTime).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }	else { $null }
-		$access = if ($ShotcutInfo.AccessTime -ne 0) { [DateTime]::FromFileTimeUtc($ShotcutInfo.AccessTime).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }	else { $null }
-		$write = if ($ShotcutInfo.WriteTime -ne 0) { [DateTime]::FromFileTimeUtc($ShotcutInfo.WriteTime).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }	else { $null }
-		$HotKey = if ($ShotcutInfo.HotKey.Highbyte -eq 0 -and $ShotcutInfo.HotKey.Lowbyte -eq 0) { "----" }	else{ "$($ShotcutInfo.HotKey.Highbyte) + $($ShotcutInfo.HotKey.Lowbyte)"	}
-		$LnkSize = ($ShotcutInfo.ShellLinkHeader.HeaderSize +
-			 		 $ShotcutInfo.LinkInfo.LinkInfoSize +
-					 $ShotcutInfo.LinkTargetIDList.IDListSize +
-					 $ShotcutInfo.StringData.StringDataSize +
-					 $ShotcutInfo.ExtraData.ExtraDataSize)
-		$LS = if ($ByteArray.Length -gt $ShotcutInfo.Size) { $ByteArray[($ShotcutInfo.Size - 1) .. $ByteArray.Length] } else { $null }
+		$fileattributes = if ($ShortcutInfo.FileAttributes -ne 0) { $ShortcutInfo.FileAttributes.ToString().split(',').foreach{ $_.replace('FILE_ATTRIBUTE_', '') } }	else { $null }
+		$creation = if ($ShortcutInfo.creationTime -ne 0) { [DateTime]::FromFileTimeUtc($ShortcutInfo.creationTime).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }	else { $null }
+		$access = if ($ShortcutInfo.AccessTime -ne 0) { [DateTime]::FromFileTimeUtc($ShortcutInfo.AccessTime).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }	else { $null }
+		$write = if ($ShortcutInfo.WriteTime -ne 0) { [DateTime]::FromFileTimeUtc($ShortcutInfo.WriteTime).ToString("dd/MM/yyyy HH:mm:ss.fffffff") }	else { $null }
+		$HotKey = if ($ShortcutInfo.HotKey.Highbyte -eq 0 -and $ShortcutInfo.HotKey.Lowbyte -eq 0) { "----" }	else{ "$($ShortcutInfo.HotKey.Highbyte) + $($ShortcutInfo.HotKey.Lowbyte)"	}
+		$LnkSize = ($ShortcutInfo.ShellLinkHeader.HeaderSize +
+			 		 $ShortcutInfo.LinkInfo.LinkInfoSize +
+					 $ShortcutInfo.LinkTargetIDList.IDListSize +
+					 $ShortcutInfo.StringData.StringDataSize +
+					 $ShortcutInfo.ExtraData.ExtraDataSize)
+		$LS = if ($ByteArray.Count -gt $ShortcutInfo.Size) { $ByteArray[($ShortcutInfo.Size - 1) .. $ByteArray.Count] } else { $null }
 		$LinkSlackLength =	if (!!$LS) { $ls.length } else{$null}
 		$LinkSlack = if (!!$LS) { [System.BitConverter]::ToString($LS) -replace '-', '' } else{''}
 			
-		$LinkInfoData = if (!!$ShotcutInfo.LinkInfo) { $ShotcutInfo.LinkInfo.GetBytes() }
+		$LinkInfoData = if (!!$ShortcutInfo.LinkInfo) { $ShortcutInfo.LinkInfo.GetBytes() }
 		else { $null }
-		$LinkTargetIDListData = if (!!$ShotcutInfo.LinkTargetIDList) { $ShotcutInfo.LinkTargetIDList.GetBytes() }
+		$LinkTargetIDListData = if (!!$ShortcutInfo.LinkTargetIDList) { $ShortcutInfo.LinkTargetIDList.GetBytes() }
 		else { $null }
-		$StringDataData = if (!!$ShotcutInfo.StringData) { $ShotcutInfo.StringData.GetBytes() }
+		$StringDataData = if (!!$ShortcutInfo.StringData) { $ShortcutInfo.StringData.GetBytes() }
 		else { $null }
-		$ExtraDataData = if (!!$ShotcutInfo.ExtraData) { $ShotcutInfo.ExtraData.GetBytes() }
+		$ExtraDataData = if (!!$ShortcutInfo.ExtraData) { $ShortcutInfo.ExtraData.GetBytes() }
 		else { $null }
 		
 		$linktargets = [PSCustomObject]@{
 			# Header
-			'Shortcut Size'    = $ShotcutInfo.Size
-			'Header Block Size'= $ShotcutInfo.ShellLinkHeader.HeaderSize
-			'LinkCLSID'	       = $ShotcutInfo.LinkCLSID
+			'Shortcut Size'    = $ShortcutInfo.Size
+			'Header Block Size'= $ShortcutInfo.ShellLinkHeader.HeaderSize
+			'LinkCLSID'	       = $ShortcutInfo.LinkCLSID
 			'Link_Flags'	   = $LinkFlags
 			'FileAttributes'   = $fileattributes
 			'CreationTime'	   = $creation
 			'AccessTime'	   = $access
 			'WriteTime'	       = $write
-			'Target File Size' = $ShotcutInfo.FileSize
-			'Icon Idx'		   = $ShotcutInfo.IconIndex
-			'ShowCommand'	   = $ShotcutInfo.ShowCommand.ToString()
+			'Target File Size' = $ShortcutInfo.FileSize
+			'Icon Idx'		   = $ShortcutInfo.IconIndex
+			'ShowCommand'	   = $ShortcutInfo.ShowCommand.ToString()
 			'HotKey'		   = $HotKey
 			'LinkSlackLength'  = $LinkSlackLength
 			'LinkSlack'		   = $LinkSlack
@@ -1714,46 +3594,46 @@ function Show-MainForm_psf
 		# LinkTargetIDList
 		if ($LinkFlags.contains('HasLinkTargetIDList'))
 		{
-			$targetidlistSize = $ShotcutInfo.LinkTargetIDList.IDListSize
-			$len = $ShotcutInfo.LinkTargetIDList.Path.Length
-			$dcount = $ShotcutInfo.LinkTargetIDList.ItemIDList.displayname.Count
+			$targetidlistSize = $ShortcutInfo.LinkTargetIDList.IDListSize
+			$len = $ShortcutInfo.LinkTargetIDList.Path.Length
+			$dcount = $ShortcutInfo.LinkTargetIDList.ItemIDList.displayname.Count
 			if ($len -eq 3 -and $dcount -eq 1)
 			{
-				$linkpath = $displayname = $ShotcutInfo.LinkTargetIDList.Path.ToString()
+				$linkpath = $displayname = $ShortcutInfo.LinkTargetIDList.Path.ToString()
 			}
 			elseif ($len -gt 0 -and $dcount -ge 1)
 			{
 				foreach ($known in $ShellFolders)
 				{
-					if ($ShotcutInfo.LinkTargetIDList.Path.Contains("$($known.Value)"))
+					if ($ShortcutInfo.LinkTargetIDList.Path.Contains("$($known.Value)"))
 					{
-						$linkpath = $ShotcutInfo.LinkTargetIDList.Path.Replace("$($known.Value)", "[$($known.Name)]")
+						$linkpath = $ShortcutInfo.LinkTargetIDList.Path.Replace("$($known.Value)", "[$($known.Name)]")
 						break
 					}
-					else { $linkpath = $ShotcutInfo.LinkTargetIDList.Path.ToString() }
+					else { $linkpath = $ShortcutInfo.LinkTargetIDList.Path.ToString() }
 				}
 				try
 				{
 					$displayname = if ($dcount -gt 1)
 					{
-						$ShotcutInfo.LinkTargetIDList.ItemIDList.displayname[$dcount - 1]
+						$ShortcutInfo.LinkTargetIDList.ItemIDList.displayname[$dcount - 1]
 					}
-					else { $ShotcutInfo.LinkTargetIDList.ItemIDList.displayname }
+					else { $ShortcutInfo.LinkTargetIDList.ItemIDList.displayname }
 				}
-				catch { $displayname = $ShotcutInfo.LinkTargetIDList.ItemIDList.displayname }
+				catch { $displayname = $ShortcutInfo.LinkTargetIDList.ItemIDList.displayname }
 			}
 			else
 			{
 				foreach ($known in $ShellFolders)
 				{
-					if ($ShotcutInfo.LinkTargetIDList.Path.Contains("$($known.Value)"))
+					if ($ShortcutInfo.LinkTargetIDList.Path.Contains("$($known.Value)"))
 					{
-						$linkpath = $ShotcutInfo.LinkTargetIDList.Path.Replace("$($known.Value)", "[$($known.Name)]")
+						$linkpath = $ShortcutInfo.LinkTargetIDList.Path.Replace("$($known.Value)", "[$($known.Name)]")
 						break
 					}
-					else { $linkpath = $ShotcutInfo.LinkTargetIDList.Path.ToString() }
+					else { $linkpath = $ShortcutInfo.LinkTargetIDList.Path.ToString() }
 				}
-				$displayname = $ShotcutInfo.LinkTargetIDList.displayname
+				$displayname = $ShortcutInfo.LinkTargetIDList.displayname
 			}
 			$linktargets | Add-Member -MemberType NoteProperty -Name "TargetID Block Size" -Value $targetidlistSize
 			$linktargets | Add-Member -MemberType NoteProperty -Name "Display Name" -Value $displayname
@@ -1761,483 +3641,53 @@ function Show-MainForm_psf
 				
 			# Add the raw data	
 			$ItemIdListItems = [System.Collections.ArrayList]::new()
-			if ($ShotcutInfo.LinkTargetIDList.ItemIDList.Count -ge 1)
+			if ($ShortcutInfo.LinkTargetIDList.ItemIDList.Count -ge 1)
 			{
-					foreach ($ItemIdListItem in $ShotcutInfo.LinkTargetIDList.ItemIDList)
-					{
-						$ItemIDType = if ($ItemIdListItem.Data) { [System.BitConverter]::ToString($ItemIdListItem.Data[0]) }else { $null }
-						if ($ItemIDType -eq '01') # Control Panel Category
-						{
-							$Signature = if ($ItemIdListItem.Data.length -ge 5) { [System.BitConverter]::ToString($ItemIdListItem.Data[2 .. 5]) -replace '-', '' } else { $null }
-							$CP = [System.BitConverter]::ToString($ItemIdListItem.Data[6])
-							$CPcategory = if(!!$CPitems[[System.String]$CP]){ "$($CPitems[[System.String]$CP]) [$0x$($CP)]" }else{"$0x$($CP)"}
-							$ItemIdListProperties = [PSCustomObject]@{
-								'ItemIDSize' = $ItemIdListItem.ItemIDSize
-								'ItemIDType' = $ItemIDType
-								'Signature'  = if ($Signature) { "0x$($Signature)" }else { $null }
-								'CPcategory' = $CPcategory
-								'Data'	     = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-							}
-							$null = $ItemIdListItems.Add($ItemIdListProperties)
-						}
-						elseif ($ItemIDType -eq '1F') # Root Shell item
-						{
-							try
-							{
-								$ItemIdListProperties = [PSCustomObject]@{ }
-								$Items = Get-Ext_1F -ByteArray $ItemIdListItem.Data
-								foreach ($property in $items.psobject.Properties)
-								{
-									$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-							}
-							catch { $null }
-						}
-						elseif ($ItemIDType.StartsWith('2')) # Volume shell item
-						{
-							if ($ItemIDType -eq '2F')
-							{
-								$ShellName = [System.Text.Encoding]::UTF8.GetString($ItemIdListItem.Data[1 .. 4])
-								$CLSID0 = if ($ItemIdListItem.Data.length -ge 20 -and ![System.Text.RegularExpressions.Regex]::IsMatch(($ItemIdListItem.Data[5 .. 19] -join ''), '[(0){16}]')) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ItemIdListItem.Data[5 .. 19]))" }
-								else { $null }
-								$CLSID = if ($ItemIdListItem.Data.length -ge 39) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ItemIdListItem.Data[23 .. 39]))" }
-								else { $null }
-								$ItemIdListProperties = [PSCustomObject]@{
-									'ItemIDSize' = $ItemIdListItem.ItemIDSize
-									'ItemIDType' = $ItemIDType
-									#	'DisplayName' = $ItemIdListItem.DisplayName
-									'ShellName'  = $ShellName
-									'GUID'	     = if ($CLSID0) { Get-FolderDescription -CLSIDstring $CLSID0 }else { $null }
-									'CLSID'	     = if ($CLSID) { Get-FolderDescription -CLSIDstring $CLSID }else { $null }
-									'Data'	     = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-							}
-							elseif ($ItemIDType -eq '2E')
-							{
-								$CLSID0 = if ($ItemIdListItem.Data.length -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ItemIdListItem.Data[2 .. 17]))" }
-								else { $null }
-								if ($ItemIdListItem.Data.length -ge 25)
-								{
-									$extLength = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[18 .. 19], 0)
-									$extversion = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[20 .. 21], 0)
-									$exttype = [System.BitConverter]::ToString($ItemIdListItem.Data[25 .. 22]) -replace '-', ''
-									if ($extLength -gt 0 -and $exttype -eq 'BEEF0025')
-									{
-										$TargetAttributes = Get-Attributes -Bytes $ItemIdListItem.Data[26..29]
-										try
-										{
-											$TargetCreated = [datetime]::FromFileTimeUtc("0x$([System.BitConverter]::ToString($ItemIdListItem.Data[37 .. 30]) -replace '-', '')").ToString("dd/MM/yyyy HH:mm:ss.fffffff")
-											$TargetAccessed = [datetime]::FromFileTimeUtc("0x$([System.BitConverter]::ToString($ItemIdListItem.Data[45 .. 38]) -replace '-', '')").ToString("dd/MM/yyyy HH:mm:ss.fffffff")
-										}
-										catch { $TargetCreated = $TargetAccessed = $null }
-									}
-								}
-								
-								$ItemIdListItemProperties = [PSCustomObject]@{
-									'ItemIDSize'	   = $ItemIdListItem.ItemIDSize
-									'ItemIDType'	   = $ItemIDType
-									'GUID'			   = if ($CLSID0) { Get-CLSID -CLSIDstring $CLSID0 }else { $null }
-									'extLength'	       = $extLength
-									'extversion'	   = $extversion
-									'exttype'		   = $exttype
-									'TargetAttributes' = $TargetAttributes
-									'TargetCreated'    = $TargetCreated
-									'TargetAccessed'   = $TargetAccessed
-									'Data'			   = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-								}
-								$null = $ItemIdListItems.Add($ItemIdListItemProperties)
-							}
-							else
-							{
-								$ItemIdListProperties = [PSCustomObject]@{
-									'ItemIDSize'  = $ItemIdListItem.ItemIDSize
-									'ItemIDType'  = $ItemIDType
-									'DisplayName' = $ItemIdListItem.DisplayName
-									'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-							}
-						}
-						elseif ($ItemIDType -in ('31', '32')) # Folder / File
-						{
-							try
-							{
-								$ItemIdListProperties = [PSCustomObject]@{
-									'DisplayName' = $ItemIdListItem.DisplayName
-									#   'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-								}
-								$Items = Get-Ext_31_32 -ByteArray $ItemIdListItem.Data
-								foreach ($property in $items.psobject.Properties)
-								{
-									$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value @($property.Value)
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-							}
-							catch
-							{
-								$null
-							}
-						}
-						elseif ($ItemIDType -in ('35','36')) # Folder / File with Unicode ANSI name
-						{
-							try
-							{
-								$ItemIdListProperties = [PSCustomObject]@{
-									'DisplayName' = $ItemIdListItem.DisplayName
-									#   'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-								}
-								$Items = Get-Ext_35_36 -ByteArray $ItemIdListItem.Data
-								foreach ($property in $items.psobject.Properties)
-								{
-									$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value @($property.Value)
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-							}
-							catch
-							{
-								$null
-							}
-						}
-						elseif ($ItemIDType -eq '61') # CLSID_Internet - URI shell item
-						{
-							try
-							{
-								$ItemIdListProperties = [PSCustomObject]@{}
-								$Items = Get-Ext_61 -ByteArray $ItemIdListItem.Data
-								foreach ($property in $items.psobject.Properties)
-								{
-									$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value @($property.Value)
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-							}
-							catch
-							{
-								$null
-							}
-						}
-						elseif ($ItemIDType -eq '71') # GUID
-						{
-							$CLSID = if ($ItemIdListItem.Data.length -ge 28) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ItemIdListItem.Data[12 .. 27]))" }
-							else { $null }
-							$ItemIdListProperties = [PSCustomObject]@{
-								'ItemIDSize'  = $ItemIdListItem.ItemIDSize
-								'ItemIDType'  = $ItemIDType
-								'DisplayName' = $ItemIdListItem.DisplayName
-								'CLSID'	      = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
-								'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-							}
-							$null = $ItemIdListItems.Add($ItemIdListProperties)
-						}
-						elseif ($ItemIDType -eq '74') # Network location shell item - Compound
-						{
-							$Signature = [System.BitConverter]::ToString($ItemIdListItem.Data[4 .. 7]) -replace '-', ''
-							$ItemIdListProperties = [PSCustomObject]@{
-								'ItemIDSize'  = $ItemIdListItem.ItemIDSize
-								'ItemIDType'  = $ItemIDType
-								'DisplayName' = $ItemIdListItem.DisplayName
-								'Signature'   = "0x$($Signature)"
-								'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-							}
-							
-							if ($Signature -eq '43465346') # CFSF
-							{
-								$embsize = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[8 .. 9], 0)
-								$embtype = [System.BitConverter]::ToString($ItemIdListItem.Data[10])
-								
-								$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'Embedded Type' -Value $embtype
-								$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'Embedded Size' -Value $embsize
-								
-								if ($embtype -in ('31', '32')) # file/folder
-								{
-									try
-									{
-										$Items = Get-Ext_31_32 -ByteArray $ItemIdListItem.Data[10..($ItemIdListItem.ItemIDSize - 7)]
-										foreach ($property in $items.psobject.Properties)
-										{
-											if ($property.Name -in ('Data', 'ItemIDSize', 'ItemIDType')) { continue }
-											$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
-										}
-										$null = $ItemIdListItems.Add($ItemIdListProperties)
-									}
-									catch
-									{$null}
-								}
-							}
-							else{ $null = $ItemIdListItems.Add($ItemIdListProperties)}
-						}
-						elseif ($ItemIDType -in ('0F','09', '16', '52') -and $ItemIdListItem.Data[18 .. 19].Contains([byte]16))
-						{
-							try
-							{
-								$ItemIdListProperties = [PSCustomObject]@{ }
-								$Items = Get-Compressed_w32 -ByteArray $ItemIdListItem.Data
-								foreach ($property in $items.psobject.Properties)
-								{
-									$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-							}
-							catch
-							{
-								$null
-							}
-						}
-						elseif ($ItemIDType -eq '00')
-						{
-							$Signature = [System.BitConverter]::ToString($ItemIdListItem.Data[2 .. 5]) -replace '-', ''
-							if ($Signature -eq '47465349') # GFSI
-							{
-								$CLSID = if ($ItemIdListItem.Data -ge 22) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ItemIdListItem.Data[6 .. 21]))" }	else { $null }
-							
-								$ItemIdListProperties = [PSCustomObject]@{
-									'ItemIDSize'  = $ItemIdListItem.ItemIDSize
-									'ItemIDType'  = $ItemIDType
-									'Signature'   = "0x$($Signature)"
-									'CLSID'	      = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
-									'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-							}
-							elseif (([System.BitConverter]::ToString($ItemIdListItem.Data[4 .. 7]) -replace '-', '') -eq '338B0123') # PropertyStore
-							{
-								$Signature = [System.BitConverter]::ToString($ItemIdListItem.Data[4 .. 7]) -replace '-', ''
-								$CLSID = if ($ItemIdListItem.Data -ge 28) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ItemIdListItem.Data[12 .. 27]))" }else { $null }
-								$CLSID0 = if ($ItemIdListItem.Data -ge 43) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ItemIdListItem.Data[28 .. 43]))" }else { $null }
-								$ItemIdListProperties = [PSCustomObject]@{
-									'ItemIDSize' = $ItemIdListItem.ItemIDSize
-									'ItemIDType' = $ItemIDType
-									'Signature'  = "0x$($Signature)"
-									'GUID'	     = if ($CLSID0) { Get-CLSID -CLSIDstring $CLSID0 }else { $null }
-									'CLSID'	     = if ($CLSID) { Get-FolderDescription -CLSIDstring $CLSID }else { $null }
-									'Data'	     = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-								}
-								if ($ItemIdListItem.Data.count -ge 56)
-								{
-									$ExtraData = $ItemIdListItem.Data[44 .. ($ItemIdListItem.Data.count - 1)]
-									$Items = Get-Ext_SPS1 -ByteArray $ExtraData
-									foreach ($property in $items.psobject.Properties)
-									{
-										$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value @($property.Value)
-									}
-									$null = $ItemIdListItems.Add($ItemIdListProperties)
-								}
-							}
-							elseif ($ItemIdListItem.Data[18 .. 19].Contains([byte]16))
-							{
-								$type = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[18 .. 19], 0)
-								$Attributes = Get-Attributes -Bytes $ItemIdListItem.Data[18..21]
-								$Timestamp = [System.Text.Encoding]::Unicode.GetString($ItemIdListItem.Data[22 .. 53])
-								$ZipIndex = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[54 .. 55], 0)
-								$ParentLength = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[62 .. 63], 0)
-								$NameLength = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[58 .. 59], 0)
-								$Name = [System.Text.Encoding]::Unicode.GetString($ItemIdListItem.Data[66 .. (66 + $NameLength * 2 - 1)])
-								$pidx = 66 + $NameLength * 2 + 2
-								$Parent = if ($ParentLength -gt 0)
-								{
-									[System.Text.Encoding]::Unicode.GetString($ItemIdListItem.Data[$pidx .. ($pidx + $ParentLength * 2 - 1)])
-								}
-								else { $null }
-								
-								$idx = $pidx + $ParentLength * 2 + 2
-								if ($idx -ge $ItemIdListItem.Data.Length) { break }
-								$extLength = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[($idx) .. ($idx + 1)], 0)
-								$extversion = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[($idx + 2) .. ($idx + 3)], 0)
-								$exttype = [System.BitConverter]::ToString($ItemIdListItem.Data[($idx + 7) .. ($idx + 4)]) -replace '-', ''
-								$findindex = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[($idx + 8) .. ($idx + 9)], 0)
-								
-								$ItemIdListProperties = [PSCustomObject]@{
-									'ItemIDSize'   = $ItemIdListItem.ItemIDSize
-									'ItemIDType'   = $ItemIDType
-									'DisplayName'  = $ItemIdListItem.DisplayName
-									'Type'		   = $type
-									'Attributes'   = $Attributes
-									'Timestamp'    = $Timestamp
-									'ZipIndex'	   = $ZipIndex
-									'ParentLength' = $ParentLength
-									'NameLength'   = $NameLength
-									'Name'		   = $Name
-									'Parent'	   = $Parent
-									'extLength'    = $extLength
-									'exttype'	   = $exttype
-									'Data'		   = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-								
-								if ($extLength -gt 0 -and $exttype -eq 'BEEF0005')
-								{
-									
-									$EmbeddedIdList = [System.Collections.ArrayList]::new()
-									$idx = $idx + 10 + 14
-									
-									While ($idx -lt $ItemIdListItem.Data.Length)
-									{
-										$XtSize = [System.BitConverter]::ToUInt16($ItemIdListItem.Data[($idx) .. ($idx + 1)], 0)
-										if ($XtSize -eq 0)
-										{
-											break
-										}
-										$xtType = [System.BitConverter]::ToString($ItemIdListItem.Data[($idx + 2)])
-										$xtData = $ItemIdListItem.Data[($idx + 2) .. ($idx + 2 + $XtSize - 1)]
-										$XtList = [PSCustomObject]@{
-											'XtSize' = $XtSize
-											'xtType' = $xtType
-											'xtData' = $xtData
-										}
-										$null = $EmbeddedIdList.Add($XtList)
-										$idx = $idx + $XtSize
-									} # end While
-									
-									# Parse the extension
-									if ($EmbeddedIdList.Count -ge 1)
-									{
-										$EmbeddedItems = [System.Collections.ArrayList]::new()
-										foreach ($XTitem in $EmbeddedIdList)
-										{
-											if ($XTitem.XtType -eq '1F')
-											{
-												try
-												{
-													$EmbeddedItemProperties = [PSCustomObject]@{ }
-													$XtItems = Get-Ext_1F -ByteArray $XTitem.xtData
-													foreach ($property in $XtItems.psobject.Properties)
-													{
-														$EmbeddedItemProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
-													}
-													$null = $EmbeddedItems.Add($EmbeddedItemProperties)
-												}
-												catch
-												{
-													$EmbeddedItemProperties = [PSCustomObject]@{
-														'ItemIDSize' = $XTitem.XtSize
-														'ItemIDType' = $XTitem.XtType
-														'Data'	     = $XTitem.xtData
-													}
-												}
-											} # End '1F'
-											elseif ($XTitem.XtType -in ('0F', '09', '16', '52'))
-											{
-												try
-												{
-													$EmbeddedItemProperties = [PSCustomObject]@{ }
-													$XtItems = Get-Compressed_w32 -ByteArray $XTitem.xtData
-													foreach ($property in $XtItems.psobject.Properties)
-													{
-														$EmbeddedItemProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
-													}
-													$null = $EmbeddedItems.Add($EmbeddedItemProperties)
-												}
-												catch
-												{
-													$EmbeddedItemProperties = [PSCustomObject]@{
-														'ItemIDSize' = $XTitem.XtSize
-														'ItemIDType' = $XTitem.XtType
-														'Data'	     = $XTitem.xtData
-													}
-												}
-											}
-											elseif ($XTitem.XtType -in ('31', '32')) # Folder / File
-											{
-												try
-												{
-													$EmbeddedItemProperties = [PSCustomObject]@{ }
-													$XtItems = Get-Ext_31_32 -ByteArray $XTitem.xtData[0..($XTitem.xtData.count - 3)]
-													foreach ($property in $XtItems.psobject.Properties)
-													{
-														$EmbeddedItemProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
-													}
-													$null = $EmbeddedItems.Add($EmbeddedItemProperties)
-												}
-												catch
-												{
-													$EmbeddedItemProperties = [PSCustomObject]@{
-														'ItemIDSize' = $XTitem.XtSize
-														'ItemIDType' = $XTitem.XtType
-														'Data'	     = $XTitem.xtData
-													}
-												}
-											}
-											else
-											{
-												$EmbeddedItemProperties = [PSCustomObject]@{
-													'ItemIDSize' = $XTitem.XtSize
-													'ItemIDType' = $XTitem.XtType
-													'Data'	     = $XTitem.xtData
-												}
-												$null = $EmbeddedItems.Add($EmbeddedItemProperties)
-											}
-										} # end foreach
-										$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'EmbeddedItems' -Value $EmbeddedItems
-									} # end extension items 
-								} # End extension
-							}
-							else
-							{
-								$ItemIdListProperties = [PSCustomObject]@{
-									'ItemIDSize' = $ItemIdListItem.ItemIDSize
-									'ItemIDType' = $ItemIDType
-									'Signature'  = "0x$($Signature)"
-									'Data'	     = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-								}
-								$null = $ItemIdListItems.Add($ItemIdListProperties)
-							}
-						}
-						else
-						{
-							$ItemIdListProperties = [PSCustomObject]@{
-								'ItemIDSize'  = $ItemIdListItem.ItemIDSize
-								'ItemIDType'  = $ItemIDType
-								'DisplayName' = $ItemIdListItem.DisplayName
-								'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-							}
-							$null = $ItemIdListItems.Add($ItemIdListProperties)
-						}
-					<#if ($null = $linktargets.'Display Name')
-					{
-						$linktargets.'Display Name' = ($ItemIdListItems.CLSID -ne $null) -join '\'
-					}#>
-					} # End for each
-				} # end if count ge 1
+				foreach ($ItemIdListItem in $ShortcutInfo.LinkTargetIDList.ItemIDList)
+				{
+					$linkItem =	Get-LinkTargetIDList -ItemIdListItem $ItemIdListItem
+					$null = $ItemIdListItems.Add($linkItem)
+				} # End for each#>
+			} # end if count ge 1
 			else { $ItemIdListProperties = $null }
 			$linktargets | Add-Member -MemberType NoteProperty -Name "ItemIdListItems" -Value $ItemIdListItems
 		}
 		else { $linkpath = $displayname = $null }
 			
 			# StringData:
-		if (!!$ShotcutInfo.StringData)
+		if (!!$ShortcutInfo.StringData)
 		{
-			$StringDataBlockSize = $ShotcutInfo.StringData.StringDataSize
+			$StringDataBlockSize = $ShortcutInfo.StringData.StringDataSize
 			$linktargets | Add-Member -MemberType NoteProperty -Name "StringData Block Size" -Value $StringDataBlockSize
 			#		HasName
 			if ($LinkFlags.contains('HasName'))
 			{
-				$name = $ShotcutInfo.StringData.NameString
+				$name = $ShortcutInfo.StringData.NameString
 				$linktargets | Add-Member -MemberType NoteProperty -Name "NameString" -Value $name
 			}
 			# 		HasWorkingDir
 			if ($LinkFlags.contains('HasWorkingDir'))
 			{
-				$WorkingDir = $ShotcutInfo.StringData.WorkingDir
+				$WorkingDir = $ShortcutInfo.StringData.WorkingDir
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Working Dir." -Value $WorkingDir
 			}
 			#		HasRelativePath
 			if ($LinkFlags.contains('HasRelativePath'))
 			{
-				$RelativePath = $ShotcutInfo.StringData.RelativePath
+				$RelativePath = $ShortcutInfo.StringData.RelativePath
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Relative Path" -Value $RelativePath
 			}
 			# HasArguments
 			if ($LinkFlags.contains('HasArguments'))
 			{
-				$CommandLineArguments = $ShotcutInfo.StringData.CommandLineArguments
+				$CommandLineArguments = $ShortcutInfo.StringData.CommandLineArguments
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Command Args" -Value $CommandLineArguments
 			}
 			
 			# HasIconLocation
 			if ($LinkFlags.contains('HasIconLocation'))
 			{
-				$iconlocation = $ShotcutInfo.StringData.IconLocation
+				$iconlocation = $ShortcutInfo.StringData.IconLocation
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Icon Location" -Value $iconlocation
 			}
 		}
@@ -2245,17 +3695,17 @@ function Show-MainForm_psf
 		# LinkInfo
 		if ($LinkFlags.contains('HasLinkInfo'))
 		{
-			$LinkInfoSize = $ShotcutInfo.LinkInfo.LinkInfoSize
-			$LinkInfoFlags = $ShotcutInfo.LinkInfo.LinkInfoFlags.ToString()
+			$LinkInfoSize = $ShortcutInfo.LinkInfo.LinkInfoSize
+			$LinkInfoFlags = $ShortcutInfo.LinkInfo.LinkInfoFlags.ToString()
 			$linktargets | Add-Member -MemberType NoteProperty -Name "Link Info Block Size" -Value $LinkInfoSize
 			$linktargets | Add-Member -MemberType NoteProperty -Name "Link Info Flags" -Value $LinkInfoFlags
 			
 			# VolumeID
 			if ($LinkInfoFlags.contains('VolumeID'))
 			{
-				$DriveSerialNumber = $ShotcutInfo.LinkInfo.VolumeID.DriveSerialNumber.tostring('X3')
-				$DriveType = $ShotcutInfo.LinkInfo.VolumeID.DriveType.ToString().replace('DRIVE_', '').replace(' ', '')
-				$VolumeLabel = $ShotcutInfo.LinkInfo.VolumeID.VolumeLabel
+				$DriveSerialNumber = $ShortcutInfo.LinkInfo.VolumeID.DriveSerialNumber.tostring('X3')
+				$DriveType = $ShortcutInfo.LinkInfo.VolumeID.DriveType.ToString().replace('DRIVE_', '').replace(' ', '')
+				$VolumeLabel = $ShortcutInfo.LinkInfo.VolumeID.VolumeLabel
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Drive Type" -Value $DriveType
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Volume Label" -Value $VolumeLabel
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Drive s/n" -Value $DriveSerialNumber
@@ -2263,43 +3713,43 @@ function Show-MainForm_psf
 			# LocalBasePath
 			if ($LinkInfoFlags.contains('LocalBasePath'))
 			{
-				$LocalBasePath = $ShotcutInfo.LinkInfo.LocalBasePath
-				$LocalBasePathUnicode = $ShotcutInfo.LinkInfo.LocalBasePathUnicode
+				$LocalBasePath = $ShortcutInfo.LinkInfo.LocalBasePath
+				$LocalBasePathUnicode = $ShortcutInfo.LinkInfo.LocalBasePathUnicode
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Local Base Path" -Value $LocalBasePath
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Local Base Path Unicode" -Value $LocalBasePathUnicode
 			}
 			# CommonPathSuffix
-			if (!!$ShotcutInfo.LinkInfo.CommonPathSuffix)
+			if (!!$ShortcutInfo.LinkInfo.CommonPathSuffix)
 			{
-				$CommonPathSuffix = $ShotcutInfo.LinkInfo.CommonPathSuffix
-				$CommonPathSuffixUnicode = $ShotcutInfo.LinkInfo.CommonPathSuffixUnicode
+				$CommonPathSuffix = $ShortcutInfo.LinkInfo.CommonPathSuffix
+				$CommonPathSuffixUnicode = $ShortcutInfo.LinkInfo.CommonPathSuffixUnicode
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Common Path Suffix" -Value $CommonPathSuffix
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Common Path Suffix Unicode" -Value $CommonPathSuffixUnicode
 			}
 			# CommonNetworkRelativeLink
 			if ($LinkInfoFlags.contains('CommonNetworkRelativeLink'))
 			{
-				$CommonNetworkRelativeLinkFlags = $ShotcutInfo.LinkInfo.CommonNetworkRelativeLink.CommonNetworkRelativeLinkFlags.ToString()
+				$CommonNetworkRelativeLinkFlags = $ShortcutInfo.LinkInfo.CommonNetworkRelativeLink.CommonNetworkRelativeLinkFlags.ToString()
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Common Network Relative Link Flags" -Value $CommonNetworkRelativeLinkFlags
 				
 				# ValidNetType
 				if ($CommonNetworkRelativeLinkFlags.Contains('ValidNetType'))
 				{
-					$NetworkProviderType = ($ShotcutInfo.LinkInfo.CommonNetworkRelativeLink.NetworkProviderType).ToString('X')
+					$NetworkProviderType = ($ShortcutInfo.LinkInfo.CommonNetworkRelativeLink.NetworkProviderType).ToString('X')
 					$NetworkProvider = if (!!$($Vendors[$NetworkProviderType])) { "0x$($NetworkProviderType) ($($Vendors[$NetworkProviderType]))" }
 					else { "0x$($NetworkProviderType)" }
 					$linktargets | Add-Member -MemberType NoteProperty -Name "NetworkProviderType" -Value $NetworkProvider
 				}
-				$NetName = $ShotcutInfo.LinkInfo.CommonNetworkRelativeLink.NetName
-				$NetNameUnicode = $ShotcutInfo.LinkInfo.CommonNetworkRelativeLink.NetNameUnicode
+				$NetName = $ShortcutInfo.LinkInfo.CommonNetworkRelativeLink.NetName
+				$NetNameUnicode = $ShortcutInfo.LinkInfo.CommonNetworkRelativeLink.NetNameUnicode
 				$linktargets | Add-Member -MemberType NoteProperty -Name "NetName" -Value $NetName
 				$linktargets | Add-Member -MemberType NoteProperty -Name "NetName Unicode" -Value $NetNameUnicode
 				
 				# ValidDevice
 				if ($CommonNetworkRelativeLinkFlags.Contains('ValidDevice'))
 				{
-					$DeviceName = $ShotcutInfo.LinkInfo.CommonNetworkRelativeLink.DeviceName
-					$DeviceNameUnicode = $ShotcutInfo.LinkInfo.CommonNetworkRelativeLink.DeviceNameUnicode
+					$DeviceName = $ShortcutInfo.LinkInfo.CommonNetworkRelativeLink.DeviceName
+					$DeviceNameUnicode = $ShortcutInfo.LinkInfo.CommonNetworkRelativeLink.DeviceNameUnicode
 					$linktargets | Add-Member -MemberType NoteProperty -Name "Device Name" -Value $DeviceName
 					$linktargets | Add-Member -MemberType NoteProperty -Name "Device Name Unicode" -Value $DeviceNameUnicode
 				}
@@ -2307,16 +3757,16 @@ function Show-MainForm_psf
 		}
 			
 		# ExtraData Block
-		if (!!$ShotcutInfo.Extradata)
+		if (!!$ShortcutInfo.Extradata)
 		{
-			$ExtraDataBlockSize = $ShotcutInfo.ExtraData.ExtraDataSize
+			$ExtraDataBlockSize = $ShortcutInfo.ExtraData.ExtraDataSize
 			$linktargets | Add-Member -MemberType NoteProperty -Name "ExtraData Block Size" -Value $ExtraDataBlockSize
 			
 			# HasDarwinID
 			if ($LinkFlags.contains('HasDarwinID'))
 			{
-				$DarwinDataAnsi = $ShotcutInfo.ExtraData.DarwinDataBlock.DarwinDataAnsi
-				$DarwinDataUnicode = $ShotcutInfo.ExtraData.DarwinDataBlock.DarwinDataUnicode
+				$DarwinDataAnsi = $ShortcutInfo.ExtraData.DarwinDataBlock.DarwinDataAnsi
+				$DarwinDataUnicode = $ShortcutInfo.ExtraData.DarwinDataBlock.DarwinDataUnicode
 				$linktargets | Add-Member -MemberType NoteProperty -Name "DarwinDataAnsi" -Value $DarwinDataAnsi
 				$linktargets | Add-Member -MemberType NoteProperty -Name "DarwinDataUnicode" -Value $DarwinDataUnicode
 			}
@@ -2324,15 +3774,15 @@ function Show-MainForm_psf
 			# RunWithShimLayer
 			if ($LinkFlags.contains('RunWithShimLayer'))
 			{
-				$LayerName = $ShotcutInfo.ExtraData.ShimDataBlock.LayerName
+				$LayerName = $ShortcutInfo.ExtraData.ShimDataBlock.LayerName
 				$linktargets | Add-Member -MemberType NoteProperty -Name "ShimLayerName" -Value $LayerName
 			}
 				
 			# EnableTargetMetadata - PropertyStore
-			if (!!$ShotcutInfo.ExtraData.PropertyStoreDataBlock.PropertyStore.PropertyStorage.TypedPropertyValue)
+			if (!!$ShortcutInfo.ExtraData.PropertyStoreDataBlock.PropertyStore.PropertyStorage.TypedPropertyValue)
 			{
-				$pc = $ShotcutInfo.ExtraData.PropertyStoreDataBlock.PropertyStore.PropertyStorage.TypedPropertyValue.count
-				$typed = $ShotcutInfo.ExtraData.PropertyStoreDataBlock.PropertyStore.PropertyStorage.TypedPropertyValue
+				$pc = $ShortcutInfo.ExtraData.PropertyStoreDataBlock.PropertyStore.PropertyStorage.TypedPropertyValue.count
+				$typed = $ShortcutInfo.ExtraData.PropertyStoreDataBlock.PropertyStore.PropertyStorage.TypedPropertyValue
 				if ($pc -ge 1)
 				{
 					for ($p = 0; $p -lt $pc; $p++)
@@ -2375,16 +3825,16 @@ function Show-MainForm_psf
 			}
 			
 			# KnownFolderDataBlock
-			if ($ShotcutInfo.ExtraData.KnownFolderDataBlock)
+			if ($ShortcutInfo.ExtraData.KnownFolderDataBlock)
 			{
-				$KnBlockSignature = $ShotcutInfo.ExtraData.KnownFolderDataBlock.BlockSignature
-				$KnownFolderID = $ShotcutInfo.ExtraData.KnownFolderDataBlock.KnownFolderID
+				$KnBlockSignature = $ShortcutInfo.ExtraData.KnownFolderDataBlock.BlockSignature
+				$KnownFolderID = $ShortcutInfo.ExtraData.KnownFolderDataBlock.KnownFolderID
 				
-				$kfguid = $ShotcutInfo.ExtraData.KnownFolderDataBlock.KnownFolderID.Guid
+				$kfguid = $ShortcutInfo.ExtraData.KnownFolderDataBlock.KnownFolderID.Guid
 				$KnownFolderDisplayName = if (!!$knownfolders.Where{ $_.GUID -eq "{$($kfguid)}" })
 				{ "$($knownfolders.Where{ $_.GUID -eq "{$($kfguid)}" }.Name)" }
 				else { "----" }
-				$KnownFolderIDOffset = $ShotcutInfo.ExtraData.KnownFolderDataBlock.Offset
+				$KnownFolderIDOffset = $ShortcutInfo.ExtraData.KnownFolderDataBlock.Offset
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Known Folder BlockSignature" -Value $KnBlockSignature
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Known Folder ID" -Value $KnownFolderID
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Known Folder DisplayName" -Value $KnownFolderDisplayName
@@ -2392,22 +3842,22 @@ function Show-MainForm_psf
 			}
 			
 			# SpecialFolderDataBlock
-			if ($ShotcutInfo.ExtraData.SpecialFolderDataBlock)
+			if ($ShortcutInfo.ExtraData.SpecialFolderDataBlock)
 			{
-				$SpBlockSignature = $ShotcutInfo.ExtraData.SpecialFolderDataBlock.BlockSignature
-				$SpecialFolderID = $ShotcutInfo.ExtraData.SpecialFolderDataBlock.SpecialFolderID
-				$SpecialFolderIDOffset = $ShotcutInfo.ExtraData.SpecialFolderDataBlock.Offset
+				$SpBlockSignature = $ShortcutInfo.ExtraData.SpecialFolderDataBlock.BlockSignature
+				$SpecialFolderID = $ShortcutInfo.ExtraData.SpecialFolderDataBlock.SpecialFolderID
+				$SpecialFolderIDOffset = $ShortcutInfo.ExtraData.SpecialFolderDataBlock.Offset
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Special Folder BlockSignature" -Value $SpBlockSignature
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Special Folder ID" -Value $SpecialFolderID
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Special Folder Offset" -Value $SpecialFolderIDOffset
 			}
 				
 				# EnvironmentVariableDataBlock # HasExpString
-			if ($LinkFlags.contains('HasExpString') -and $ShotcutInfo.ExtraData.EnvironmentVariableDataBlock)
+			if ($LinkFlags.contains('HasExpString') -and $ShortcutInfo.ExtraData.EnvironmentVariableDataBlock)
 			{
-				$EnvBlockSignature = $ShotcutInfo.ExtraData.EnvironmentVariableDataBlock.BlockSignature
+				$EnvBlockSignature = $ShortcutInfo.ExtraData.EnvironmentVariableDataBlock.BlockSignature
 					
-				$Bytes = $ShotcutInfo.ExtraData.EnvironmentVariableDataBlock.GetBytes()
+				$Bytes = $ShortcutInfo.ExtraData.EnvironmentVariableDataBlock.GetBytes()
 				
 				$BlockLength = [System.BitConverter]::ToUInt32($Bytes[0 .. 3], 0)
 				$BlockSignature = [System.BitConverter]::ToString($Bytes[7 .. 4]) -replace '-', ''
@@ -2424,9 +3874,9 @@ function Show-MainForm_psf
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Environment Variable TargetUnicode" -Value $TargetUnicode
 			}
 			# ConsoleDataBlock
-			if ($ShotcutInfo.ExtraData.ConsoleDataBlock)
+			if ($ShortcutInfo.ExtraData.ConsoleDataBlock)
 			{
-				$ConsoleDataBlock = $ShotcutInfo.ExtraData.ConsoleDataBlock
+				$ConsoleDataBlock = $ShortcutInfo.ExtraData.ConsoleDataBlock
 				if ($ConsoleDataBlock.count -ge 1)
 				{
 					$ConsoleData = [PSCustomObject]@{ }
@@ -2441,48 +3891,48 @@ function Show-MainForm_psf
 			}
 			
 			# ConsoleFEDataBlock
-			if ($ShotcutInfo.ExtraData.ConsoleFEDataBlock)
+			if ($ShortcutInfo.ExtraData.ConsoleFEDataBlock)
 			{
 				# https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/63d3d639-7fd2-4afb-abbe-0d5b5551eef8
-				$CodePage = $ShotcutInfo.ExtraData.ConsoleFEDataBlock.CodePage
+				$CodePage = $ShortcutInfo.ExtraData.ConsoleFEDataBlock.CodePage
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Console CodePage ID" -Value $CodePage
 			}
 			
 			# TrackerDataBlock
-			if ($ShotcutInfo.ExtraData.TrackerDataBlock)
+			if ($ShortcutInfo.ExtraData.TrackerDataBlock)
 			{
 				# MachineID
-				if (!!$ShotcutInfo.ExtraData.TrackerDataBlock.MachineID)
+				if (!!$ShortcutInfo.ExtraData.TrackerDataBlock.MachineID)
 				{
-					$machineid = $ShotcutInfo.ExtraData.TrackerDataBlock.MachineID.ToUpper()
+					$machineid = $ShortcutInfo.ExtraData.TrackerDataBlock.MachineID.ToUpper()
 					$linktargets | Add-Member -MemberType NoteProperty -Name "Machine Id" -Value $machineid
 				}
 				
 				# GUIDs
-				if (!!$ShotcutInfo.ExtraData.TrackerDataBlock.Droid.guid[0])
+				if (!!$ShortcutInfo.ExtraData.TrackerDataBlock.Droid.guid[0])
 				{
-					$g1b = ([GUID]($ShotcutInfo.ExtraData.TrackerDataBlock.Droid.guid[0] -replace "-", '')).ToByteArray()
+					$g1b = ([GUID]($ShortcutInfo.ExtraData.TrackerDataBlock.Droid.guid[0] -replace "-", '')).ToByteArray()
 					$g1h = [System.BitConverter]::ToString($g1b) -replace '-', ''
 					$Guid1 = Get-ObjectIdFromHex -Hex $g1h
 					$linktargets | Add-Member -MemberType NoteProperty -Name "Guid 1" -Value $Guid1
 				}
-				if (!!$ShotcutInfo.ExtraData.TrackerDataBlock.DroidBirth.guid[0])
+				if (!!$ShortcutInfo.ExtraData.TrackerDataBlock.DroidBirth.guid[0])
 				{
-					$bg1b = ([GUID]($ShotcutInfo.ExtraData.TrackerDataBlock.DroidBirth.guid[0] -replace "-", '')).ToByteArray()
+					$bg1b = ([GUID]($ShortcutInfo.ExtraData.TrackerDataBlock.DroidBirth.guid[0] -replace "-", '')).ToByteArray()
 					$bg1h = [System.BitConverter]::ToString($bg1b) -replace '-', ''
 					$BGuid1 = Get-ObjectIdFromHex -Hex $bg1h
 					$linktargets | Add-Member -MemberType NoteProperty -Name "Birth Guid 1" -Value $BGuid1
 				}
-				if (!!$ShotcutInfo.ExtraData.TrackerDataBlock.Droid.guid[1])
+				if (!!$ShortcutInfo.ExtraData.TrackerDataBlock.Droid.guid[1])
 				{
-					$g2b = ([GUID]($ShotcutInfo.ExtraData.TrackerDataBlock.Droid.guid[1] -replace "-", '')).ToByteArray()
+					$g2b = ([GUID]($ShortcutInfo.ExtraData.TrackerDataBlock.Droid.guid[1] -replace "-", '')).ToByteArray()
 					$g2h = [System.BitConverter]::ToString($g2b) -replace '-', ''
 					$Guid2 = Get-ObjectIdFromHex -Hex $g2h
 					$linktargets | Add-Member -MemberType NoteProperty -Name "Guid 2" -Value $Guid2
 				}
-				if (!!$ShotcutInfo.ExtraData.TrackerDataBlock.DroidBirth.guid[1])
+				if (!!$ShortcutInfo.ExtraData.TrackerDataBlock.DroidBirth.guid[1])
 				{
-					$bg2b = ([GUID]($ShotcutInfo.ExtraData.TrackerDataBlock.DroidBirth.guid[1] -replace "-", '')).ToByteArray()
+					$bg2b = ([GUID]($ShortcutInfo.ExtraData.TrackerDataBlock.DroidBirth.guid[1] -replace "-", '')).ToByteArray()
 					$bg2h = [System.BitConverter]::ToString($bg2b) -replace '-', ''
 					$BGuid2 = Get-ObjectIdFromHex -Hex $bg2h
 					$linktargets | Add-Member -MemberType NoteProperty -Name "Birth Guid 2" -Value $BGuid2
@@ -2490,10 +3940,10 @@ function Show-MainForm_psf
 			}
 				
 			# ExtraData.VistaAndAboveIDListDataBlock 
-			if (!!$ShotcutInfo.ExtraData.VistaAndAboveIDListDataBlock)
+			if (!!$ShortcutInfo.ExtraData.VistaAndAboveIDListDataBlock)
 			{
-				$VistaDisplayName = $ShotcutInfo.ExtraData.VistaAndAboveIDListDataBlock.IDList.DisplayName
-				$VistaPath = $ShotcutInfo.ExtraData.VistaAndAboveIDListDataBlock.IDList.Path
+				$VistaDisplayName = $ShortcutInfo.ExtraData.VistaAndAboveIDListDataBlock.IDList.DisplayName
+				$VistaPath = $ShortcutInfo.ExtraData.VistaAndAboveIDListDataBlock.IDList.Path
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Vista_Path" -Value $VistaPath
 				$linktargets | Add-Member -MemberType NoteProperty -Name "Vista_DisplayName" -Value $VistaDisplayName
 			}
@@ -2501,8 +3951,8 @@ function Show-MainForm_psf
 			# HasExpIcon
 			if ($LinkFlags.contains('HasExpIcon'))
 			{
-				$iconTargetAnsi = Get-SafePath -Path $ShotcutInfo.ExtraData.IconEnvironmentDataBlock.TargetAnsi
-				$iconTargetUnicode = Get-SafePath -Path $ShotcutInfo.ExtraData.IconEnvironmentDataBlock.TargetUnicode
+				$iconTargetAnsi = Get-SafePath -Path $ShortcutInfo.ExtraData.IconEnvironmentDataBlock.TargetAnsi
+				$iconTargetUnicode = Get-SafePath -Path $ShortcutInfo.ExtraData.IconEnvironmentDataBlock.TargetUnicode
 				$linktargets | Add-Member -MemberType NoteProperty -Name "icon Target Ansi" -Value $iconTargetAnsi
 				$linktargets | Add-Member -MemberType NoteProperty -Name "icon Target Unicode" -Value "$($iconTargetUnicode)"
 			}
@@ -3553,7 +5003,7 @@ function Show-MainForm_psf
 		# https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/23bb5877-e3dd-4799-9f50-79f05f938537
 		# with these:
 		# https://learn.microsoft.com/en-us/windows/win32/api/winbase/ns-winbase-file_remote_protocol_info
-		
+		$Status.Text = "Selected file: $($fname)"
 		#Open file & read the LNK
 		$ReadFile = [System.IO.File]::Open("$($File)", ([IO.FileMode]::Open), ([IO.FileAccess]::Read), ([IO.FileShare]::ReadWrite))
 		$data = [System.Byte[]]::new($fs)
@@ -3590,17 +5040,20 @@ function Show-MainForm_psf
 				$o = 0
 				foreach ($offset in $offsets)
 				{
-					try
-					{
-						$LNKData = Get-ShellLinkfrombyteArray -ByteArray $data[($offset.start)..($offset.start + $offset.length)]
-					}
-					catch
-					{
-						$LNKData = $null
-						$Status.Text = "Error processing $($fname) as a ShellLNK"
-						$treeview2.EndUpdate()
-						Return
-					}
+					try { $LNKData = Get-ShellLinkfrombyteArray -ByteArray $data[($offset.start)..($offset.start + $offset.length)] }
+					catch [System.Management.Automation.MethodInvocationException] {
+							Show-ErrorMessage -ErrorMessage "$($Error[0].Exception.InnerException.Message)"
+							$Error.Clear()
+							$LNKData = $null
+							$treeview2.EndUpdate()
+							continue
+						}
+					catch {
+							$LNKData = $null
+							$Status.Text = "Error processing $($fname) as a ShellLNK"
+							$treeview2.EndUpdate()
+							continue
+						}
 					
 					if (!!$LNKData)
 					{
@@ -3609,11 +5062,11 @@ function Show-MainForm_psf
 						# Header
 						$SizeNode = $LNKNode.Nodes.Add('Shortcut Size', "Shortcut Size: $($LNKData.'Shortcut Size')")
 						$null = $SizeNode.Nodes.Add('Header Block Size', "Header Block Size: $($LNKData.'Header Block Size')")
-						$SizeNode.Nodes['Header Block Size'].Tag = @([System.BitConverter]::ToString($data[($offset.start) .. ($offset.start + 76-1)]) -replace '-', '')
+						$SizeNode.Nodes['Header Block Size'].Tag = @([System.BitConverter]::ToString($data[($offset.start) .. ($offset.start + 76 - 1)]) -replace '-', '')
 						$SizeNode.Nodes['Header Block Size'].ToolTipText = "Right click to copy the raw (Hex) data (76)"
 						$SizeNode.Nodes['Header Block Size'].ForeColor = 'Peru'
 						
-						if ($LNKData.'Link Info Block Size')
+						if (!!$LNKData.'Link Info Block Size')
 						{
 							$null = $SizeNode.Nodes.Add('Link Info Block Size', "Link Info Block Size: $($LNKData.'Link Info Block Size')")
 							if ($LNKData.LinkInfoData.count -gt 0)
@@ -3633,7 +5086,7 @@ function Show-MainForm_psf
 								$SizeNode.Nodes['TargetID Block Size'].ForeColor = 'Peru'
 							}
 						}
-						if ($LNKData.'StringData Block Size')
+						if (!!$LNKData.'StringData Block Size')
 						{
 							$null = $SizeNode.Nodes.Add('StringData Block Size', "StringData Block Size: $($LNKData.'StringData Block Size')")
 							if ($LNKData.StringDataData.count -gt 0)
@@ -3696,319 +5149,9 @@ function Show-MainForm_psf
 						}
 						if ($LNKData.ItemIdListItems)
 						{
-							$IDListItemsNode = $LNKNode.Nodes.Add("$('IDList Items')", "IDList Items")
-							for ($ic = 0; $ic -lt $LNKData.ItemIdListItems.count; $ic++)
-							{
-								$IDListEntry = $IDListItemsNode.Nodes.Add("IDListItem$($ic)", "IDList Entry #$($ic.ToString('D3')) [$($LNKData.ItemIdListItems[$ic].ItemIDType)]")
-								$IDListEntry.ForeColor = 'Red'
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Size", "ItemID Size: $($LNKData.ItemIdListItems[$ic].ItemIDSize)")
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ItemIDType", "ItemID Type: $($LNKData.ItemIdListItems[$ic].ItemIDType)")
-								$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["ItemIDType"].ForeColor = 'Violet'
-								if ($null -ne $LNKData.ItemIdListItems[$ic].DisplayName)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("DisplayName", "ItemID Display Name: $($LNKData.ItemIdListItems[$ic].DisplayName)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].Signature)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Signature", "Signature: $($LNKData.ItemIdListItems[$ic].Signature)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].CPcategory)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("CPcategory", "Control Panel Category: $($LNKData.ItemIdListItems[$ic].CPcategory)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].DriveLetter)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("DriveLetter", "Drive Letter: $($LNKData.ItemIdListItems[$ic].DriveLetter)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].URI)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("URI", "URI: $($LNKData.ItemIdListItems[$ic].URI)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].'SortOrderIndex')
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("SortOrderIndex", "Sort Order Index: $($LNKData.ItemIdListItems[$ic].'SortOrderIndex')")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].GUID)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("GUID", "GUID: $($LNKData.ItemIdListItems[$ic].GUID)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].CLSID)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("CLSID", "CLSID: $($LNKData.ItemIdListItems[$ic].CLSID)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].ShellName)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ShellName", "Shell Name: $($LNKData.ItemIdListItems[$ic].ShellName)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].Filesize)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Filesize", "File Size: $($LNKData.ItemIdListItems[$ic].Filesize)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].Attributes)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Attributes", "Attributes: $($LNKData.ItemIdListItems[$ic].Attributes)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].TargetAttributes)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("TargetAttributes", "Target Attributes: $($LNKData.ItemIdListItems[$ic].TargetAttributes)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].Host)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("HostOS", "Host OS: $($LNKData.ItemIdListItems[$ic].Host)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].Ansi_Name)
-								{
-									$Ansi_Name = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Ansi_Name", "Ansi Name: $($LNKData.ItemIdListItems[$ic].Ansi_Name)")
-									$Ansi_Name.ForeColor = 'PaleGreen'
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].w32Modified)
-								{
-									$w32Modifiednode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("w32Modified", "Modified (UTC): $($LNKData.ItemIdListItems[$ic].w32Modified)")
-									$w32Modifiednode.ForeColor = 'Cyan'
-								}
-								if (!!$LNKData.ItemIdListItems[$ic].ItemIdExtensions -and $LNKData.ItemIdListItems[$ic].ItemIdExtensions.count -ge 1)
-								{
-									$x = 0
-									Foreach ($extention in $LNKData.ItemIdListItems[$ic].ItemIdExtensions)
-									{
-										if (!!$extention.itemIdExtType)
-										{
-											$extentionNode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("itemIdExtType$($x)", "Extension #$($x) Type: [$($extention.itemIdExtType)]")
-										}
-										else
-										{
-											$extentionNode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("itemIdExtType$($x)", "Extension #$($x)")
-										}
-										$extentionNode.ForeColor = 'Tomato'
-										$null = $extentionNode.Nodes.Add("ExtentionSize", "Extension Size: $($extention.extLength)")
-										$null = $extentionNode.Nodes.Add("ExtentionVersion", "Extension Version: $($extention.extversion)")
-										if ($null -ne $extention.Unicode_Name)
-										{
-											$Unicode_Name = $extentionNode.Nodes.Add("Unicode_Name", "Unicode Name: $($extention.Unicode_Name)")
-											$Unicode_Name.ForeColor = 'PaleGreen'
-										}
-										if ($null -ne $extention.Application)
-										{
-											$null = $extentionNode.Nodes.Add("Application", "Application: $($extention.Application)")
-										}
-										if ($null -ne $extention.DocumentType)
-										{
-											$null = $extentionNode.Nodes.Add("DocumentType", "Document Type: $($extention.DocumentType)")
-										}
-										if ($null -ne $extention.Created)
-										{
-											$CreatedNode = $extentionNode.Nodes.Add("Created", "Created (UTC): $($extention.Created)")
-											$CreatedNode.ForeColor = 'Cyan'
-										}
-										if ($null -ne $extention.Modified)
-										{
-											$ModifiedNode = $extentionNode.Nodes.Add("Modified", "Modified (UTC): $($extention.Modified)")
-											$ModifiedNode.ForeColor = 'Cyan'
-										}
-										if ($null -ne $extention.Accessed)
-										{
-											$AccessedNode = $extentionNode.Nodes.Add("Accessed", "Accessed (UTC): $($extention.Accessed)")
-											$AccessedNode.ForeColor = 'Cyan'
-										}
-										if ($null -ne $extention.w32Created)
-										{
-											$w32CreatedNode = $extentionNode.Nodes.Add("w32Created", "Created (UTC): $($extention.w32Created)")
-											$w32CreatedNode.ForeColor = 'Cyan'
-										}
-										if ($null -ne $extention.w32Accessed)
-										{
-											$w32AccessedNode = $extentionNode.Nodes.Add("w32Accessed", "Accessed (UTC): $($extention.w32Accessed)")
-											$w32AccessedNode.ForeColor = 'Cyan'
-										}
-										if ($null -ne $extention.MFTRecordNr)
-										{
-											$MFTRecordNrNode = $extentionNode.Nodes.Add("MFTRecordNr", "MFT Record Nr: $($extention.MFTRecordNr)")
-											$MFTRecordNrNode.ForeColor = 'Orange'
-											$MFTRecordSeqNr = $extentionNode.Nodes.Add("MFTRecordSeqNr", "MFT Record Sequence Nr: $($extention.MFTRecordSeqNr)")
-											$MFTRecordSeqNr.ForeColor = 'Orange'
-										}
-										if ($null -ne $extention.Unknown -and $extention.Unknown -ne '0x00000000')
-										{
-											$null = $extentionNode.Nodes.Add("Unknown", "Unknown value: $($extention.Unknown)")
-										}
-										if ($null -ne $extention.'Storage Size')
-										{
-											$null = $extentionNode.Nodes.Add("Storage Size", "Storage Size: $($extention.'Storage Size')")
-											$null = $extentionNode.Nodes.Add("FormatID", "Format ID: $($extention.FormatID)")
-											$null = $extentionNode.Nodes.Add("ID", "ID: $($extention.ID)")
-											if ($null -ne $extention.TypedProperty -and $extention.TypedProperty.count -ge 1)
-											{
-												for ($t = 0; $t -lt $extention.TypedProperty.count; $t++)
-												{
-													$TypedPropertyNodes = $extentionNode.Nodes.Add("TypedProperty$($t)", "TypedProperty Entry #$($t)")
-													$TypedPropertyNodes.ForeColor = 'Plum'
-													$null = $TypedPropertyNodes.Nodes.Add("ValueSize$($t)", "ValueSize: $($extention.TypedProperty[$t].ValueSize)")
-													if ($extention.TypedProperty[$t].NameSize -gt 0)
-													{
-														$null = $TypedPropertyNodes.Nodes.Add("NameSize$($t)", "NameSize: $($extention.TypedProperty[$t].NameSize)")
-														$null = $TypedPropertyNodes.Nodes.Add("Name$($t)", "Name: $($extention.TypedProperty[$t].Name)")
-														$TypedPropertyNodes.Nodes["Name$($t)"].ForeColor = 'LightGreen'
-													}
-													$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyType$($t)", "TypedProperty Type: $($extention.TypedProperty[$t].TypedPropertyType)")
-													if (!$extention.TypedProperty[$t].TypedPropertyType.ToString().Contains('VT_BLOB'))
-													{
-														$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyValue$($t)", "TypedProperty Value: $($extention.TypedProperty[$t].TypedPropertyValue)")
-													}
-													else
-													{
-														$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyValue$($t)", "TypedProperty Value")
-														$TypedPropertyNodes.Nodes["TypedPropertyValue$($t)"].Tag = @($extention.TypedProperty[$t].TypedPropertyValue)
-														$TypedPropertyNodes.Nodes["TypedPropertyValue$($t)"].ToolTipText = "Right click to copy the raw (Hex) data ($($extention.TypedProperty[$t].ValueSize))"
-														$TypedPropertyNodes.Nodes["TypedPropertyValue$($t)"].ForeColor = 'Peru'
-													}
-												}
-											}
-										}
-										if ($null -ne $extention.extData)
-										{
-											$rawext = $extentionNode.Nodes.Add("extData", "Extention Data")
-											$rawext.Tag = @($extention.extData)
-											$rawext.ToolTipText = "Right click to copy the raw (Hex) data ($($extention.extData.length))"
-											$rawext.ForeColor = 'Peru'
-										}
-										
-										$x++
-									}
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].ExtType)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ExtType", "Extension Type: $($LNKData.ItemIdListItems[$ic].ExtType)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].TargetCreated)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("TargetCreated", "Target Created: $($LNKData.ItemIdListItems[$ic].TargetCreated)")
-									$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["TargetCreated"].ForeColor = 'Cyan'
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].TargetAccessed)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("TargetAccessed", "Target Accessed: $($LNKData.ItemIdListItems[$ic].TargetAccessed)")
-									$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["TargetAccessed"].ForeColor = 'Cyan'
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].Timestamp)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Timestamp", "Timestamp: $($LNKData.ItemIdListItems[$ic].Timestamp)")
-									$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["Timestamp"].ForeColor = 'Cyan'
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].ZipIndex)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ZipIndex", "ZipIndex: $($LNKData.ItemIdListItems[$ic].ZipIndex)")
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].NameLength -and $LNKData.ItemIdListItems[$ic].NameLength -gt 0)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("NameLength", "Name Length: $($LNKData.ItemIdListItems[$ic].NameLength)")
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Name", "Name: $($LNKData.ItemIdListItems[$ic].Name)")
-									$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["Name"].ForeColor = 'Yellow'
-								}
-								if ($null -ne $LNKData.ItemIdListItems[$ic].ParentLength -and $LNKData.ItemIdListItems[$ic].ParentLength -gt 0)
-								{
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ParentLength", "Parent Name Length: $($LNKData.ItemIdListItems[$ic].ParentLength)")
-									$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Parent", "Parent Name: $($LNKData.ItemIdListItems[$ic].Parent)")
-									$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["Parent"].ForeColor = 'PaleGreen'
-								}
-								if (!!$LNKData.ItemIdListItems[$ic].EmbeddedItems -and $LNKData.ItemIdListItems[$ic].EmbeddedItems.count -ge 1)
-								{
-									$e = 0
-									foreach ($embeddeditem in $LNKData.ItemIdListItems[$ic].EmbeddedItems)
-									{
-										$embedded = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("EmbeddedItem$($e)", "Embedded Item: #$($e) Type: [$($embeddeditem.ItemIDType)]")
-										$embedded.ForeColor = 'Violet'
-										foreach ($embeddedproperty in $embeddeditem.psobject.Properties)
-										{
-											if ($embeddedproperty.Name -eq 'ItemIdExtensions')
-											{
-												$x = 0
-												Foreach ($extention in $embeddedproperty.Value)
-												{
-													$extentionNode = $embedded.Nodes.Add("itemIdExtType", "Extension #$($x) Type: [$($extention.itemIdExtType)]")
-													$extentionNode.ForeColor = 'Plum'
-													$null = $extentionNode.Nodes.Add("ExtentionSize", "Extension Size: $($extention.extLength)")
-													$null = $extentionNode.Nodes.Add("ExtentionVersion", "Extension Version: $($extention.extversion)")
-													if ($null -ne $extention.Unicode_Name)
-													{
-														$Unicode_Name = $extentionNode.Nodes.Add("Unicode_Name", "Unicode Name: $($extention.Unicode_Name)")
-														$Unicode_Name.ForeColor = 'PaleGreen'
-													}
-													if ($null -ne $extention.DocumentType)
-													{
-														$null = $extentionNode.Nodes.Add("DocumentType", "Document Type: $($extention.DocumentType)")
-													}
-													if ($null -ne $extention.w32Created)
-													{
-														$w32CreatedNode = $extentionNode.Nodes.Add("w32Created", "Created (UTC): $($extention.w32Created)")
-														$w32CreatedNode.ForeColor = 'Cyan'
-													}
-													if ($null -ne $extention.w32Accessed)
-													{
-														$w32AccessedNode = $extentionNode.Nodes.Add("w32Accessed", "Accessed (UTC): $($extention.w32Accessed)")
-														$w32AccessedNode.ForeColor = 'Cyan'
-													}
-													if ($null -ne $extention.MFTRecordNr)
-													{
-														$MFTRecordNrNode = $extentionNode.Nodes.Add("MFTRecordNr", "MFT Record Nr: $($extention.MFTRecordNr)")
-														$MFTRecordNrNode.ForeColor = 'Orange'
-														$MFTRecordSeqNr = $extentionNode.Nodes.Add("MFTRecordSeqNr", "MFT Record Sequence Nr: $($extention.MFTRecordSeqNr)")
-														$MFTRecordSeqNr.ForeColor = 'Orange'
-													}
-													if ($null -ne $extention.Unknown -and $extention.Unknown -ne '0x00000000')
-													{
-														$null = $extentionNode.Nodes.Add("Unknown", "Unknown value: $($extention.Unknown)")
-													}
-													$x++
-												}
-											}
-											
-											elseif ($embeddedproperty.Name -eq 'Timestamp')
-											{
-												$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
-												$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'Cyan'
-											}
-											elseif ($embeddedproperty.Name -eq 'Parent')
-											{
-												$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
-												$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'PaleGreen'
-											}
-											elseif ($embeddedproperty.Name -eq 'Name')
-											{
-												$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
-												$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'Yellow'
-											}
-											elseif ($embeddedproperty.Name -eq 'w32Modified')
-											{
-												$w32Modifiednode = $embedded.Nodes.Add("w32Modified", "Modified (UTC): $($embeddedproperty.Value)")
-												$w32Modifiednode.ForeColor = 'Cyan'
-											}
-											elseif ($embeddedproperty.Name -eq 'Data')
-											{
-												$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "Embedded Item $($embeddedproperty.Name)")
-												$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'Peru'
-												$embedded.Nodes["$($embeddedproperty.Name)"].Tag = @($embeddedproperty.Value)
-												$embedded.Nodes["$($embeddedproperty.Name)"].ToolTipText = "Right click to copy the raw (Hex) data ($($embeddedproperty.Value.length))"
-											}
-											elseif ($embeddedproperty.Name -eq 'Filesize' -and $embeddedproperty.Value -eq $null)
-											{
-												continue
-											}
-											else
-											{
-												$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
-												if ($embeddedproperty.Name -eq 'Ansi_Name') { $embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'PaleGreen' }
-											}
-										}
-										$e++
-									}
-								}
-								$raw = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("RawHexData", "ItemID Data") # : $($LNKData.ItemIdListItems[$ic].Data)
-								$raw.Tag = @($LNKData.ItemIdListItems[$ic].Data)
-								$raw.ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.ItemIdListItems[$ic].Data.length))"
-								$raw.ForeColor = 'Peru'
-							}
+							Populate-ItemIdListItems -ItemIDListNode $LNKNode -ItemIdList $LNKData.ItemIdListItems
 						}
-						
+					
 						# StringData - HasName
 						if ($LNKData.Link_Flags.contains('HasName'))
 						{
@@ -4131,7 +5274,6 @@ function Show-MainForm_psf
 								foreach ($TProperty in $LNKData.PSobject.Properties.where{ $_.name -match "TypedProperty" })
 								{
 									$null = $TargetMetadataNode.Nodes.Add("$($TProperty.Name)", "$($TProperty.Value)")
-									$TargetMetadataNode.Nodes["$($TProperty.Name)"].ToolTipText = "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/2a4589eb-9a23-4a8b-adbd-3e368233c099"
 								}
 							}
 						}
@@ -4308,9 +5450,18 @@ function Show-MainForm_psf
 					}
 				}
 			}
+			else
+			{
+				[System.Console]::Beep(500,150)
+				$Status.Text = "Nothing to see in $($fname)"
+			}
 		}
-		else { $Status.Text = "Nothing to see in $($fname)" }
-		$Status.Text = "Selected file: $($fname)"
+		else
+		{
+			[System.Console]::Beep(500, 150)
+			$Status.Text = "Nothing to see in $($fname)"
+		}
+	
 	}
 	
 	function Process-Automatic
@@ -4461,6 +5612,7 @@ function Show-MainForm_psf
 				{
 					$streamNode = $Root2.Nodes.Add($streaminf.StreamName, "Stream Name: [$($streaminf.StreamName.ToString())] $($LNKData.'Display Name')")
 					$streamNode.ForeColor = 'Orange'
+					$streamNode.Tag = @($null, $streaminf.Data)
 					$null = $streamNode.Nodes.Add("$('Stream Data Size')", "Stream Size: $($streaminf.DataLength)")
 					# Header
 					$SizeNode = $streamNode.Nodes.Add("$('Shortcut Size')", "Shortcut Size: $($LNKData.'Shortcut Size')")
@@ -4547,321 +5699,8 @@ function Show-MainForm_psf
 					}
 					if ($LNKData.ItemIdListItems)
 					{
-						$IDListItemsNode = $streamNode.Nodes.Add("$('IDList Items')", "IDList Items")
-						for ($ic = 0; $ic -lt $LNKData.ItemIdListItems.count; $ic++)
-						{
-							$IDListEntry = $IDListItemsNode.Nodes.Add("IDListItem$($ic)", "IDList Entry #$($ic.ToString('D3')) [$($LNKData.ItemIdListItems[$ic].ItemIDType)]")
-							$IDListEntry.ForeColor = 'Red'
-							$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Size", "ItemID Size: $($LNKData.ItemIdListItems[$ic].ItemIDSize)")
-							$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ItemIDType", "ItemID Type: $($LNKData.ItemIdListItems[$ic].ItemIDType)")
-							$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["ItemIDType"].ForeColor = 'Violet'
-							if ($null -ne $LNKData.ItemIdListItems[$ic].DisplayName)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("DisplayName", "ItemID Display Name: $($LNKData.ItemIdListItems[$ic].DisplayName)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].Signature)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Signature", "Signature: $($LNKData.ItemIdListItems[$ic].Signature)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].CPcategory)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("CPcategory", "Control Panel Category: $($LNKData.ItemIdListItems[$ic].CPcategory)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].DriveLetter)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("DriveLetter", "Drive Letter: $($LNKData.ItemIdListItems[$ic].DriveLetter)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].URI)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("URI", "URI: $($LNKData.ItemIdListItems[$ic].URI)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].'SortOrderIndex')
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("SortOrderIndex", "Sort Order Index: $($LNKData.ItemIdListItems[$ic].'SortOrderIndex')")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].GUID)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("GUID", "GUID: $($LNKData.ItemIdListItems[$ic].GUID)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].CLSID)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("CLSID", "CLSID: $($LNKData.ItemIdListItems[$ic].CLSID)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].ShellName)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ShellName", "Shell Name: $($LNKData.ItemIdListItems[$ic].ShellName)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].Filesize)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Filesize", "File Size: $($LNKData.ItemIdListItems[$ic].Filesize)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].Attributes)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Attributes", "Attributes: $($LNKData.ItemIdListItems[$ic].Attributes)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].TargetAttributes)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("TargetAttributes", "Target Attributes: $($LNKData.ItemIdListItems[$ic].TargetAttributes)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].Host)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("HostOS", "Host OS: $($LNKData.ItemIdListItems[$ic].Host)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].Ansi_Name)
-							{
-								$Ansi_Name = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Ansi_Name", "Ansi Name: $($LNKData.ItemIdListItems[$ic].Ansi_Name)")
-								$Ansi_Name.ForeColor = 'PaleGreen'
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].w32Modified)
-							{
-								$w32Modifiednode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("w32Modified", "Modified (UTC): $($LNKData.ItemIdListItems[$ic].w32Modified)")
-								$w32Modifiednode.ForeColor = 'Cyan'
-							}
-							if (!!$LNKData.ItemIdListItems[$ic].ItemIdExtensions -and $LNKData.ItemIdListItems[$ic].ItemIdExtensions.count -ge 1)
-							{
-								$x = 0
-								Foreach ($extention in $LNKData.ItemIdListItems[$ic].ItemIdExtensions)
-								{
-									if (!!$extention.itemIdExtType)
-									{
-										$extentionNode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("itemIdExtType$($x)", "Extension #$($x) Type: [$($extention.itemIdExtType)]")
-									}
-									else
-									{
-										$extentionNode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("itemIdExtType$($x)", "Extension #$($x)")
-									}
-									$extentionNode.ForeColor = 'Tomato'
-									$null = $extentionNode.Nodes.Add("ExtentionSize", "Extension Size: $($extention.extLength)")
-									$null = $extentionNode.Nodes.Add("ExtentionVersion", "Extension Version: $($extention.extversion)")
-									if ($null -ne $extention.Unicode_Name)
-									{
-										$Unicode_Name = $extentionNode.Nodes.Add("Unicode_Name", "Unicode Name: $($extention.Unicode_Name)")
-										$Unicode_Name.ForeColor = 'PaleGreen'
-									}
-									if ($null -ne $extention.Application)
-									{
-										$null = $extentionNode.Nodes.Add("Application", "Application: $($extention.Application)")
-									}
-									if ($null -ne $extention.DocumentType)
-									{
-										$null = $extentionNode.Nodes.Add("DocumentType", "Document Type: $($extention.DocumentType)")
-									}
-									if ($null -ne $extention.Created)
-									{
-										$CreatedNode = $extentionNode.Nodes.Add("Created", "Created (UTC): $($extention.Created)")
-										$CreatedNode.ForeColor = 'Cyan'
-									}
-									if ($null -ne $extention.Modified)
-									{
-										$ModifiedNode = $extentionNode.Nodes.Add("Modified", "Modified (UTC): $($extention.Modified)")
-										$ModifiedNode.ForeColor = 'Cyan'
-									}
-									if ($null -ne $extention.Accessed)
-									{
-										$AccessedNode = $extentionNode.Nodes.Add("Accessed", "Accessed (UTC): $($extention.Accessed)")
-										$AccessedNode.ForeColor = 'Cyan'
-									}
-									if ($null -ne $extention.w32Created)
-									{
-										$w32CreatedNode = $extentionNode.Nodes.Add("w32Created", "Created (UTC): $($extention.w32Created)")
-										$w32CreatedNode.ForeColor = 'Cyan'
-									}
-									if ($null -ne $extention.w32Accessed)
-									{
-										$w32AccessedNode = $extentionNode.Nodes.Add("w32Accessed", "Accessed (UTC): $($extention.w32Accessed)")
-										$w32AccessedNode.ForeColor = 'Cyan'
-									}
-									if ($null -ne $extention.MFTRecordNr)
-									{
-										$MFTRecordNrNode = $extentionNode.Nodes.Add("MFTRecordNr", "MFT Record Nr: $($extention.MFTRecordNr)")
-										$MFTRecordNrNode.ForeColor = 'Orange'
-										$MFTRecordSeqNr = $extentionNode.Nodes.Add("MFTRecordSeqNr", "MFT Record Sequence Nr: $($extention.MFTRecordSeqNr)")
-										$MFTRecordSeqNr.ForeColor = 'Orange'
-									}
-									if ($null -ne $extention.Unknown -and $extention.Unknown -ne '0x00000000')
-									{
-										$null = $extentionNode.Nodes.Add("Unknown", "Unknown value: $($extention.Unknown)")
-									}
-									if ($null -ne $extention.'Storage Size')
-									{
-										$null = $extentionNode.Nodes.Add("Storage Size", "Storage Size: $($extention.'Storage Size')")
-										$null = $extentionNode.Nodes.Add("FormatID", "Format ID: $($extention.FormatID)")
-										$null = $extentionNode.Nodes.Add("ID", "ID: $($extention.ID)")
-										if ($null -ne $extention.TypedProperty -and $extention.TypedProperty.count -ge 1)
-										{
-											for ($t = 0; $t -lt $extention.TypedProperty.count; $t++)
-											{
-												$TypedPropertyNodes = $extentionNode.Nodes.Add("TypedProperty$($t)", "TypedProperty Entry #$($t)")
-												$TypedPropertyNodes.ForeColor = 'Plum'
-												$null = $TypedPropertyNodes.Nodes.Add("ValueSize$($t)", "ValueSize: $($extention.TypedProperty[$t].ValueSize)")
-												if ($extention.TypedProperty[$t].NameSize -gt 0)
-												{
-													$null = $TypedPropertyNodes.Nodes.Add("NameSize$($t)", "NameSize: $($extention.TypedProperty[$t].NameSize)")
-													$null = $TypedPropertyNodes.Nodes.Add("Name$($t)", "Name: $($extention.TypedProperty[$t].Name)")
-													$TypedPropertyNodes.Nodes["Name$($t)"].ForeColor = 'LightGreen'
-												}
-												$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyType$($t)", "TypedProperty Type: $($extention.TypedProperty[$t].TypedPropertyType)")
-												if (!$extention.TypedProperty[$t].TypedPropertyType.ToString().Contains('VT_BLOB'))
-												{
-													$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyValue$($t)", "TypedProperty Value: $($extention.TypedProperty[$t].TypedPropertyValue)")
-												}
-												else
-												{
-													$null = $TypedPropertyNodes.Nodes.Add("TypedPropertyValue$($t)", "TypedProperty Value")
-													$TypedPropertyNodes.Nodes["TypedPropertyValue$($t)"].Tag = @($extention.TypedProperty[$t].TypedPropertyValue)
-													$TypedPropertyNodes.Nodes["TypedPropertyValue$($t)"].ToolTipText = "Right click to copy the raw (Hex) data ($($extention.TypedProperty[$t].ValueSize))"
-													$TypedPropertyNodes.Nodes["TypedPropertyValue$($t)"].ForeColor = 'Peru'
-												}
-											}
-										}
-									}
-									if ($null -ne $extention.extData)
-									{
-										$rawext = $extentionNode.Nodes.Add("extData", "Extention Data")
-										$rawext.Tag = @($extention.extData)
-										$rawext.ToolTipText = "Right click to copy the raw (Hex) data ($($extention.extData.length))"
-										$rawext.ForeColor = 'Peru'
-									}
-									$x++
-								}
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].ExtType)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ExtType", "Extension Type: $($LNKData.ItemIdListItems[$ic].ExtType)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].TargetCreated)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("TargetCreated", "Target Created: $($LNKData.ItemIdListItems[$ic].TargetCreated)")
-								$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["TargetCreated"].ForeColor = 'Cyan'
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].TargetAccessed)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("TargetAccessed", "Target Accessed: $($LNKData.ItemIdListItems[$ic].TargetAccessed)")
-								$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["TargetAccessed"].ForeColor = 'Cyan'
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].Timestamp)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Timestamp", "Timestamp: $($LNKData.ItemIdListItems[$ic].Timestamp)")
-								$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["Timestamp"].ForeColor = 'Cyan'
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].ZipIndex)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ZipIndex", "ZipIndex: $($LNKData.ItemIdListItems[$ic].ZipIndex)")
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].NameLength -and $LNKData.ItemIdListItems[$ic].NameLength -gt 0)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("NameLength", "Name Length: $($LNKData.ItemIdListItems[$ic].NameLength)")
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Name", "Name: $($LNKData.ItemIdListItems[$ic].Name)")
-								$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["Name"].ForeColor = 'Yellow'
-							}
-							if ($null -ne $LNKData.ItemIdListItems[$ic].ParentLength -and $LNKData.ItemIdListItems[$ic].ParentLength -gt 0)
-							{
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("ParentLength", "Parent Name Length: $($LNKData.ItemIdListItems[$ic].ParentLength)")
-								$null = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("Parent", "Parent Name: $($LNKData.ItemIdListItems[$ic].Parent)")
-								$IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes["Parent"].ForeColor = 'PaleGreen'
-							}
-							if (!!$LNKData.ItemIdListItems[$ic].EmbeddedItems -and $LNKData.ItemIdListItems[$ic].EmbeddedItems.count -ge 1)
-							{
-								$e = 0
-								foreach ($embeddeditem in $LNKData.ItemIdListItems[$ic].EmbeddedItems)
-								{
-									$embedded = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("EmbeddedItem$($e)", "Embedded Item: #$($e) Type: [$($embeddeditem.ItemIDType)]")
-									$embedded.ForeColor = 'Violet'
-									foreach ($embeddedproperty in $embeddeditem.psobject.Properties)
-									{
-										if ($embeddedproperty.Name -eq 'ItemIdExtensions')
-										{
-											$x = 0
-											Foreach ($extention in $embeddedproperty.Value)
-											{
-												$extentionNode = $embedded.Nodes.Add("itemIdExtType", "Extension #$($x) Type: [$($extention.itemIdExtType)]")
-												$extentionNode.ForeColor = 'Plum'
-												$null = $extentionNode.Nodes.Add("ExtentionSize", "Extension Size: $($extention.extLength)")
-												$null = $extentionNode.Nodes.Add("ExtentionVersion", "Extension Version: $($extention.extversion)")
-												if ($null -ne $extention.Unicode_Name)
-												{
-													$Unicode_Name = $extentionNode.Nodes.Add("Unicode_Name", "Unicode Name: $($extention.Unicode_Name)")
-													$Unicode_Name.ForeColor = 'PaleGreen'
-												}
-												if ($null -ne $extention.Application)
-												{
-													$null = $extentionNode.Nodes.Add("Application", "Application: $($extention.Application)")
-												}
-												if ($null -ne $extention.DocumentType)
-												{
-													$null = $extentionNode.Nodes.Add("DocumentType", "Document Type: $($extention.DocumentType)")
-												}
-												if ($null -ne $extention.w32Created)
-												{
-													$w32CreatedNode = $extentionNode.Nodes.Add("w32Created", "Created (UTC): $($extention.w32Created)")
-													$w32CreatedNode.ForeColor = 'Cyan'
-												}
-												if ($null -ne $extention.w32Accessed)
-												{
-													$w32AccessedNode = $extentionNode.Nodes.Add("w32Accessed", "Accessed (UTC): $($extention.w32Accessed)")
-													$w32AccessedNode.ForeColor = 'Cyan'
-												}
-												if ($null -ne $extention.MFTRecordNr)
-												{
-													$MFTRecordNrNode = $extentionNode.Nodes.Add("MFTRecordNr", "MFT Record Nr: $($extention.MFTRecordNr)")
-													$MFTRecordNrNode.ForeColor = 'Orange'
-													$MFTRecordSeqNr = $extentionNode.Nodes.Add("MFTRecordSeqNr", "MFT Record Sequence Nr: $($extention.MFTRecordSeqNr)")
-													$MFTRecordSeqNr.ForeColor = 'Orange'
-												}
-												if ($null -ne $extention.Unknown -and $extention.Unknown -ne '0x00000000')
-												{
-													$null = $extentionNode.Nodes.Add("Unknown", "Unknown value: $($extention.Unknown)")
-												}
-												$x++
-											}
-										}
-										elseif ($embeddedproperty.Name -eq 'Timestamp')
-										{
-											$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
-											$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'Cyan'
-										}
-										elseif ($embeddedproperty.Name -eq 'Parent')
-										{
-											$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
-											$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'PaleGreen'
-										}
-										elseif ($embeddedproperty.Name -eq 'Name')
-										{
-											$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
-											$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'Yellow'
-										}
-										elseif ($embeddedproperty.Name -eq 'w32Modified')
-										{
-											$w32Modifiednode = $embedded.Nodes.Add("w32Modified", "Modified (UTC): $($embeddedproperty.Value)")
-											$w32Modifiednode.ForeColor = 'Cyan'
-										}
-										elseif ($embeddedproperty.Name -eq 'Data')
-										{
-											$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "Embedded Item $($embeddedproperty.Name)")
-											$embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'Peru'
-											$embedded.Nodes["$($embeddedproperty.Name)"].Tag = @($embeddedproperty.Value)
-											$embedded.Nodes["$($embeddedproperty.Name)"].ToolTipText = "Right click to copy the raw (Hex) data ($($embeddedproperty.Value.length))"
-										}
-										elseif ($embeddedproperty.Name -eq 'Filesize' -and $embeddedproperty.Value -eq $null)
-										{
-											continue
-										}
-										else
-										{
-											$null = $embedded.Nodes.Add("$($embeddedproperty.Name)", "$($embeddedproperty.Name): $($embeddedproperty.Value)")
-											if ($embeddedproperty.Name -eq 'Ansi_Name') { $embedded.Nodes["$($embeddedproperty.Name)"].ForeColor = 'PaleGreen' }
-										}
-									}
-									$e++
-								}
-							}
-							$raw = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("RawHexData", "ItemID Data") # : $($LNKData.ItemIdListItems[$ic].Data)
-							$raw.Tag = @($LNKData.ItemIdListItems[$ic].Data)
-							$raw.ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.ItemIdListItems[$ic].Data.length))"
-							$raw.ForeColor = 'Peru'
-						}
+						Populate-ItemIdListItems -ItemIDListNode $streamNode -ItemIdList $LNKData.ItemIdListItems
 					}
-					
 					# StringData - HasName
 					if ($LNKData.Link_Flags.contains('HasName') )
 					{
@@ -4886,9 +5725,8 @@ function Show-MainForm_psf
 					{
 						$argsnode = $streamNode.Nodes.Add("$('Command Args')", "Command Arguments: $($LNKData.'Command Args')")
 						$argsnode.ToolTipText = [System.Text.RegularExpressions.Regex]::Replace($LNKData.'Command Args', '(.){100}', "$('$0')`n")
-						$argsnode.ForeColor = 'Gold'
+						$argsnode.ForeColor = 'Yellow'
 					}
-					
 					# Link Info
 					if ($LNKData.Link_Flags.Contains('HasLinkInfo'))
 					{
@@ -4988,7 +5826,6 @@ function Show-MainForm_psf
 							foreach ($TProperty in $LNKData.PSobject.Properties.where{ $_.name -match "TypedProperty" })
 							{
 								$null = $TargetMetadataNode.Nodes.Add("$($TProperty.Name)", "$($TProperty.Value)")
-								$TargetMetadataNode.Nodes["$($TProperty.Name)"].ToolTipText = "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/2a4589eb-9a23-4a8b-adbd-3e368233c099"
 							}
 						}
 					}
@@ -5740,11 +6577,41 @@ function Show-MainForm_psf
 			{
 				$CopyNode2Tag.Visible = $false
 			}
+			if ($_.Node.Text.StartsWith("Stream Name") -and  !!$_.Node.Tag[1])
+			{
+				$SaveStreamToFile.Visible = $true
+			}
+			else
+			{
+				$SaveStreamToFile.Visible = $false
+			}
 		}
 		
 	}
 	
 	
+	$SaveStreamToFile_Click={
+		if (!!$treeview2.SelectedNode.Tag -and !!$treeview2.SelectedNode.Tag[1])
+		{
+			$savefiledialog1.AddExtension = $true
+			$savefiledialog1.InitialDirectory = [Environment]::GetFolderPath('Desktop')
+			$savefiledialog1.Filter = "LNK files (*.lnk)|*.lnk|All files (*.*)|*.*"
+			$savefiledialog1.FilterIndex = 0
+			$savefiledialog1.FileName = "Stream"
+			$savefiledialog1.DefaultExt = 'lnk'
+			
+			if ($savefiledialog1.ShowDialog() -eq 'OK')
+			{
+				$data = $treeview2.SelectedNode.Tag[1]
+				$OutputFileStream = [IO.File]::OpenWrite($savefiledialog1.FileName)
+				$OutputFileStream.Write($data, 0, $data.count)
+				$OutputFileStream.Dispose()
+				$Status.Text = 'Ready'
+			}
+			else { [System.Console]::Beep(500, 150) }
+		}
+		else { [System.Console]::Beep(500, 150) }
+	}
 	
 	# --End User Generated Script--
 	#----------------------------------------------
@@ -5811,6 +6678,7 @@ function Show-MainForm_psf
 			$OpenFileWith.remove_Click($OpenFileWith_Click)
 			$CopyFullFilePath.remove_Click($CopyFullFilePath_Click)
 			$CopyNode2Tag.remove_Click($CopyNode2Tag_Click)
+			$SaveStreamToFile.remove_Click($SaveStreamToFile_Click)
 			$Jumplist_Browser.remove_Load($Form_StateCorrection_Load)
 			$Jumplist_Browser.remove_Closing($Form_StoreValues_Closing)
 			$Jumplist_Browser.remove_FormClosed($Form_Cleanup_FormClosed)
@@ -6694,6 +7562,7 @@ BuWSu6CElvwDAAAAAElFTkSuQmCCCw=='))
 	[void]$contextmenustrip2.Items.Add($CopyNode2)
 	[void]$contextmenustrip2.Items.Add($CopyNode2Tag)
 	[void]$contextmenustrip2.Items.Add($CopyAll2)
+	[void]$contextmenustrip2.Items.Add($SaveStreamToFile)
 	[void]$contextmenustrip2.Items.Add($toolstripseparator9)
 	[void]$contextmenustrip2.Items.Add($Expand2)
 	[void]$contextmenustrip2.Items.Add($Collapse2)
@@ -6705,7 +7574,7 @@ BuWSu6CElvwDAAAAAElFTkSuQmCCCw=='))
 	[void]$contextmenustrip2.Items.Add($toolstripseparator3)
 	[void]$contextmenustrip2.Items.Add($Exit2)
 	$contextmenustrip2.Name = 'contextmenustrip2'
-	$contextmenustrip2.Size = New-Object System.Drawing.Size(378, 298)
+	$contextmenustrip2.Size = New-Object System.Drawing.Size(378, 350)
 	#
 	# CopyNode2
 	#
@@ -7177,6 +8046,35 @@ z+7oAAAAAElFTkSuQmCCCw=='))
 	$CopyNode2Tag.Text = 'Copy Selected Node''s Tag Data (Hex)'
 	$CopyNode2Tag.Visible = $False
 	$CopyNode2Tag.add_Click($CopyNode2Tag_Click)
+	#
+	# SaveStreamToFile
+	#
+	$SaveStreamToFile.BackColor = [System.Drawing.Color]::Lavender 
+	#region Binary Data
+	$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+	$System_IO_MemoryStream = New-Object System.IO.MemoryStream (,[byte[]][System.Convert]::FromBase64String('
+AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBD
+dWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0
+ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAJgIAAAKJUE5HDQoaCgAA
+AA1JSERSAAAAEAAAABAIBgAAAB/z/2EAAAABc1JHQgCuzhzpAAAABGdBTUEAALGPC/xhBQAAAAlw
+SFlzAAAWJQAAFiUBSVIk8AAAAbtJREFUOE+V0j9IAnEUB/CfIB50eHChECSIihLUEBSIkaI4KAm2
+lBA1RA0SGBaSiKHo0BQ0NJWTqFOb0BAF7aFrRNJQtBUVhZEuvd7vd3+EOOJ68OXe3b3f5+74HeH4
+8VNidAMhAryeXesKIQRMvB1Eq+eM0MX7B4d40ag5rBUKZHMFECz0wQhwQ0PYGEBvUSC1lR0AhdIe
+u0jr/aML7XZbM/1+n80ogGh1ScB2NqcCeuoX4IJNPFGAr15P8+k0L2/vbIbObqS2ZMDkgvVkSgX+
+qm/5SGdX15IgWJ0SsLS8pgtQis4uLK4MgHg8gY2B3dCbSHQed8GBPQKhcAy8M5F/JRCMImCXAK8v
+BE73FJ5wGEEjv99ARGAOzMM27DknTHsDYBnxQCyWYN941WrBbafDelqZTEZNOp1miD8QlQADAv5g
+hAFzMtBsNuH84pL1tMrlMpRKJSgWi5DP5weAhb2Bo+ubjYLdOcmALv5sR8cVqDdO4Bm3nW5dvV6H
+Wq0G1WoVKpWKCggMIOKuWRz7Hp+YYQBd0Ll7gPvHJ+jLG99oNNRQhALBcFwBCIfZMXC2T3pDX0zA
+D48CMfI3PxhbWzq0BjJ0AAAAAElFTkSuQmCCCw=='))
+	#endregion
+	$SaveStreamToFile.Image = $Formatter_binaryFomatter.Deserialize($System_IO_MemoryStream)
+	$Formatter_binaryFomatter = $null
+	$System_IO_MemoryStream = $null
+	$SaveStreamToFile.Name = 'SaveStreamToFile'
+	$SaveStreamToFile.Size = New-Object System.Drawing.Size(377, 30)
+	$SaveStreamToFile.Text = 'Save Stream to File'
+	$SaveStreamToFile.Visible = $False
+	$SaveStreamToFile.add_Click($SaveStreamToFile_Click)
 	$contextmenustrip2.ResumeLayout()
 	$contextmenustrip1.ResumeLayout()
 	$menustrip1.ResumeLayout()
@@ -7207,8 +8105,8 @@ Main ($CommandLine)
 # SIG # Begin signature block
 # MIIviAYJKoZIhvcNAQcCoIIveTCCL3UCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAAFuyLdvBClFg/
-# QLYTr1wz2FMU3uXEv5mKT7xtd0Evz6CCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBToaHsZ9/RmpON
+# jZZf6IXEUSDNIh5zmnV5YPzOGlWVfKCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -7428,35 +8326,35 @@ Main ($CommandLine)
 # AQEwaDBUMQswCQYDVQQGEwJHQjEYMBYGA1UEChMPU2VjdGlnbyBMaW1pdGVkMSsw
 # KQYDVQQDEyJTZWN0aWdvIFB1YmxpYyBDb2RlIFNpZ25pbmcgQ0EgUjM2AhALYufv
 # MdbwtA/sWXrOPd+kMA0GCWCGSAFlAwQCAQUAoEwwGQYJKoZIhvcNAQkDMQwGCisG
-# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIBlVQevGUZXbGmIaqbGw+haSfxKQWt5S
-# qWnJ0Ni0O2XVMA0GCSqGSIb3DQEBAQUABIICAIvCoxVT8cEeNcUDaINRzIZO5wZJ
-# bm6NHU7kQjow0u70CL5dyjSN0nLq5HIEZRMPCwOdsSSXVGzB9AYmx3sTZf+JasrR
-# rmdq+hVccwwTkuW7sv86IX44qB8HjxFEsst/3e+zBiArOg3piEI4Hi9pyrUeHISM
-# Dn9ovjwhTRspaF6AZ678vGGnDV1hTiSoDR1QIOpT1zVLfG/ZE3zu+F8PK1Qbkffq
-# kX6g3TiXoISO1kCa/zIi3zftPIlH0tVeAqte4bkfJwE2tqCAzJ5QEsSYVeDn8eYd
-# iayL/OkDlxe0Qc2vGMw4snj6dCrMRb/clUlC1vBcaWgvdR6pxaQTaRjIazBiOlxt
-# wsbLKj2x4K68+SntnuuwQ7Dwh29e3iTGhQch75qbJ2OQsJR2jGyTSzXazioyJc+3
-# 1+FzIuidu89H1cQpN7/B0CS1O4CBcZEtCyRmD8IWz22k9STEZA5xe8Y5kGvP0KDs
-# LwACdnxI5QvvH9UCHBL0PAFhYFUAKC0cmmJobTjuIWdEZgrVunX6m/3pAbdLc3JC
-# XNGADgYRqwy/L9gO8Y4A6DGYd3EYbJAUEbmbiwoPa+1WVoU5AHFFe4q2HSjQinn3
-# qrqDz8qROpO5v5f6zBC1st3xhwz6BJhi4B9BXJ7wHERoqatt20Rct4WEPaMVOLnK
-# UvHwLksaLQFlyVYUoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
+# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIBvJV0PNG5vN2fQK4aYzB9I6IlZX91QF
+# w6yKGiPAAQ63MA0GCSqGSIb3DQEBAQUABIICAGklrPPCIRJvx+UKYja/kJzKLFXT
+# IAK1heuJ1xoAg8O94qPSrsm3QTjdgpLfhDpldW7cs4dA6ayADCmjW3fNkE8gbdTA
+# lGpphTj4Sld6UBK10/WvSy4WFoeMe3jPEP8hcoXHrsiEWSS8+JorgdLubFWokeYC
+# 98XPs4vSTefGZgePBCozAPluI9Qs4hkXVvoR/SVyvbN8v/NiP21aKCY11CG33nDx
+# loUuYip5d+Wg2PZRvtxiFi4baMuO6W956xoQ7LPtejcty+2KDq+bXt9sG3AmSUkv
+# IuhsmRLtixfQJBASN307LETErU4+/5ZYXN/kxVfWVutiVPfugEhXwp3MKyhkCuyL
+# A33lfEsJbjioURL5XxSED/mbjHpTwWEwmvzUcwj2+dDOaJv4ZVOVL74gEH6P4U5Q
+# LF5SLePz3cOHSzhf10P/CHPtLZnFYF3x7gxykcxPixPFJGtMwy0fJJTf//Lskldd
+# aAsrkxu7PCNYYXVrOMjmKNnAUGgbPigqLjhwkFP/R0vnojClPQXbEiZvYzhUDZ9A
+# kWnwqpLlu523oMg8vNg7ci+hCV1q0n0PWtXL/nQUQ/lem1m1tpoLDm7sHYOTpJ4p
+# 1zdARIgBUh0vUM9T7eMdkmM5LFlJI3goLhtVdZj5uCkl3w03z6vxFYO8eTHg54sr
+# WuGBsTl7OVIyDcqNoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
 # MAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExMTAvBgNVBAMT
 # KEdsb2JhbFNpZ24gVGltZXN0YW1waW5nIENBIC0gU0hBMzg0IC0gRzQCEAFIkD3C
 # irynoRlNDBxXuCkwCwYJYIZIAWUDBAIBoIIBPTAYBgkqhkiG9w0BCQMxCwYJKoZI
-# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMTIxOTUzMzlaMCsGCSqGSIb3DQEJ
+# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMTUyMjMyMDdaMCsGCSqGSIb3DQEJ
 # NDEeMBwwCwYJYIZIAWUDBAIBoQ0GCSqGSIb3DQEBCwUAMC8GCSqGSIb3DQEJBDEi
-# BCB19fpHFZnPom9gOdbF0w8gc+j7ILULUDGNIV3Pjhbj1DCBpAYLKoZIhvcNAQkQ
+# BCAsjuPcKv4qZeWLeL4Maf5zozfbGW6wksUMSOjY+/gQfTCBpAYLKoZIhvcNAQkQ
 # AgwxgZQwgZEwgY4wgYsEFDEDDhdqpFkuqyyLregymfy1WF3PMHMwX6RdMFsxCzAJ
 # BgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 # bG9iYWxTaWduIFRpbWVzdGFtcGluZyBDQSAtIFNIQTM4NCAtIEc0AhABSJA9woq8
-# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgANF4MMsH9tZXjvswDXQeVEEwFPM
-# M5yxJba3wlerC9Lhph3IuKm5v/I92Yu3omW5JA43rslob1Pdu+5PAOEMO1wQPBVh
-# cdDRcQdjPNpPmvxxlV4Jc4IZFV7DW+P4Cek+WarSOGNR5EPQcaoqgSDcEtZx6shR
-# MFLqwfGq3sX50iWcH07cC3z0aZuuoZrpu68V0qfIn7e37w2hALXPyU0/YcS2EIzM
-# LyIdBDgP1e8Y2DSgae3gTsXHtaiZzfNsOF0/vAmWIjHktFlUMqGBjglXDu+3XNlf
-# eHNw3W/FduEg5Wrk0LtyXqthTHeF3M/EtWgjQcq1t2t1WDizQnJi2CjZtM/Y8x28
-# Y44nG/CYdXnmmE/xDVEbXoHaZz1Hj7Cd6RF14OJ+1TuRmaI0enFh/llS7Yxycacv
-# n1FPyyoNTLvXBZ0ARdO9ODUvvybuCKo+dlwChur4DyHAuJ+pxg5Lu3RyzrlsLbYY
-# ZlryydUIRZycIcp84Fhujwn+1CthFcatGS126A==
+# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgKuLqq22pLl+46sN/3Uq15z0OXCr
+# CC3PXW/+/txylZ9/jyk7EUzIFK9lJ3i9wsAAXygMIgBk6hShg+/J6MuWBtzJXTwq
+# aYqANJrMmTgfq7anvMtMbLxihDDlrfkJoKGZTiSrRpTxjAw5Kyfprn2tK6Wjg8Af
+# dwaEhJnzh0RTAUSqFDX7PDtZ88Mlx/fOypX3j95foSl34cwZKjlCYpAT8+AZ3B7G
+# a2tWBRV9kWHAlhmmTMm08GUhcpA5jfS1E+sG3GSwmLNdvsdGw+EEt35DBQ9TgUDZ
+# vWU4J3svde8rw2Y1YoGPW3g/SXz9rujElemwZiPf/Hn1xkMhVsvTwQSu8+AbaYbk
+# HIb99IDMKfdBP56kIUXW6/utoyg4DIlVqXgiIWhamq1BgX0DxLTHAsMNANo3a3c1
+# EIKr6x93J7tuGEUcs+Gyog+6SOtYlj+Tp5aJJ6F0+mLmGeVSzs8g6Fq5GcEaWUDu
+# pcM44457Ees2GYXprU5j0kqWtI2aAQdFwf2V6w==
 # SIG # End signature block
