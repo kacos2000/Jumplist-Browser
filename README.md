@@ -1,4 +1,4 @@
-# Jumplist-Browser
+## Jumplist-Browser
 Automatic/Custom Destinations &amp; ShellLNK Browser
 
 ==> [Latest version](https://github.com/kacos2000/Jumplist-Browser/releases/latest) <==
@@ -19,7 +19,7 @@ Sample screenshot:
 
 ---------------------------------------------------------------------------------------------------------------
 
-[TIP]:
+### [TIP]:
 In **'automaticDestinations-ms'** files, with the exception of *Windows Control Panel*, *Windows Explorer* and *Quick Access*, 
 entries usually include a 'Hint' on which Application they are related to. 
 These hints are seen in the last IDlist entry (type [32] (File)):
