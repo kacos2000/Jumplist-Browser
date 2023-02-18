@@ -24,7 +24,7 @@ In **'automaticDestinations-ms'** files, with the exception of *Windows Control 
 entries usually include a 'Hint' on which Application they are related to. 
 These hints are seen in the last IDlist entry (type [32] *(File)*):
 
-either indirectly: 
+either indirectly: <br>
 MPC-HC *(Media Player Classic - Home Cinema)*:<br>
 ![image](https://user-images.githubusercontent.com/11378310/219865398-65ceda89-8e6c-4a53-9f20-228d1fda0458.png)<br>
 MS Excel:<br>
