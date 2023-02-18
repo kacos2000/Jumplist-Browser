@@ -22,7 +22,7 @@ Sample screenshot:
 ### [TIP]:
 In **'automaticDestinations-ms'** files, with the exception of *Windows Control Panel*, *Windows Explorer* and *Quick Access*, 
 entries usually include a 'Hint' on which Application they are related to. 
-These hints are seen in the last IDlist entry (type [32] (File)):
+These hints are seen in the last IDlist entry (type [32] *(File)*):
 
 either indirectly: 
 MPC-HC *(Media Player Classic - Home Cinema)*:<br>
