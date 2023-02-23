@@ -4125,7 +4125,6 @@ function Show-MainForm_psf
 						$MFTrecordSeqNr = [System.BitConverter]::ToUInt16($ByteArray[($idx + 18) .. ($idx + 19)], 0)
 						$idx = $idx + 20 + 14 # skip null bytes
 						$unknownyet = "0x$([System.BitConverter]::ToString($ByteArray[($idx) .. ($idx + 3)]) -replace '-', '')"
-						<#$Unicode_Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx + 4) .. ($idx + 4 + ($extstart + $extlength - ($idx + 4) - 1))])#>
 						$TargetString = [System.Text.Encoding]::Unicode.GetString($ByteArray[($extstart + 46) .. ($extstart + $extlength - 3)])
 						$Unicode_Name = ($TargetString -split '\0')[0]
 						$Localized_Name = ($TargetString -split '\0')[1]
@@ -4135,25 +4134,26 @@ function Show-MainForm_psf
 						$MFTrecordNr = [System.BitConverter]::ToUInt64(($ByteArray[($idx + 12) .. ($idx + 17)] + $ByteArray[($idx + 10) .. $($idx + 11)]), 0)
 						$MFTrecordSeqNr = [System.BitConverter]::ToUInt16($ByteArray[($idx + 18) .. ($idx + 19)], 0)
 						$idx = $idx + 20 + 10 # skip null bytes
-						<#$Unicode_Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + ($extstart + $extlength - ($idx) - 1))])#>
 						$TargetString = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($extstart + $extlength - 3)])
 						$Unicode_Name = ($TargetString -split '\0')[0]
 						$Localized_Name = ($TargetString -split '\0')[1]
 					}
 					elseif ($extversion -eq 8)
 					{
-						$TargetString = [System.Text.Encoding]::Unicode.GetString($ByteArray[($extstart + 42) .. ($extstart + $extlength - 3)])
+						# Check if record has FAT/MFT record info
+						if ($ByteArray[$extStart+20] -ne [byte]0 )
+						{
+							$MFTrecordNr = [System.BitConverter]::ToUInt64(($ByteArray[($idx + 12) .. ($idx + 17)] + $ByteArray[($idx + 10) .. $($idx + 11)]), 0)
+							$MFTrecordSeqNr = [System.BitConverter]::ToUInt16($ByteArray[($extStart + 8 + 18) .. ($extStart + 8 + 19)], 0)
+							$idx = $idx +34
+						}
+						else
+						{
+							$idx = $idx + 14
+						}
+						$TargetString = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($extstart + $extlength - 3)])
 						$Unicode_Name = ($TargetString -split '\0')[0]
 						$Localized_Name = ($TargetString -split '\0')[1]
-						<#$ends = [System.Text.RegularExpressions.Regex]::Match($TargetString, "(\x00\x00)")
-						$idx = $extstart + $extlength - 5 - [System.Text.RegularExpressions.Regex]::Match($TargetString, "(\x00\x00)").index + 1
-						$Unicode_Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + ($extstart + $extlength - $idx - 1))])#>
-						
-						if ($extlength - $extStart - 14 - $unicodename.length -ge 8 -and ($extStart + 26) -lt $idx)
-						{
-							$MFTrecordNr = [System.BitConverter]::ToUInt64(($ByteArray[($extStart+8 + 12) .. ($extStart+8 + 17)] + $ByteArray[($extStart+8 + 10) .. $($extStart+8 + 11)]), 0)
-							$MFTrecordSeqNr = [System.BitConverter]::ToUInt16($ByteArray[($extStart+8 + 18) .. ($extStart+8 + 19)], 0)
-						}
 					}
 					elseif ($extversion -eq 3)
 					{
@@ -7999,7 +7999,14 @@ function Show-MainForm_psf
 	$CopyNode2Tag_Click = {
 		if (!!$treeview2.SelectedNode.Tag)
 		{
-			$treeview2.SelectedNode.Tag[0] | Set-Clipboard
+			try
+			{
+				$treeview2.SelectedNode.Tag[0] | Set-Clipboard
+			}
+			catch
+			{
+				[System.Console]::Beep(500, 150)
+			}
 		}
 	}
 	
@@ -9858,17 +9865,17 @@ YtvrsQ+3Rsf8DKALGncPcP/4BLKy8eVyWQtFKBCajakA4TA7Js75SW8YixmsvQNAuiw3PwhUWzMK
 	$System_IO_MemoryStream = New-Object System.IO.MemoryStream (,[byte[]][System.Convert]::FromBase64String('
 AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBD
 dWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0
-ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAKwIAAAKJUE5HDQoaCgAA
-AA1JSERSAAAAEAAAABAIBgAAAB/z/2EAAAABc1JHQgCuzhzpAAAABGdBTUEAALGPC/xhBQAAAAlw
-SFlzAAAWJQAAFiUBSVIk8AAAAcBJREFUOE+NU01LAmEQfhcXyw5RB+sSRZcg6BAE/YXKDp0MRNE+
-TkVCUXSJwA6RkHSRDtGxW1HXoEvUqUWXoFsRQbDgoexLSe1rmkcHC1rTB4bdd+Z5Z2dnnlF20PwJ
-SwskXxxB84OfBUcgmelcSvVJuDY4p67H9aD5Ob1HFD4gqgudU2P4Zrt/7U4XSnW0zt20cAX5sZ13
-ip0SNUycU/PM1aqEa0PP8m09J3lbOaJiEj2Y/OqNWC4JV0axD/5Emi2Pd+9WltY5gStkEp8L4r8X
-uj2YkBmJP1L0hP7Y4MYdEj0LtQS377he8xlPclTuCUPX/EbOu5mmyCGVzRNL8WXjtX3mwiFUpbqm
-TSdfzvUvXpLmO3sXt+qYNJrYnx+NP9DCPl+OWhw3XrtnL36mgQOcCIIEMi7hslAUkpaSGzl8TNxK
-oQyUg7J+l4myUT5+Q6icxHjCb8qxBDQCDbFrFBqIRgrVHhgFG0ZSwIgwKoyMzxgj/BilJfTKgDgg
-EogFooF4ICIJ1wbIFHJFEsgXMoacJVwdWBQsDBYHC4RFwkJhsYTyL9xsbUXrnR9Snv0s25saPvjg
-Z0YN7KbK8ZIxX6lvZs4zqwCZeh4AAAAASUVORK5CYIIL'))
+ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAHgIAAAKJUE5HDQoaCgAA
+AA1JSERSAAAAEAAAABAIBgAAAB/z/2EAAAAEZ0FNQQAAsY8L/GEFAAAACXBIWXMAABYlAAAWJQFJ
+UiTwAAABwElEQVQ4T41TOyxDYRT+b3pRBmHAIulgM0kkYrMJXUxX0FJsXlPFJmWQSDwWMYjRhLBK
+LMLkum26WEhDIo0O1KtSbT2O89170ki09EtO7v3P+f5zzz3nO6oQtAErrvnCL66hyIfmt7Iuv5Vq
+mr1tlXBpKBuLjeiD4c/xXaKpfaKKQJSqJ682O0KkC+V/NARj9ZrPygxvvdPyCVHVaJRqJy4XJFwa
+PKFrNyfJzR+SnUQfsr7aV24qJVwcTh+spOY7y+Dd2HilJU5QGYgQ+7Livxd6YTAp1bP2SIvH9Mu6
+Vu+IEzwL1YEncOTW+k+f5KhU6EjXBsw3Yz1JcweUN+9ygqsw08rYcQlTqWbjvFzrM9/aZi6Ik7yL
+m5NGa/ic6V17oOk9vrwY57iZ7uDkQlEKBzgRBAlkXMJloSgktZPzR/AxcTO4DJSDsn6WibJRPn5D
+mEjyhN+UowM0Ag0p1Cg0EI0UamFgFPZIeDQYEUaFkWF0jp9Hye9CLw6IAyKBWCAaiAciknBpgEwh
+VySBfCFjyFnC/wOLgoXB4mCBsEhYKCyWUP5EHVujbS3BbuXde2XLKe/+Bz9TqnM7kY87xnylvgFe
+cjMncFhmHQAAAABJRU5ErkJgggs='))
 	#endregion
 	$toolstripRefresh.Image = $Formatter_binaryFomatter.Deserialize($System_IO_MemoryStream)
 	$Formatter_binaryFomatter = $null
@@ -9909,8 +9916,8 @@ Main ($CommandLine)
 # SIG # Begin signature block
 # MIIviAYJKoZIhvcNAQcCoIIveTCCL3UCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBtisjiUOGxtJ2a
-# 7istEOInu5T4i1WXhffxShGsqote96CCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCoDGRWvSpyuncT
+# PpSbRYuEWfhH8Qt5iLttNAjbirZZraCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -10130,35 +10137,35 @@ Main ($CommandLine)
 # AQEwaDBUMQswCQYDVQQGEwJHQjEYMBYGA1UEChMPU2VjdGlnbyBMaW1pdGVkMSsw
 # KQYDVQQDEyJTZWN0aWdvIFB1YmxpYyBDb2RlIFNpZ25pbmcgQ0EgUjM2AhALYufv
 # MdbwtA/sWXrOPd+kMA0GCWCGSAFlAwQCAQUAoEwwGQYJKoZIhvcNAQkDMQwGCisG
-# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEILs7NE09/M+p1BLjNBXYf1V2Gfl+hHMr
-# BmliSVEuVMsHMA0GCSqGSIb3DQEBAQUABIICAFBubyuBAhuaqkCW+oi4kFGgpuqU
-# gwvv+1oMa9cHf3W8s1LQiSpyBUG+vlPlzfOY+cAdFjQ+DrQdQ9FOuXUMcJhZSmGq
-# klcHb+aVtIooHjkvcIa2BKZxKwM7LPBPUNyzvWnmRTDKpOyaujIwRR3aaZK3gXP/
-# HbJkcMYXRfBiR/g89EL1uD5Z0Kae87UiAz/ohMXLfrbMbkff543i7NF0h2omZXTF
-# FQzC4PDpnZPNBTNwOv03zmM6nZHldTR4EIWJ4bHo+ddvzTqHGDnePgtRIEaM+4Vd
-# V5LNEwJfs3QqVVrKQPo9pgucAyUtZLooqf+ShQt3zeiIN0kKwHZYoG04RXUsjsBk
-# Eud2MCRWP1VbzORGwE7TcntRsmwtqrxIYvZeDDWAnV2DTf+YHIBz6ZZsb11x+U03
-# 2wUMLML8BQzuTNf4I3jxHSqGAtGHC1L9ht2kfRuj3yLW3/iEaxU9XXyzKeM7ZotW
-# fROrwHUIybyJDa7rlgIL5lKY9y0RP6qSIGcgIN1CP7O2VugA4H77ix/qr4bS7FpM
-# vwDDUgqUgS8q0uTKvMMzzzfeXiptwwb87jqeS2jGPHGsaOhDlH5n/3FOJoLzUt4M
-# zrW3hYMvgXvzjPsUZZ1fartYyXulSs/TpoZGRse1PgRpqFE8ptilD0q2VIKMw9aX
-# +q0+qniRA+R8fjuLoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
+# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIGD20hscD3QVgYmGhLYWWJfYU0ta3wI/
+# YSoy6gBK2dc+MA0GCSqGSIb3DQEBAQUABIICAC5FaRp1dF42Qf4r0S578vkTV68N
+# 6mpw4f0Fn3P+XkoBaztiJk8C3AiMp5agX3Wdln9MHdWEOssFu6Vun5qis7DnJ2NQ
+# PSxtg+kaRJNWqHD+oUmZGiHiEIFQZcO44SW/mysgtTTtH2Rf5wYMtZnpA9szqZkK
+# 42mjA+lth1yoX0JpFEXL5UWl2R2nxRSevfdRbDFevsJ7onFp3LkEWiY6nYCALp19
+# DHKm/BiPukqSyHA9ovSNRdV4nICoUTLaawevdn8cFDEACQ7hWX9Oh2QQ4dNaK5kG
+# ra+oaml3XUS5IpzDYDkxFbrsVaY9t7hk2pAU9yWeBYoVP5MvijB2bc8rd0yuo6aL
+# WppIZr7B+rzOqHFcvWdkbPp4KPD4TCVy/m5IcgqlNQ69uQpemrGfvC7DtB9Bq3ve
+# 9KxVaZbPmgMSbiCTu7fdDBQEZn9M1dOstzFrSP+JxJVPbNd0PNGj6j03mQ/oZh+L
+# 1CsPZO+AvUnHyjWW68X6Ve4y/3kEkHxxZEHVm4SGaurZpzRJ5dw6Nkh6Su0oN6yl
+# DvGj1SK0+E/MQbEb3Lj+A/Nzl/JJxRA3YdPPzC8VqcvkIs+6EsUHclMvPXnejTrG
+# KYGzgf+PYL7vdjbDmsgVPCrFm5+KpPrLPZrPgqTMUoOELck8u93pfzcUwrXaqFVo
+# y4uRB220E/F2QerQoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
 # MAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExMTAvBgNVBAMT
 # KEdsb2JhbFNpZ24gVGltZXN0YW1waW5nIENBIC0gU0hBMzg0IC0gRzQCEAFIkD3C
 # irynoRlNDBxXuCkwCwYJYIZIAWUDBAIBoIIBPTAYBgkqhkiG9w0BCQMxCwYJKoZI
-# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMjMxNzI1NDJaMCsGCSqGSIb3DQEJ
+# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMjMyMTI4NTFaMCsGCSqGSIb3DQEJ
 # NDEeMBwwCwYJYIZIAWUDBAIBoQ0GCSqGSIb3DQEBCwUAMC8GCSqGSIb3DQEJBDEi
-# BCAZm7KAceWL6BODxZ8AtMajZOerPETGcMBAxps8AQJ4BjCBpAYLKoZIhvcNAQkQ
+# BCD2YykmE+SfcrR4w6Q7cUgvPRQLv0eXXum6eg+SdyTXuDCBpAYLKoZIhvcNAQkQ
 # AgwxgZQwgZEwgY4wgYsEFDEDDhdqpFkuqyyLregymfy1WF3PMHMwX6RdMFsxCzAJ
 # BgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 # bG9iYWxTaWduIFRpbWVzdGFtcGluZyBDQSAtIFNIQTM4NCAtIEc0AhABSJA9woq8
-# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgADNQWsTSs5FHNkKkebc5WOtrvn1
-# Yqjh2uJ4tp9JF70MZBxzH3tCzYVeumwn+ja3W0QNKjlD0B9ZTUgKbURKpdmUDlg3
-# zGNu6xDq3MHXP4MFfNvNfMroeEvHv6iAfE4MpMTgrKXc0zCtzvKfIu0Kip36izcd
-# kJlZXtIH1QH3GUVoDLWZqn8mX7xjfkNrJWRx8tLq7NLTu13L+RV//r9ZydMDyOBI
-# 6bcB7OMDgl+yxh5Hd14MxEozJH/pcth4grBeb90s0Yq4gz5nG06EUG8C5TfD58Qa
-# 0/jayHlTACFDhwt64usf+WW/f1+iG/iFGEfWlXJARcWUUG+4aCZlTqsxPipgMqV1
-# WgCHRK5rS56OPZljb82rkDRq/Pvk8dZ8cW+pgvZDFoPFDuyzhXnuLcEo1kKS5I/L
-# yHbretQ05L7zETSh1/eRjsJIfI+8K4rlWBVJWVbqvyo4Q3W83OJCRd/Mn+BMPWVC
-# QtPYqLF7huzkQtM2MFpdL/MO/A9MfQAHddbb7w==
+# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgFYEba7jR7U68c00/9LgRbArRmY5
+# P8r3vpBP7OdNufIF6Uh7pZuj7fBP3LOT3rDrREmIZJz6Cih7g76vnVHZdz1giFnS
+# fjpwvre76dK8x+bjxZ0epTq2PXJNPufYKoUBnyLny9WJrF4RAXNHLCG+tP7PrITt
+# RtbheMITfmq7wBda+VGYI2QVmjPmrqCfepRvL06qXB7WUtIzfpsapes3mjRaPbI1
+# PET8RDizZXjA/m0dPKYqPmaMdxnG4+XLprfNXJgkZoonkmWNTBCdusmW8Xso8edX
+# HLZHOc8gX6PIrqLzqQ4mOdqvqaQMTO8XgkGWycrbNk/VWT6mRuSQR+uM9uDWK4TI
+# AWytppY/1WCE4S2eviRAG6+udbJMHtfDCqfGHakmmHPlXia2pWDHb4X4OVe+R3PI
+# 9MAZsowzwlsrDpOxjTdym9w07tZ+wiQDiwh7e1wDi7BHYLyYgU9iZE2bSuzguJ0W
+# V2cpuRrEL8nBZb9vQmy/HXbuk8YTq7rRY1PQ5A==
 # SIG # End signature block
