@@ -4,7 +4,6 @@
 	 					 https://github.com/kacos2000/Jumplist-Browser
     --------------------------------------------------------------------------------
 #>
-
 function Main {
 <#
     .SYNOPSIS
@@ -754,6 +753,13 @@ function Show-MainForm_psf
 						{
 							$null = $extensionNode.Nodes.Add("CLSID", "CLSID: $($extension.CLSID)")
 						}
+						if ($null -ne $extension.UriEntries)
+						{
+							foreach ($uri_entry in $extension.UriEntries.PSobject.Properties)
+							{
+								$null = $extensionNode.Nodes.Add("$($uri_entry.Name)", "$($uri_entry.Name): $($uri_entry.Value)")
+							}
+						}
 						if ($null -ne $extension.TargetPath)
 						{
 							$null = $extensionNode.Nodes.Add("TargetPath", "Target Path: $($extension.TargetPath)")
@@ -779,6 +785,11 @@ function Show-MainForm_psf
 						{
 							$Unicode_Name = $extensionNode.Nodes.Add("Unicode_Name", "Unicode Name: $($extension.Unicode_Name)")
 							$Unicode_Name.ForeColor = 'PaleGreen'
+						}
+						if ($null -ne $extension.Localized_Name -and $extension.Localized_Name -ne '')
+						{
+							$Localized_Name = $extensionNode.Nodes.Add("Localized_Name", "Localized Name: $($extension.Localized_Name)")
+							$Localized_Name.ForeColor = 'PaleGreen'
 						}
 						if ($null -ne $extension.Application)
 						{
@@ -2715,6 +2726,28 @@ function Show-MainForm_psf
 		"11" = "Mobile PC"
 	}
 	
+	# https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775141(v=vs.85)
+	$UriEntryTypes = [ordered]@{
+		'1'  = 'Authority'
+		'2'  = 'Display URI'
+		'3'  = 'Domain'
+		'4'  = 'Extension'
+		'5'  = 'Fragment'
+		'6'  = 'Host'
+		'7'  = 'Password'
+		'8'  = 'Path'
+		'9'  = 'Path & Query'
+		'10' = 'Query'
+		'11' = 'Raw URI'
+		'12' = 'Scheme Name'
+		'13' = 'User Info'
+		'14' = 'User Name'
+		'15' = 'Host Type'
+		'16' = 'Port'
+		'17' = 'Scheme'
+		'18' = 'Zone'
+	}
+	
 	function Get-Attributes
 	{
 		param
@@ -3198,8 +3231,8 @@ function Show-MainForm_psf
 						'ItemIDType'	 = $ItemIDType
 						'SortOrderIndex' = $Class
 						'CLSID'		     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
-					}
-				} # End of 50
+						}
+					} # End of 50
 				'00'{
 						if ([System.BitConverter]::ToString($ByteArray[2]) -eq '2F')
 						{
@@ -3267,7 +3300,7 @@ function Show-MainForm_psf
 							
 						} # end 1SPS
 					} # End of 00
-				{ $_ -in ('44', '48') }{
+				{ $_ -in ('41' ,'42','44', '48') }{
 					
 					$Class = if ($SortOrderIndex[[String]$ClassType]) { "$($SortOrderIndex[[String]$ClassType]) [$($ClassType)]" }
 					else { $ClassType }
@@ -3349,21 +3382,42 @@ function Show-MainForm_psf
 			}
 			catch { $null }
 		}
-		elseif ($ItemIDType -eq '2E')
+		elseif ($ItemIDType -eq '2E') # CLSID etc
 		{
 			try
 			{
-				$Signature = [System.BitConverter]::ToString($ByteArray[4..7]) -replace '-', ''
-				if ($Signature -eq '06203108') # Shell Ext Volume (Portable Volume)
+				<#$Signature = [System.BitConverter]::ToString($ByteArray[4..7]) -replace '-', ''#>
+				<#if ($Signature -eq '06203108') # Shell Ext Volume (Portable Volume) <============= Not Added Yet
 				{
 					$ItemIdListProperties = [PSCustomObject]@{
 						'ItemIDSize' = $ItemIDSize
 						'ItemIDType' = $ItemIDType
 					}
 				}
+				else#>if ($ByteArray[2] -eq [byte]12) # 0x0C
+				{
+					$CLSID0 = if ($ItemIDSize -ge 32) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[16 .. 31]))" }
+					else { $null }
+					$CLSID = if ($ItemIDSize -ge 48) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[32 .. 47]))" }
+					else { $null }
+					
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize'  = $ItemIDSize
+						'ItemIDType'  = $ItemIDType
+					}
+					if ($null -ne $CLSID0)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'GUID' -Value (Get-FolderDescription -CLSIDstring $CLSID0)
+					}
+					if ($null -ne $CLSID)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'CLSID' -Value (Get-CLSID -CLSIDstring $CLSID)
+					}
+				}
 				else
 				{
-					$CLSID0 = if ($ItemIDSize -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }	else { $null }
+					$CLSID0 = if ($ItemIDSize -ge 18) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[2 .. 17]))" }
+					else { $null }
 					
 					$ItemIdListProperties = [PSCustomObject]@{
 						'ItemIDSize' = $ItemIDSize
@@ -3395,8 +3449,7 @@ function Show-MainForm_psf
 				'ItemIDType' = $ItemIDType
 			}
 		}
-		
-		
+			
 		$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "Data" -Value "$([System.BitConverter]::ToString($ByteArray) -replace '-', '')"
 		
 		return $ItemIdListProperties
@@ -3455,6 +3508,36 @@ function Show-MainForm_psf
 		try
 		{
 			$Flags = "0x$([System.BitConverter]::ToString($ByteArray[2]))"
+			$TargetString = [System.Text.Encoding]::UTF8.GetString($ByteArray[3 .. ($ItemIDSize - 3)])
+			$String = ($TargetString -split '\0')
+			
+			$Name = $String[0]
+			$Desription = $String[1]
+			
+			$start = $TargetString.IndexOf($String[1]) + 3
+			$idx = $start + $String[1].Length
+			$NetworkProviderType = [System.BitConverter]::ToString($ByteArray[($idx + 3) .. ($idx)]) -replace '-', ''
+			$NetworkProvider = if (!!$($Vendors[$NetworkProviderType])) { "0x$($NetworkProviderType) ($($Vendors[$NetworkProviderType]))" }	else { "0x$($NetworkProviderType)" }
+			$idx = $idx + 4
+					
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize'	  = $ItemIDSize
+				'ItemIDType'	  = $ItemIDType
+				'Flags'		      = $Flags
+				'Name'		      = $Name
+				'Desription'	  = $Desription
+				'NetworkProvider' = $NetworkProvider
+			}
+			
+			if ($ItemIDSize -gt $idx)
+			{
+				# Get the extension(s)
+				$ItemIdExtensions = Get-ItemIdExtensions -ByteArray $ByteArray -idx $idx
+				
+				$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "ItemIdExtensions" -Value @($ItemIdExtensions)
+			}
+			$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "Data" -Value "$([System.BitConverter]::ToString($ByteArray) -replace '-', '')"
+			<#$Flags = "0x$([System.BitConverter]::ToString($ByteArray[2]))"
 			$idx = $ByteArray[3 .. (3 + $ItemIDSize - 1)].IndexOf([byte]'0')
 			$Name = [System.Text.Encoding]::UTF8.GetString($ByteArray[3 .. (3 + $idx - 1)])
 			$next = 3 + $idx + 1
@@ -3473,7 +3556,7 @@ function Show-MainForm_psf
 				'Desription'      = $Desription
 				'NetworkProvider' = $NetworkProvider
 				'Data'		      = [System.BitConverter]::ToString($ByteArray) -replace '-', ''
-			}
+			}#>
 		}
 		catch
 		{
@@ -3488,22 +3571,6 @@ function Show-MainForm_psf
 		
 	} # End Get-Ext_C3
 	
-	<#
-		.SYNOPSIS
-			A brief description of the Get-Ext_31_32 function.
-		
-		.DESCRIPTION
-			A detailed description of the Get-Ext_31_32 function.
-		
-		.PARAMETER ByteArray
-			A description of the ByteArray parameter.
-		
-		.EXAMPLE
-			PS C:\> Get-Ext_31_32 -ByteArray $ByteArray
-		
-		.NOTES
-			Additional information about the function.
-	#>
 	function Get-Ext_31_32 # Folder / File
 	{
 		param
@@ -4057,20 +4124,29 @@ function Show-MainForm_psf
 						$MFTrecordSeqNr = [System.BitConverter]::ToUInt16($ByteArray[($idx + 18) .. ($idx + 19)], 0)
 						$idx = $idx + 20 + 14 # skip null bytes
 						$unknownyet = "0x$([System.BitConverter]::ToString($ByteArray[($idx) .. ($idx + 3)]) -replace '-', '')"
-						$Unicode_Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx + 4) .. ($idx + 4 + ($extstart + $extlength - ($idx + 4) - 1))])
+						<#$Unicode_Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx + 4) .. ($idx + 4 + ($extstart + $extlength - ($idx + 4) - 1))])#>
+						$TargetString = [System.Text.Encoding]::Unicode.GetString($ByteArray[($extstart + 46) .. ($extstart + $extlength - 3)])
+						$Unicode_Name = ($TargetString -split '\0')[0]
+						$Localized_Name = ($TargetString -split '\0')[1]
 					}
 					elseif ($extversion -eq 7)
 					{
 						$MFTrecordNr = [System.BitConverter]::ToUInt64(($ByteArray[($idx + 12) .. ($idx + 17)] + $ByteArray[($idx + 10) .. $($idx + 11)]), 0)
 						$MFTrecordSeqNr = [System.BitConverter]::ToUInt16($ByteArray[($idx + 18) .. ($idx + 19)], 0)
 						$idx = $idx + 20 + 10 # skip null bytes
-						$Unicode_Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + ($extstart + $extlength - ($idx) - 1))])
+						<#$Unicode_Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + ($extstart + $extlength - ($idx) - 1))])#>
+						$TargetString = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($extstart + $extlength - 3)])
+						$Unicode_Name = ($TargetString -split '\0')[0]
+						$Localized_Name = ($TargetString -split '\0')[1]
 					}
 					elseif ($extversion -eq 8)
 					{
-						$TargetString = [System.Text.Encoding]::GetEncoding(28591).GetString($ByteArray[($extstart + $extlength - 5) .. ($extstart+8)])
+						$TargetString = [System.Text.Encoding]::Unicode.GetString($ByteArray[($extstart + 42) .. ($extstart + $extlength - 3)])
+						$Unicode_Name = ($TargetString -split '\0')[0]
+						$Localized_Name = ($TargetString -split '\0')[1]
+						<#$ends = [System.Text.RegularExpressions.Regex]::Match($TargetString, "(\x00\x00)")
 						$idx = $extstart + $extlength - 5 - [System.Text.RegularExpressions.Regex]::Match($TargetString, "(\x00\x00)").index + 1
-						$Unicode_Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + ($extstart + $extlength - $idx - 1))])
+						$Unicode_Name = [System.Text.Encoding]::Unicode.GetString($ByteArray[($idx) .. ($idx + ($extstart + $extlength - $idx - 1))])#>
 						
 						if ($extlength - $extStart - 14 - $unicodename.length -ge 8 -and ($extStart + 26) -lt $idx)
 						{
@@ -4100,6 +4176,7 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "MFTrecordSeqNr" -Value $MFTrecordSeqNr
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Unknown" -Value $unknownyet
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Unicode_Name" -Value $Unicode_Name
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Localized_Name" -Value $Localized_Name
 					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				}
@@ -4177,6 +4254,62 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				}
 			} # End BEEF0010
+			elseif ($itemIdExtType -eq 'BEEF0014') # Uri_PROPERTY
+			{
+				try
+				{
+					$CLSID = if ($extLength -ge 23) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[($extStart + 8) .. ($extStart + 8 + 15)]))" }else { $null }
+					$GUID = if (!!$CLSID) { Get-CLSID -CLSIDstring $CLSID }	else { $CLSID }
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "GUID" -Value $GUID
+					if ($extLength -ge 55)
+					{
+						$datalength = [System.BitConverter]::ToUInt32($ByteArray[($extStart + 24) .. ($extStart + 27)], 0)
+						$NrOfEntries = [System.BitConverter]::ToUInt32($ByteArray[($extStart + 52) .. ($extStart + 55)], 0)
+	
+						if ((24 + $datalength) -gt $extLength -or $NrOfEntries -eq 0) { return }
+						
+						$UriEntries = [PSCustomObject]@{ }
+						$ix = $extStart + 56
+						$n = 0
+						while ($n -lt $NrOfEntries )
+						{
+							$EntryType = [System.BitConverter]::ToUInt32($ByteArray[$ix .. ($ix + 3)], 0)
+							$Type = if (!!$UriEntryTypes[[System.String]$EntryType]) { "$($UriEntryTypes[[System.String]$EntryType]) [$($EntryType)]" }	else { $EntryType }
+							
+							$EntryLength = [System.BitConverter]::ToUInt32($ByteArray[($ix + 4) .. ($ix + 7)], 0)
+							
+							if (($EntryLength -eq 0) -or (($ix + $EntryLength) -gt ($extStart + $extLength))) { break }
+							
+							$ix = $ix + 8
+							$Entry = if ($EntryType -eq 16 -and $EntryLength -eq 4)
+										{
+											[System.BitConverter]::ToUInt32($ByteArray[($ix) .. ($ix + 3)], 0)
+										}
+										else
+										{
+								[System.Text.Encoding]::Unicode.GetString($ByteArray[($ix) .. ($ix + $EntryLength - 3)])
+							}
+							$UriEntries | Add-Member -MemberType NoteProperty -Name $Type -Value $Entry
+							
+							# Get the next entry
+							$ix = $ix + $EntryLength
+							if ($ix -gt ($extStart+$extLength)) { break }
+							$n++
+						} # End While 
+						
+						$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "UriEntries" -Value $UriEntries
+					}
+					
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+					
+				}
+				catch
+				{
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+			} # End BEEF0014
 			elseif ($itemIdExtType -eq 'BEEF000A')
 			{
 				try
@@ -4336,7 +4469,7 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				} #end catch
 			} # end BEEF0019
-			elseif ($itemIdExtType -eq 'BEEF0024') # Serialised Property Store
+			elseif ($itemIdExtType -eq 'BEEF0024') # Serialized Property Store
 			{
 				try
 				{
@@ -4384,7 +4517,7 @@ function Show-MainForm_psf
 					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				}
-			}
+			} # End BEEF0025
 			elseif ($itemIdExtType -eq 'BEEF0026')
 			{
 				try
@@ -4410,7 +4543,7 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				} #end catch
 			} # End BEEF0026
-			elseif ($itemIdExtType -eq 'BEEF0027') # Serialised Property Store
+			elseif ($itemIdExtType -eq 'BEEF0027') # Serialized Property Store
 			{
 				try
 				{
@@ -4467,7 +4600,7 @@ function Show-MainForm_psf
 			} # End BEEF0000
 			else
 			{
-				if($itemIdExtType.StartsWith('BEEF00'))
+				if($itemIdExtType.StartsWith('BEEF'))
 				{
 					$NewExtension = $true
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "NewExtension" -Value $NewExtension
@@ -4948,6 +5081,7 @@ function Show-MainForm_psf
 		try { $ShortcutInfo = [ShellLink.Shortcut]::FromByteArray($ByteArray) }
 		catch [System.Management.Automation.MethodInvocationException]{
 				Show-ErrorMessage -ErrorMessage $Error[0].Exception.InnerException.Message
+				$Error.Clear()
 				$ShortcutInfo = $null
 				return
 			}
@@ -6204,6 +6338,13 @@ function Show-MainForm_psf
 		"9E312F4ADEE9107"  = "Opera Browser"
 		"43929AE4535C8DEA" = "Microsoft.SkypeApp 15 x86"
 		"69D97CDC8D4D5043" = "Microsoft.windowscommunicationsapps"
+		"34B9A7AD69FF9C1B" = "Microsoft Access"
+		"436EB6EB1BD9F03F" = "Microsoft Visio 15"
+		"53F58609D680CDBC" = "Isobuster"
+		"58A5AF636F485FF2" = "RegistryExplorer"
+		"603EAABE372FB7EE" = "CorelDraw 17"
+		"60536F49B49E4689" = "Microsoft XmlNotepad 2007"
+		"D992BCC31B3E5727" = "Opera Browser"
 	}
 	
 	# There is a shell API for the SHOpenWithDialog function
@@ -7066,6 +7207,7 @@ function Show-MainForm_psf
 		{
 			[System.Console]::Beep(500, 150)
 			Show-ErrorMessage -ErrorMessage "Can not Access $($fname)"
+			$Error.Clear()
 			[System.Console]::Beep(500, 150)
 			return
 		}
@@ -7849,11 +7991,28 @@ function Show-MainForm_psf
 		$node = $treeview1.SelectedNode
 		if ($node.Name.EndsWith(".automaticDestinations-ms") -and !!$node.Tag )
 		{
-			Process-Automatic -File "$($treeview1.SelectedNode.Name)"
+			try
+			{
+				Process-Automatic -File "$($treeview1.SelectedNode.Name)"
+			}
+			catch
+			{
+				Show-ErrorMessage -ErrorMessage $Error[0].Exception.InnerException.Message
+				$Error.Clear
+			}
 		}
-		elseif(!!$node.Tag)
+		elseif (!!$node.Tag)
 		{
-			Process-Link -File "$($treeview1.SelectedNode.Name)"
+			try
+			{
+				Process-Link -File "$($treeview1.SelectedNode.Name)"
+			}
+			catch
+			{
+				Show-ErrorMessage -ErrorMessage $Error[0].Exception.InnerException.Message
+				$Error.Clear
+			}
+			
 		}
 	}
 	$Collapse_Expand1_Click={
@@ -8202,6 +8361,15 @@ function Show-MainForm_psf
 		else { [System.Console]::Beep(500, 150) }
 	}
 	
+	
+	$Status_DoubleClick = {
+		if (!!$Status.Text)
+		{
+			$Status.Text | Set-Clipboard
+			[System.Console]::Beep(2000,150)
+		}
+	}
+	
 	# --End User Generated Script--
 	#----------------------------------------------
 	#region Generated Events
@@ -8244,6 +8412,7 @@ function Show-MainForm_psf
 			$Jumplist_Browser.remove_Load($Jumplist_Browser_Load)
 			$openfolder.remove_Click($openfolder_Click)
 			$exitToolStripMenuItem.remove_Click($exitToolStripMenuItem_Click)
+			$Status.remove_DoubleClick($Status_DoubleClick)
 			$treeview1.remove_AfterSelect($treeview1_AfterSelect)
 			$treeview1.remove_NodeMouseClick($treeview1_NodeMouseClick)
 			$treeview2.remove_NodeMouseClick($treeview2_NodeMouseClick)
@@ -9023,6 +9192,7 @@ QmCCCw=='))
 	$Status.Name = 'Status'
 	$Status.Size = New-Object System.Drawing.Size(24, 24)
 	$Status.TextAlign = 'MiddleLeft'
+	$Status.add_DoubleClick($Status_DoubleClick)
 	#
 	# treeview1
 	#
@@ -9694,8 +9864,8 @@ Main ($CommandLine)
 # SIG # Begin signature block
 # MIIviAYJKoZIhvcNAQcCoIIveTCCL3UCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCC3ncYM/mRXQvQg
-# D3J/1xo5pr803izE4973vWlzTv2l1KCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBnX1EZdusmqfkV
+# LQTxn2EFsyiHderpDkzNUyWxYBWJbKCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -9915,35 +10085,35 @@ Main ($CommandLine)
 # AQEwaDBUMQswCQYDVQQGEwJHQjEYMBYGA1UEChMPU2VjdGlnbyBMaW1pdGVkMSsw
 # KQYDVQQDEyJTZWN0aWdvIFB1YmxpYyBDb2RlIFNpZ25pbmcgQ0EgUjM2AhALYufv
 # MdbwtA/sWXrOPd+kMA0GCWCGSAFlAwQCAQUAoEwwGQYJKoZIhvcNAQkDMQwGCisG
-# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIK9YjPbw72MPccodqQfYi6H2PK6EShVT
-# kLoq7PALW9CLMA0GCSqGSIb3DQEBAQUABIICAGVN7ULOFOnL+Ax4uMN5pvJmQVAd
-# PXuRMkoXe48sMgApHBEttypZxzWWUXrbN6cknsT/DY0HzfESSk9vdpLe8BuH8+ij
-# X34+O2ZN3VZfzbAhaUJmb62zvJbkAetbiDUjknnjCqrpp7+dOHz+gK47AQkmFEsK
-# Jk8b6brJAGQsgp2YH0/GbVdn59HhBAAlic6wcRV1RYF++jnkcqq+2kbukuia+GtW
-# l8prF6sPdjyfrnzG8BmTyFln+PZocOSl5VwiFgVq8gMIKuQVzT8h0+o8gNhvIPfr
-# BnZNF/GhzDjXiKs7GoN9ZzpcmNwXAbIoBxqUM7VnslNSp8ekOySdsoPHNGhJuiGK
-# wlRc/+8+Q/7xFLzqMOBn0Gpj/5Cw492BRMFDL87svx631f5hqYHegMAAPtDcpaRW
-# xkGF2rrqkcyQ3TRhVrouNsksjxRFBVhwbGCQz1nEgRTgJxO2zggciqW2eIDNL7zy
-# syZHN2pCVMYS2/jO3ibDmNmNh143zw6t1HY65anJTekuYfHdDQp8hjEOUkZz+RAf
-# uYU/fC1a0Hrvt1FvTQA3Ba3zWNWVlqnwQycKQaAjSP/3/OsKQOyjMtnnehB7Vl/N
-# ONHvGShNe7SZ6yv3WCHCB3Sa4ZCEj3c566QEC7YYJjlHexl4h72Xpud5fXYPVQgj
-# Q+4RX+Ir52FyPW9uoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
+# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIIRIabE2ouJ4f7cebYlRUNjyyraPco7j
+# Zn6oXuo6t4+pMA0GCSqGSIb3DQEBAQUABIICAA5GqInWw7x0g1tHNB+7tsgfsZAo
+# KPnyhnHHh7bg58VTVgeNm4ABCb+WK67IBiTuri1lBxe+TeC4WiaqHYpfsMykQANk
+# DVvE+Vd5MCJQy+AY+EtFrm9yHo02IAWjpgTCM0FaZwS3xas8lqBlvYIa0ZhVKMeC
+# lpg+hPiYpCHiP1qAzpNgI6O8+P6Nx0jQaUpJjFDHa8QAOZk2TTKFxV4g23ZVvvd+
+# vy5nV5A4R6NufoaoX94bNYFYmvMOHzDQRpTN3eQgc+s88682OBmqiJN3AaU5DDS9
+# 6BaFOaBGICxqcpl54sBgx2gEjF4t2L3pBkEYcLxzdR91H2VvRT2g8tjRRLMYfS/H
+# F6fQTz9Dn1hdNrnCAXDqzAMA3N1iUPICjO+rNRBBhYVtpN5ybAXvep220Z9ls4ZB
+# eF6VkzYaNUbMnG6w84iX1BlP9WDqO/EeR6tr9IiNpq6blO+047zXuuPidB0o139p
+# QQoob8KY4iIO8/ZGqHcs45/TWl0y2+CveF3s/wCO0i0P/4voK/AmKk3GhbpwPino
+# NM1OZtPESWNnccNWwovH+IZhC+l9R9av6t36Rnhr5oFj4R800qPPcJgWjh++NJ+r
+# Q+7JRHI4nDYDN7Yv7oxolM9fdOYrcszf5hNZZ9R84vU25L5kGB/ttz7C2MOAp2ST
+# kfgvp79SM4oejsUyoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
 # MAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExMTAvBgNVBAMT
 # KEdsb2JhbFNpZ24gVGltZXN0YW1waW5nIENBIC0gU0hBMzg0IC0gRzQCEAFIkD3C
 # irynoRlNDBxXuCkwCwYJYIZIAWUDBAIBoIIBPTAYBgkqhkiG9w0BCQMxCwYJKoZI
-# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMjAyMzE2MDZaMCsGCSqGSIb3DQEJ
+# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMjMxMjUxMzhaMCsGCSqGSIb3DQEJ
 # NDEeMBwwCwYJYIZIAWUDBAIBoQ0GCSqGSIb3DQEBCwUAMC8GCSqGSIb3DQEJBDEi
-# BCDLOxkVffcJRqzG3oPinvZwpq983czbRXxmAU/FvKd8vzCBpAYLKoZIhvcNAQkQ
+# BCApl1vwQS7sGjClb9AoH5TyK1YtlHSONCgq7coFwhq1vzCBpAYLKoZIhvcNAQkQ
 # AgwxgZQwgZEwgY4wgYsEFDEDDhdqpFkuqyyLregymfy1WF3PMHMwX6RdMFsxCzAJ
 # BgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 # bG9iYWxTaWduIFRpbWVzdGFtcGluZyBDQSAtIFNIQTM4NCAtIEc0AhABSJA9woq8
-# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgJsKuQjhjlgAlBBEkUd5iz9iOhH1
-# 0GCbDDas0mWvNyUtZuQL6BNI3oQmMibwswTchtR8SUYLe7Op/v/CYVP1RTAJcWvQ
-# ZZ0fQMezVA/oSXqYdwKctfPxLljZ4gRWguuiwGWS4+5D5Gk5SXN5eph/YXRXhbPb
-# dix2cPS9PqfNFxRbr5Ez12ObpqD9/7Xbkxztu9QJwikLKY+VQbR+5xTaWoqynF/a
-# 3ePQ8MyYacfTkaiDrrn/CX9qaOLMSk5q0/p7Ms2wADomfYchOkypbgF0ECxgv1L5
-# nOqw3hvcUZngGJLXbJzS831dJRyNTLvvbXiEIQbL/Ygv48dNLN26ha+c8zRMhm1B
-# J+9xc4L3o29w1L4/fWXbGn430MP7jpc/0BdHmPtvYoWTgBZQG5OlZp4vcpTU2LHO
-# LgoQOoWYBcSXwpsbsCPNEIh7NOSeJTgBADjb86sZWgyozZyE4nFvuzTw1/KnaoFB
-# s3b6Zxqeb9EXohimcmeI8T9Tgakf/kxOy4FkDA==
+# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgH90rox5d2OMyyoIDlgwSkbZVg3a
+# lsGwJTXHZxVclCF/Xvjx9BA8YPsMMsIkNXgjXnWiu3qSHSOzhBxBaInT/p55Yqaw
+# gEelvH2iwJpyiugSCwSVpgiyHdvsdlJCJaUGFWoPNbHzHoHqQz3MEU5BCtuqGaCZ
+# Ht+sNEtxmpnPIx2F/JRS9LTvlJ11q/KrvwZvRT6thVR2FiVw29Hs+iiSnrbYd9Ne
+# n2JifSrJoTFDZnGyAWRCI5Pnf3Pc1GKbTCZTqU+xg9sLBWiWY0mxtAbDDzsKGA6m
+# Tn+l0wOJ00yekEjCTZiMCUNzQ1AH42Mdsc0Ezn7V7G9+UaFeU8MrXu9W8chVeRkr
+# yl8ThsX3wr42R+hfIF/kZ7NDWTuofBpvesbIJJMEYv0YNHldZfVdm18f+ep10uSU
+# L7KmdaqGXcAYN0ojo9dS2IdtM+D/z1c8hR7dIoGicVZzKmund9hJelZHReThY1w+
+# JQJmJeOIjMxN2sTAWLlV9VlhEwsrhsIzYoeKPQ==
 # SIG # End signature block
