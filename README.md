@@ -43,9 +43,11 @@ or Directly:<br>
 Windows Wordpad:<br>
 ![image](https://user-images.githubusercontent.com/11378310/219865461-223076e7-4195-4089-97e3-6a8b00baa5bd.png)<br>
 Modern CSV:<br>
-![image](https://user-images.githubusercontent.com/11378310/219865578-234ea46d-0ac0-4fca-afaa-64a870501137.png)
+![image](https://user-images.githubusercontent.com/11378310/219865578-234ea46d-0ac0-4fca-afaa-64a870501137.png)<br>
+Maël Hörz's [HxD Hex Editor](https://mh-nexus.de/en/hxd/)<br>
+![image](https://user-images.githubusercontent.com/11378310/221018836-62cbc8e4-4dbf-4eda-8892-82230db48c0f.png)<br>
 
-
+---------------------------------------------------------------------------------------------------------------
 
 
 
