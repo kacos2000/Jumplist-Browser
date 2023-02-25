@@ -3806,6 +3806,43 @@ function Show-MainForm_psf
 		return $ItemIdListProperties
 	} # End Get-Ext_71
 	
+	$TypedPropertiesWithUnicodeValues = @(
+		'AutolistCacheKey'
+		'item_url'
+		'title'
+		'substrate_id'
+		'category'
+		'source_id'
+		'onedrive_cid'
+		'location'
+		'user_id'
+		'local_path'
+		'sharepoint_web_id'
+		'kind'
+		'type'
+		'file_size'
+		'is_pinned_synced'
+		'sync_attempt_count'
+		'sharepoint_list_item_id'
+		'onedrive_item_id'
+		'creation_timestamp'
+		'sharepoint_site_url'
+		'sharepoint_list_id'
+		'last_accessed_timestamp'
+		'web_account_id'
+		'activity_json'
+		'extension'
+		'modification_timestamp'
+		'display_path'
+		'onedrive_drive_id'
+		'activity'
+		'app'
+		'resource_id'
+		'sharepoint_list_item_unique_id'
+		'sharepoint_site_id'
+		'onedrive_drive_type'
+	)
+	
 	function Get-Ext_SPS1 # Serialized Property Store 
 	{
 		param
@@ -3915,7 +3952,7 @@ function Show-MainForm_psf
 								{
 									$tpbytes = $typed.Value
 								}
-								elseif($pc.PropertyStorage[$t].PropertyStorage[$p].Name -eq 'AutolistCacheKey') # Unicode string
+								elseif($pc.PropertyStorage[$t].PropertyStorage[$p].Name -in $TypedPropertiesWithUnicodeValues -or $pc.PropertyStorage[$t].PropertyStorage[$p].Name.StartsWith('Accounts') <#-eq 'AutolistCacheKey'#>) # Unicode string
 								{
 									if ($typed.Value.length -gt 8)
 									{
@@ -4166,18 +4203,18 @@ function Show-MainForm_psf
 								$TargetString = [System.Text.Encoding]::UTF8.GetString($ByteArray[($idx) .. ($extstart + $extlength - 3)])
 								$Localized_Name = ($TargetString -split '\0')[0]
 							}
-						}
+					}
 						
-						$FileSystem = if ($MFTrecordNr -gt 0 -and $MFTrecordSeqNr -gt 0) { 'NTFS' }
-								elseif ($MFTrecordNr -gt 0 -and ($MFTrecordSeqNr -eq 0 -or $MFTrecordSeqNr -eq $null))
+					$FileSystem = if ($MFTrecordNr -gt 0 -and $MFTrecordSeqNr -gt 0) { 'NTFS' }
+							elseif ($MFTrecordNr -gt 0 -and ($MFTrecordSeqNr -eq 0 -or $MFTrecordSeqNr -eq $null))
+							{
+								if (!!$w32AccessedDate)
 								{
-									if (!!$w32AccessedDate)
-									{
-										if ($w32AccessedDate.Minute -eq 0 -and $w32AccessedDate.Second -eq 0 -and $w32AccessedDate.Millisecond -eq 0) { 'FAT' }
-										else { 'exFAT' }
-									}
+									if ($w32AccessedDate.Minute -eq 0 -and $w32AccessedDate.Second -eq 0 -and $w32AccessedDate.Millisecond -eq 0) { 'FAT' }
+									else { 'exFAT' }
 								}
-								else{$null}
+							}
+							else{$null}
 					
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "FileSystem" -Value $FileSystem
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "MFTrecordNr" -Value $MFTrecordNr
@@ -6310,6 +6347,9 @@ function Show-MainForm_psf
 		"603EAABE372FB7EE" = "CorelDraw 17"
 		"60536F49B49E4689" = "Microsoft XmlNotepad 2007"
 		"D992BCC31B3E5727" = "Opera Browser"
+		"22E699DDC3928886" = "Fineprint PdfFactory"
+		"3EBCDFA8943CC8B8" = "SAPIEN SnippetEditor"
+		"DAA1194A2BD88BD7" = "SAPIEN Packager"
 	}
 	
 	# There is a shell API for the SHOpenWithDialog function
@@ -6932,14 +6972,6 @@ function Show-MainForm_psf
 							$TargetMetadataNode = $LNKNode.Nodes.Add("TargetMetadata", "Target Metadata")
 							$TargetMetadataNode.ForeColor = 'Violet'
 							Populate-SPS1 -Node $TargetMetadataNode -SPS1properties @($LNKData.PropertyStoreEntries)
-							
-							<#if (($LNKData.PSobject.Properties.where{ $_.name -match "TypedProperty" }).count -ge 1)
-							{
-								foreach ($TProperty in $LNKData.PSobject.Properties.where{ $_.name -match "TypedProperty" })
-								{
-									$null = $TargetMetadataNode.Nodes.Add("$($TProperty.Name)", "$($TProperty.Value)")
-								}
-							}#>
 						}
 						
 						# 	Extradata - KnownFolderDataBlock
@@ -7281,7 +7313,7 @@ function Show-MainForm_psf
 				{
 					$streamNode = $Root2.Nodes.Add($streaminf.StreamName, "Stream Name: [$($streaminf.StreamName.ToString())] $($LNKData.'Display Name')")
 					$streamNode.ForeColor = 'Orange'
-					$streamNode.Tag = @($null, $streaminf.Data)
+					$streamNode.Tag = @($null, $streaminf.Data) 
 					$null = $streamNode.Nodes.Add("$('Stream Data Size')", "Stream Size: $($streaminf.DataLength)")
 					# Header
 					$SizeNode = $streamNode.Nodes.Add("$('Shortcut Size')", "Shortcut Size: $($LNKData.'Shortcut Size')")
@@ -7491,16 +7523,6 @@ function Show-MainForm_psf
 						$TargetMetadataNode = $streamNode.Nodes.Add("TargetMetadata", "Target Metadata")
 						$TargetMetadataNode.ForeColor = 'Violet'
 						Populate-SPS1 -Node $TargetMetadataNode -SPS1properties @($LNKData.PropertyStoreEntries)
-						
-						<#if (($LNKData.PSobject.Properties.where{ $_.name -match "TypedProperty" }).count -ge 1)
-						{
-							$TargetMetadataNode = $streamNode.Nodes.Add("TargetMetadata", "Target Metadata")
-							$TargetMetadataNode.ForeColor = 'Violet'
-							foreach ($TProperty in $LNKData.PSobject.Properties.where{ $_.name -match "TypedProperty" })
-							{
-								$null = $TargetMetadataNode.Nodes.Add("$($TProperty.Name)", "$($TProperty.Value)")
-							}
-						}#>
 					}
 					
 					# 	Extradata - KnownFolderDataBlock
@@ -7641,7 +7663,7 @@ function Show-MainForm_psf
 					if ($streaminf.Data)
 					{
 						$raw = $streamNode.Nodes.Add("RawHexData", "Stream Data")
-						$raw.Tag = @([System.BitConverter]::ToString($streaminf.Data) -replace '-', '')
+						$raw.Tag = @(([System.BitConverter]::ToString($streaminf.Data) -replace '-', ''))
 						$raw.ToolTipText = "Right click to copy the raw (Hex) data ($($streaminf.Data.count))"
 						$raw.ForeColor = 'Peru'
 					}
@@ -7654,7 +7676,7 @@ function Show-MainForm_psf
 					}
 				}
 				# Process DestList
-				elseif ($LNKData -eq $null -and ($streaminf.StreamName -eq 'DestList'))
+				elseif ($null -eq $LNKData -and ($streaminf.StreamName -eq 'DestList'))
 				{
 					$check = $Root2.Nodes.Find("$($streaminf.StreamName)", $true)
 					if (!!$check)
@@ -7666,8 +7688,8 @@ function Show-MainForm_psf
 						{
 							$DestNode = $Root2.Nodes.Add($streaminf.StreamName, "Stream Name: $($streaminf.StreamName)")
 						}
-						$DestNode.ForeColor = 'Orange'
-				try
+					$DestNode.ForeColor = 'Orange'
+					try
 					{
 						if ($streaminf.StreamName -eq "DestList")
 						{
@@ -7699,54 +7721,72 @@ function Show-MainForm_psf
 							{
 								$lastaccessed = try { [datetime]::FromFileTimeUtc("0x$([System.BitConverter]::ToString($x.data[($start + 107) .. ($start + 100)]) -replace '-', '')").ToString("dd/MM/yyyy HH:mm:ss.fffffff") }
 								catch { [System.BitConverter]::ToString($x.data[($start + 107) .. ($start + 100)]) -replace '-', '' }
-								
-								if (([Bitconverter]::ToUInt32($x.Data[0 .. 3], 0)) -eq 1)
-								{
-									$stringlength = [Bitconverter]::ToUInt16($x.data[($start + 112) .. ($start + 113)], 0)
-								
-									[pscustomobject]@{
-										'Hash' = [System.BitConverter]::ToString($x.data[$start .. ($start + 7)]) -replace '-', ''
-										'Volume Droid ID' =  Get-ObjectIdFromHex -Hex  ([System.BitConverter]::ToString($x.data[($start + 8) .. ($start + 23)]) -replace '-', ''  )
-										'File Droid ID' = Get-ObjectIdFromHex -Hex ( [System.BitConverter]::ToString($x.data[($start + 24) .. ($start + 39)]) -replace '-', ''  )
-										'Birth volume Droid ID' = Get-ObjectIdFromHex -Hex ( [System.BitConverter]::ToString($x.data[($start + 40) .. ($start + 55)]) -replace '-', '') 
-										'Birth file Droid ID' =  Get-ObjectIdFromHex -Hex  ([System.BitConverter]::ToString($x.data[($start + 56) .. ($start + 71)]) -replace '-', '' )
-										'Hostname' = [System.Text.Encoding]::ASCII.GetString($x.data[($start + 72) .. ($start + 87)])
-										'Entry ID' = [Bitconverter]::ToUInt64($x.data[($start + 88) .. ($start + 95)], 0)
-										'Access Counter' = [Bitconverter]::ToInt32($x.data[($start + 96) .. ($start + 99)], 0)
-										'Last Accessed' = $lastaccessed
-										'Entry Pin Status' = if (([System.BitConverter]::ToString($x.data[($start + 108) .. ($start + 111)]) -replace '-', '') -eq 'FFFFFFFF') { 'Unpinned' } else { [Bitconverter]::ToUInt32($x.data[($start + 108) .. ($start + 111)], 0) }
-										'String Data Length' = $stringlength
-										'InQuickAccess' = $null
-										'String' = [System.Text.Encoding]::Unicode.GetString($x.data[($start + 114) .. ($start + 114 + $stringlength * 2 - 1)])
-									} # eND psCO
+							
+							if (([Bitconverter]::ToUInt32($x.Data[0 .. 3], 0)) -eq 1) # Version 1
+							{
+								$stringlength = [Bitconverter]::ToUInt16($x.data[($start + 112) .. ($start + 113)], 0)
+								$Hostname = if (([System.BitConverter]::ToString($x.data[($start + 72) .. ($start + 87)]) -replace '-', '') -ne '00000000000000000000000000000000') { [System.Text.Encoding]::UTF8.GetString($x.data[($start + 72) .. ($start + 87)]) }
+									else { $null }
+									
+								[pscustomobject]@{
+									'Hash' = [System.BitConverter]::ToString($x.data[$start .. ($start + 7)]) -replace '-', ''
+									'Volume Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 8) .. ($start + 23)]) -replace '-', '')
+									'File Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 24) .. ($start + 39)]) -replace '-', '')
+									'Birth volume Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 40) .. ($start + 55)]) -replace '-', '')
+									'Birth file Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 56) .. ($start + 71)]) -replace '-', '')
+									'Hostname' = $Hostname
+									'Entry ID' = [Bitconverter]::ToUInt64($x.data[($start + 88) .. ($start + 95)], 0)
+									'Access Counter' = [Bitconverter]::ToInt32($x.data[($start + 96) .. ($start + 99)], 0)
+									'Last Accessed' = $lastaccessed
+									'Entry Pin Status' = if (([System.BitConverter]::ToString($x.data[($start + 108) .. ($start + 111)]) -replace '-', '') -eq 'FFFFFFFF') { 'Unpinned' } else { [Bitconverter]::ToUInt32($x.data[($start + 108) .. ($start + 111)], 0) }
+									'String Data Length' = $stringlength
+									'InQuickAccess' = $null
+									'String' = [System.Text.Encoding]::Unicode.GetString($x.data[($start + $entrylength) .. ($start + $entrylength + $stringlength * 2 - 1)])
+									'ExtensionSize' = 0
+									'ExtensionData' = $null
+									'RawEntryData' = [System.BitConverter]::ToString($x.data[$start .. ($start + $entrylength + $stringlength * 2 - 1)]) -replace '-', ''
+								} # eND psCO
 								$start = $start + $entrylength + $stringlength * 2
+							}
+							else
+							{
+								$stringlength = [Bitconverter]::ToUInt16($x.data[($start + 128) .. ($start + 129)], 0)
+								$extsize = [Bitconverter]::ToInt32($x.data[($start + $entrylength + $stringlength * 2) .. ($start + $entrylength + $stringlength * 2 + 3)], 0)
+								$Hostname = if(([System.BitConverter]::ToString($x.data[($start + 72) .. ($start + 87)]) -replace '-', '') -ne '00000000000000000000000000000000' )	{ [System.Text.Encoding]::UTF8.GetString($x.data[($start + 72) .. ($start + 87)])}else{$null}
+									
+								[pscustomobject]@{
+									'Hash' = [System.BitConverter]::ToString($x.data[$start .. ($start + 7)]) -replace '-', ''
+									'Volume Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 8) .. ($start + 23)]) -replace '-', '')
+									'File Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 24) .. ($start + 39)]) -replace '-', '')
+									'Birth volume Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 40) .. ($start + 55)]) -replace '-', '')
+									'Birth file Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 56) .. ($start + 71)]) -replace '-', '')
+									'Hostname' = $Hostname
+									'Entry ID' = [Bitconverter]::ToUInt64($x.data[($start + 88) .. ($start + 95)], 0)
+									'Access Counter' = [Bitconverter]::ToInt32($x.data[($start + 96) .. ($start + 99)], 0)
+									'Last Accessed' = $lastaccessed
+									'Entry Pin Status' = if (([System.BitConverter]::ToString($x.data[($start + 108) .. ($start + 111)]) -replace '-', '') -eq 'FFFFFFFF') { 'Unpinned' } else { [Bitconverter]::ToUInt32($x.data[($start + 108) .. ($start + 111)], 0) }
+									'String Data Length' = $stringlength
+									'InQuickAccess' = if ([Bitconverter]::ToUInt64($x.data[($start + 116) .. ($start + 123)], 0) -eq 1) { $true }else{ $false }
+									'String' = [System.Text.Encoding]::Unicode.GetString($x.data[($start + $entrylength) .. ($start + $entrylength + $stringlength * 2 - 1)])
+									'ExtensionSize' = $extsize
+									'ExtensionData' = if ($extsize -gt 0) { $x.data[($start + $entrylength + $stringlength * 2) .. ($start + $entrylength + $stringlength * 2 + 4 + $extsize - 1)] } else { $null }
+									'RawEntryData' = [System.BitConverter]::ToString($x.data[$start .. ($start + $entrylength + $stringlength * 2 + 4 + $extsize)]) -replace '-', ''
+								} # eND psCO
+								
+								if ($extsize -eq 0)
+								{
+									$start = $start + $entrylength + $stringlength * 2 + 4
 								}
 								else
 								{
-									$stringlength = [Bitconverter]::ToUInt16($x.data[($start + 128) .. ($start + 129)], 0)
-									
-									[pscustomobject]@{
-										'Hash' = [System.BitConverter]::ToString($x.data[$start .. ($start + 7)]) -replace '-', ''
-										'Volume Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 8) .. ($start + 23)]) -replace '-', '')
-										'File Droid ID' = Get-ObjectIdFromHex -Hex  ([System.BitConverter]::ToString($x.data[($start + 24) .. ($start + 39)]) -replace '-', '')
-										'Birth volume Droid ID' = Get-ObjectIdFromHex -Hex ( [System.BitConverter]::ToString($x.data[($start + 40) .. ($start + 55)]) -replace '-', '')
-										'Birth file Droid ID' = Get-ObjectIdFromHex -Hex ([System.BitConverter]::ToString($x.data[($start + 56) .. ($start + 71)]) -replace '-', '' )
-										'Hostname' = [System.Text.Encoding]::ASCII.GetString($x.data[($start + 72) .. ($start + 87)])
-										'Entry ID' = [Bitconverter]::ToUInt64($x.data[($start + 88) .. ($start + 95)], 0)
-									    'Access Counter' = [Bitconverter]::ToInt32($x.data[($start + 96) .. ($start + 99)], 0)
-										'Last Accessed' = $lastaccessed
-										'Entry Pin Status' = if (([System.BitConverter]::ToString($x.data[($start + 108) .. ($start + 111)]) -replace '-', '') -eq 'FFFFFFFF') { 'Unpinned' } else { [Bitconverter]::ToUInt32($x.data[($start + 108) .. ($start + 111)], 0) }
-										'String Data Length' = $stringlength
-										'InQuickAccess' = if ([Bitconverter]::ToUInt64($x.data[($start + 116) .. ($start + 123)], 0) -eq 1) { $true }else{ $false }
-										'String' = [System.Text.Encoding]::Unicode.GetString($x.data[($start + 130) .. ($start + 130 + $stringlength * 2 - 1)])
-									} # eND psCO
-								$start = $start + $entrylength + $stringlength * 2 + 4
+									$start = $start + $entrylength + $stringlength * 2 + 4 + $extsize
 								} # end else
-							} # End entries
+							} # end else
+						} # End entries
 							
 							# Add Entries
-						$EntriesNodes = $DestNode.Nodes.Add("Entries", "Entries")
-						$EntriesNodes.ForeColor = 'DarkTurquoise'
+							$EntriesNodes = $DestNode.Nodes.Add("Entries", "Entries")
+							$EntriesNodes.ForeColor = 'DarkTurquoise'
 							$e = 0
 							foreach ($entry in $entries)
 							{
@@ -7754,79 +7794,72 @@ function Show-MainForm_psf
 								$entryNode.ForeColor = 'GreenYellow'
 								$null = $entryNode.Nodes.Add("$($e)entry.Hash", "Hash: $($entry.'Hash')")
 							
-							<## test
-								$null = $entryNode.Nodes.Add("$($e)Volume Droid ID", "Volume Droid ID: $([System.BitConverter]::ToString($x.data[($start + 8) .. ($start + 23)]) -replace '-', '')")
-								$null = $entryNode.Nodes.Add("$($e)File Droid ID", "File Droid ID: $([System.BitConverter]::ToString($x.data[($start + 24) .. ($start + 39)]) -replace '-', '')")
-								$null = $entryNode.Nodes.Add("$($e)Birth volume Droid ID", "Birth Volume Droid ID: $([System.BitConverter]::ToString($x.data[($start + 40) .. ($start + 55)]) -replace '-', '')")
-								$null = $entryNode.Nodes.Add("$($e)Birth file Droid ID", "Birth File Droid ID: $([System.BitConverter]::ToString($x.data[($start + 56) .. ($start + 71)]) -replace '-', '')")
-							# end test#>
+								if (!!$entry.'Volume Droid ID')
+								{
+									$Guid1Node = $entryNode.Nodes.Add("$('Guid 1')", "Volume Droid ID:  $($entry.'Volume Droid ID'.ObjectID)")
+									$Null = $Guid1Node.Nodes.Add("version", "GUID Version: $($entry.'Volume Droid ID'.version)")
+									$Null = $Guid1Node.Nodes.Add("variant", "GUID Variant: $($entry.'Volume Droid ID'.variant)")
+									$Null = $Guid1Node.Nodes.Add("Sequence", "GUID Sequence: $($entry.'Volume Droid ID'.Sequence)")
+									if (!!$entry.'Volume Droid ID'.MAC)
+									{
+										# Add to tree
+										$Null = $Guid1Node.Nodes.Add("GUIDcreated", "GUID created at: $($entry.'Volume Droid ID'.Created)")
+										$Guid1Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
+										$Null = $Guid1Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Guid 1'.MAC)")
+										$Guid1Node.Nodes["MAC Address"].Tag = $entry.'Volume Droid ID'.MAC
+										$Guid1Node.Nodes["MAC Address"].ToolTipText = "The MAC address used in the ObjectID is the address of the primary network card in the computer"
+									}
+								}
+								if (!!$entry.'File Droid ID')
+								{
+									$BGuid1Node = $entryNode.Nodes.Add("$('Droid Birth Guid 1')", "Droid Birth Guid 1: $($entry.'File Droid ID'.ObjectID)")
+									$Null = $BGuid1Node.Nodes.Add("version", "GUID Version: $($entry.'File Droid ID'.version)")
+									$Null = $BGuid1Node.Nodes.Add("variant", "GUID Variant: $($entry.'File Droid ID'.variant)")
+									$Null = $BGuid1Node.Nodes.Add("Sequence", "GUID Sequence: $($entry.'File Droid ID'.Sequence)")
+									if (!!$entry.'File Droid ID'.MAC)
+									{
+										# Add to tree
+										$Null = $BGuid1Node.Nodes.Add("GUIDcreated", "GUID created at: $($entry.'File Droid ID'.Created)")
+										$BGuid1Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
+										$Null = $BGuid1Node.Nodes.Add("MAC Address", "MAC Address: $($entry.'File Droid ID'.MAC)")
+										$BGuid1Node.Nodes["MAC Address"].Tag = $entry.'File Droid ID'.MAC
+										$BGuid1Node.Nodes["MAC Address"].ToolTipText = "The MAC address used in the ObjectID is the address of the primary network card in the computer"
+									}
+								}
+								if (!!$entry.'Birth Volume Droid ID')
+								{
+									$Guid2Node = $entryNode.Nodes.Add("$('Guid 2')", "Droid Guid 2: $($entry.'Birth Volume Droid ID'.ObjectID)")
+									$Null = $Guid2Node.Nodes.Add("version", "GUID Version: $($entry.'Birth volume Droid ID'.version)")
+									$Null = $Guid2Node.Nodes.Add("variant", "GUID Variant: $($entry.'Birth volume Droid ID'.variant)")
+									$Null = $Guid2Node.Nodes.Add("Sequence", "GUID Sequence: $($entry.'Birth volume Droid ID'.Sequence)")
+									if (!!$entry.'Birth volume Droid ID'.MAC)
+									{
+										# Add to tree
+										$Null = $Guid2Node.Nodes.Add("GUIDcreated", "GUID created at: $($entry.'Birth Volume Droid ID'.Created)")
+										$Guid2Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
+										$Null = $Guid2Node.Nodes.Add("MAC Address", "MAC Address: $($entry.'Birth volume Droid ID'.MAC)")
+										$Guid2Node.Nodes["MAC Address"].Tag = $entry.'Birth volume Droid ID'.MAC
+										$Guid2Node.Nodes["MAC Address"].ToolTipText = "The MAC address used in the ObjectID is the address of the primary network card in the computer"
+									}
+								}
+								if (!!$entry.'Birth file Droid ID')
+								{
+									$BGuid2Node = $entryNode.Nodes.Add("$('Birth Guid 2')", "Birth File Droid ID: $($entry.'Birth file Droid ID'.ObjectID)")
+									$Null = $BGuid2Node.Nodes.Add("version", "GUID Version: $($entry.'Birth file Droid ID'.version)")
+									$Null = $BGuid2Node.Nodes.Add("variant", "GUID Variant: $($entry.'Birth file Droid ID'.variant)")
+									$Null = $BGuid2Node.Nodes.Add("Sequence", "GUID Sequence: $($entry.'Birth file Droid ID'.Sequence)")
+									if (!!$entry.'Birth file Droid ID'.MAC)
+									{
+										# Add to tree
+										$Null = $BGuid2Node.Nodes.Add("GUIDcreated", "GUID created at: $($entry.'Birth file Droid ID'.Created)")
+										$BGuid2Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
+										$Null = $BGuid2Node.Nodes.Add("MAC Address", "MAC Address: $($entry.'Birth file Droid ID'.MAC)")
+										$BGuid2Node.Nodes["MAC Address"].Tag = $entry.'Birth file Droid ID'.MAC
+										$BGuid2Node.Nodes["MAC Address"].ToolTipText = "The MAC address used in the ObjectID is the address of the primary network card in the computer"
+									}
+								}
 							
-							if (!!$entry.'Volume Droid ID')
-							{
-								$Guid1Node = $entryNode.Nodes.Add("$('Guid 1')", "Volume Droid ID:  $($entry.'Volume Droid ID'.ObjectID)")
-								$Null = $Guid1Node.Nodes.Add("version", "GUID Version: $($entry.'Volume Droid ID'.version)")
-								$Null = $Guid1Node.Nodes.Add("variant", "GUID Variant: $($entry.'Volume Droid ID'.variant)")
-								$Null = $Guid1Node.Nodes.Add("Sequence", "GUID Sequence: $($entry.'Volume Droid ID'.Sequence)")
-								if (!!$entry.'Volume Droid ID'.MAC)
-								{
-									# Add to tree
-									$Null = $Guid1Node.Nodes.Add("GUIDcreated", "GUID created at: $($entry.'Volume Droid ID'.Created)")
-									$Guid1Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
-									$Null = $Guid1Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Guid 1'.MAC)")
-									$Guid1Node.Nodes["MAC Address"].Tag = $entry.'Volume Droid ID'.MAC
-									$Guid1Node.Nodes["MAC Address"].ToolTipText = "The MAC address used in the ObjectID is the address of the primary network card in the computer"
-								}
-							}
-							if (!!$entry.'File Droid ID')
-							{
-								$BGuid1Node = $entryNode.Nodes.Add("$('Droid Birth Guid 1')", "Droid Birth Guid 1: $($entry.'File Droid ID'.ObjectID)")
-								$Null = $BGuid1Node.Nodes.Add("version", "GUID Version: $($entry.'File Droid ID'.version)")
-								$Null = $BGuid1Node.Nodes.Add("variant", "GUID Variant: $($entry.'File Droid ID'.variant)")
-								$Null = $BGuid1Node.Nodes.Add("Sequence", "GUID Sequence: $($entry.'File Droid ID'.Sequence)")
-								if (!!$entry.'File Droid ID'.MAC)
-								{
-									# Add to tree
-									$Null = $BGuid1Node.Nodes.Add("GUIDcreated", "GUID created at: $($entry.'File Droid ID'.Created)")
-									$BGuid1Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
-									$Null = $BGuid1Node.Nodes.Add("MAC Address", "MAC Address: $($entry.'File Droid ID'.MAC)")
-									$BGuid1Node.Nodes["MAC Address"].Tag = $entry.'File Droid ID'.MAC
-									$BGuid1Node.Nodes["MAC Address"].ToolTipText = "The MAC address used in the ObjectID is the address of the primary network card in the computer"
-								}
-							}
-							if (!!$entry.'Birth Volume Droid ID')
-							{
-								$Guid2Node = $entryNode.Nodes.Add("$('Guid 2')", "Droid Guid 2: $($entry.'Birth Volume Droid ID'.ObjectID)")
-								$Null = $Guid2Node.Nodes.Add("version", "GUID Version: $($entry.'Birth volume Droid ID'.version)")
-								$Null = $Guid2Node.Nodes.Add("variant", "GUID Variant: $($entry.'Birth volume Droid ID'.variant)")
-								$Null = $Guid2Node.Nodes.Add("Sequence", "GUID Sequence: $($entry.'Birth volume Droid ID'.Sequence)")
-								if (!!$entry.'Birth volume Droid ID'.MAC)
-								{
-									# Add to tree
-									$Null = $Guid2Node.Nodes.Add("GUIDcreated", "GUID created at: $($entry.'Birth Volume Droid ID'.Created)")
-									$Guid2Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
-									$Null = $Guid2Node.Nodes.Add("MAC Address", "MAC Address: $($entry.'Birth volume Droid ID'.MAC)")
-									$Guid2Node.Nodes["MAC Address"].Tag = $entry.'Birth volume Droid ID'.MAC
-									$Guid2Node.Nodes["MAC Address"].ToolTipText = "The MAC address used in the ObjectID is the address of the primary network card in the computer"
-								}
-							}
-							if (!!$entry.'Birth file Droid ID')
-							{
-								$BGuid2Node = $entryNode.Nodes.Add("$('Birth Guid 2')", "Birth File Droid ID: $($entry.'Birth file Droid ID'.ObjectID)")
-								$Null = $BGuid2Node.Nodes.Add("version", "GUID Version: $($entry.'Birth file Droid ID'.version)")
-								$Null = $BGuid2Node.Nodes.Add("variant", "GUID Variant: $($entry.'Birth file Droid ID'.variant)")
-								$Null = $BGuid2Node.Nodes.Add("Sequence", "GUID Sequence: $($entry.'Birth file Droid ID'.Sequence)")
-								if (!!$entry.'Birth file Droid ID'.MAC)
-								{
-									# Add to tree
-									$Null = $BGuid2Node.Nodes.Add("GUIDcreated", "GUID created at: $($entry.'Birth file Droid ID'.Created)")
-									$BGuid2Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
-									$Null = $BGuid2Node.Nodes.Add("MAC Address", "MAC Address: $($entry.'Birth file Droid ID'.MAC)")
-									$BGuid2Node.Nodes["MAC Address"].Tag = $entry.'Birth file Droid ID'.MAC
-									$BGuid2Node.Nodes["MAC Address"].ToolTipText = "The MAC address used in the ObjectID is the address of the primary network card in the computer"
-								}
-							}
-							
-							$null = $entryNode.Nodes.Add("$($e)entry.Hostname", "Hostname: $($entry.'Hostname')")
+								$null = $entryNode.Nodes.Add("$($e)entry.Hostname", "Hostname: $($entry.'Hostname')")
 								$null = $entryNode.Nodes.Add("$($e)entry.ID", "Entry ID: $($entry.'Entry ID')")
 								$LastAccessed = $entryNode.Nodes.Add("$($e)Last Accessed", "Last Accessed: $($entry.'Last Accessed')")
 								$LastAccessed.ForeColor = 'Cyan'
@@ -7834,11 +7867,64 @@ function Show-MainForm_psf
 								$null = $entryNode.Nodes.Add("$($e)InQuickAccess", "InQuickAccess: $($entry.'InQuickAccess')")
 								$null = $entryNode.Nodes.Add("$($e)String Data Length", "String Data Length: $($entry.'String Data Length')")
 								$null = $entryNode.Nodes.Add("$($e)String", "String: $($entry.'String')")
+							
+								if ($entry.ExtensionSize -gt 0)
+								{
+									$null = $entryNode.Nodes.Add("$($e)ExtensionSize", "Extension Size: $($entry.ExtensionSize)")
+									$items = Get-Ext_SPS1 -ByteArray ($entry.ExtensionData)
+									$PropertyStoreEntries = [System.Collections.ArrayList]::new()
+									foreach ($property in $items)
+									{
+										$PropertyStoreEntry = [PSCustomObject]::new()
+										$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+										$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+										$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+										$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
+									}
+									if (!!$items)
+									{
+										Populate-SPS1 -Node $entryNode -SPS1properties @($PropertyStoreEntries)
+									}
+								}
+							 	# Add the Raw Stream (LNK) Hex Data
+								if (!!$entry.RawEntryData)
+								{
+									$rawstream = $entryNode.Nodes.Add("RawHexData", "Stream Data")
+									$rawstream.Tag = @($entry.RawEntryData)
+									$rawstream.ToolTipText = "Right click to copy the raw (Hex) data ($($entry.RawEntryData.length))"
+									$rawstream.ForeColor = 'Peru'
+								}
 								$e = $e + 1
 							}
+							
+							if ($null -ne $streaminf.Data)
+							{
+								$sdata = [System.BitConverter]::ToString($streaminf.Data) -replace '-', ''
+								$null = $DestNode.Nodes.Add("DataSize", "Stream Data Size: $($streaminf.Data.count)")
+								$null = $DestNode.Nodes.Add("Data", "Stream Data")
+								$DestNode.Nodes["Data"].Tag = @($sdata)
+								$DestNode.Nodes["Data"].ToolTipText = "Right click to copy the raw (Hex) data ($($sdata.Length))"
+								$DestNode.Nodes["Data"].ForeColor = 'Peru'
+							}
+							
 						} # endif
 					} #end try
-					catch { }
+					catch
+					{
+						if ($null -ne $streaminf.Data)
+						{
+							$sdata = [System.BitConverter]::ToString($streaminf.Data) -replace '-', ''
+							$null = $DestNode.Nodes.Add("DataSize", "Stream Data Size: $($streaminf.Data.count)")
+							$null = $DestNode.Nodes.Add("Data", "Stream Data")
+							$DestNode["Data"].Tag = @($sdata)
+							$DestNode["Data"].ToolTipText = "Right click to copy the raw (Hex) data ($($sdata.Length))"
+							$DestNode["Data"].ForeColor = 'Peru'
+						}
+						else
+						{
+							$null
+						}
+					}
 				}
 				elseif ($LNKData -eq $null -and ($streaminf.StreamName -eq 'DestListPropertyStore'))
 				{
@@ -7852,11 +7938,47 @@ function Show-MainForm_psf
 						$DestNode = $Root2.Nodes.Add($streaminf.StreamName, "Stream Name: $($streaminf.StreamName)")
 					}
 					$DestNode.ForeColor = 'DarkRed'
-					if ($streaminf.Data -ne $null)
+					if ($null -ne $streaminf.Data)
 					{
-						$sdata = [System.BitConverter]::ToString($streaminf.Data) -replace '-',''
-						$null = $DestNode.Nodes.Add("DataSize", "Data Size: $($streaminf.Data.length)")
-						$null = $DestNode.Nodes.Add("Data","Data: 0x$($sdata)")
+						$sdata = [System.BitConverter]::ToString($streaminf.Data) -replace '-', ''
+						if ($streaminf.data.count -gt 12 -and [System.BitConverter]::ToString($streaminf.data[8 .. 11]) -eq '31-53-50-53') # 1SPS
+						{
+							$items = Get-Ext_SPS1 -ByteArray $streaminf.Data
+							$PropertyStoreEntries = [System.Collections.ArrayList]::new()
+							foreach ($property in $items)
+							{
+								$PropertyStoreEntry = [PSCustomObject]::new()
+								$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'Storage Size' -Value $property.'Storage Size'
+								$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
+								$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
+								$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
+							}
+							if (!!$items)
+							{
+								Populate-SPS1 -Node $DestNode -SPS1properties @($PropertyStoreEntries)
+								$null = $DestNode.Nodes.Add("DataSize", "Stream Data Size: $($streaminf.Data.count)")
+								$null = $DestNode.Nodes.Add("Data", "Stream Data")
+								$DestNode.Nodes["Data"].Tag = @($sdata)
+								$DestNode.Nodes["Data"].ToolTipText = "Right click to copy the raw (Hex) data ($($sdata.Length))"
+								$DestNode.Nodes["Data"].ForeColor = 'Peru'
+							}
+							else
+							{
+								$null = $DestNode.Nodes.Add("DataSize", "Stream Data Size: $($streaminf.Data.count)")
+								$null = $DestNode.Nodes.Add("Data", "Stream Data")
+								$DestNode.Nodes["Data"].Tag = @($sdata)
+								$DestNode.Nodes["Data"].ToolTipText = "Right click to copy the raw (Hex) data ($($sdata.Length))"
+								$DestNode.Nodes["Data"].ForeColor = 'Peru'
+							}
+						}
+						else
+						{
+							$null = $DestNode.Nodes.Add("DataSize", "Stream Data Size: $($streaminf.Data.count)")
+							$null = $DestNode.Nodes.Add("Data", "Stream Data")
+							$DestNode.Nodes["Data"].Tag = @($sdata)
+							$DestNode.Nodes["Data"].ToolTipText = "Right click to copy the raw (Hex) data ($($sdata.Length))"
+							$DestNode.Nodes["Data"].ForeColor = 'Peru'
+						}
 					}
 				}
 				else
@@ -7871,12 +7993,15 @@ function Show-MainForm_psf
 						$DestNode = $Root2.Nodes.Add($streaminf.StreamName, "Stream Name: $($streaminf.StreamName)")
 					}
 					$DestNode.ForeColor = 'Red'
-	
+					
 					if (!!$streaminf.Data)
 					{
 						$sdata = [System.BitConverter]::ToString($streaminf.Data) -replace '-', ''
-						$null = $DestNode.Nodes.Add("DataSize", "Data Size: $($streaminf.Data.length)")
-						$null = $DestNode.Nodes.Add("Data", "Data: 0x$($sdata)")
+						$null = $DestNode.Nodes.Add("DataSize", "Stream Data Size: $($sdata.length)")
+						$null = $DestNode.Nodes.Add("Raw Data", "Stream Data")
+						$DestNode.Nodes["Raw Data"].Tag = @($sdata)
+						$DestNode.Nodes["Raw Data"].ToolTipText = "Right click to copy the raw (Hex) data ($($sdata.Length))"
+						$DestNode.Nodes["Raw Data"].ForeColor = 'Peru'
 					}
 					else
 					{
@@ -7940,8 +8065,16 @@ function Show-MainForm_psf
 			}
 			catch
 			{
-				Show-ErrorMessage -ErrorMessage $Error[0].Exception.InnerException.Message
-				$Error.Clear
+				if (!!$Error[0].Exception.InnerException.Message)
+				{
+					Show-ErrorMessage -ErrorMessage $Error[0].Exception.InnerException.Message
+					$Error.Clear
+				}
+				else
+				{
+					$status.Text = "Error processing $($treeview1.SelectedNode.Name)"
+					$null
+				}
 			}
 		}
 		elseif (!!$node.Tag)
@@ -7997,7 +8130,7 @@ function Show-MainForm_psf
 	}
 	
 	$CopyNode2Tag_Click = {
-		if (!!$treeview2.SelectedNode.Tag)
+		if (!!$treeview2.SelectedNode.Tag -and $treeview2.SelectedNode.Tag.count -ge 1)
 		{
 			try
 			{
@@ -8012,7 +8145,7 @@ function Show-MainForm_psf
 	
 	$CopyAll2_Click={
 			$node = $treeview2.SelectedNode
-			If (!!$node -and $node.GetNodeCount($false) -ge 1)
+			If (!!$node -and $node.GetNodeCount($true) -ge 1)
 			{
 				$Status.Text = 'Please wait ..'
 				$Jumplist_Browser.Cursor = 'AppStarting'
@@ -8314,7 +8447,7 @@ function Show-MainForm_psf
 			{
 				$CopyNode2Tag.Visible = $false
 			}
-			if ($_.Node.Text.StartsWith("Stream Name") -and  !!$_.Node.Tag[1])
+			if ($_.Node.Text.StartsWith("Stream Name") -and $_.Tag.count -gt 1 -and !!$_.Node.Tag[1])
 			{
 				$SaveStreamToFile.Visible = $true
 			}
@@ -9916,8 +10049,8 @@ Main ($CommandLine)
 # SIG # Begin signature block
 # MIIviAYJKoZIhvcNAQcCoIIveTCCL3UCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCoDGRWvSpyuncT
-# PpSbRYuEWfhH8Qt5iLttNAjbirZZraCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCg3UalaY5uJ4S4
+# JOAP1TB5MHL88E9nqpsyFxJGqhIXuaCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -10137,35 +10270,35 @@ Main ($CommandLine)
 # AQEwaDBUMQswCQYDVQQGEwJHQjEYMBYGA1UEChMPU2VjdGlnbyBMaW1pdGVkMSsw
 # KQYDVQQDEyJTZWN0aWdvIFB1YmxpYyBDb2RlIFNpZ25pbmcgQ0EgUjM2AhALYufv
 # MdbwtA/sWXrOPd+kMA0GCWCGSAFlAwQCAQUAoEwwGQYJKoZIhvcNAQkDMQwGCisG
-# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIGD20hscD3QVgYmGhLYWWJfYU0ta3wI/
-# YSoy6gBK2dc+MA0GCSqGSIb3DQEBAQUABIICAC5FaRp1dF42Qf4r0S578vkTV68N
-# 6mpw4f0Fn3P+XkoBaztiJk8C3AiMp5agX3Wdln9MHdWEOssFu6Vun5qis7DnJ2NQ
-# PSxtg+kaRJNWqHD+oUmZGiHiEIFQZcO44SW/mysgtTTtH2Rf5wYMtZnpA9szqZkK
-# 42mjA+lth1yoX0JpFEXL5UWl2R2nxRSevfdRbDFevsJ7onFp3LkEWiY6nYCALp19
-# DHKm/BiPukqSyHA9ovSNRdV4nICoUTLaawevdn8cFDEACQ7hWX9Oh2QQ4dNaK5kG
-# ra+oaml3XUS5IpzDYDkxFbrsVaY9t7hk2pAU9yWeBYoVP5MvijB2bc8rd0yuo6aL
-# WppIZr7B+rzOqHFcvWdkbPp4KPD4TCVy/m5IcgqlNQ69uQpemrGfvC7DtB9Bq3ve
-# 9KxVaZbPmgMSbiCTu7fdDBQEZn9M1dOstzFrSP+JxJVPbNd0PNGj6j03mQ/oZh+L
-# 1CsPZO+AvUnHyjWW68X6Ve4y/3kEkHxxZEHVm4SGaurZpzRJ5dw6Nkh6Su0oN6yl
-# DvGj1SK0+E/MQbEb3Lj+A/Nzl/JJxRA3YdPPzC8VqcvkIs+6EsUHclMvPXnejTrG
-# KYGzgf+PYL7vdjbDmsgVPCrFm5+KpPrLPZrPgqTMUoOELck8u93pfzcUwrXaqFVo
-# y4uRB220E/F2QerQoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
+# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIFvS3eJCmjuBMNf6KeH4eQUbHGTkDVlM
+# TypTQC19HfItMA0GCSqGSIb3DQEBAQUABIICAEe+h/Hbw6BATWhFSm1/8pWpBzLV
+# /KE6sqCM+oYJ0MrsonmYIL5p0M3G6DrCY9xZwO2g99rAjT676v+Qr3A0BCgJyqL0
+# T4JxHpj0ea7xVnYbq2wHuI7yTxd326m7ufb6WOqEZ8FywAvt6DAvvOHfVyT1cRMD
+# 46NaQe97AU6UDiuCq8upRdX4zlBuxsvBhP3pQg6nSjVmHFIqMhLHLCvwbMROmr+z
+# HmeMbPXX7GH18y9/NhgTM0f3UQaqgEEO8sjZrAv+NHU7ZYSHPn0g3qvC9hrLMKyD
+# 1gK1qbraOPzpth0rSAMbUvEhhGWUN8QAqZy6f4PGqQY0qx3I6Mx+l0GoIrlmhGwp
+# hoRv4A/oS/OQ5QyXk4VtqC7006aTDwZTKE5N12n0Gjj5ZZfuAyZxe2tE04oOkiPJ
+# zy7Z2XOTW5fC+6TpzAf7qi1EJTDGOJ3EEtJlNbBhbdLDdtiHuh5lEyYYJ/cuUbhA
+# /4rjIp5RLWPiewG0PBBpRP3YwDHgkH3LrI+v57Qjod3i0UDqn2OP2gRFR7IZSJSH
+# OMkgvLyS1qmQH/+IO7473hX/8o7lK9HljCP7r2vGKgW0EFX9uwmtAEJK2FLacaxn
+# JPyYko56zJ3EY9Hqjl9INeosOWOYWVcYh9h3eI5FdpXpluVAQYQzuwn4bQ8vhSD+
+# 8Hh0gdaOzPhRmAbQoYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
 # MAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExMTAvBgNVBAMT
 # KEdsb2JhbFNpZ24gVGltZXN0YW1waW5nIENBIC0gU0hBMzg0IC0gRzQCEAFIkD3C
 # irynoRlNDBxXuCkwCwYJYIZIAWUDBAIBoIIBPTAYBgkqhkiG9w0BCQMxCwYJKoZI
-# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMjMyMTI4NTFaMCsGCSqGSIb3DQEJ
+# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMjUwMDUwMjJaMCsGCSqGSIb3DQEJ
 # NDEeMBwwCwYJYIZIAWUDBAIBoQ0GCSqGSIb3DQEBCwUAMC8GCSqGSIb3DQEJBDEi
-# BCD2YykmE+SfcrR4w6Q7cUgvPRQLv0eXXum6eg+SdyTXuDCBpAYLKoZIhvcNAQkQ
+# BCASBYQn/h1ysgofDObzUlOq/p9R1ZXtCuseD0RhzNItYTCBpAYLKoZIhvcNAQkQ
 # AgwxgZQwgZEwgY4wgYsEFDEDDhdqpFkuqyyLregymfy1WF3PMHMwX6RdMFsxCzAJ
 # BgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 # bG9iYWxTaWduIFRpbWVzdGFtcGluZyBDQSAtIFNIQTM4NCAtIEc0AhABSJA9woq8
-# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgFYEba7jR7U68c00/9LgRbArRmY5
-# P8r3vpBP7OdNufIF6Uh7pZuj7fBP3LOT3rDrREmIZJz6Cih7g76vnVHZdz1giFnS
-# fjpwvre76dK8x+bjxZ0epTq2PXJNPufYKoUBnyLny9WJrF4RAXNHLCG+tP7PrITt
-# RtbheMITfmq7wBda+VGYI2QVmjPmrqCfepRvL06qXB7WUtIzfpsapes3mjRaPbI1
-# PET8RDizZXjA/m0dPKYqPmaMdxnG4+XLprfNXJgkZoonkmWNTBCdusmW8Xso8edX
-# HLZHOc8gX6PIrqLzqQ4mOdqvqaQMTO8XgkGWycrbNk/VWT6mRuSQR+uM9uDWK4TI
-# AWytppY/1WCE4S2eviRAG6+udbJMHtfDCqfGHakmmHPlXia2pWDHb4X4OVe+R3PI
-# 9MAZsowzwlsrDpOxjTdym9w07tZ+wiQDiwh7e1wDi7BHYLyYgU9iZE2bSuzguJ0W
-# V2cpuRrEL8nBZb9vQmy/HXbuk8YTq7rRY1PQ5A==
+# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgHucZjsQaxo5SFCiNpvk94sA4fqs
+# K53ZbuWoGHYkQKL/YRkF89Z+v5OhRkjAYjRzvz0/uPkehYvZqpMhGb7xRIk4wbL5
+# TLPorRquSLWawUQDtm1uIVYVjk8oGBy6wuOXN3JL5MXcEYP55rztd6Y9dPa7rlRE
+# jmTOhWksmsFM2EWViLjnlPnKaHaff9kvj5/YrrKiKvgLxyi+DOsCfHe0AOpcXM+S
+# witaRP+zQmM1fWsJqogN1JGzGRMGl48Es6K1EgTFL6J+/yLLvA1yZwJIpsg6zSNK
+# R8J9v9BEY9Tsj5+Cc8LRfQ3QS80lNFAv9UIcB8rPuQHIxNssV8hcw4u7EUzWiOHD
+# gO102nzUt27oGQPs1tX1B9U5uUKWhKT8vqOKY1eKhQxz8Knaefw1r9qbscbQ9Vne
+# fNgkdEpy2o1INgWmgwYdo3sxjomIKY1BDwfwKxonK2cNoo+uPnaA6iJC5u6sZnXr
+# piJXYpt4tZrBgcvvweq2Cyz5dCwHPPvDvbt6ug==
 # SIG # End signature block
