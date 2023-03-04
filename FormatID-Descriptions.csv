@@ -675,14 +675,108 @@ e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\21,Message Attachment Names
 64440492-4c8b-11d1-8b70-080036b11a03\100,Media Episode Number
 64440492-4c8b-11d1-8b70-080036b11a03\101,Media Season Number
 644d37b4-e1b3-4bad-b099-7e7c04966aca\100,Contact Email Address3
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8192,Devices Manufacturer
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8194,Devices Model Name
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8195,Devices Model Number
+EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
+92506491-FF95-4724-A05A-5B81885A7C92\1,WSD Metadata Clean
+92506491-FF95-4724-A05A-5B81885A7C92\2,WSD Service Info
+92506491-FF95-4724-A05A-5B81885A7C92\4096,WSD AddressURI
+92506491-FF95-4724-A05A-5B81885A7C92\4097,WSD Types
+92506491-FF95-4724-A05A-5B81885A7C92\4098,WSD Scopes
+92506491-FF95-4724-A05A-5B81885A7C92\4099,WSD MetadataVersion
+92506491-FF95-4724-A05A-5B81885A7C92\4100,WSD App Seq InstanceID
+92506491-FF95-4724-A05A-5B81885A7C92\4101,WSD App Seq SessionID
+92506491-FF95-4724-A05A-5B81885A7C92\4102,WSD App Seq Message Number
+92506491-FF95-4724-A05A-5B81885A7C92\8192,WSD XAddrs
+904b03a2-471d-423c-a584-f3483238a146\1,Device Visibility Flags
+904b03a2-471d-423c-a584-f3483238a146\2,Device Not Present
+78C34FC8-104A-4aca-9EA4-524D52996E57\36,Device QueueSize
+78C34FC8-104A-4aca-9EA4-524D52996E57\37,Device Status
+78C34FC8-104A-4aca-9EA4-524D52996E57\38,Device Comment
+78C34FC8-104A-4aca-9EA4-524D52996E57\39,Device Model
+78C34FC8-104A-4aca-9EA4-524D52996E57\51,DeviceDisplay Address
+78C34FC8-104A-4aca-9EA4-524D52996E57\52,DeviceDisplay DiscoveryMethod
+78C34FC8-104A-4aca-9EA4-524D52996E57\53,DeviceDisplay IsEncrypted
+78C34FC8-104A-4aca-9EA4-524D52996E57\54,DeviceDisplay IsAuthenticated
+78C34FC8-104A-4aca-9EA4-524D52996E57\55,DeviceDisplay IsConnected
+78C34FC8-104A-4aca-9EA4-524D52996E57\56,DeviceDisplay IsPaired
+78C34FC8-104A-4aca-9EA4-524D52996E57\57,DeviceDisplay Icon
+78C34FC8-104A-4aca-9EA4-524D52996E57\65,DeviceDisplay Version
+78C34FC8-104A-4aca-9EA4-524D52996E57\66,DeviceDisplay Last_Seen
+78C34FC8-104A-4aca-9EA4-524D52996E57\67,DeviceDisplay Last_Connected
+78C34FC8-104A-4aca-9EA4-524D52996E57\68,DeviceDisplay IsShowInDisconnectedState
+78C34FC8-104A-4aca-9EA4-524D52996E57\70,DeviceDisplay IsLocalMachine
+78C34FC8-104A-4aca-9EA4-524D52996E57\71,DeviceDisplay MetadataPath
+78C34FC8-104A-4aca-9EA4-524D52996E57\72,DeviceDisplay IsMetadataSearchInProgress
+78C34FC8-104A-4aca-9EA4-524D52996E57\73,DeviceDisplay MetadataChecksum
+78C34FC8-104A-4aca-9EA4-524D52996E57\74,DeviceDisplay IsNotInterestingForDisplay
+78C34FC8-104A-4aca-9EA4-524D52996E57\76,DeviceDisplay LaunchDeviceStageOnDeviceConnect
+78C34FC8-104A-4aca-9EA4-524D52996E57\77,DeviceDisplay LaunchDeviceStageFromExplorer
+78C34FC8-104A-4aca-9EA4-524D52996E57\78,DeviceDisplay BaselineExperienceId
+78C34FC8-104A-4aca-9EA4-524D52996E57\79,DeviceDisplay IsDeviceUniquelyIdentifiable
+78C34FC8-104A-4aca-9EA4-524D52996E57\80,DeviceDisplay AssociationArray
+78C34FC8-104A-4aca-9EA4-524D52996E57\81,DeviceDisplay DeviceDescription1
+78C34FC8-104A-4aca-9EA4-524D52996E57\82,DeviceDisplay DeviceDescription2
+78C34FC8-104A-4aca-9EA4-524D52996E57\83,DeviceDisplay IsNotWorkingProperly
+78C34FC8-104A-4aca-9EA4-524D52996E57\84,DeviceDisplay IsSharedDevice
+78C34FC8-104A-4aca-9EA4-524D52996E57\85,DeviceDisplay IsNetworkDevice
+78C34FC8-104A-4aca-9EA4-524D52996E57\86,DeviceDisplay IsDefaultDevice
+78C34FC8-104A-4aca-9EA4-524D52996E57\87,DeviceDisplay MetadataCabinet
+78C34FC8-104A-4aca-9EA4-524D52996E57\88,DeviceDisplay RequiresPairingElevation
+78C34FC8-104A-4aca-9EA4-524D52996E57\89,DeviceDisplay ExperienceId
+78C34FC8-104A-4aca-9EA4-524D52996E57\90,DeviceDisplay Category
+78C34FC8-104A-4aca-9EA4-524D52996E57\91,DeviceDisplay Category_Desc_Singular
+78C34FC8-104A-4aca-9EA4-524D52996E57\92,DeviceDisplay Category_Desc_Plural
+78C34FC8-104A-4aca-9EA4-524D52996E57\93,DeviceDisplay Category_Icon
+78C34FC8-104A-4aca-9EA4-524D52996E57\94,DeviceDisplay CategoryGroup_Desc
+78C34FC8-104A-4aca-9EA4-524D52996E57\95,DeviceDisplay CategoryGroup_Icon
+78C34FC8-104A-4aca-9EA4-524D52996E57\97,DeviceDisplay PrimaryCategory
+78C34FC8-104A-4aca-9EA4-524D52996E57\98,DeviceDisplay UnpairUninstall
+78C34FC8-104A-4aca-9EA4-524D52996E57\99,DeviceDisplay RequiresUninstallElevation
+78C34FC8-104A-4aca-9EA4-524D52996E57\100,DeviceDisplay DeviceFunctionSubRank
+78C34FC8-104A-4aca-9EA4-524D52996E57\101,DeviceDisplay AlwaysShowDeviceAsConnected
+53808008-07BB-4661-BC3C-B5953E708560\1,DeviceInterface Device Path
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\1,Devnode, PnPXDevNode
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\2,AssociationState
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\3,AssociatedInstanceId
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4,LastNotificationTime
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4096,Devices GlobalIdentity
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4097,Devices Types
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4098,Devices Scopes
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4099,Devices XAddrs
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4100,Devices MetadataVersion
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4101,Devices ID
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4102,Devices RootProxy/RemoteAddress
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8192,DeviceDisplay Manufacturer
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8194,DeviceDisplay Model Name
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8195,DeviceDisplay Model Number
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8198,Devices Presentation Url
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12288,Devices Friendly Name
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12288,DeviceDisplay Friendly Name
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12289,Devices Firmware Version
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12290,Devices Serial Number
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12292,Devices Category
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12293,Devices Category Description
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12294,Devices PhysicalAddress
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12295,Devices NetworkInterfaceLuid
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12296,Devices NetworkInterfaceGuid
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12297,Devices Ip Address
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12304,Devices Category Descrtiption NonPlural
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16384,Devices Service Address
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16385,Devices Service Id
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16386,Devices Service Types
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16388,Devices Service Control Url
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16389,Devices Service Desc Url
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16390,Devices Service Event Sub Url
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\20480,Devices DomainName
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\20482,Devices ShareName
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\24576,Devices Alt Location Info
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\24577,Devices LifeTime
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\24578,Devices NetworkInterface
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\28672,Devices Removable
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\28688,Devices IP Bus Enumerated
+8807CAE6-7DB6-4f10-8EE4-435EAA1392BC\1,Pairing ListItemText
+8807CAE6-7DB6-4f10-8EE4-435EAA1392BC\2,Pairing ListItemDescription
+8807CAE6-7DB6-4f10-8EE4-435EAA1392BC\3,Pairing ListItemIcon
+8807CAE6-7DB6-4f10-8EE4-435EAA1392BC\4,Pairing ListItemDefault
+8807CAE6-7DB6-4f10-8EE4-435EAA1392BC\16,Pairing IsWifiOnlyDevice
 65a98875-3c80-40ab-abbc-efdaf77dbee2\100,Acquisition Id
 660e04d6-81ab-4977-a09f-82313113ab26\100,Contact Home Fax Number
 6614ef48-4efe-4424-9eda-c79f404edf3e\2,Devices Notifications Missed Call
@@ -816,23 +910,6 @@ e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\21,Message Attachment Names
 76c09943-7c33-49e3-9e7e-cdba872cfada\100,GPS Track
 776b6b3b-1e3d-4b0c-9a0e-8fbaf2a8492a\100,Photo Focal Lengt hNumerator
 78342dcb-e358-4145-ae9a-6bfe4e0f9f51\100,GPS Altitude Denominator
-78c34fc8-104a-4aca-9ea4-524d52996e57\52,Devices Discovery Method
-78c34fc8-104a-4aca-9ea4-524d52996e57\55,Devices Connected
-78c34fc8-104a-4aca-9ea4-524d52996e57\56,Devices Paired
-78c34fc8-104a-4aca-9ea4-524d52996e57\57,Devices Icon
-78c34fc8-104a-4aca-9ea4-524d52996e57\70,Devices Local Machine
-78c34fc8-104a-4aca-9ea4-524d52996e57\71,Devices Metadata Path
-78c34fc8-104a-4aca-9ea4-524d52996e57\77,Devices Launch Device Stage From Explorer
-78c34fc8-104a-4aca-9ea4-524d52996e57\81,Devices Device Description1
-78c34fc8-104a-4aca-9ea4-524d52996e57\82,Devices Device Description2
-78c34fc8-104a-4aca-9ea4-524d52996e57\83,Devices NotWorking Properly
-78c34fc8-104a-4aca-9ea4-524d52996e57\84,Devices Is Shared
-78c34fc8-104a-4aca-9ea4-524d52996e57\85,Devices Is Network Connected
-78c34fc8-104a-4aca-9ea4-524d52996e57\86,Devices Is Default
-78c34fc8-104a-4aca-9ea4-524d52996e57\90,Devices Category Ids
-78c34fc8-104a-4aca-9ea4-524d52996e57\91,Devices Category
-78c34fc8-104a-4aca-9ea4-524d52996e57\92,Devices Category Plural
-78c34fc8-104a-4aca-9ea4-524d52996e57\94,Devices Category Group
 78c34fc8-104a-4aca-9ea4-524d52996e57\256,Devices Device Instance Id
 79486778-4c6f-4dde-bc53-cd594311af99\2,Connected Search Local Weights
 79d94e82-4d79-45aa-821a-74858b4e4ca6\2,Devices AepService IoT Service Interfaces
@@ -1305,6 +1382,10 @@ de5ef3c7-46e1-484e-9999-62c5308394c1\100,Contact Primary Address Post Office Box
 de621b8f-e125-43a3-a32d-5665446d632a\25,Security Encryption Owners Display
 de9e220b-41d4-4690-8b6b-3d89e231eef1\100,Fonts Family Name
 dea7c82c-1d89-4a66-9427-a4e3debabcb1\100,Journal Contacts
+debda43a-37b3-4383-91e7-4498da2995ab\1,WNET Scope
+debda43a-37b3-4383-91e7-4498da2995ab\2,WNET Type
+debda43a-37b3-4383-91e7-4498da2995ab\3,WNET DisplayType
+debda43a-37b3-4383-91e7-4498da2995ab\4,WNET Usage
 debda43a-37b3-4383-91e7-4498da2995ab\5,WNET Local Name
 debda43a-37b3-4383-91e7-4498da2995ab\6,WNET Remote Name
 debda43a-37b3-4383-91e7-4498da2995ab\7,WNET Comment
@@ -1483,3 +1564,23 @@ fec7952b-4bf0-4c03-b6e1-2796818b7ca9\100,Fonts Version
 ff1167eb-cbfc-4341-a568-a7c91a68982c\2,Devices Wwan Interface Guid
 ff962609-b7d6-4999-862d-95180d529aea\100,Contact Other Address Street
 ffae9db7-1c8d-43ff-818c-84403aa3732d\100,Source Package Family Name
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\2,System FilterInfo
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\3,System Kind
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\5,System WordWheel
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\6,System FullText
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\7,System ItemsInStack
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\8,System ItemId
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\9,System DelegationFlags
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\10,System ItemSourceCLSID
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\11,System DelegateSourceId
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\12,System Generic_String
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\13,System Generic_Integer
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\14,System Generic_DateTime
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\15,System Generic_Boolean
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\16,System Generic_FloatingPoint
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\17,System ResultSourceId
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\19,System ChapterId
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\20,System ResultType
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\23,System WebPreviewUrl
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\24,System ThumbnailCacheIdParts
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\25,System ItemContext
