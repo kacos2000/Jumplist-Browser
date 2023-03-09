@@ -289,7 +289,7 @@ CA4E628D-8567-4896-AB6B-835B221F373F,Microsoft-Windows-Search
 56285391-9B96-4696-9EAD-2D17F98FBDB2,Microsoft-Windows-EmbeddedAppLauncher
 A9C11050-9E93-4FA4-8FE0-7C4750A345B2,Microsoft-Windows-CoreSystem-SmsRouter
 D5F7235B-48E2-4E9C-92FE-0E4950ABA9E8,Microsoft-Windows-WEPHOSTSVC
-AAF67066-0BF8-469F-AB76-27Microsoft-Windows-PowerShell-DesiredStateConfiguration-FileDownloadManager5590C434EE,
+AAF67066-0BF8-469F-AB76-275590C434EE,Microsoft-Windows-PowerShell-DesiredStateConfiguration-FileDownloadManager
 de4f0660-fa10-4b8f-a494-068b20b22307,Control Panel Category
 1BABEFB4-59CB-49E5-9698-FD38AC830A91,msiscsi_iScsi
 D65C0754-7790-427F-AD73-D7C644260F57,ScannerUtilityInstaller
@@ -1065,7 +1065,7 @@ A3DC6AE7-CAE9-461E-9F75-5ABDCD36B4BF,Microsoft .NET Core 3.1 Templates 3.1.416 (
 65D99466-7A8E-489C-B8E1-962BC945031E,Microsoft-Windows-Shell-DefaultPrograms
 538CBBAD-4877-4EB2-B26E-7CAEE8F0F8CB,Microsoft-Windows-FunctionDiscoveryHost
 8E0E93FB-76AD-42EE-8770-B9DFEA596F65,Microsoft-Windows-Fax
-3DA494E4-0FE2-415C-B895-FB5265C5C8Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider3B,
+3DA494E4-0FE2-415C-B895-FB5265C5C83B,Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider
 F152DC14-A3A0-4258-BECE-69A3EE4C2DE8,Microsoft-Windows-Hyper-V-Integration-TimeSync
 6ED11B00-C1B5-48CB-AECC-FF72EBEFBAE8,Microsoft-Windows-Wallet
 F61CEFC0-AA2E-11DA-A746-0800200C9A66,Microsoft-Windows-Shell-Shwebsvc
