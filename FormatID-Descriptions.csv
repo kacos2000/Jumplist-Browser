@@ -1,45 +1,45 @@
 ﻿PropertyStore FormatID\ID,Description
 46588ae2-4cbc-4338-bbfc-139326986dce\4,SID
-dabd30ed-0043-4789-a7f8-d013a4736622\100,Item Folder Path Display Narrow
-28636aa6-953d-11d2-b5d6-00c04fd918d0\0,Find Data
+DABD30ED-0043-4789-A7F8-D013A4736622\100,ItemFolderPathDisplayNarrow
+28636AA6-953D-11D2-B5D6-00C04FD918D0\0,FindData
 28636aa6-953d-11d2-b5d6-00c04fd918d0\1,Network Resource
-28636aa6-953d-11d2-b5d6-00c04fd918d0\2,Description ID
+28636AA6-953D-11D2-B5D6-00C04FD918D0\2,DescriptionID
 28636aa6-953d-11d2-b5d6-00c04fd918d0\3,Which Folder
 28636aa6-953d-11d2-b5d6-00c04fd918d0\4,Network Location
-28636aa6-953d-11d2-b5d6-00c04fd918d0\5,Computer Name
-28636aa6-953d-11d2-b5d6-00c04fd918d0\6,Namespace CLSID
-28636aa6-953d-11d2-b5d6-00c04fd918d0\8,Item Path Display Narrow
-28636aa6-953d-11d2-b5d6-00c04fd918d0\9,Perceived Type
+28636AA6-953D-11D2-B5D6-00C04FD918D0\5,ComputerName
+28636AA6-953D-11D2-B5D6-00C04FD918D0\6,NamespaceCLSID
+28636AA6-953D-11D2-B5D6-00C04FD918D0\8,ItemPathDisplayNarrow
+28636AA6-953D-11D2-B5D6-00C04FD918D0\9,PerceivedType
 28636aa6-953d-11d2-b5d6-00c04fd918d0\10,Computer Simple Name
-28636aa6-953d-11d2-b5d6-00c04fd918d0\11,Item Type
-28636aa6-953d-11d2-b5d6-00c04fd918d0\12,File Count
-28636aa6-953d-11d2-b5d6-00c04fd918d0\14,Total File Size
+28636AA6-953D-11D2-B5D6-00C04FD918D0\11,ItemType
+28636AA6-953D-11D2-B5D6-00C04FD918D0\12,FileCount
+28636AA6-953D-11D2-B5D6-00C04FD918D0\14,TotalFileSize
 28636aa6-953d-11d2-b5d6-00c04fd918d0\22,Max Stack Count
 28636aa6-953d-11d2-b5d6-00c04fd918d0\23,List Description
-28636aa6-953d-11d2-b5d6-00c04fd918d0\24,Parsing Name
-28636aa6-953d-11d2-b5d6-00c04fd918d0\25,SFGAO Flags
+28636AA6-953D-11D2-B5D6-00C04FD918D0\24,ParsingName
+28636AA6-953D-11D2-B5D6-00C04FD918D0\25,SFGAOFlags
 28636aa6-953d-11d2-b5d6-00c04fd918d0\26,Order
 28636aa6-953d-11d2-b5d6-00c04fd918d0\27,Computer Description
-28636aa6-953d-11d2-b5d6-00c04fd918d0\29,Contained Items
-28636aa6-953d-11d2-b5d6-00c04fd918d0\30,Parsing Path
+28636AA6-953D-11D2-B5D6-00C04FD918D0\29,ContainedItems
+28636AA6-953D-11D2-B5D6-00C04FD918D0\30,ParsingPath
 28636aa6-953d-11d2-b5d6-00c04fd918d0\31,Network Provider
 28636aa6-953d-11d2-b5d6-00c04fd918d0\32,Delegate ID List
-28636aa6-953d-11d2-b5d6-00c04fd918d0\33,Is SendTo Target
+28636AA6-953D-11D2-B5D6-00C04FD918D0\33,IsSendToTarget
 28636aa6-953d-11d2-b5d6-00c04fd918d0\34,Hide On Desktop
 28636aa6-953d-11d2-b5d6-00c04fd918d0\35,Network Places Default Name
 28636aa6-953d-11d2-b5d6-00c04fd918d0\36,Storage System Type
-28636aa6-953d-11d2-b5d6-00c04fd918d0\37,Item SubType
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\2,App User Model Relaunch Command
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\3,App User Model Relaunch Icon Resource
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\4,App User Model Relaunch Display Name Resource
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\5,App User Model ID
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\6,App User Model Is DestList Separator
+28636AA6-953D-11D2-B5D6-00C04FD918D0\37,ItemSubType
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\2,AppUserModel RelaunchCommand
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\3,AppUserModel RelaunchIconResource
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\4,AppUserModel RelaunchDisplayNameResource
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\5,AppUserModel ID
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\6,AppUserModel IsDestListSeparator
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\7,App User Model Is DestList Link
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\8,App User Model Exclude From Show In New Install
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\9,App User Model Prevent Pinning
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\8,AppUserModel ExcludeFromShowInNewInstall
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\9,AppUserModel PreventPinning
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\10,App User Model Best Shortcut
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\11,App User Model Is Dual Mode
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\12,App User Model Start Pin Option
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\11,AppUserModel IsDualMode
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\12,AppUserModel StartPinOption
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\13,App User Model Relevance
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\14,App User Model Host Environment
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\15,App User Model Package Install Path
@@ -53,36 +53,36 @@ dabd30ed-0043-4789-a7f8-d013a4736622\100,Item Folder Path Display Narrow
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\23,App User Model Excluded From Launcher
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\24,App User Model AppCompat ID
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\25,App User Model Run Flags
-9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\26,App User Model Toast Activator CLSID
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\26,AppUserModel ToastActivatorCLSID
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\27,App User Model DestList Provided Title
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\28,App User Model DestList Provided Description
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\29,App User Model DestList Logo Uri
 9f4c2855-9f79-4b39-a8d0-e1d42de1d5f3\30,App User Model DestList Provided Group Name
-446d16b1-8dad-4870-a748-402ea43d788c\100,Thumbnail Cache Id
-446d16b1-8dad-4870-a748-402ea43d788c\104,Volume Id
+446D16B1-8DAD-4870-A748-402EA43D788C\100,ThumbnailCacheId
+446D16B1-8DAD-4870-A748-402EA43D788C\104,VolumeId
 446d16b1-8dad-4870-a748-402ea43d788c\105,Tooltip Thumbnail Stream
 fb8d2d7b-90d1-4e34-bf60-6eac09922bbf\2,WinX Hash
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\3,Subject
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\4,Author
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\5,Keywords
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\6,Comment
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\7,Document Template
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\8,Document Last Author
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\9,Document Revision Number
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\10,Document Total Editing Time
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\11,Document Date Printed
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\12,Document Date Created
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\13,Document Date Saved
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\14,Document Page Count
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\15,Document Word Count
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\16,Document Character Count
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\17,Thumbnail
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\18,Application Name
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\19,Document Security
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\24,High Keywords
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\25,Low Keywords
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\26,Medium Keywords
-f29f85e0-4ff9-1068-ab91-08002b27b3d9\27,Thumbnail Stream
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\3,Subject
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\4,Author
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\5,Keywords
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\6,Comment
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\7,Document Template
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\8,Document LastAuthor
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\9,Document RevisionNumber
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\10,Document TotalEditingTime
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\11,Document DatePrinted
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\12,Document DateCreated
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\13,Document DateSaved
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\14,Document PageCount
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\15,Document WordCount
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\16,Document CharacterCount
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\17,Thumbnail
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\18,ApplicationName
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\19,Document Security
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\24,HighKeywords
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\25,LowKeywords
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\26,MediumKeywords
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\27,ThumbnailStream
 841e4f90-ff59-4d16-8947-e81bbffab36d\2,Publisher Display Name
 841e4f90-ff59-4d16-8947-e81bbffab36d\3,Software Registered Owner
 841e4f90-ff59-4d16-8947-e81bbffab36d\4,Software Registered Company
@@ -97,7 +97,7 @@ f29f85e0-4ff9-1068-ab91-08002b27b3d9\27,Thumbnail Stream
 841e4f90-ff59-4d16-8947-e81bbffab36d\13,Software ReadMe Url
 841e4f90-ff59-4d16-8947-e81bbffab36d\14,Software Update Info Url
 841e4f90-ff59-4d16-8947-e81bbffab36d\15,Software Times Used
-841e4f90-ff59-4d16-8947-e81bbffab36d\16,Software Date Last Used
+841E4F90-FF59-4D16-8947-E81BBFFAB36D\16,Software DateLastUsed
 841e4f90-ff59-4d16-8947-e81bbffab36d\17,Software Tasks File Url
 841e4f90-ff59-4d16-8947-e81bbffab36d\18,Software Parent Name
 841e4f90-ff59-4d16-8947-e81bbffab36d\19,Software Product ID
@@ -121,136 +121,136 @@ f29f85e0-4ff9-1068-ab91-08002b27b3d9\27,Thumbnail Stream
 86d40b4d-9069-443c-819a-2a54090dccec\21,Tile Fence Post
 86d40b4d-9069-443c-819a-2a54090dccec\22,Tile Install Progress
 86d40b4d-9069-443c-819a-2a54090dccec\23,Tile Encoded Target Path
-b725f130-47ef-101a-a5f1-02608c9eebac\2,Item Folder Name Display
+B725F130-47EF-101A-A5F1-02608C9EEBAC\2,ItemFolderNameDisplay
 b725f130-47ef-101a-a5f1-02608c9eebac\3,Search ClassID
-b725f130-47ef-101a-a5f1-02608c9eebac\4,Item Type Text
+B725F130-47EF-101A-A5F1-02608C9EEBAC\4,ItemTypeText
 b725f130-47ef-101a-a5f1-02608c9eebac\8,File Index
 b725f130-47ef-101a-a5f1-02608c9eebac\9,Search Last Change USN
-b725f130-47ef-101a-a5f1-02608c9eebac\10,Item Name Display
-b725f130-47ef-101a-a5f1-02608c9eebac\12,Size
-b725f130-47ef-101a-a5f1-02608c9eebac\13,File Attributes
-b725f130-47ef-101a-a5f1-02608c9eebac\14,Date Modified
-b725f130-47ef-101a-a5f1-02608c9eebac\15,Date Created
-b725f130-47ef-101a-a5f1-02608c9eebac\16,Date Accessed
-b725f130-47ef-101a-a5f1-02608c9eebac\18,File Allocation Size
-b725f130-47ef-101a-a5f1-02608c9eebac\19,Search Contents
+B725F130-47EF-101A-A5F1-02608C9EEBAC\10,ItemNameDisplay
+B725F130-47EF-101A-A5F1-02608C9EEBAC\12,Size
+B725F130-47EF-101A-A5F1-02608C9EEBAC\13,FileAttributes
+B725F130-47EF-101A-A5F1-02608C9EEBAC\14,DateModified
+B725F130-47EF-101A-A5F1-02608C9EEBAC\15,DateCreated
+B725F130-47EF-101A-A5F1-02608C9EEBAC\16,DateAccessed
+B725F130-47EF-101A-A5F1-02608C9EEBAC\18,FileAllocationSize
+B725F130-47EF-101A-A5F1-02608C9EEBAC\19,Search Contents
 b725f130-47ef-101a-a5f1-02608c9eebac\20,Search ShortName
-b725f130-47ef-101a-a5f1-02608c9eebac\21,File FRN
+B725F130-47EF-101A-A5F1-02608C9EEBAC\21,FileFRN
 b725f130-47ef-101a-a5f1-02608c9eebac\22,Search Scope
-b725f130-47ef-101a-a5f1-02608c9eebac\23,Item Name Sort Override
-b725f130-47ef-101a-a5f1-02608c9eebac\24,Item Name Display Without Extension
-b725f130-47ef-101a-a5f1-02608c9eebac\25,Folder Name Display
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\2,Message Bcc Address
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\3,Message Bcc Name
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\4,Message Cc Address
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\5,Message Cc Name
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\6,Item Folder Path Display
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\7,Item Path Display
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\9,Communication Account Name
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\10,Is Read
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\11,Importance
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\12,Flag Status
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\13,Message From Address
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\14,Message From Name
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\15,Message Store
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\16,Message To Address
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\17,Message To Name
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\18,Contact Web Page
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\19,Message Date Sent
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\20,Message Date Received
-e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\21,Message Attachment Names
+B725F130-47EF-101A-A5F1-02608C9EEBAC\23,ItemNameSortOverride
+B725F130-47EF-101A-A5F1-02608C9EEBAC\24,ItemNameDisplayWithoutExtension
+B725F130-47EF-101A-A5F1-02608C9EEBAC\25,FolderNameDisplay
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\2,Message BccAddress
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\3,Message BccName
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\4,Message CcAddress
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\5,Message CcName
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\6,ItemFolderPathDisplay
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\7,ItemPathDisplay
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\9,Communication AccountName
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\10,IsRead
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\11,Importance
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\12,FlagStatus
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\13,Message FromAddress
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\14,Message FromName
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\15,Message Store
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\16,Message ToAddress
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\17,Message ToName
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\18,Contact WebPage
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\19,Message DateSent
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\20,Message DateReceived
+E3E0584C-B788-4A5A-BB20-7F5A44C9ACDD\21,Message AttachmentNames
 00000000-0000-0000-0000-000000000000\0,Null
 000214a1-0000-0000-c000-000000000046}\9,Status
-00bc20a3-bd48-4085-872c-a88d77f5097e\105,Music Composer Sort Override
-00f58a38-c54b-4c40-8696-97235980eae1\100,Calendar Resources
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\101,Contact Job Info1 Yomi Company Name
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\102,Contact Job Info1 Company Name
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\103,Contact Job Info1 Title
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\104,Contact Job Info1 Office Location
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\105,Contact Job Info1 Manager
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\106,Contact Job Info1 Department
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\107,Contact Job Info2 Yomi Company Name
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\108,Contact Job Info2 Company Name
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\109,Contact Job Info2 Title
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\110,Contact Job Info2 Office Location
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\112,Contact Job Info2 Manager
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\113,Contact Job Info2 Department
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\114,Contact Job Info3 Yomi Company Name
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\115,Contact Job Info3 Company Name
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\116,Contact Job Info3 Title
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\117,Contact Job Info3 Office Location
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\118,Contact Job Info3 Manager
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\119,Contact Job Info3 Department
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\120,Contact Job Info1 Company Address
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\121,Contact Job Info2 Company Address
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\123,Contact Job Info3 Company Address
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\124,Contact Webpage 2
-00f63dd8-22bd-4a5d-ba34-5cb0b9bdcb03\125,Contact Webpage 3
-026e516e-b814-414b-83cd-856d6fef4822\3,Devices Interface Enabled
-026e516e-b814-414b-83cd-856d6fef4822\4,Devices Interface Class Guid
-026e516e-b814-414b-83cd-856d6fef4822\6,Devices Restricted Interface
-029c0252-5b86-46c7-aca0-2769ffc8e3d4\100,GPS Latitude Ref
-02b0f689-a914-4e45-821d-1dda452ed2c4\100,GPS Longitude Numerator
-03089873-8ee8-4191-bd60-d31f72b7900b\100,Contact Display Other Phone Numbers
-0337ecec-39fb-4581-a0bd-4c4cc51e9914\100,Photo Aperture Numerator
-048658ad-2db8-41a4-bbb6-ac1ef1207eb1\100,Item Class Type
+00BC20A3-BD48-4085-872C-A88D77F5097E\105,Music ComposerSortOverride
+00F58A38-C54B-4C40-8696-97235980EAE1\100,Calendar Resources
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\101,Contact JobInfo1YomiCompanyName
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\102,Contact JobInfo1CompanyName
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\103,Contact JobInfo1Title
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\104,Contact JobInfo1OfficeLocation
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\105,Contact JobInfo1Manager
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\106,Contact JobInfo1Department
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\107,Contact JobInfo2YomiCompanyName
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\108,Contact JobInfo2CompanyName
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\109,Contact JobInfo2Title
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\110,Contact JobInfo2OfficeLocation
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\112,Contact JobInfo2Manager
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\113,Contact JobInfo2Department
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\114,Contact JobInfo3YomiCompanyName
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\115,Contact JobInfo3CompanyName
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\116,Contact JobInfo3Title
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\117,Contact JobInfo3OfficeLocation
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\118,Contact JobInfo3Manager
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\119,Contact JobInfo3Department
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\120,Contact JobInfo1CompanyAddress
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\121,Contact JobInfo2CompanyAddress
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\123,Contact JobInfo3CompanyAddress
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\124,Contact Webpage2
+00F63DD8-22BD-4A5D-BA34-5CB0B9BDCB03\125,Contact Webpage3
+026E516E-B814-414B-83CD-856D6FEF4822\3,Devices InterfaceEnabled
+026E516E-B814-414B-83CD-856D6FEF4822\4,Devices InterfaceClassGuid
+026E516E-B814-414B-83CD-856D6FEF4822\6,Devices RestrictedInterface
+029C0252-5B86-46C7-ACA0-2769FFC8E3D4\100,GPS LatitudeRef
+02B0F689-A914-4E45-821D-1DDA452ED2C4\100,GPS LongitudeNumerator
+03089873-8EE8-4191-BD60-D31F72B7900B\100,Contact DisplayOtherPhoneNumbers
+0337ECEC-39FB-4581-A0BD-4C4CC51E9914\100,Photo ApertureNumerator
+048658AD-2DB8-41A4-BBB6-AC1EF1207EB1\100,ItemClassType
 05e932b1-7ca2-491f-bd69-99b4cb266cbb\2,Connected Search Disambiguation Text
-06704b0c-e830-4c81-9178-91e4e95a80a0\2,Devices Notification Store
-06704b0c-e830-4c81-9178-91e4e95a80a0\3,Devices Notification
-084d8a0a-e6d5-40de-bf1f-c8820e7c877c\100,Task CompletionStatus
-08a65aa1-f4c9-43dd-9ddf-a33d8e7ead85\100,Contact HomeAddressCountry
-08c7cc5f-60f2-4494-ad75-55e3e0b5add0\100,Task Owner
-08f6d7c2-e3f2-44fc-af1e-5aa5c81a2d3e\100,Photo MaxAperture
+06704B0C-E830-4C81-9178-91E4E95A80A0\2,Devices NotificationStore
+06704B0C-E830-4C81-9178-91E4E95A80A0\3,Devices Notification
+084D8A0A-E6D5-40DE-BF1F-C8820E7C877C\100,Task CompletionStatus
+08A65AA1-F4C9-43DD-9DDF-A33D8E7EAD85\100,Contact HomeAddressCountry
+08C7CC5F-60F2-4494-AD75-55E3E0B5ADD0\100,Task Owner
+08F6D7C2-E3F2-44FC-AF1E-5AA5C81A2D3E\100,Photo MaxAperture
 09329b74-40a3-4c68-bf07-af9a572f607c\100,Is Folder
-0933f3f5-4786-4f46-a8e8-d64dd37fa521\100,Photo Focal Plane X Resolution Denominator
-09429607-582d-437f-84c3-de93a2b24c3c\100,Calendar Optional AttendeeNames
+0933F3F5-4786-4F46-A8E8-D64DD37FA521\100,Photo FocalPlaneXResolutionDenominator
+09429607-582D-437F-84C3-DE93A2B24C3C\100,Calendar OptionalAttendeeNames
 09736039-456b-4219-ba3e-ec573b58cf97\2,Secondary Tile Is Uninstalled
-09edd5b6-b301-43c5-9990-d00302effd46\100,Media Average Level
-0a7b84ef-0c27-463f-84ef-06c5070001be\10,Device Interface Printer Name
+09EDD5B6-B301-43C5-9990-D00302EFFD46\100,Media AverageLevel
+0A7B84EF-0C27-463F-84EF-06C5070001BE\10,DeviceInterface PrinterName
 0abe4d16-9384-426b-b41a-eac3c8e0f147\2,Search Content Snippet
-0adef160-db3f-4308-9a21-06237b16fa2a\100,Contact Home Address Street
-0b48f35a-be6e-4f17-b108-3c4073d1669a\15,Device Printer URL
-0b63e343-9ccc-11d0-bcdb-00805fccce04\2,Search Url To Index
-0b63e343-9ccc-11d0-bcdb-00805fccce04\12,Search Url To Index With Modification Time
-0b63e343-9ccc-11d0-bcdb-00805fccce04\23,Search Is Closed Directory
-0b63e343-9ccc-11d0-bcdb-00805fccce04\24,Search Is Fully Contained
+0ADEF160-DB3F-4308-9A21-06237B16FA2A\100,Contact HomeAddressStreet
+0B48F35A-BE6E-4F17-B108-3C4073D1669A\15,Device PrinterURL
+0B63E343-9CCC-11D0-BCDB-00805FCCCE04\2,Search UrlToIndex
+0B63E343-9CCC-11D0-BCDB-00805FCCCE04\12,Search UrlToIndexWithModificationTime
+0B63E343-9CCC-11D0-BCDB-00805FCCCE04\23,Search IsClosedDirectory
+0B63E343-9CCC-11D0-BCDB-00805FCCCE04\24,Search IsFullyContained
 0b63e343-9ccc-11d0-bcdb-00805fccce04\25,Search Provider Class
 0b63e343-9ccc-11d0-bcdb-00805fccce04\26,Search Provider Web Domain
 0b63e343-9ccc-11d0-bcdb-00805fccce04\27,Search Provider Result Limit
-0b63e350-9ccc-11d0-bcdb-00805fccce04\5,MIME Type
-0b63e350-9ccc-11d0-bcdb-00805fccce04\8,Search Gather Time
+0B63E350-9CCC-11D0-BCDB-00805FCCCE04\5,MIMEType
+0B63E350-9CCC-11D0-BCDB-00805FCCCE04\8,Search GatherTime
 0b63e350-9ccc-11d0-bcdb-00805fccce04\9,Search Access Count
 0b63e350-9ccc-11d0-bcdb-00805fccce04\11,Search Last Indexed Total Time
-0b8bb018-2725-4b44-92ba-7933aeb2dde7\2,Contact Account Picture Dynamic Video
-0b8bb018-2725-4b44-92ba-7933aeb2dde7\3,Contact Account Picture Large
-0b8bb018-2725-4b44-92ba-7933aeb2dde7\4,Contact Account Picture Small
-0ba7d6c3-568d-4159-ab91-781a91fb71e5\100,Calendar Required Attendee Addresses
-0bba1ede-7566-4f47-90ec-25fc567ced2a\2,Devices AepContainer Children
-0bba1ede-7566-4f47-90ec-25fc567ced2a\3,Devices AepContainer Can Pair
-0bba1ede-7566-4f47-90ec-25fc567ced2a\4,Devices AepContainer Is Paired
-0bba1ede-7566-4f47-90ec-25fc567ced2a\6,Devices AepContainer Manufacturer
-0bba1ede-7566-4f47-90ec-25fc567ced2a\7,Devices AepContainer Model Name
-0bba1ede-7566-4f47-90ec-25fc567ced2a\8,Devices AepContainer Model Ids
-0bba1ede-7566-4f47-90ec-25fc567ced2a\9,Devices AepContainer Categories
-0bba1ede-7566-4f47-90ec-25fc567ced2a\11,Devices AepContainer Is Present
-0bba1ede-7566-4f47-90ec-25fc567ced2a\12,Devices AepContainer Container Id
-0bba1ede-7566-4f47-90ec-25fc567ced2a\13,Devices AepContainer Protocol Ids
-0be1c8e7-1981-4676-ae14-fdd78f05a6e7\100,Message Sender Address
+0B8BB018-2725-4B44-92BA-7933AEB2DDE7\2,Contact AccountPictureDynamicVideo
+0B8BB018-2725-4B44-92BA-7933AEB2DDE7\3,Contact AccountPictureLarge
+0B8BB018-2725-4B44-92BA-7933AEB2DDE7\4,Contact AccountPictureSmall
+0BA7D6C3-568D-4159-AB91-781A91FB71E5\100,Calendar RequiredAttendeeAddresses
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\2,Devices AepContainer Children
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\3,Devices AepContainer CanPair
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\4,Devices AepContainer IsPaired
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\6,Devices AepContainer Manufacturer
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\7,Devices AepContainer ModelName
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\8,Devices AepContainer ModelIds
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\9,Devices AepContainer Categories
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\11,Devices AepContainer IsPresent
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\12,Devices AepContainer ContainerId
+0BBA1EDE-7566-4F47-90EC-25FC567CED2A\13,Devices AepContainer ProtocolIds
+0BE1C8E7-1981-4676-AE14-FDD78F05A6E7\100,Message SenderAddress
 0be3fd71-3f87-40e0-aead-0294cf674635\2,Shell Is Dav Resource
-0c73b141-39d6-4653-a683-cab291eaf95b\2,Supplemental Album Id
-0c73b141-39d6-4653-a683-cab291eaf95b\3,Supplemental Resource Id
-0c840a88-b043-466d-9766-d4b26da3fa77\100,Photo Subject Distance Denominator
-0cb2bf5a-9ee7-4a86-8222-f01e07fdadaf\100,PropGroup Photo Advanced
-0cef7d53-fa64-11d1-a203-0000f81fedee\3,File Description
-0cef7d53-fa64-11d1-a203-0000f81fedee\4,File Version
-0cef7d53-fa64-11d1-a203-0000f81fedee\5,Internal Name
-0cef7d53-fa64-11d1-a203-0000f81fedee\6,Original File Name
-0cef7d53-fa64-11d1-a203-0000f81fedee\7,Software Product Name
+0C73B141-39D6-4653-A683-CAB291EAF95B\2,Supplemental AlbumID
+0C73B141-39D6-4653-A683-CAB291EAF95B\3,Supplemental ResourceId
+0C840A88-B043-466D-9766-D4B26DA3FA77\100,Photo SubjectDistanceDenominator
+0CB2BF5A-9EE7-4A86-8222-F01E07FDADAF\100,PropGroup PhotoAdvanced
+0CEF7D53-FA64-11D1-A203-0000F81FEDEE\3,FileDescription
+0CEF7D53-FA64-11D1-A203-0000F81FEDEE\4,FileVersion
+0CEF7D53-FA64-11D1-A203-0000F81FEDEE\5,InternalName
+0CEF7D53-FA64-11D1-A203-0000F81FEDEE\6,OriginalFileName
+0CEF7D53-FA64-11D1-A203-0000F81FEDEE\7,Software ProductName
 0cef7d53-fa64-11d1-a203-0000f81fedee\8,Software Product Version
-0cef7d53-fa64-11d1-a203-0000f81fedee\9,Trademarks
+0CEF7D53-FA64-11D1-A203-0000F81FEDEE\9,Trademarks
 0cef7d53-fa64-11d1-a203-0000f81fedee\11,Platform
-0cf8fb02-1837-42f1-a697-a7017aa289b9\100,GPS DOP
-0da41cfa-d224-4a18-ae2f-596158db4b3a\100,Message Sender Name
+0CF8FB02-1837-42F1-A697-A7017AA289B9\100,GPS DOP
+0DA41CFA-D224-4A18-AE2F-596158DB4B3A\100,Message SenderName
 0ded77b3-c614-456c-ae5b-285b38d7b01b\2,Launcher Order
 0ded77b3-c614-456c-ae5b-285b38d7b01b\3,Launcher Group ID
 0ded77b3-c614-456c-ae5b-285b38d7b01b\6,Launcher View ID
@@ -271,123 +271,123 @@ e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\21,Message Attachment Names
 0ded77b3-c614-456c-ae5b-285b38d7b01b\21,Launcher Store Category
 0ded77b3-c614-456c-ae5b-285b38d7b01b\22,Launcher Win Store Category Name
 0ded77b3-c614-456c-ae5b-285b38d7b01b\23,Launcher SubgroupID
-0f55cde2-4f49-450d-92c1-dcd16301b1b7\100,GPS Latitude Decimal
-10984e0a-f9f2-4321-b7ef-baf195af4319\100,Parental Rating Reason
-10b24595-41a2-4e20-93c2-5761c1395f32\100,GPS Img Direction Denominator
-10dabe05-32aa-4c29-bf1a-63e2d220587f\100,Image Image Id
+0F55CDE2-4F49-450D-92C1-DCD16301B1B7\100,GPS LatitudeDecimal
+10984E0A-F9F2-4321-B7EF-BAF195AF4319\100,ParentalRatingReason
+10B24595-41A2-4E20-93C2-5761C1395F32\100,GPS ImgDirectionDenominator
+10DABE05-32AA-4C29-BF1A-63E2D220587F\100,Image ImageID
 1173f62a-2a55-4f62-aed6-8c7112e0f7a3\5,Force Full Text
-11d6336b-38c4-4ec9-84d6-eb38d0b150af\100,Contact Other Email Addresses
-125491f4-818f-46b2-91b5-d537753617b2\100,GPS Status
+11D6336B-38C4-4EC9-84D6-EB38D0B150AF\100,Contact OtherEmailAddresses
+125491F4-818F-46B2-91B5-D537753617B2\100,GPS Status
 12ea418f-d8cd-4cdf-9b23-457eaac7ff0d\100,Communication Directory Server
 12fa14f5-c6fe-4545-bce2-1ed6cb6b8422\2,Connected Search Link Text
-13673f42-a3d6-49f6-b4da-ae46e0c5237c\2,Devices DevObject Type
-13eb7ffc-ec89-4346-b19d-ccc6f1784223\101,Music Album Title Sort Override
-14977844-6b49-4aad-a714-a4513bf60460\100,Contact First Name
-149c0b69-2c2d-48fc-808f-d318d78c4636\2,Volume Is Mapped Drive
-14b81da1-0135-4d31-96d9-6cbfc9671a99\259,Image Compression
-14b81da1-0135-4d31-96d9-6cbfc9671a99\271,Photo Camera Manufacturer
-14b81da1-0135-4d31-96d9-6cbfc9671a99\272,Photo Camera Model
-14b81da1-0135-4d31-96d9-6cbfc9671a99\273,Photo Camera Serial Number
-14b81da1-0135-4d31-96d9-6cbfc9671a99\274,Photo Orientation
-14b81da1-0135-4d31-96d9-6cbfc9671a99\305,Software Used
-14b81da1-0135-4d31-96d9-6cbfc9671a99\18248,Photo Event
-14b81da1-0135-4d31-96d9-6cbfc9671a99\18258,Date Imported
+13673F42-A3D6-49F6-B4DA-AE46E0C5237C\2,Devices DevObjectType
+13EB7FFC-EC89-4346-B19D-CCC6F1784223\101,Music AlbumTitleSortOverride
+14977844-6B49-4AAD-A714-A4513BF60460\100,Contact FirstName
+149C0B69-2C2D-48FC-808F-D318D78C4636\2,Volume IsMappedDrive
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\259,Image Compression
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\271,Photo CameraManufacturer
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\272,Photo CameraModel
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\273,Photo CameraSerialNumber
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\274,Photo Orientation
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\305,SoftwareUsed
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\18248,Photo Event
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\18258,DateImported
 14b81da1-0135-4d31-96d9-6cbfc9671a99\33432,Image Copyright
-14b81da1-0135-4d31-96d9-6cbfc9671a99\33434,Photo Exposure Time
-14b81da1-0135-4d31-96d9-6cbfc9671a99\33437,Photo FNumber
-14b81da1-0135-4d31-96d9-6cbfc9671a99\34850,Photo Exposure Program
-14b81da1-0135-4d31-96d9-6cbfc9671a99\34855,Photo ISO Speed
-14b81da1-0135-4d31-96d9-6cbfc9671a99\36867,Photo Date Taken
-14b81da1-0135-4d31-96d9-6cbfc9671a99\37377,Photo Shutter Speed
-14b81da1-0135-4d31-96d9-6cbfc9671a99\37378,Photo Aperture
-14b81da1-0135-4d31-96d9-6cbfc9671a99\37380,Photo Exposure Bias
-14b81da1-0135-4d31-96d9-6cbfc9671a99\37382,Photo Subject Distance
-14b81da1-0135-4d31-96d9-6cbfc9671a99\37383,Photo Metering Mode
-14b81da1-0135-4d31-96d9-6cbfc9671a99\37384,Photo Light Source
-14b81da1-0135-4d31-96d9-6cbfc9671a99\37385,Photo Flash
-14b81da1-0135-4d31-96d9-6cbfc9671a99\37386,Photo Focal Length
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\33434,Photo ExposureTime
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\33437,Photo FNumber
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\34850,Photo ExposureProgram
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\34855,Photo ISOSpeed
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\36867,Photo DateTaken
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\37377,Photo ShutterSpeed
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\37378,Photo Aperture
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\37380,Photo ExposureBias
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\37382,Photo SubjectDistance
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\37383,Photo MeteringMode
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\37384,Photo LightSource
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\37385,Photo Flash
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\37386,Photo FocalLength
 14b81da1-0135-4d31-96d9-6cbfc9671a99\40096,Image Property Bag
-14b81da1-0135-4d31-96d9-6cbfc9671a99\40961,Image Color Space
-14b81da1-0135-4d31-96d9-6cbfc9671a99\41483,Photo Flash Energy
-1506935d-e3e7-450f-8637-82233ebe5f6e\2,Devices WiFi Direct Interface Address
-1506935d-e3e7-450f-8637-82233ebe5f6e\3,Devices WiFi Direct Interface Guid
-1506935d-e3e7-450f-8637-82233ebe5f6e\4,Devices WiFi Direct Group Id
-1506935d-e3e7-450f-8637-82233ebe5f6e\5,Devices WiFi Direct Is Connected
-1506935d-e3e7-450f-8637-82233ebe5f6e\6,Devices WiFi Direct Is Visible
-1506935d-e3e7-450f-8637-82233ebe5f6e\7,Devices WiFi Direct Is Legacy Device
-1506935d-e3e7-450f-8637-82233ebe5f6e\8,Devices WiFi Direct Miracast Version
-1506935d-e3e7-450f-8637-82233ebe5f6e\9,Devices WiFi Direct Is Miracast Lcp Supported
-1506935d-e3e7-450f-8637-82233ebe5f6e\10,Devices WiFi Direct Services
-1506935d-e3e7-450f-8637-82233ebe5f6e\11,Devices WiFi Direct Supported ChannelList
-1506935d-e3e7-450f-8637-82233ebe5f6e\12,Devices WiFi Direct Information Elements
-1506935d-e3e7-450f-8637-82233ebe5f6e\13,Devices WiFi Direct Device Address
-16473c91-d017-4ed9-ba4d-b6baa55dbcf8\100,GPS Img Direction
-16cbb924-6500-473b-a5be-f1599bcbe413\100,Photo Digital Zoom Numerator
-16e634ee-2bff-497b-bd8a-4341ad39eeb9\100,GPS Latitude Denominator
-16ea4042-d6f4-4bca-8349-7c78d30fb333\100,Photo Shutter Speed Numerator
-176dc63c-2688-4e89-8143-a347800f25e9\6,Contact Job Title
-176dc63c-2688-4e89-8143-a347800f25e9\7,Contact Office Location
-176dc63c-2688-4e89-8143-a347800f25e9\20,Contact Home Telephone
-176dc63c-2688-4e89-8143-a347800f25e9\25,Contact Primary Telephone
-176dc63c-2688-4e89-8143-a347800f25e9\35,Contact Mobile Telephone
-176dc63c-2688-4e89-8143-a347800f25e9\47,Contact Birthday
-176dc63c-2688-4e89-8143-a347800f25e9\48,Contact Primary Email Address
-176dc63c-2688-4e89-8143-a347800f25e9\65,Contact Hom eAddress City
-176dc63c-2688-4e89-8143-a347800f25e9\69,Contact Personal Title
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\40961,Image ColorSpace
+14B81DA1-0135-4D31-96D9-6CBFC9671A99\41483,Photo FlashEnergy
+1506935D-E3E7-450F-8637-82233EBE5F6E\2,Devices WiFiDirect InterfaceAddress
+1506935D-E3E7-450F-8637-82233EBE5F6E\3,Devices WiFiDirect InterfaceGuid
+1506935D-E3E7-450F-8637-82233EBE5F6E\4,Devices WiFiDirect GroupId
+1506935D-E3E7-450F-8637-82233EBE5F6E\5,Devices WiFiDirect IsConnected
+1506935D-E3E7-450F-8637-82233EBE5F6E\6,Devices WiFiDirect IsVisible
+1506935D-E3E7-450F-8637-82233EBE5F6E\7,Devices WiFiDirect IsLegacyDevice
+1506935D-E3E7-450F-8637-82233EBE5F6E\8,Devices WiFiDirect MiracastVersion
+1506935D-E3E7-450F-8637-82233EBE5F6E\9,Devices WiFiDirect IsMiracastLcpSupported
+1506935D-E3E7-450F-8637-82233EBE5F6E\10,Devices WiFiDirect Services
+1506935D-E3E7-450F-8637-82233EBE5F6E\11,Devices WiFiDirect SupportedChannelList
+1506935D-E3E7-450F-8637-82233EBE5F6E\12,Devices WiFiDirect InformationElements
+1506935D-E3E7-450F-8637-82233EBE5F6E\13,Devices WiFiDirect DeviceAddress
+16473C91-D017-4ED9-BA4D-B6BAA55DBCF8\100,GPS ImgDirection
+16CBB924-6500-473B-A5BE-F1599BCBE413\100,Photo DigitalZoomNumerator
+16E634EE-2BFF-497B-BD8A-4341AD39EEB9\100,GPS LatitudeDenominator
+16EA4042-D6F4-4BCA-8349-7C78D30FB333\100,Photo ShutterSpeedNumerator
+176DC63C-2688-4E89-8143-A347800F25E9\6,Contact JobTitle
+176DC63C-2688-4E89-8143-A347800F25E9\7,Contact OfficeLocation
+176DC63C-2688-4E89-8143-A347800F25E9\20,Contact HomeTelephone
+176DC63C-2688-4E89-8143-A347800F25E9\25,Contact PrimaryTelephone
+176DC63C-2688-4E89-8143-A347800F25E9\35,Contact MobileTelephone
+176DC63C-2688-4E89-8143-A347800F25E9\47,Contact Birthday
+176DC63C-2688-4E89-8143-A347800F25E9\48,Contact PrimaryEmailAddress
+176DC63C-2688-4E89-8143-A347800F25E9\65,Contact HomeAddressCity
+176DC63C-2688-4E89-8143-A347800F25E9\69,Contact PersonalTitle
 176dc63c-2688-4e89-8143-a347800f25e9\70,Contact Given Name
-176dc63c-2688-4e89-8143-a347800f25e9\71,Contact Middle Name
-176dc63c-2688-4e89-8143-a347800f25e9\73,Contact Suffix
-176dc63c-2688-4e89-8143-a347800f25e9\74,Contact Nick Name
-176dc63c-2688-4e89-8143-a347800f25e9\75,Contact Prefix
+176DC63C-2688-4E89-8143-A347800F25E9\71,Contact MiddleName
+176DC63C-2688-4E89-8143-A347800F25E9\73,Contact Suffix
+176DC63C-2688-4E89-8143-A347800F25E9\74,Contact NickName
+176DC63C-2688-4E89-8143-A347800F25E9\75,Contact Prefix
 1804d1fb-9fa4-441d-a536-76468ac43307\100,WebDav Path
-182c1ea6-7c1c-4083-ab4b-ac6c9f4ed128\100,GPS Dest Longitude Ref
-188c1f91-3c40-4132-9ec5-d8b03b72a8a2\100,Calendar Response Status
-18bbd425-ecfd-46ef-b612-7b4a6034eda0\100,Contact Primary Address Postal Code
-19b51fa6-1f92-4a5c-ab48-7df0abd67444\100,Image Resolution Unit
-1a701bf6-478c-4361-83ab-3701bb053c58\100,Photo Brightness
-1a9ba605-8e7c-4d11-ad7d-a50ada18ba1b\2,Message Participants
-1b5439e7-eba1-4af8-bdd7-7af1d4549493\100,RecordedTV Station Name
-1b97738a-fdfc-462f-9d93-1957e08be90c\100,Photo FNumber Numerator
+182C1EA6-7C1C-4083-AB4B-AC6C9F4ED128\100,GPS DestLongitudeRef
+188C1F91-3C40-4132-9EC5-D8B03B72A8A2\100,Calendar ResponseStatus
+18BBD425-ECFD-46EF-B612-7B4A6034EDA0\100,Contact PrimaryAddressPostalCode
+19B51FA6-1F92-4A5C-AB48-7DF0ABD67444\100,Image ResolutionUnit
+1A701BF6-478C-4361-83AB-3701BB053C58\100,Photo Brightness
+1A9BA605-8E7C-4D11-AD7D-A50ADA18BA1B\2,Message Participants
+1B5439E7-EBA1-4AF8-BDD7-7AF1D4549493\100,RecordedTV StationName
+1B97738A-FDFC-462F-9D93-1957E08BE90C\100,Photo FNumberNumerator
 30c8eef4-a832-41e2-ab32-e3c3ca28fd29\2,Home Grouping
 30c8eef4-a832-41e2-ab32-e3c3ca28fd29\3,Home Sort Order
 30c8eef4-a832-41e2-ab32-e3c3ca28fd29\4,Home Is Pinned
 30c8eef4-a832-41e2-ab32-e3c3ca28fd29\5,Home PropList Sort
 30c8eef4-a832-41e2-ab32-e3c3ca28fd29\6,Home Item Folder Path Display
-3143bf7c-80a8-4854-8880-e2e40189bdd0\100,Message Attachment Contents
-315b9c8d-80a9-4ef9-ae16-8e746da51d70\100,Calendar Is Recurring
-318a6b45-087f-4dc2-b8cc-05359551fc9e\100,Photo Related Sound File
-31b37743-7c5e-4005-93e6-e953f92b82e9\2,Devices WiFi Direct Services Service Address
-31b37743-7c5e-4005-93e6-e953f92b82e9\3,Devices WiFi Direct Services Service Name
-31b37743-7c5e-4005-93e6-e953f92b82e9\4,Devices WiFi Direct Services Service Information
-31b37743-7c5e-4005-93e6-e953f92b82e9\5,Devices WiFi Direct Services Advertisement Id
-31b37743-7c5e-4005-93e6-e953f92b82e9\6,Devices WiFi Direct Services Service Config Methods
-31b37743-7c5e-4005-93e6-e953f92b82e9\7,Devices WiFi Direct Services Request Service Information
+3143BF7C-80A8-4854-8880-E2E40189BDD0\100,Message AttachmentContents
+315B9C8D-80A9-4EF9-AE16-8E746DA51D70\100,Calendar IsRecurring
+318A6B45-087F-4DC2-B8CC-05359551FC9E\100,Photo RelatedSoundFile
+31B37743-7C5E-4005-93E6-E953F92B82E9\2,Devices WiFiDirectServices ServiceAddress
+31B37743-7C5E-4005-93E6-E953F92B82E9\3,Devices WiFiDirectServices ServiceName
+31B37743-7C5E-4005-93E6-E953F92B82E9\4,Devices WiFiDirectServices ServiceInformation
+31B37743-7C5E-4005-93E6-E953F92B82E9\5,Devices WiFiDirectServices AdvertisementId
+31B37743-7C5E-4005-93E6-E953F92B82E9\6,Devices WiFiDirectServices ServiceConfigMethods
+31B37743-7C5E-4005-93E6-E953F92B82E9\7,Devices WiFiDirectServices RequestServiceInformation
 328d8b21-7729-4bfc-954c-902b329d56b0\2,Sync Copy In
 32bcb03c-7f34-4e3f-bbb2-ebe63629f5e4\100,Is Simple Item
-33dcf22b-28d5-464c-8035-1ee9efd25278\100,GPS Longitude Ref
-341796f1-1df9-4b1c-a564-91bdefa43877\100,Photo PhotometricInterpretation
-346c8bd1-2e6a-4c45-89a4-61b78e8e700f\100,Is Incomplete
-35dbe6fe-44c3-4400-aaae-d2c799c407e8\100,GPS Track Ref
-3602c812-0f3b-45f0-85ad-603468d69423\100,GPS Date
-3633de59-6825-4381-a49b-9f6ba13a1471\2,Devices Playback State
-3633de59-6825-4381-a49b-9f6ba13a1471\3,Devices Playback Title
-3633de59-6825-4381-a49b-9f6ba13a1471\4,Devices Remaining Duration
-3633de59-6825-4381-a49b-9f6ba13a1471\5,Devices Playback Position Percent
-364028da-d895-41fe-a584-302b1bb70a76\100,Contact Display Business Phone Numbers
-364b6fa9-37ab-482a-be2b-ae02f60d4318\100,Image Compressed Bits Per  Pixel
+33DCF22B-28D5-464C-8035-1EE9EFD25278\100,GPS LongitudeRef
+341796F1-1DF9-4B1C-A564-91BDEFA43877\100,Photo PhotometricInterpretation
+346C8BD1-2E6A-4C45-89A4-61B78E8E700F\100,IsIncomplete
+35DBE6FE-44C3-4400-AAAE-D2C799C407E8\100,GPS TrackRef
+3602C812-0F3B-45F0-85AD-603468D69423\100,GPS Date
+3633DE59-6825-4381-A49B-9F6BA13A1471\2,Devices PlaybackState
+3633DE59-6825-4381-A49B-9F6BA13A1471\3,Devices PlaybackTitle
+3633DE59-6825-4381-A49B-9F6BA13A1471\4,Devices RemainingDuration
+3633DE59-6825-4381-A49B-9F6BA13A1471\5,Devices PlaybackPositionPercent
+364028DA-D895-41FE-A584-302B1BB70A76\100,Contact DisplayBusinessPhoneNumbers
+364B6FA9-37AB-482A-BE2B-AE02F60D4318\100,Image CompressedBitsPerPixel
 37ebd11f-7e72-4ebc-9d4c-c790f8c277c2\2,Device Interface Spb Controller Friendly Name
-38965063-edc8-4268-8491-b7723172cf29\100,Contact Email Address 2
-38d43380-d418-4830-84d5-46935a81c5c6\32,Security Allowed Enterprise Data Protection Identities
-39a7f922-477c-48de-8bc8-b28441e342e3\100,Project
-39b77f4f-a104-4863-b395-2db2ad8f7bc1\100,Contact Connected Service Display Name
-3a372292-7fca-49a7-99d5-e47bb2d4e7ab\100,GPS Dest Latitude Denominator
-3b2ce006-5e61-4fde-bab8-9b8aac9b26df\5,Devices Aep Protocol Id
-3b2ce006-5e61-4fde-bab8-9b8aac9b26df\8,Devices Aep Id
-3c8cee58-d4f0-4cf9-b756-4e5d24447bcd\100,Contact Gender
-3c8cee58-d4f0-4cf9-b756-4e5d24447bcd\101,Contact Gender Value
+38965063-EDC8-4268-8491-B7723172CF29\100,Contact EmailAddress2
+38D43380-D418-4830-84D5-46935A81C5C6\32,Security AllowedEnterpriseDataProtectionIdentities
+39A7F922-477C-48DE-8BC8-B28441E342E3\100,Project
+39B77F4F-A104-4863-B395-2DB2AD8F7BC1\100,Contact ConnectedServiceDisplayName
+3A372292-7FCA-49A7-99D5-E47BB2D4E7AB\100,GPS DestLatitudeDenominator
+3B2CE006-5E61-4FDE-BAB8-9B8AAC9B26DF\5,Devices Aep ProtocolId
+3B2CE006-5E61-4FDE-BAB8-9B8AAC9B26DF\8,Devices Aep AepId
+3C8CEE58-D4F0-4CF9-B756-4E5D24447BCD\100,Contact Gender
+3C8CEE58-D4F0-4CF9-B756-4E5D24447BCD\101,Contact GenderValue
 3d658d4d-bc38-464a-b555-418d554a8df8\100,Fonts Description
 3d75e4f5-a391-4952-81f7-c7072fe53025\100,File Reparse Point Tag
-3f08e66f-2f44-4bb9-a682-ac35d2562322\100,Image Compression Text
+3F08E66F-2F44-4BB9-A682-AC35D2562322\100,Image CompressionText
 3f5d9b45-5e9f-4d5c-8a5e-403181bf177b\2,Extensions Type
 3f5d9b45-5e9f-4d5c-8a5e-403181bf177b\3,Extensions Date Last Used
 3f5d9b45-5e9f-4d5c-8a5e-403181bf177b\4,Extensions Used Count
@@ -399,60 +399,60 @@ e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\21,Message Attachment Names
 3f5d9b45-5e9f-4d5c-8a5e-403181bf177b\10,Extensions File Name
 3f5d9b45-5e9f-4d5c-8a5e-403181bf177b\11,Extensions File Path
 3f5d9b45-5e9f-4d5c-8a5e-403181bf177b\12,Extensions Flags
-3f8472b5-e0af-4db2-8071-c53fe76ae7ce\100,Due Date
-402b5934-ec5a-48c3-93e6-85e86a2d934e\100,Contact Business Address City
-41cf5ae0-f75a-4806-bd87-59c7d9248eb9\100,File Name
-425d69e5-48ad-4900-8d80-6eb6b8d0ac86\100,GPS Dest Longitude Denominator
-428040ac-a177-4c8a-9760-f6f761227f9a\100,Communication Date Item Expires
-42864dfd-9da4-4f77-bded-4aad7b256735\100,Photo Gain Control Denominator
-4340a6c5-93fa-4706-972c-7b648008a5a7\8,Devices Parent
-4340a6c5-93fa-4706-972c-7b648008a5a7\9,Devices Children
-436f2667-14e2-4feb-b30a-146c53b5b674\100,Link Arguments
-43f8d7b7-a444-4f87-9383-52271c9b915c\100,DateArchived
-446f787f-10c4-41cb-a6c4-4d0343551597\100,Contact Business Address State
+3F8472B5-E0AF-4DB2-8071-C53FE76AE7CE\100,DueDate
+402B5934-EC5A-48C3-93E6-85E86A2D934E\100,Contact BusinessAddressCity
+41CF5AE0-F75A-4806-BD87-59C7D9248EB9\100,FileName
+425D69E5-48AD-4900-8D80-6EB6B8D0AC86\100,GPS DestLongitudeDenominator
+428040AC-A177-4C8A-9760-F6F761227F9A\100,Communication DateItemExpires
+42864DFD-9DA4-4F77-BDED-4AAD7B256735\100,Photo GainControlDenominator
+4340A6C5-93FA-4706-972C-7B648008A5A7\8,Devices Parent
+4340A6C5-93FA-4706-972C-7B648008A5A7\9,Devices Children
+436F2667-14E2-4FEB-B30A-146C53B5B674\100,Link Arguments
+43F8D7B7-A444-4F87-9383-52271C9B915C\100,DateArchived
+446F787F-10C4-41CB-A6C4-4D0343551597\100,Contact BusinessAddressState
 4530d076-b598-4a81-8813-9b11286ef6ea\2,Fonts Font Embeddability
 4530d076-b598-4a81-8813-9b11286ef6ea\5,Fonts Type
 4530d076-b598-4a81-8813-9b11286ef6ea\7,Fonts File Names
 4596208c-32fa-41d2-9695-af0cb9e8dcfe\100,Stack Thumbnail Cache Ids
-45eae747-8e2a-40ae-8cbf-ca52aba6152a\100,Flag Color Text
-4679c1b5-844d-4590-baf5-f322231f1b81\100,GPS Longitude Decimal
-467ee575-1f25-4557-ad4e-b8b58b0d9c15\100,GPS Satellites
-4684fe97-8765-4842-9c13-f006447b178c\100,Recorded TV Original Broadcast Date
-46ac629d-75ea-4515-867f-6dc4321c5844\100,GPS Altitude Ref
-46b4e8de-cdb2-440d-885c-1658eb65b914\100,Note Color Text
-47166b16-364f-4aa0-9f31-e2ab3df449c3\100,GPS DOP Numerator
-4776cafa-bce4-4cb1-a23e-265e76d8eb11\100,Note Color
-47a96261-cb4c-4807-8ad3-40b9d9dbc6bc\100,GPS DestLongitude
-48fd6ec8-8a12-4cdf-a03e-4ec5a511edde\100,Start Date
-49237325-a95a-4f67-b211-816b2d45d2e0\100,Photo Saturation
+45EAE747-8E2A-40AE-8CBF-CA52ABA6152A\100,FlagColorText
+4679C1B5-844D-4590-BAF5-F322231F1B81\100,GPS LongitudeDecimal
+467EE575-1F25-4557-AD4E-B8B58B0D9C15\100,GPS Satellites
+4684FE97-8765-4842-9C13-F006447B178C\100,RecordedTV OriginalBroadcastDate
+46AC629D-75EA-4515-867F-6DC4321C5844\100,GPS AltitudeRef
+46B4E8DE-CDB2-440D-885C-1658EB65B914\100,Note ColorText
+47166B16-364F-4AA0-9F31-E2AB3DF449C3\100,GPS DOPNumerator
+4776CAFA-BCE4-4CB1-A23E-265E76D8EB11\100,Note Color
+47A96261-CB4C-4807-8AD3-40B9D9DBC6BC\100,GPS DestLongitude
+48FD6EC8-8A12-4CDF-A03E-4EC5A511EDDE\100,StartDate
+49237325-A95A-4F67-B211-816B2D45D2E0\100,Photo Saturation
 49691c90-7e17-101a-a91c-08002b2ecda9\2,Search Results Rank
-49691c90-7e17-101a-a91c-08002b2ecda9\3,Search Rank
-49691c90-7e17-101a-a91c-08002b2ecda9\4,Search Hit Count
-49691c90-7e17-101a-a91c-08002b2ecda9\5,Search Entry Id
+49691C90-7E17-101A-A91C-08002B2ECDA9\3,Search Rank
+49691C90-7E17-101A-A91C-08002B2ECDA9\4,Search HitCount
+49691C90-7E17-101A-A91C-08002B2ECDA9\5,Search EntryID
 49691c90-7e17-101a-a91c-08002b2ecda9\8,Search Reverse File Name
-49691c90-7e17-101a-a91c-08002b2ecda9\9,Item Url
+49691C90-7E17-101A-A91C-08002B2ECDA9\9,ItemUrl
 49691c90-7e17-101a-a91c-08002b2ecda9\10,Content Url
 49691c90-7e17-101a-a91c-08002b2ecda9\15,Search Row Id
-49691c90-7e17-101a-a91c-08002b2ecda9\21,Search Query Property Hits
+49691C90-7E17-101A-A91C-08002B2ECDA9\21,Search QueryPropertyHits
 49691c90-7e17-101a-a91c-08002b2ecda9\22,Search Completion
 49691c90-7e17-101a-a91c-08002b2ecda9\28,Search Result Set Aggregate Attributes
 49753869-849c-4323-a41f-26d73f28b53b\100,Fonts Vendors
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\2,Devices Signal Strength
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\3,Devices Text Messages
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\4,Devices New Pictures
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\5,Devices Missed Calls
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\6,Devices Voicemail
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\7,Devices Network Name
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\8,Devices Network Type
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\9,Devices Roaming
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\10,Devices Battery Life
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\11,Devices Charging State
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\12,Devices Storage Capacity
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\13,Devices Storage Free Space
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\14,Devices Storage Free Space Percent
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\22,Devices Battery Plus Charging
-49cd1f76-5626-4b17-a4e8-18b4aa1a2213\23,Devices Battery Plus Charging Text
-49d1091f-082e-493f-b23f-d2308aa9668c\100,PropList Non Personal
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\2,Devices SignalStrength
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\3,Devices TextMessages
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\4,Devices NewPictures
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\5,Devices MissedCalls
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\6,Devices Voicemail
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\7,Devices NetworkName
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\8,Devices NetworkType
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\9,Devices Roaming
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\10,Devices BatteryLife
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\11,Devices ChargingState
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\12,Devices StorageCapacity
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\13,Devices StorageFreeSpace
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\14,Devices StorageFreeSpacePercent
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\22,Devices BatteryPlusCharging
+49CD1F76-5626-4B17-A4E8-18B4AA1A2213\23,Devices BatteryPlusChargingText
+49D1091F-082E-493F-B23F-D2308AA9668C\100,PropList NonPersonal
 49eb6558-c09c-46dc-8668-1f848c290d0b\1,Shell Exclusion
 49eb6558-c09c-46dc-8668-1f848c290d0b\3,Shell Item Offline Status
 4ac903f8-e780-4e4b-b7b8-4d00a99804fc\100,Home Group Sharing Status
@@ -463,62 +463,62 @@ e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\21,Message Attachment Names
 4bd13b3d-e68b-44ec-89ee-7611789d4070\103,Start Menu Group Item
 4bd13b3d-e68b-44ec-89ee-7611789d4070\104,Start Menu Include In Scope
 4bd13b3d-e68b-44ec-89ee-7611789d4070\105,Start Menu Result Source Id
-4c6bf15c-4c03-4aac-91f5-64c0f852bcf4\2,Device Interface Serial Usb Vendor Id
-4c6bf15c-4c03-4aac-91f5-64c0f852bcf4\3,Device Interface Serial Usb Product Id
-4c6bf15c-4c03-4aac-91f5-64c0f852bcf4\4,Device Interface Serial Port Name
-4d1ebee8-0803-4774-9842-b77db50265e9\2,Storage Portable
-4d1ebee8-0803-4774-9842-b77db50265e9\3,Storage Removable Media
-4d1ebee8-0803-4774-9842-b77db50265e9\4,Storage System Critical
+4C6BF15C-4C03-4AAC-91F5-64C0F852BCF4\2,DeviceInterface Serial UsbVendorId
+4C6BF15C-4C03-4AAC-91F5-64C0F852BCF4\3,DeviceInterface Serial UsbProductId
+4C6BF15C-4C03-4AAC-91F5-64C0F852BCF4\4,DeviceInterface Serial PortName
+4D1EBEE8-0803-4774-9842-B77DB50265E9\2,Storage Portable
+4D1EBEE8-0803-4774-9842-B77DB50265E9\3,Storage RemovableMedia
+4D1EBEE8-0803-4774-9842-B77DB50265E9\4,Storage SystemCritical
 4e9cfc01-5d36-406a-83cd-4e7423923604\2,Offline Sync Time
 4f289a46-2bbb-4ae8-9eda-e5e034707a71\2,Lzh Folder Compressed Size
 4f289a46-2bbb-4ae8-9eda-e5e034707a71\3,Lzh Folder CRC16
 4f289a46-2bbb-4ae8-9eda-e5e034707a71\4,Lzh Folder Method
 4f289a46-2bbb-4ae8-9eda-e5e034707a71\5,Lzh Folder Ratio
-4fffe4d0-914f-4ac4-8d6f-c9c61de169b1\100,Photo Focal Plane Y Resolution
-502cfeab-47eb-459c-b960-e6d8728f7701\100,Zone Identifier
-502cfeab-47eb-459c-b960-e6d8728f7701\101,Last Writer Package Family Name
-502cfeab-47eb-459c-b960-e6d8728f7701\102,App Zone Identifier
-5068bcdf-d697-4d85-8c53-1f1cdab01763\100,Contact Display Home Phone Numbers
-508161fa-313b-43d5-83a1-c1accf68622c\100,Contact Other Address
-51236583-0c4a-4fe8-b81f-166aec13f510\100,Devices App Package Family Name
-51236583-0c4a-4fe8-b81f-166aec13f510\123,Devices Glyph Icon
-51ec3f47-dd50-421d-8769-334f50424b1e\100,Photo Sharpness Text
-53da57cf-62c0-45c4-81de-7610bcefd7f5\100,Calendar Show Time As Text
-540b947e-8b40-45bc-a8a2-6a0b894cbda2\5,Devices Present
-540b947e-8b40-45bc-a8a2-6a0b894cbda2\6,Devices Device Has Problem
-540b947e-8b40-45bc-a8a2-6a0b894cbda2\9,Devices Physical Device Location
+4FFFE4D0-914F-4AC4-8D6F-C9C61DE169B1\100,Photo FocalPlaneYResolution
+502CFEAB-47EB-459C-B960-E6D8728F7701\100,ZoneIdentifier
+502CFEAB-47EB-459C-B960-E6D8728F7701\101,LastWriterPackageFamilyName
+502CFEAB-47EB-459C-B960-E6D8728F7701\102,AppZoneIdentifier
+5068BCDF-D697-4D85-8C53-1F1CDAB01763\100,Contact DisplayHomePhoneNumbers
+508161FA-313B-43D5-83A1-C1ACCF68622C\100,Contact OtherAddress
+51236583-0C4A-4FE8-B81F-166AEC13F510\100,Devices AppPackageFamilyName
+51236583-0C4A-4FE8-B81F-166AEC13F510\123,Devices GlyphIcon
+51EC3F47-DD50-421D-8769-334F50424B1E\100,Photo SharpnessText
+53DA57CF-62C0-45C4-81DE-7610BCEFD7F5\100,Calendar ShowTimeAsText
+540B947E-8B40-45BC-A8A2-6A0B894CBDA2\5,Devices Present
+540B947E-8B40-45BC-A8A2-6A0B894CBDA2\6,Devices DeviceHasProblem
+540B947E-8B40-45BC-A8A2-6A0B894CBDA2\9,Devices PhysicalDeviceLocation
 54b3a473-59aa-445b-aecd-77541ba8b7c9\2,User Name
 54b3a473-59aa-445b-aecd-77541ba8b7c9\3,User Display Name
 54b3a473-59aa-445b-aecd-77541ba8b7c9\5,User Profile Path
 5567bf77-2be2-4222-befa-d0c9c9cc4b6e\2,Velocity Feature Id
-55e98597-ad16-42e0-b624-21599a199838\100,Photo Exposure Time Denominator
-560c36c0-503a-11cf-baa1-00004c752a9a\2,Search Auto Summary
-560c36c0-503a-11cf-baa1-00004c752a9a\3,Search Query Focused Summary
-560c36c0-503a-11cf-baa1-00004c752a9a\4,Search Query Focused Summary With Fallback
-56310920-2491-4919-99ce-eadb06fafdb2\100,Contact Business Home Page
-56a3372e-ce9c-11d2-9f0e-006097c686f6\2,Music Artist
-56a3372e-ce9c-11d2-9f0e-006097c686f6\4,Music Album Title
-56a3372e-ce9c-11d2-9f0e-006097c686f6\5,Media Year
-56a3372e-ce9c-11d2-9f0e-006097c686f6\7,Music Track Number
-56a3372e-ce9c-11d2-9f0e-006097c686f6\11,Music Genre
-56a3372e-ce9c-11d2-9f0e-006097c686f6\12,Music Lyrics
-56a3372e-ce9c-11d2-9f0e-006097c686f6\13,Music Album Artist
-56a3372e-ce9c-11d2-9f0e-006097c686f6\33,Music Content Group Description
-56a3372e-ce9c-11d2-9f0e-006097c686f6\34,Music Initial Key
-56a3372e-ce9c-11d2-9f0e-006097c686f6\35,Music Beats Per Minute
-56a3372e-ce9c-11d2-9f0e-006097c686f6\36,Music Conductor
-56a3372e-ce9c-11d2-9f0e-006097c686f6\37,Music Part Of Set
-56a3372e-ce9c-11d2-9f0e-006097c686f6\38,Media Sub Title
-56a3372e-ce9c-11d2-9f0e-006097c686f6\39,Music Mood
-56a3372e-ce9c-11d2-9f0e-006097c686f6\100,Music Album Id
-56c90e9d-9d46-4963-886f-2e1cd9a694ef\100,Contact Home Email Addresses
+55E98597-AD16-42E0-B624-21599A199838\100,Photo ExposureTimeDenominator
+560C36C0-503A-11CF-BAA1-00004C752A9A\2,Search AutoSummary
+560C36C0-503A-11CF-BAA1-00004C752A9A\3,Search QueryFocusedSummary
+560C36C0-503A-11CF-BAA1-00004C752A9A\4,Search QueryFocusedSummaryWithFallback
+56310920-2491-4919-99CE-EADB06FAFDB2\100,Contact BusinessHomePage
+56A3372E-CE9C-11D2-9F0E-006097C686F6\2,Music Artist
+56A3372E-CE9C-11D2-9F0E-006097C686F6\4,Music AlbumTitle
+56A3372E-CE9C-11D2-9F0E-006097C686F6\5,Media Year
+56A3372E-CE9C-11D2-9F0E-006097C686F6\7,Music TrackNumber
+56A3372E-CE9C-11D2-9F0E-006097C686F6\11,Music Genre
+56A3372E-CE9C-11D2-9F0E-006097C686F6\12,Music Lyrics
+56A3372E-CE9C-11D2-9F0E-006097C686F6\13,Music AlbumArtist
+56A3372E-CE9C-11D2-9F0E-006097C686F6\33,Music ContentGroupDescription
+56A3372E-CE9C-11D2-9F0E-006097C686F6\34,Music InitialKey
+56A3372E-CE9C-11D2-9F0E-006097C686F6\35,Music BeatsPerMinute
+56A3372E-CE9C-11D2-9F0E-006097C686F6\36,Music Conductor
+56A3372E-CE9C-11D2-9F0E-006097C686F6\37,Music PartOfSet
+56A3372E-CE9C-11D2-9F0E-006097C686F6\38,Media SubTitle
+56A3372E-CE9C-11D2-9F0E-006097C686F6\39,Music Mood
+56A3372E-CE9C-11D2-9F0E-006097C686F6\100,Music AlbumID
+56C90E9D-9D46-4963-886F-2E1CD9A694EF\100,Contact HomeEmailAddresses
 57086c23-86c6-478f-afb2-236188c8f47f\2,Taskbar Tab Active
 57086c23-86c6-478f-afb2-236188c8f47f\3,Taskbar Tab List
 5741cf9c-56fe-485b-8901-4786449e188d\100,Fonts Designed For
-59569556-0a08-4212-95b9-fae2ad6413db\2,Devices Notifications New Voicemail
+59569556-0A08-4212-95B9-FAE2AD6413DB\2,Devices Notifications NewVoicemail
 596fd41b-af9b-4ba8-9b49-33b16f16678c\100,Fonts Styles
-59d49e61-840f-4aa9-a939-e2099b7f6399\100,GPS Processing Method
-59dde9f2-5253-40ea-9a8b-479e96c6249a\100,Photo Contrast Text
+59D49E61-840F-4AA9-A939-E2099B7F6399\100,GPS ProcessingMethod
+59DDE9F2-5253-40EA-9A8B-479E96C6249A\100,Photo ContrastText
 5ab5c75f-15e1-4d65-924a-04754567243c\2,Setting Host Id
 5ab5c75f-15e1-4d65-924a-04754567243c\3,Setting Setting Id
 5ab5c75f-15e1-4d65-924a-04754567243c\4,Setting Page Id
@@ -526,7 +526,7 @@ e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\21,Message Attachment Names
 5ab5c75f-15e1-4d65-924a-04754567243c\6,Setting Condition
 5ab5c75f-15e1-4d65-924a-04754567243c\7,Setting Glyph
 5ab5c75f-15e1-4d65-924a-04754567243c\8,Setting Glyph Rtl
-5bf396d4-5eb2-466f-bde9-2fb3f2361d6e\100,Calendar Show Time As
+5BF396D4-5EB2-466F-BDE9-2FB3F2361D6E\100,Calendar ShowTimeAs
 5cbf2787-48cf-4208-b90e-ee5e5d420294\1,History Url Hash
 5cbf2787-48cf-4208-b90e-ee5e5d420294\2,Link Target Url
 5cbf2787-48cf-4208-b90e-ee5e5d420294\3,Url Scheme
@@ -567,114 +567,114 @@ e3e0584c-b788-4a5a-bb20-7f5a44c9acdd\21,Message Attachment Names
 5cbf2787-48cf-4208-b90e-ee5e5d420294\41,History Watch
 5cbf2787-48cf-4208-b90e-ee5e5d420294\42,History Favorite Icon Hash
 5cbf2787-48cf-4208-b90e-ee5e5d420294\43,Icon Secondary Stream Name
-5cda5fc8-33ee-4ff3-9094-ae7bd8868c4d\100,Is Deleted
+5CDA5FC8-33EE-4FF3-9094-AE7BD8868C4D\100,IsDeleted
 5cde9f0e-1de4-4453-96a9-56e8832efa3d\1,Computer Domain Name
 5cde9f0e-1de4-4453-96a9-56e8832efa3d\2,Computer Workgroup
-5d76b67f-9b3d-44bb-b6ae-25da4f638a67\2,Is Pinned To Name Space Tree
-5d76b67f-9b3d-44bb-b6ae-25da4f638a67\3,Is Default Save Location
-5d76b67f-9b3d-44bb-b6ae-25da4f638a67\4,Is Search Only Item
-5d76b67f-9b3d-44bb-b6ae-25da4f638a67\5,Is Default Non Owner Save Location
-5d76b67f-9b3d-44bb-b6ae-25da4f638a67\6,Owner SID
+5D76B67F-9B3D-44BB-B6AE-25DA4F638A67\2,IsPinnedToNameSpaceTree
+5D76B67F-9B3D-44BB-B6AE-25DA4F638A67\3,IsDefaultSaveLocation
+5D76B67F-9B3D-44BB-B6AE-25DA4F638A67\4,IsSearchOnlyItem
+5D76B67F-9B3D-44BB-B6AE-25DA4F638A67\5,IsDefaultNonOwnerSaveLocation
+5D76B67F-9B3D-44BB-B6AE-25DA4F638A67\6,OwnerSID
 5d76b67f-9b3d-44bb-b6ae-25da4f638a67\7,Is Default Save Location For Display
-5d76b67f-9b3d-44bb-b6ae-25da4f638a67\8,Is Location Supported
+5D76B67F-9B3D-44BB-B6AE-25DA4F638A67\8,IsLocationSupported
 5d76b67f-9b3d-44bb-b6ae-25da4f638a67\9,Library Location Support Status
-5d76b67f-9b3d-44bb-b6ae-25da4f638a67\10,Default Save Location Display
+5D76B67F-9B3D-44BB-B6AE-25DA4F638A67\10,DefaultSaveLocationDisplay
 5d76b67f-9b3d-44bb-b6ae-25da4f638a67\11,Default Save Location Icon Container
-5da84765-e3ff-4278-86b0-a27967fbdd03\100,Is Flagged
-5dc2253f-5e11-4adf-9cfe-910dd01e3e70\100,Contact Hobbies
-5f5aff6a-37e5-4780-97ea-80c7565cf535\34,Security Encryption Owners
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\2,Devices Aep Bluetooth Cod Major
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\3,Devices Aep Bluetooth Cod Minor
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\4,Devices Aep Bluetooth Cod Services Limited Discovery
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\5,Devices Aep Bluetooth Cod Services Positioning
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\6,Devices Aep Bluetooth Cod Services Networking
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\7,Devices Aep Bluetooth Cod Services Rendering
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\8,Devices Aep Bluetooth Cod Services Capturing
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\9,Devices Aep Bluetooth Cod Services Object Xfer
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\10,Devices Aep Bluetooth Cod Services Audio
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\11,Devices Aep Bluetooth Cod Services Telephony
-5fbd34cd-561a-412e-ba98-478a6b0fef1d\12,Devices Aep Bluetooth Cod Services Information
-61478c08-b600-4a84-bbe4-e99c45f0a072\100,Photo Saturation Text
-61872cf7-6b5e-4b4b-ac2d-59da84459248\100,PropGroup Media
+5DA84765-E3FF-4278-86B0-A27967FBDD03\100,IsFlagged
+5DC2253F-5E11-4ADF-9CFE-910DD01E3E70\100,Contact Hobbies
+5F5AFF6A-37E5-4780-97EA-80C7565CF535\34,Security EncryptionOwners
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\2,Devices Aep Bluetooth Cod Major
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\3,Devices Aep Bluetooth Cod Minor
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\4,Devices Aep Bluetooth Cod Services LimitedDiscovery
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\5,Devices Aep Bluetooth Cod Services Positioning
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\6,Devices Aep Bluetooth Cod Services Networking
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\7,Devices Aep Bluetooth Cod Services Rendering
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\8,Devices Aep Bluetooth Cod Services Capturing
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\9,Devices Aep Bluetooth Cod Services ObjectXfer
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\10,Devices Aep Bluetooth Cod Services Audio
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\11,Devices Aep Bluetooth Cod Services Telephony
+5FBD34CD-561A-412E-BA98-478A6B0FEF1D\12,Devices Aep Bluetooth Cod Services Information
+61478C08-B600-4A84-BBE4-E99C45F0A072\100,Photo SaturationText
+61872CF7-6B5E-4B4B-AC2D-59DA84459248\100,PropGroup Media
 62d2d9ab-8b64-498d-b865-402d4796f865\3,Location Empty String
-6336b95e-c7a7-426d-86fd-7ae3d39c84b4\100,Photo White Balance Text
-635e9051-50a5-4ba2-b9db-4ed056c77296\100,Contact Full Name
-63c25b20-96be-488f-8788-c09c407ad812\100,Contact Primary Address Street
+6336B95E-C7A7-426D-86FD-7AE3D39C84B4\100,Photo WhiteBalanceText
+635E9051-50A5-4BA2-B9DB-4ED056C77296\100,Contact FullName
+63C25B20-96BE-488F-8788-C09C407AD812\100,Contact PrimaryAddressStreet
 641064ba-9329-47e6-8f36-5fa81aa461a0\2,OneNote Page Edit History
 641064ba-9329-47e6-8f36-5fa81aa461a0\3,OneNote Tagged Notes
 641064ba-9329-47e6-8f36-5fa81aa461a0\4,OneNote Linked Note Uri
-6444048f-4c8b-11d1-8b70-080036b11a03\3,Image Horizontal Size
-6444048f-4c8b-11d1-8b70-080036b11a03\4,Image Vertical Size
-6444048f-4c8b-11d1-8b70-080036b11a03\5,Image Horizontal Resolution
-6444048f-4c8b-11d1-8b70-080036b11a03\6,Image Vertical Resolution
-6444048f-4c8b-11d1-8b70-080036b11a03\7,Image Bit Depth
-6444048f-4c8b-11d1-8b70-080036b11a03\12,Media Frame Count
-6444048f-4c8b-11d1-8b70-080036b11a03\13,Image Dimensions
-64440490-4c8b-11d1-8b70-080036b11a03\2,Audio Format
-64440490-4c8b-11d1-8b70-080036b11a03\3,Media Duration
-64440490-4c8b-11d1-8b70-080036b11a03\4,Audio Encoding Bitrate
-64440490-4c8b-11d1-8b70-080036b11a03\5,Audio Sample Rate
-64440490-4c8b-11d1-8b70-080036b11a03\6,Audio Sample Size
-64440490-4c8b-11d1-8b70-080036b11a03\7,Audio Channel Count
-64440490-4c8b-11d1-8b70-080036b11a03\8,Audio Stream Number
-64440490-4c8b-11d1-8b70-080036b11a03\9,Audio Stream Name
-64440490-4c8b-11d1-8b70-080036b11a03\10,Audio Compression
-64440491-4c8b-11d1-8b70-080036b11a03\2,Video Stream Name
-64440491-4c8b-11d1-8b70-080036b11a03\3,Video Frame Width
-64440491-4c8b-11d1-8b70-080036b11a03\4,Video Frame Height
-64440491-4c8b-11d1-8b70-080036b11a03\6,Video Frame Rate
-64440491-4c8b-11d1-8b70-080036b11a03\8,Video Encoding Bitrate
-64440491-4c8b-11d1-8b70-080036b11a03\9,Video Sample Size
-64440491-4c8b-11d1-8b70-080036b11a03\10,Video Compression
-64440491-4c8b-11d1-8b70-080036b11a03\11,Video Stream Number
-64440491-4c8b-11d1-8b70-080036b11a03\42,Video Horizontal Aspect Ratio
-64440491-4c8b-11d1-8b70-080036b11a03\43,Video Total Bitrate
-64440491-4c8b-11d1-8b70-080036b11a03\44,Video Four CC
-64440491-4c8b-11d1-8b70-080036b11a03\45,Video Vertical Aspect Ratio
-64440491-4c8b-11d1-8b70-080036b11a03\46,Video Transcoded For Sync
-64440491-4c8b-11d1-8b70-080036b11a03\98,Video Is Stereo
-64440491-4c8b-11d1-8b70-080036b11a03\99,Video Orientation
-64440491-4c8b-11d1-8b70-080036b11a03\100,Video Is Spherical
+6444048F-4C8B-11D1-8B70-080036B11A03\3,Image HorizontalSize
+6444048F-4C8B-11D1-8B70-080036B11A03\4,Image VerticalSize
+6444048F-4C8B-11D1-8B70-080036B11A03\5,Image HorizontalResolution
+6444048F-4C8B-11D1-8B70-080036B11A03\6,Image VerticalResolution
+6444048F-4C8B-11D1-8B70-080036B11A03\7,Image BitDepth
+6444048F-4C8B-11D1-8B70-080036B11A03\12,Media FrameCount
+6444048F-4C8B-11D1-8B70-080036B11A03\13,Image Dimensions
+64440490-4C8B-11D1-8B70-080036B11A03\2,Audio Format
+64440490-4C8B-11D1-8B70-080036B11A03\3,Media Duration
+64440490-4C8B-11D1-8B70-080036B11A03\4,Audio EncodingBitrate
+64440490-4C8B-11D1-8B70-080036B11A03\5,Audio SampleRate
+64440490-4C8B-11D1-8B70-080036B11A03\6,Audio SampleSize
+64440490-4C8B-11D1-8B70-080036B11A03\7,Audio ChannelCount
+64440490-4C8B-11D1-8B70-080036B11A03\8,Audio StreamNumber
+64440490-4C8B-11D1-8B70-080036B11A03\9,Audio StreamName
+64440490-4C8B-11D1-8B70-080036B11A03\10,Audio Compression
+64440491-4C8B-11D1-8B70-080036B11A03\2,Video StreamName
+64440491-4C8B-11D1-8B70-080036B11A03\3,Video FrameWidth
+64440491-4C8B-11D1-8B70-080036B11A03\4,Video FrameHeight
+64440491-4C8B-11D1-8B70-080036B11A03\6,Video FrameRate
+64440491-4C8B-11D1-8B70-080036B11A03\8,Video EncodingBitrate
+64440491-4C8B-11D1-8B70-080036B11A03\9,Video SampleSize
+64440491-4C8B-11D1-8B70-080036B11A03\10,Video Compression
+64440491-4C8B-11D1-8B70-080036B11A03\11,Video StreamNumber
+64440491-4C8B-11D1-8B70-080036B11A03\42,Video HorizontalAspectRatio
+64440491-4C8B-11D1-8B70-080036B11A03\43,Video TotalBitrate
+64440491-4C8B-11D1-8B70-080036B11A03\44,Video FourCC
+64440491-4C8B-11D1-8B70-080036B11A03\45,Video VerticalAspectRatio
+64440491-4C8B-11D1-8B70-080036B11A03\46,Video TranscodedForSync
+64440491-4C8B-11D1-8B70-080036B11A03\98,Video IsStereo
+64440491-4C8B-11D1-8B70-080036B11A03\99,Video Orientation
+64440491-4C8B-11D1-8B70-080036B11A03\100,Video IsSpherical
 64440492-4c8b-11d1-8b70-080036b11a03\7,Media Status
-64440492-4c8b-11d1-8b70-080036b11a03\9,Rating
-64440492-4c8b-11d1-8b70-080036b11a03\11,Copyright
-64440492-4c8b-11d1-8b70-080036b11a03\12,Share User Rating
-64440492-4c8b-11d1-8b70-080036b11a03\13,Media Class Primary Id
-64440492-4c8b-11d1-8b70-080036b11a03\14,Media Class Secondary Id
-64440492-4c8b-11d1-8b70-080036b11a03\15,Media DVDID
-64440492-4c8b-11d1-8b70-080036b11a03\16,Media MCDI
-64440492-4c8b-11d1-8b70-080036b11a03\17,Media Metadata Content Provider
-64440492-4c8b-11d1-8b70-080036b11a03\18,Media Content Distributor
-64440492-4c8b-11d1-8b70-080036b11a03\19,Music Composer
-64440492-4c8b-11d1-8b70-080036b11a03\20,Video Director
-64440492-4c8b-11d1-8b70-080036b11a03\21,Parental Rating
-64440492-4c8b-11d1-8b70-080036b11a03\22,Media Producer
-64440492-4c8b-11d1-8b70-080036b11a03\23,Media Writer
-64440492-4c8b-11d1-8b70-080036b11a03\24,Media Collection Group Id
-64440492-4c8b-11d1-8b70-080036b11a03\25,Media Collection Id
-64440492-4c8b-11d1-8b70-080036b11a03\26,Media Content Id
-64440492-4c8b-11d1-8b70-080036b11a03\27,Media Creator Application
-64440492-4c8b-11d1-8b70-080036b11a03\28,Media Creator Application Version
-64440492-4c8b-11d1-8b70-080036b11a03\30,Media Publisher
-64440492-4c8b-11d1-8b70-080036b11a03\31,Music Period
-64440492-4c8b-11d1-8b70-080036b11a03\32,Media Author Url
-64440492-4c8b-11d1-8b70-080036b11a03\33,Media Promotion Url
-64440492-4c8b-11d1-8b70-080036b11a03\34,Media User Web Url
-64440492-4c8b-11d1-8b70-080036b11a03\35,Media Unique File Identifier
-64440492-4c8b-11d1-8b70-080036b11a03\36,Media Encoded By
-64440492-4c8b-11d1-8b70-080036b11a03\37,Media Encoding Settings
-64440492-4c8b-11d1-8b70-080036b11a03\38,Media Protection Type
-64440492-4c8b-11d1-8b70-080036b11a03\39,Media Provider Rating
-64440492-4c8b-11d1-8b70-080036b11a03\40,Media Provider Style
-64440492-4c8b-11d1-8b70-080036b11a03\41,Media User No Auto Info
-64440492-4c8b-11d1-8b70-080036b11a03\42,Media Series Name
-64440492-4c8b-11d1-8b70-080036b11a03\47,Media Thumbnail Large Path
-64440492-4c8b-11d1-8b70-080036b11a03\48,Media Thumbnail Large Uri
-64440492-4c8b-11d1-8b70-080036b11a03\49,Media ThumbnailSmallPath
-64440492-4c8b-11d1-8b70-080036b11a03\50,Media Thumbnail Small Uri
-64440492-4c8b-11d1-8b70-080036b11a03\100,Media Episode Number
-64440492-4c8b-11d1-8b70-080036b11a03\101,Media Season Number
-644d37b4-e1b3-4bad-b099-7e7c04966aca\100,Contact Email Address3
+64440492-4C8B-11D1-8B70-080036B11A03\9,Rating
+64440492-4C8B-11D1-8B70-080036B11A03\11,Copyright
+64440492-4C8B-11D1-8B70-080036B11A03\12,ShareUserRating
+64440492-4C8B-11D1-8B70-080036B11A03\13,Media ClassPrimaryID
+64440492-4C8B-11D1-8B70-080036B11A03\14,Media ClassSecondaryID
+64440492-4C8B-11D1-8B70-080036B11A03\15,Media DVDID
+64440492-4C8B-11D1-8B70-080036B11A03\16,Media MCDI
+64440492-4C8B-11D1-8B70-080036B11A03\17,Media MetadataContentProvider
+64440492-4C8B-11D1-8B70-080036B11A03\18,Media ContentDistributor
+64440492-4C8B-11D1-8B70-080036B11A03\19,Music Composer
+64440492-4C8B-11D1-8B70-080036B11A03\20,Video Director
+64440492-4C8B-11D1-8B70-080036B11A03\21,ParentalRating
+64440492-4C8B-11D1-8B70-080036B11A03\22,Media Producer
+64440492-4C8B-11D1-8B70-080036B11A03\23,Media Writer
+64440492-4C8B-11D1-8B70-080036B11A03\24,Media CollectionGroupID
+64440492-4C8B-11D1-8B70-080036B11A03\25,Media CollectionID
+64440492-4C8B-11D1-8B70-080036B11A03\26,Media ContentID
+64440492-4C8B-11D1-8B70-080036B11A03\27,Media CreatorApplication
+64440492-4C8B-11D1-8B70-080036B11A03\28,Media CreatorApplicationVersion
+64440492-4C8B-11D1-8B70-080036B11A03\30,Media Publisher
+64440492-4C8B-11D1-8B70-080036B11A03\31,Music Period
+64440492-4C8B-11D1-8B70-080036B11A03\32,Media AuthorUrl
+64440492-4C8B-11D1-8B70-080036B11A03\33,Media PromotionUrl
+64440492-4C8B-11D1-8B70-080036B11A03\34,Media UserWebUrl
+64440492-4C8B-11D1-8B70-080036B11A03\35,Media UniqueFileIdentifier
+64440492-4C8B-11D1-8B70-080036B11A03\36,Media EncodedBy
+64440492-4C8B-11D1-8B70-080036B11A03\37,Media EncodingSettings
+64440492-4C8B-11D1-8B70-080036B11A03\38,Media ProtectionType
+64440492-4C8B-11D1-8B70-080036B11A03\39,Media ProviderRating
+64440492-4C8B-11D1-8B70-080036B11A03\40,Media ProviderStyle
+64440492-4C8B-11D1-8B70-080036B11A03\41,Media UserNoAutoInfo
+64440492-4C8B-11D1-8B70-080036B11A03\42,Media SeriesName
+64440492-4C8B-11D1-8B70-080036B11A03\47,Media ThumbnailLargePath
+64440492-4C8B-11D1-8B70-080036B11A03\48,Media ThumbnailLargeUri
+64440492-4C8B-11D1-8B70-080036B11A03\49,Media ThumbnailSmallPath
+64440492-4C8B-11D1-8B70-080036B11A03\50,Media ThumbnailSmallUri
+64440492-4C8B-11D1-8B70-080036B11A03\100,Media EpisodeNumber
+64440492-4C8B-11D1-8B70-080036B11A03\101,Media SeasonNumber
+644D37B4-E1B3-4BAD-B099-7E7C04966ACA\100,Contact EmailAddress3
 EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 92506491-FF95-4724-A05A-5B81885A7C92\1,WSD Metadata Clean
 92506491-FF95-4724-A05A-5B81885A7C92\2,WSD Service Info
@@ -693,40 +693,40 @@ EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 78C34FC8-104A-4aca-9EA4-524D52996E57\38,Device Comment
 78C34FC8-104A-4aca-9EA4-524D52996E57\39,Device Model
 78C34FC8-104A-4aca-9EA4-524D52996E57\51,DeviceDisplay Address
-78C34FC8-104A-4aca-9EA4-524D52996E57\52,DeviceDisplay DiscoveryMethod
+78C34FC8-104A-4ACA-9EA4-524D52996E57\52,Devices DiscoveryMethod
 78C34FC8-104A-4aca-9EA4-524D52996E57\53,DeviceDisplay IsEncrypted
 78C34FC8-104A-4aca-9EA4-524D52996E57\54,DeviceDisplay IsAuthenticated
-78C34FC8-104A-4aca-9EA4-524D52996E57\55,DeviceDisplay IsConnected
-78C34FC8-104A-4aca-9EA4-524D52996E57\56,DeviceDisplay IsPaired
-78C34FC8-104A-4aca-9EA4-524D52996E57\57,DeviceDisplay Icon
+78C34FC8-104A-4ACA-9EA4-524D52996E57\55,Devices Connected
+78C34FC8-104A-4ACA-9EA4-524D52996E57\56,Devices Paired
+78C34FC8-104A-4ACA-9EA4-524D52996E57\57,Devices Icon
 78C34FC8-104A-4aca-9EA4-524D52996E57\65,DeviceDisplay Version
 78C34FC8-104A-4aca-9EA4-524D52996E57\66,DeviceDisplay Last_Seen
 78C34FC8-104A-4aca-9EA4-524D52996E57\67,DeviceDisplay Last_Connected
 78C34FC8-104A-4aca-9EA4-524D52996E57\68,DeviceDisplay IsShowInDisconnectedState
-78C34FC8-104A-4aca-9EA4-524D52996E57\70,DeviceDisplay IsLocalMachine
-78C34FC8-104A-4aca-9EA4-524D52996E57\71,DeviceDisplay MetadataPath
+78C34FC8-104A-4ACA-9EA4-524D52996E57\70,Devices LocalMachine
+78C34FC8-104A-4ACA-9EA4-524D52996E57\71,Devices MetadataPath
 78C34FC8-104A-4aca-9EA4-524D52996E57\72,DeviceDisplay IsMetadataSearchInProgress
 78C34FC8-104A-4aca-9EA4-524D52996E57\73,DeviceDisplay MetadataChecksum
 78C34FC8-104A-4aca-9EA4-524D52996E57\74,DeviceDisplay IsNotInterestingForDisplay
 78C34FC8-104A-4aca-9EA4-524D52996E57\76,DeviceDisplay LaunchDeviceStageOnDeviceConnect
-78C34FC8-104A-4aca-9EA4-524D52996E57\77,DeviceDisplay LaunchDeviceStageFromExplorer
+78C34FC8-104A-4ACA-9EA4-524D52996E57\77,Devices LaunchDeviceStageFromExplorer
 78C34FC8-104A-4aca-9EA4-524D52996E57\78,DeviceDisplay BaselineExperienceId
 78C34FC8-104A-4aca-9EA4-524D52996E57\79,DeviceDisplay IsDeviceUniquelyIdentifiable
 78C34FC8-104A-4aca-9EA4-524D52996E57\80,DeviceDisplay AssociationArray
-78C34FC8-104A-4aca-9EA4-524D52996E57\81,DeviceDisplay DeviceDescription1
-78C34FC8-104A-4aca-9EA4-524D52996E57\82,DeviceDisplay DeviceDescription2
-78C34FC8-104A-4aca-9EA4-524D52996E57\83,DeviceDisplay IsNotWorkingProperly
-78C34FC8-104A-4aca-9EA4-524D52996E57\84,DeviceDisplay IsSharedDevice
-78C34FC8-104A-4aca-9EA4-524D52996E57\85,DeviceDisplay IsNetworkDevice
-78C34FC8-104A-4aca-9EA4-524D52996E57\86,DeviceDisplay IsDefaultDevice
+78C34FC8-104A-4ACA-9EA4-524D52996E57\81,Devices DeviceDescription1
+78C34FC8-104A-4ACA-9EA4-524D52996E57\82,Devices DeviceDescription2
+78C34FC8-104A-4ACA-9EA4-524D52996E57\83,Devices NotWorkingProperly
+78C34FC8-104A-4ACA-9EA4-524D52996E57\84,Devices IsShared
+78C34FC8-104A-4ACA-9EA4-524D52996E57\85,Devices IsNetworkConnected
+78C34FC8-104A-4ACA-9EA4-524D52996E57\86,Devices IsDefault
 78C34FC8-104A-4aca-9EA4-524D52996E57\87,DeviceDisplay MetadataCabinet
 78C34FC8-104A-4aca-9EA4-524D52996E57\88,DeviceDisplay RequiresPairingElevation
 78C34FC8-104A-4aca-9EA4-524D52996E57\89,DeviceDisplay ExperienceId
-78C34FC8-104A-4aca-9EA4-524D52996E57\90,DeviceDisplay Category
-78C34FC8-104A-4aca-9EA4-524D52996E57\91,DeviceDisplay Category_Desc_Singular
-78C34FC8-104A-4aca-9EA4-524D52996E57\92,DeviceDisplay Category_Desc_Plural
+78C34FC8-104A-4ACA-9EA4-524D52996E57\90,Devices CategoryIds
+78C34FC8-104A-4ACA-9EA4-524D52996E57\91,Devices Category
+78C34FC8-104A-4ACA-9EA4-524D52996E57\92,Devices CategoryPlural
 78C34FC8-104A-4aca-9EA4-524D52996E57\93,DeviceDisplay Category_Icon
-78C34FC8-104A-4aca-9EA4-524D52996E57\94,DeviceDisplay CategoryGroup_Desc
+78C34FC8-104A-4ACA-9EA4-524D52996E57\94,Devices CategoryGroup
 78C34FC8-104A-4aca-9EA4-524D52996E57\95,DeviceDisplay CategoryGroup_Icon
 78C34FC8-104A-4aca-9EA4-524D52996E57\97,DeviceDisplay PrimaryCategory
 78C34FC8-104A-4aca-9EA4-524D52996E57\98,DeviceDisplay UnpairUninstall
@@ -734,7 +734,7 @@ EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 78C34FC8-104A-4aca-9EA4-524D52996E57\100,DeviceDisplay DeviceFunctionSubRank
 78C34FC8-104A-4aca-9EA4-524D52996E57\101,DeviceDisplay AlwaysShowDeviceAsConnected
 53808008-07BB-4661-BC3C-B5953E708560\1,DeviceInterface Device Path
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\1,Devnode (PnPXDevNode)
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\1,Devnode, PnPXDevNode
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\2,AssociationState
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\3,AssociatedInstanceId
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4,LastNotificationTime
@@ -745,11 +745,11 @@ EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4100,Devices MetadataVersion
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4101,Devices ID
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4102,Devices RootProxy/RemoteAddress
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8192,DeviceDisplay Manufacturer
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8194,DeviceDisplay Model Name
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8195,DeviceDisplay Model Number
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\8198,Devices Presentation Url
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12288,DeviceDisplay Friendly Name
+656A3BB3-ECC0-43FD-8477-4AE0404A96CD\8192,Devices Manufacturer
+656A3BB3-ECC0-43FD-8477-4AE0404A96CD\8194,Devices ModelName
+656A3BB3-ECC0-43FD-8477-4AE0404A96CD\8195,Devices ModelNumber
+656A3BB3-ECC0-43FD-8477-4AE0404A96CD\8198,Devices PresentationUrl
+656A3BB3-ECC0-43FD-8477-4AE0404A96CD\12288,Devices FriendlyName
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12289,Devices Firmware Version
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12290,Devices Serial Number
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12292,Devices Category
@@ -757,10 +757,10 @@ EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12294,Devices PhysicalAddress
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12295,Devices NetworkInterfaceLuid
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12296,Devices NetworkInterfaceGuid
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12297,Devices Ip Address
+656A3BB3-ECC0-43FD-8477-4AE0404A96CD\12297,Devices IpAddress
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\12304,Devices Category Descrtiption NonPlural
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16384,Devices Service Address
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16385,Devices Service Id
+656A3BB3-ECC0-43FD-8477-4AE0404A96CD\16384,Devices ServiceAddress
+656A3BB3-ECC0-43FD-8477-4AE0404A96CD\16385,Devices ServiceId
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16386,Devices Service Types
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16388,Devices Service Control Url
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\16389,Devices Service Desc Url
@@ -777,53 +777,53 @@ EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 8807CAE6-7DB6-4f10-8EE4-435EAA1392BC\3,Pairing ListItemIcon
 8807CAE6-7DB6-4f10-8EE4-435EAA1392BC\4,Pairing ListItemDefault
 8807CAE6-7DB6-4f10-8EE4-435EAA1392BC\16,Pairing IsWifiOnlyDevice
-65a98875-3c80-40ab-abbc-efdaf77dbee2\100,Acquisition Id
-660e04d6-81ab-4977-a09f-82313113ab26\100,Contact Home Fax Number
-6614ef48-4efe-4424-9eda-c79f404edf3e\2,Devices Notifications Missed Call
-668cdfa5-7a1b-4323-ae4b-e527393a1d81\100,Source Item
-67df94de-0ca7-4d6f-b792-053a3e4f03cf\100,Flag Color
-6845cc72-1b71-48c3-af86-b09171a19b14\3,Devices Dial Protocol Installed Applications
-68dd6094-7216-40f1-a029-43fe7127043f\100,PropGroup Music
-6a15e5a0-0a1e-4cd7-bb8c-d2f1b0c929bc\100,Contact Business Telephone
-6af55d45-38db-4495-acb0-d4728a3b8314\2,Devices AepContainer Supports Audio
-6af55d45-38db-4495-acb0-d4728a3b8314\3,Devices AepContainer Supports Video
-6af55d45-38db-4495-acb0-d4728a3b8314\4,Devices AepContainer Supports Images
-6af55d45-38db-4495-acb0-d4728a3b8314\5,Devices AepContainer Supported Uri Schemes
-6af55d45-38db-4495-acb0-d4728a3b8314\6,Devices AepContainer Dial Protocol Installed Applications
-6af55d45-38db-4495-acb0-d4728a3b8314\7,Devices AepContainer Supports Limited Discovery
-6af55d45-38db-4495-acb0-d4728a3b8314\8,Devices AepContainer Supports Positioning
-6af55d45-38db-4495-acb0-d4728a3b8314\9,Devices AepContainer Supports Networking
-6af55d45-38db-4495-acb0-d4728a3b8314\10,Devices AepContainer Supports Rendering
-6af55d45-38db-4495-acb0-d4728a3b8314\11,Devices AepContainer Supports Capturing
-6af55d45-38db-4495-acb0-d4728a3b8314\12,Devices AepContainer Supports Object Transfer
-6af55d45-38db-4495-acb0-d4728a3b8314\13,Devices AepContainer Supports Telephony
-6af55d45-38db-4495-acb0-d4728a3b8314\14,Devices AepContainer Supports Information
-6afe7437-9bcd-49c7-80fe-4a5c65fa5874\104,Music Disc Number
-6b223b6a-162e-4aa9-b39f-05d678fc6d77\100,Music Synchronized Lyrics
-6b8b68f6-200b-47ea-8d25-d8050f57339f\100,Photo Flash Text
-6b8da074-3b5c-43bc-886f-0a2cdce00b6f\100,Item Name
-6bdd1fc6-810f-11d0-bec7-08002be2092f\2,Devices Wia Device Type
+65A98875-3C80-40AB-ABBC-EFDAF77DBEE2\100,AcquisitionID
+660E04D6-81AB-4977-A09F-82313113AB26\100,Contact HomeFaxNumber
+6614EF48-4EFE-4424-9EDA-C79F404EDF3E\2,Devices Notifications MissedCall
+668CDFA5-7A1B-4323-AE4B-E527393A1D81\100,SourceItem
+67DF94DE-0CA7-4D6F-B792-053A3E4F03CF\100,FlagColor
+6845CC72-1B71-48C3-AF86-B09171A19B14\3,Devices DialProtocol InstalledApplications
+68DD6094-7216-40F1-A029-43FE7127043F\100,PropGroup Music
+6A15E5A0-0A1E-4CD7-BB8C-D2F1B0C929BC\100,Contact BusinessTelephone
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\2,Devices AepContainer SupportsAudio
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\3,Devices AepContainer SupportsVideo
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\4,Devices AepContainer SupportsImages
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\5,Devices AepContainer SupportedUriSchemes
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\6,Devices AepContainer DialProtocol InstalledApplications
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\7,Devices AepContainer SupportsLimitedDiscovery
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\8,Devices AepContainer SupportsPositioning
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\9,Devices AepContainer SupportsNetworking
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\10,Devices AepContainer SupportsRendering
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\11,Devices AepContainer SupportsCapturing
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\12,Devices AepContainer SupportsObjectTransfer
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\13,Devices AepContainer SupportsTelephony
+6AF55D45-38DB-4495-ACB0-D4728A3B8314\14,Devices AepContainer SupportsInformation
+6AFE7437-9BCD-49C7-80FE-4A5C65FA5874\104,Music DiscNumber
+6B223B6A-162E-4AA9-B39F-05D678FC6D77\100,Music SynchronizedLyrics
+6B8B68F6-200B-47EA-8D25-D8050F57339F\100,Photo FlashText
+6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F\100,ItemName
+6BDD1FC6-810F-11D0-BEC7-08002BE2092F\2,Devices WiaDeviceType
 6ccd0131-c397-4744-b2d8-d2c13f457026\80,Game Type
-6d217f6d-3f6a-4825-b470-5f03ca2fbe9b\100,Photo Program Mode
-6d24888f-4718-4bda-afed-ea0fb4386cd8\100,Offline Status
-6d6d5d49-265d-4688-9f4e-1fdd33e7cc83\100,Identity Internet Sid
-6d748de2-8d38-4cc3-ac60-f009b057c557\2,RecordedTV Episode Name
-6d748de2-8d38-4cc3-ac60-f009b057c557\3,RecordedTV Program Description
-6d748de2-8d38-4cc3-ac60-f009b057c557\4,RecordedTV Credits
-6d748de2-8d38-4cc3-ac60-f009b057c557\5,RecordedTV Station Call Sign
-6d748de2-8d38-4cc3-ac60-f009b057c557\7,RecordedTV Channe' Number
+6D217F6D-3F6A-4825-B470-5F03CA2FBE9B\100,Photo ProgramMode
+6D24888F-4718-4BDA-AFED-EA0FB4386CD8\100,OfflineStatus
+6D6D5D49-265D-4688-9F4E-1FDD33E7CC83\100,Identity InternetSid
+6D748DE2-8D38-4CC3-AC60-F009B057C557\2,RecordedTV EpisodeName
+6D748DE2-8D38-4CC3-AC60-F009B057C557\3,RecordedTV ProgramDescription
+6D748DE2-8D38-4CC3-AC60-F009B057C557\4,RecordedTV Credits
+6D748DE2-8D38-4CC3-AC60-F009B057C557\5,RecordedTV StationCallSign
+6D748DE2-8D38-4CC3-AC60-F009B057C557\7,RecordedTV ChannelNumber
 6d748de2-8d38-4cc3-ac60-f009b057c557\10,RecordedTV Video Quality
-6d748de2-8d38-4cc3-ac60-f009b057c557\12,RecordedTV Is Closed Captioning Available
-6d748de2-8d38-4cc3-ac60-f009b057c557\13,RecordedTV Is Repeat Broadcast
-6d748de2-8d38-4cc3-ac60-f009b057c557\14,RecordedTV Is SAP
-6d748de2-8d38-4cc3-ac60-f009b057c557\15,RecordedTV Date Content Expires
-6d748de2-8d38-4cc3-ac60-f009b057c557\16,RecordedTV Is ATSC Content
-6d748de2-8d38-4cc3-ac60-f009b057c557\17,RecordedTV Is DTV Content
-6d748de2-8d38-4cc3-ac60-f009b057c557\18,RecordedTV Is HD Content
-6e682923-7f7b-4f0c-a337-cfca296687bf\100,Contact Other Address City
-6ebe6946-2321-440a-90f0-c043efd32476\100,Photo Brightness Denominator
-6fa20de6-d11c-4d9d-a154-64317628c12d\100,Expand oProperties
-702926f4-44a6-43e1-ae71-45627116893b\100,GPS Track Numerator
+6D748DE2-8D38-4CC3-AC60-F009B057C557\12,RecordedTV IsClosedCaptioningAvailable
+6D748DE2-8D38-4CC3-AC60-F009B057C557\13,RecordedTV IsRepeatBroadcast
+6D748DE2-8D38-4CC3-AC60-F009B057C557\14,RecordedTV IsSAP
+6D748DE2-8D38-4CC3-AC60-F009B057C557\15,RecordedTV DateContentExpires
+6D748DE2-8D38-4CC3-AC60-F009B057C557\16,RecordedTV IsATSCContent
+6D748DE2-8D38-4CC3-AC60-F009B057C557\17,RecordedTV IsDTVContent
+6D748DE2-8D38-4CC3-AC60-F009B057C557\18,RecordedTV IsHDContent
+6E682923-7F7B-4F0C-A337-CFCA296687BF\100,Contact OtherAddressCity
+6EBE6946-2321-440A-90F0-C043EFD32476\100,Photo BrightnessDenominator
+6FA20DE6-D11C-4D9D-A154-64317628C12D\100,ExpandoProperties
+702926F4-44A6-43E1-AE71-45627116893B\100,GPS TrackNumerator
 7036dcfc-69ab-4316-b5ac-50de702447b0\102,Structured Query Before
 7036dcfc-69ab-4316-b5ac-50de702447b0\103,Structured Query After
 7036dcfc-69ab-4316-b5ac-50de702447b0\104,Structured Query File
@@ -890,47 +890,47 @@ EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 705d8364-7547-468c-8c88-84860bcbed4c\209,LOGON Status
 705d8364-7547-468c-8c88-84860bcbed4c\500,PROFILE Path
 705d8364-7547-468c-8c88-84860bcbed4c\501,PROFILE GUID
-71724756-3e74-4432-9b59-e7b2f668a593\2,Devices AepService Friendly Name
-71724756-3e74-4432-9b59-e7b2f668a593\3,Devices AepService Service Class Id
-71724756-3e74-4432-9b59-e7b2f668a593\4,Devices AepService Container Id
-71b377d6-e570-425f-a170-809fae73e54e\100,Contact Other Address State
+71724756-3E74-4432-9B59-E7B2F668A593\2,Devices AepService FriendlyName
+71724756-3E74-4432-9B59-E7B2F668A593\3,Devices AepService ServiceClassId
+71724756-3E74-4432-9B59-E7B2F668A593\4,Devices AepService ContainerId
+71B377D6-E570-425F-A170-809FAE73E54E\100,Contact OtherAddressState
 720eb626-dbe4-4113-835c-9315e1e2ff77\2,Actions Action Name
 720eb626-dbe4-4113-835c-9315e1e2ff77\3,Actions Activation Context
-7268af55-1ce4-4f6e-a41f-b6e4ef10e4a9\100,Contact Profession
-72fab781-acda-43e5-b155-b2434f85e678\100,Date Completed
-72fc5ba4-24f9-4011-9f3f-add27afad818\100,Calendar Reminder Time
-730fb6dd-cf7c-426b-a03f-bd166cc9ee24\100,Contact Business Address
+7268AF55-1CE4-4F6E-A41F-B6E4EF10E4A9\100,Contact Profession
+72FAB781-ACDA-43E5-B155-B2434F85E678\100,DateCompleted
+72FC5BA4-24F9-4011-9F3F-ADD27AFAD818\100,Calendar ReminderTime
+730FB6DD-CF7C-426B-A03F-BD166CC9EE24\100,Contact BusinessAddress
 73389854-0b42-4ea6-bc67-847d430899fd\2,Connected Search Require Template
 733cb147-8b1f-4c48-9966-192fde353c75\100,Music Stack Thumbnail Cache Ids
-738bf284-1d87-420b-92cf-5834bf6ef9ed\100,Photo Exposure Bias Numerator
-744c8242-4df5-456c-ab9e-014efb9021e3\100,Calendar Organizer Address
-745baf0e-e5c1-4cfb-8a1b-d031a0a52393\100,Photo Digital Zoom Denominator
-74a7de49-fa11-4d3d-a006-db7e08675916\100,Identity Provider Id
+738BF284-1D87-420B-92CF-5834BF6EF9ED\100,Photo ExposureBiasNumerator
+744C8242-4DF5-456C-AB9E-014EFB9021E3\100,Calendar OrganizerAddress
+745BAF0E-E5C1-4CFB-8A1B-D031A0A52393\100,Photo DigitalZoomDenominator
+74A7DE49-FA11-4D3D-A006-DB7E08675916\100,Identity ProviderID
 75ee72ae-7d5f-482f-9487-f1c46ca819c1\100,Camera Roll Deduplication Id
-76c09943-7c33-49e3-9e7e-cdba872cfada\100,GPS Track
-776b6b3b-1e3d-4b0c-9a0e-8fbaf2a8492a\100,Photo Focal Lengt hNumerator
-78342dcb-e358-4145-ae9a-6bfe4e0f9f51\100,GPS Altitude Denominator
-78c34fc8-104a-4aca-9ea4-524d52996e57\256,Devices Device Instance Id
+76C09943-7C33-49E3-9E7E-CDBA872CFADA\100,GPS Track
+776B6B3B-1E3D-4B0C-9A0E-8FBAF2A8492A\100,Photo FocalLengthNumerator
+78342DCB-E358-4145-AE9A-6BFE4E0F9F51\100,GPS AltitudeDenominator
+78C34FC8-104A-4ACA-9EA4-524D52996E57\256,Devices DeviceInstanceId
 79486778-4c6f-4dde-bc53-cd594311af99\2,Connected Search Local Weights
-79d94e82-4d79-45aa-821a-74858b4e4ca6\2,Devices AepService IoT Service Interfaces
+79D94E82-4D79-45AA-821A-74858B4E4CA6\2,Devices AepService IoT ServiceInterfaces
 7a55582b-bd8c-4475-b94c-b87a388a7899\100,Status Icons
-7a7d76f4-b630-4bd7-95ff-37cc51a975c9\2,Link Target Extension
-7abcf4f8-7c3f-4988-ac91-8d2c2e97eca5\100,GPS Dest Bearing Denominator
-7b9f6399-0a3f-4b12-89bd-4adc51c918af\100,Contact Home Address Post Office Box
+7A7D76F4-B630-4BD7-95FF-37CC51A975C9\2,Link TargetExtension
+7ABCF4F8-7C3F-4988-AC91-8D2C2E97ECA5\100,GPS DestBearingDenominator
+7B9F6399-0A3F-4B12-89BD-4ADC51C918AF\100,Contact HomeAddressPostOfficeBox
 7ba3535d-69aa-4525-a938-f3ec79485377\2,SAM Allowed Logon
 7ba3535d-69aa-4525-a938-f3ec79485377\3,SAM Dont Enumerate For Logon
-7bd5533e-af15-44db-b8c8-bd6624e1d032\2,Sync Handler CollectionId
-7bd5533e-af15-44db-b8c8-bd6624e1d032\3,Sync Handler Id
+7BD5533E-AF15-44DB-B8C8-BD6624E1D032\2,Sync HandlerCollectionID
+7BD5533E-AF15-44DB-B8C8-BD6624E1D032\3,Sync HandlerID
 7bd5533e-af15-44db-b8c8-bd6624e1d032\4,Sync Event Description
 7bd5533e-af15-44db-b8c8-bd6624e1d032\5,Sync Progress
-7bd5533e-af15-44db-b8c8-bd6624e1d032\6,Sync Item Id
+7BD5533E-AF15-44DB-B8C8-BD6624E1D032\6,Sync ItemID
 7bd5533e-af15-44db-b8c8-bd6624e1d032\7,Sync Date Synchronized
-7bd5533e-af15-44db-b8c8-bd6624e1d032\8,Sync Handler Type
-7bd5533e-af15-44db-b8c8-bd6624e1d032\9,Sync Handler Type Label
-7bd5533e-af15-44db-b8c8-bd6624e1d032\10,Sync Status
+7BD5533E-AF15-44DB-B8C8-BD6624E1D032\8,Sync HandlerType
+7BD5533E-AF15-44DB-B8C8-BD6624E1D032\9,Sync HandlerTypeLabel
+7BD5533E-AF15-44DB-B8C8-BD6624E1D032\10,Sync Status
 7bd5533e-af15-44db-b8c8-bd6624e1d032\11,Sync Conflict Count
 7bd5533e-af15-44db-b8c8-bd6624e1d032\12,Sync Error Count
-7bd5533e-af15-44db-b8c8-bd6624e1d032\13,Sync Comments
+7BD5533E-AF15-44DB-B8C8-BD6624E1D032\13,Sync Comments
 7bd5533e-af15-44db-b8c8-bd6624e1d032\14,Sync Enabled
 7bd5533e-af15-44db-b8c8-bd6624e1d032\15,Sync Hidden
 7bd5533e-af15-44db-b8c8-bd6624e1d032\16,Sync Connected
@@ -939,112 +939,112 @@ EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 7bd5533e-af15-44db-b8c8-bd6624e1d032\20,Sync Event Level
 7bd5533e-af15-44db-b8c8-bd6624e1d032\21,Sync Event Flags
 7bd5533e-af15-44db-b8c8-bd6624e1d032\22,Sync Sync Results
-7bd5533e-af15-44db-b8c8-bd6624e1d032\23,Sync Progress Percentage
-7bd5533e-af15-44db-b8c8-bd6624e1d032\24,Sync State
+7BD5533E-AF15-44DB-B8C8-BD6624E1D032\23,Sync ProgressPercentage
+7BD5533E-AF15-44DB-B8C8-BD6624E1D032\24,Sync State
 7bd5533e-af15-44db-b8c8-bd6624e1d032\25,Sync Item State
 7bd5533e-af15-44db-b8c8-bd6624e1d032\26,Sync Item Status Text
 7bd5533e-af15-44db-b8c8-bd6624e1d032\27,Sync Item Status Description
 7bd5533e-af15-44db-b8c8-bd6624e1d032\28,Sync Item Status Action
 7bd5533e-af15-44db-b8c8-bd6624e1d032\29,Sync Global Activity Message
 7bd5533e-af15-44db-b8c8-bd6624e1d032\30,Sync Last Synced Message
-7d122d5a-ae5e-4335-8841-d71e7ce72f53\100,GPS Speed Denominator
-7d683fc9-d155-45a8-bb1f-89d19bcb792f\100,Identity Display Name
-7ddaaad1-ccc8-41ae-b750-b2cb8031aea2\100,GPS Latitude Numerator
-7fd7259d-16b4-4135-9f97-7c96ecd2fa9e\100,PropGroup Message
-7fe3aa27-2648-42f3-89b0-454e5cb150c3\100,Photo Program Mode Text
-807b653a-9e91-43ef-8f97-11ce04ee20c5\100,Communication Suffix
-80d81ea6-7473-4b0c-8216-efc11a2c4c8b\2,Devices Model Id
-80f41eb8-afc4-4208-aa5f-cce21a627281\100,Contact Connected Service Identities
-813f4124-34e6-4d17-ab3e-6b1f3c2247a1\100,Photo Maker Note Offset
-821437d6-9eab-4765-a589-3b1cbbd22a61\100,Photo Photometric Interpretation Text
-827edb4f-5b73-44a7-891d-fdffabea35ca\100,GPS Altitude
+7D122D5A-AE5E-4335-8841-D71E7CE72F53\100,GPS SpeedDenominator
+7D683FC9-D155-45A8-BB1F-89D19BCB792F\100,Identity DisplayName
+7DDAAAD1-CCC8-41AE-B750-B2CB8031AEA2\100,GPS LatitudeNumerator
+7FD7259D-16B4-4135-9F97-7C96ECD2FA9E\100,PropGroup Message
+7FE3AA27-2648-42F3-89B0-454E5CB150C3\100,Photo ProgramModeText
+807B653A-9E91-43EF-8F97-11CE04EE20C5\100,Communication Suffix
+80D81EA6-7473-4B0C-8216-EFC11A2C4C8B\2,Devices ModelId
+80F41EB8-AFC4-4208-AA5F-CCE21A627281\100,Contact ConnectedServiceIdentities
+813F4124-34E6-4D17-AB3E-6B1F3C2247A1\100,Photo MakerNoteOffset
+821437D6-9EAB-4765-A589-3B1CBBD22A61\100,Photo PhotometricInterpretationText
+827EDB4F-5B73-44A7-891D-FDFFABEA35CA\100,GPS Altitude
 83914d1a-c270-48bf-b00d-1c4e451b0150\100,Default Group Order
-83a6347e-6fe4-4f40-ba9c-c4865240d1f4\100,Communication Followup Icon Index
-83da6326-97a6-4088-9453-a1923f573b29\9,Devices Is Software Installing
-847c66de-b8d6-4af9-abc3-6f4f926bc039\14,Device Interface Printer Driver Directory
-84d8f337-981d-44b3-9615-c7596dba17e3\100,Contact Email Addresses
-8589e481-6040-473d-b171-7fa89c2708ed\100,Contact Company Main Telephone
-8619a4b6-9f4d-4429-8c0f-b996ca59e335\100,Communication Security Flags
+83A6347E-6FE4-4F40-BA9C-C4865240D1F4\100,Communication FollowupIconIndex
+83DA6326-97A6-4088-9453-A1923F573B29\9,Devices IsSoftwareInstalling
+847C66DE-B8D6-4AF9-ABC3-6F4F926BC039\14,DeviceInterface PrinterDriverDirectory
+84D8F337-981D-44B3-9615-C7596DBA17E3\100,Contact EmailAddresses
+8589E481-6040-473D-B171-7FA89C2708ED\100,Contact CompanyMainTelephone
+8619A4B6-9F4D-4429-8C0F-B996CA59E335\100,Communication SecurityFlags
 86407db8-9df7-48cd-b986-f999adc19731\2,Share Target Description
-8727cfff-4868-4ec6-ad5b-81b98521d1ab\100,GPS Latitude
-880f70a2-6082-47ac-8aab-a739d1a300c3\151,Devices Shared Tooltip
-880f70a2-6082-47ac-8aab-a739d1a300c3\152,Devices Networked Tooltip
-880f70a2-6082-47ac-8aab-a739d1a300c3\153,Devices Default Tooltip
-8859a284-de7e-4642-99ba-d431d044b1ec\100,PropGroup Media Advanced
-8943b373-388c-4395-b557-bc6dbaffafdb\2,Devices Audio Device Raw Processing Supported
-8943b373-388c-4395-b557-bc6dbaffafdb\3,Devices Audio Device Microphone Sensitivity In Dbfs
-8943b373-388c-4395-b557-bc6dbaffafdb\4,Devices Audio Device Microphone Signal To Noise Ratio In Db
-8969b275-9475-4e00-a887-ff93b8b41e44\100,PropGroup Description
-897b3694-fe9e-43e6-8066-260f590c0100\2,Contact JA Company Name Phonetic
-897b3694-fe9e-43e6-8066-260f590c0100\3,Contact JA First Name Phonetic
-897b3694-fe9e-43e6-8066-260f590c0100\4,Contact JA Last Name Phonetic
-8a2f99f9-3c37-465d-a8d7-69777a246d0c\2,Link Feed Item Local Id
-8a2f99f9-3c37-465d-a8d7-69777a246d0c\5,Link Target Url Host Name
-8a2f99f9-3c37-465d-a8d7-69777a246d0c\6,Link Target Url Path
-8af4961c-f526-43e5-aa81-db768219178d\100,Photo SubjectDistanceNumerator
-8afcc170-8a46-4b53-9eee-90bae7151e62\100,Contact Home Address Postal Code
-8b26ea41-058f-43f6-aecc-4035681ce977\100,Contact Other Address Post Office Box
+8727CFFF-4868-4EC6-AD5B-81B98521D1AB\100,GPS Latitude
+880F70A2-6082-47AC-8AAB-A739D1A300C3\151,Devices SharedTooltip
+880F70A2-6082-47AC-8AAB-A739D1A300C3\152,Devices NetworkedTooltip
+880F70A2-6082-47AC-8AAB-A739D1A300C3\153,Devices DefaultTooltip
+8859A284-DE7E-4642-99BA-D431D044B1EC\100,PropGroup MediaAdvanced
+8943B373-388C-4395-B557-BC6DBAFFAFDB\2,Devices AudioDevice RawProcessingSupported
+8943B373-388C-4395-B557-BC6DBAFFAFDB\3,Devices AudioDevice Microphone SensitivityInDbfs
+8943B373-388C-4395-B557-BC6DBAFFAFDB\4,Devices AudioDevice Microphone SignalToNoiseRatioInDb
+8969B275-9475-4E00-A887-FF93B8B41E44\100,PropGroup Description
+897B3694-FE9E-43E6-8066-260F590C0100\2,Contact JA CompanyNamePhonetic
+897B3694-FE9E-43E6-8066-260F590C0100\3,Contact JA FirstNamePhonetic
+897B3694-FE9E-43E6-8066-260F590C0100\4,Contact JA LastNamePhonetic
+8A2F99F9-3C37-465D-A8D7-69777A246D0C\2,Link FeedItemLocalId
+8A2F99F9-3C37-465D-A8D7-69777A246D0C\5,Link TargetUrlHostName
+8A2F99F9-3C37-465D-A8D7-69777A246D0C\6,Link TargetUrlPath
+8AF4961C-F526-43E5-AA81-DB768219178D\100,Photo SubjectDistanceNumerator
+8AFCC170-8A46-4B53-9EEE-90BAE7151E62\100,Contact HomeAddressPostalCode
+8B26EA41-058F-43F6-AECC-4035681CE977\100,Contact OtherAddressPostOfficeBox
 8bf6b9f6-b4f5-482f-a2c2-44bdad2fcfa9\51,SAM Account Is Disabled For Logon UI
-8c3b93a4-baed-1a83-9a32-102ee313f6eb\100,Identity Blob
-8c7ed206-3f8a-4827-b3ab-ae9e1faefc6c\2,Devices Container Id
-8c7ed206-3f8a-4827-b3ab-ae9e1faefc6c\4,Devices In Local Machine Container
+8C3B93A4-BAED-1A83-9A32-102EE313F6EB\100,Identity Blob
+8C7ED206-3F8A-4827-B3AB-AE9E1FAEFC6C\2,Devices ContainerId
+8C7ED206-3F8A-4827-B3AB-AE9E1FAEFC6C\4,Devices InLocalMachineContainer
 8d72aca1-0716-419a-9ac1-acb07b18dc32\2,File Attributes Display
-8e531030-b960-4346-ae0d-66bc9a86fb94\100,Communication Direction
-8e8ecf7c-b7b8-4eb8-a63f-0ee715c96f9e\100,Photo Gain Control Numerator
-8f167568-0aae-4322-8ed9-6055b7b0e398\100,Contact Other Address Country
-8f367200-c270-457c-b1d4-e07c5bcd90c7\100,Contact Last Name
-8fdc6dea-b929-412b-ba90-397a257465fe\100,Contact Car Telephone
-900a403b-097b-4b95-8ae2-071fdaeeb118\100,PropGroup Advanced
-90197ca7-fd8f-4e8c-9da3-b57e1e609295\100,Rating Text
-908696c7-8f87-44f2-80ed-a8c1c6894575\2,Library Locations Count
+8E531030-B960-4346-AE0D-66BC9A86FB94\100,Communication Direction
+8E8ECF7C-B7B8-4EB8-A63F-0EE715C96F9E\100,Photo GainControlNumerator
+8F167568-0AAE-4322-8ED9-6055B7B0E398\100,Contact OtherAddressCountry
+8F367200-C270-457C-B1D4-E07C5BCD90C7\100,Contact LastName
+8FDC6DEA-B929-412B-BA90-397A257465FE\100,Contact CarTelephone
+900A403B-097B-4B95-8AE2-071FDAEEB118\100,PropGroup Advanced
+90197CA7-FD8F-4E8C-9DA3-B57E1E609295\100,RatingText
+908696C7-8F87-44F2-80ED-A8C1C6894575\2,LibraryLocationsCount
 908696c7-8f87-44f2-80ed-a8c1c6894575\4,Library Locations List
-9098f33c-9a7d-48a8-8de5-2e1227a64e91\100,Message Proof In Progress
-90e5e14e-648b-4826-b2aa-acaf790e3513\10,Is Encrypted
+9098F33C-9A7D-48A8-8DE5-2E1227A64E91\100,Message ProofInProgress
+90E5E14E-648B-4826-B2AA-ACAF790E3513\10,IsEncrypted
 916d17ac-8a97-48af-85b7-867a88fad542\2,Connected Search Auto Complete
-91eff6f3-2e27-42ca-933e-7c999fbe310b\100,Contact Business Fax Number
-93112f89-c28b-492f-8a9d-4be2062cee8a\100,Photo Exposure Index Denominator
-95beb1fc-326d-4644-b396-cd3ed90e6ddf\100,Journal Entry Type
-95c656c1-2abf-4148-9ed3-9ec602e3b7cd\100,Contact Other Address Postal Code
-95e127b5-79cc-4e83-9c9e-8422187b3e0e\2,Device Interface Win Usb Usb Vendor Id
-95e127b5-79cc-4e83-9c9e-8422187b3e0e\3,Device Interface Win Usb Usb Product Id
-95e127b5-79cc-4e83-9c9e-8422187b3e0e\4,Device Interface Win Usb Usb Class
-95e127b5-79cc-4e83-9c9e-8422187b3e0e\5,Device Interface Win Usb Usb Sub Class
-95e127b5-79cc-4e83-9c9e-8422187b3e0e\6,Device Interface Win Usb Usb Protocol
-95e127b5-79cc-4e83-9c9e-8422187b3e0e\7,Device Interface Win Usb Device Interface Classes
-9660c283-fc3a-4a08-a096-eed3aac46da2\100,Contact Data Suppliers
-967b5af8-995a-46ed-9e11-35b3c5b9782d\100,Photo Exposure Index
-972e333e-ac7e-49f1-8adf-a70d07a9bcab\100,GPS Area Information
+91EFF6F3-2E27-42CA-933E-7C999FBE310B\100,Contact BusinessFaxNumber
+93112F89-C28B-492F-8A9D-4BE2062CEE8A\100,Photo ExposureIndexDenominator
+95BEB1FC-326D-4644-B396-CD3ED90E6DDF\100,Journal EntryType
+95C656C1-2ABF-4148-9ED3-9EC602E3B7CD\100,Contact OtherAddressPostalCode
+95E127B5-79CC-4E83-9C9E-8422187B3E0E\2,DeviceInterface WinUsb UsbVendorId
+95E127B5-79CC-4E83-9C9E-8422187B3E0E\3,DeviceInterface WinUsb UsbProductId
+95E127B5-79CC-4E83-9C9E-8422187B3E0E\4,DeviceInterface WinUsb UsbClass
+95E127B5-79CC-4E83-9C9E-8422187B3E0E\5,DeviceInterface WinUsb UsbSubClass
+95E127B5-79CC-4E83-9C9E-8422187B3E0E\6,DeviceInterface WinUsb UsbProtocol
+95E127B5-79CC-4E83-9C9E-8422187B3E0E\7,DeviceInterface WinUsb DeviceInterfaceClasses
+9660C283-FC3A-4A08-A096-EED3AAC46DA2\100,Contact DataSuppliers
+967B5AF8-995A-46ED-9E11-35B3C5B9782D\100,Photo ExposureIndex
+972E333E-AC7E-49F1-8ADF-A70D07A9BCAB\100,GPS AreaInformation
 9744311e-7951-4b2e-b6f0-ecb293cac119\1,Devices Aep Bluetooth Issue Inquiry
 9744311e-7951-4b2e-b6f0-ecb293cac119\2,Devices Aep Bluetooth Le Active Scanning
 9744311e-7951-4b2e-b6f0-ecb293cac119\3,Devices Aep Bluetooth Le Scan Interval
 9744311e-7951-4b2e-b6f0-ecb293cac119\4,Devices Aep Bluetooth Le Scan Window
-9744311e-7951-4b2e-b6f0-ecb293cac119\5,Devices AepService Bluetooth Cache Mode
-9744311e-7951-4b2e-b6f0-ecb293cac119\6,Devices AepService Bluetooth Target Device
-97b0ad89-df49-49cc-834e-660974fd755b\100,Contact Label
+9744311E-7951-4B2E-B6F0-ECB293CAC119\5,Devices AepService Bluetooth CacheMode
+9744311E-7951-4B2E-B6F0-ECB293CAC119\6,Devices AepService Bluetooth TargetDevice
+97B0AD89-DF49-49CC-834E-660974FD755B\100,Contact Label
 98f920d1-51e2-4722-9069-3c4b5cff5165\100,Is Barricade Page
-98f98354-617a-46b8-8560-5b1b64bf1f89\100,Contact Home Address
-995ef0b0-7eb3-4a8b-b9ce-068bb3f4af69\1,Devices Aep Bluetooth Le Appearance
+98F98354-617A-46B8-8560-5B1B64BF1F89\100,Contact HomeAddress
+995EF0B0-7EB3-4A8B-B9CE-068BB3F4AF69\1,Devices Aep Bluetooth Le Appearance
 995ef0b0-7eb3-4a8b-b9ce-068bb3f4af69\2,Devices Aep Bluetooth Le Advertisement
 995ef0b0-7eb3-4a8b-b9ce-068bb3f4af69\3,Devices Aep Bluetooth Le Scan Response
-995ef0b0-7eb3-4a8b-b9ce-068bb3f4af69\4,Devices Aep Bluetooth Le Address Type
-995ef0b0-7eb3-4a8b-b9ce-068bb3f4af69\5,Devices Aep Bluetooth Le Appearance Category
-995ef0b0-7eb3-4a8b-b9ce-068bb3f4af69\6,Devices Aep Bluetooth Le Appearance Subcategory
-995ef0b0-7eb3-4a8b-b9ce-068bb3f4af69\8,Devices Aep Bluetooth Le Is Connectable
-9973d2b5-bfd8-438a-ba94-5349b293181a\100,PropGroup Calendar
-9a8ebb75-6458-4e82-bacb-35c0095b03bb\100,Photo Transcoded For Sync
-9a93244d-a7ad-4ff8-9b99-45ee4cc09af6\100,Contact Assistant Telephone
-9a9bc088-4f6d-469e-9919-e705412040f9\100,Message Is Fwd Or Reply
-9ab84393-2a0f-4b75-bb22-7279786977cb\100,GPS Dest Bearing Ref
-9ad5badb-cea7-4470-a03d-b84e51b9949e\100,Contact Anniversary
-9aebae7a-9644-487d-a92c-657585ed751a\100,Media Subscription Content Id
+995EF0B0-7EB3-4A8B-B9CE-068BB3F4AF69\4,Devices Aep Bluetooth Le AddressType
+995EF0B0-7EB3-4A8B-B9CE-068BB3F4AF69\5,Devices Aep Bluetooth Le Appearance Category
+995EF0B0-7EB3-4A8B-B9CE-068BB3F4AF69\6,Devices Aep Bluetooth Le Appearance Subcategory
+995EF0B0-7EB3-4A8B-B9CE-068BB3F4AF69\8,Devices Aep Bluetooth Le IsConnectable
+9973D2B5-BFD8-438A-BA94-5349B293181A\100,PropGroup Calendar
+9A8EBB75-6458-4E82-BACB-35C0095B03BB\100,Photo TranscodedForSync
+9A93244D-A7AD-4FF8-9B99-45EE4CC09AF6\100,Contact AssistantTelephone
+9A9BC088-4F6D-469E-9919-E705412040F9\100,Message IsFwdOrReply
+9AB84393-2A0F-4B75-BB22-7279786977CB\100,GPS DestBearingRef
+9AD5BADB-CEA7-4470-A03D-B84E51B9949E\100,Contact Anniversary
+9AEBAE7A-9644-487D-A92C-657585ED751A\100,Media SubscriptionContentId
 9b174b33-40ff-11d2-a27e-00c04fc30871\2,Recycle Deleted From
 9b174b33-40ff-11d2-a27e-00c04fc30871\3,Recycle Date Deleted
-9b174b34-40ff-11d2-a27e-00c04fc30871\4,File Owner
+9B174B34-40FF-11D2-A27E-00C04FC30871\4,FileOwner
 9b174b34-40ff-11d2-a27e-00c04fc30871\8,New Menu Preferred Types
 9b174b34-40ff-11d2-a27e-00c04fc30871\10,New Menu Allowed Types
-9b174b35-40ff-11d2-a27e-00c04fc30871\2,Free Space
-9b174b35-40ff-11d2-a27e-00c04fc30871\3,Capacity
-9b174b35-40ff-11d2-a27e-00c04fc30871\4,Volume File System
+9B174B35-40FF-11D2-A27E-00C04FC30871\2,FreeSpace
+9B174B35-40FF-11D2-A27E-00C04FC30871\3,Capacity
+9B174B35-40FF-11D2-A27E-00C04FC30871\4,Volume FileSystem
 9b174b35-40ff-11d2-a27e-00c04fc30871\5,Percent Full
 9b174b35-40ff-11d2-a27e-00c04fc30871\7,Computer Decorated FreeSpace
 9b174b35-40ff-11d2-a27e-00c04fc30871\10,Volume Is Root
@@ -1052,178 +1052,178 @@ EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 9b34bbb9-949c-488d-9a6d-eeb47c847a2f\4,Wireless Security
 9b34bbb9-949c-488d-9a6d-eeb47c847a2f\5,Wireless Radio Type
 9b34bbb9-949c-488d-9a6d-eeb47c847a2f\9,Wireless Connection Mode
-9bc2c99b-ac71-4127-9d1c-2596d0d7dcb7\100,GPS Dest Distance Denominator
-9c1fcf74-2d97-41ba-b4ae-cb2e3661a6e4\5,Priority
+9BC2C99B-AC71-4127-9D1C-2596D0D7DCB7\100,GPS DestDistanceDenominator
+9C1FCF74-2D97-41BA-B4AE-CB2E3661A6E4\5,Priority
 9c1fcf74-2d97-41ba-b4ae-cb2e3661a6e4\7,Communication Newsgroup Name
-9c1fcf74-2d97-41ba-b4ae-cb2e3661a6e4\8,Message Has Attachments
+9C1FCF74-2D97-41BA-B4AE-CB2E3661A6E4\8,Message HasAttachments
 9c1fcf74-2d97-41ba-b4ae-cb2e3661a6e4\10,SAM Account Name
 9c1fcf74-2d97-41ba-b4ae-cb2e3661a6e4\13,Message Type
 9c1fcf74-2d97-41ba-b4ae-cb2e3661a6e4\17,Message Received
-9cb0c358-9d7a-46b1-b466-dcc6f1a3d93d\100,Contact Display Mobile Phone Numbers
-9d1d7cc5-5c39-451c-86b3-928e2d18cc47\100,GPS Dest Latitude
-9d2408b6-3167-422b-82b0-f583b7a7cfe3\100,Contact Spouse Name
-9e7d118f-b314-45a0-8cfb-d654b917c9e9\100,Photo Brightness Numerator
-a00742a1-cd8c-4b37-95ab-70755587767a\3,Device Interface Printer Enumeration Flag
-a015ed5d-aaea-4d58-8a86-3c586920ea0b\100,GPS Measure Mode
-a06992b3-8caf-4ed7-a547-b259e32ac9fc\100,Search Store
-a09f084e-ad41-489f-8076-aa5be3082bca\100,Simple Rating
-a0be94c5-50ba-487b-bd35-0654be8881ed\100,GPS DOP Denominator
-a0e00ee1-f0c7-4d41-b8e7-26a7bd8d38b0\2,Devices Notifications Storage Full
-a0e00ee1-f0c7-4d41-b8e7-26a7bd8d38b0\3,Devices Notifications Storage Full Link Text
-a0e74609-b84d-4f49-b860-462bd9971f98\100,Photo Focal Length In Film
+9CB0C358-9D7A-46B1-B466-DCC6F1A3D93D\100,Contact DisplayMobilePhoneNumbers
+9D1D7CC5-5C39-451C-86B3-928E2D18CC47\100,GPS DestLatitude
+9D2408B6-3167-422B-82B0-F583B7A7CFE3\100,Contact SpouseName
+9E7D118F-B314-45A0-8CFB-D654B917C9E9\100,Photo BrightnessNumerator
+A00742A1-CD8C-4B37-95AB-70755587767A\3,DeviceInterface PrinterEnumerationFlag
+A015ED5D-AAEA-4D58-8A86-3C586920EA0B\100,GPS MeasureMode
+A06992B3-8CAF-4ED7-A547-B259E32AC9FC\100,Search Store
+A09F084E-AD41-489F-8076-AA5BE3082BCA\100,SimpleRating
+A0BE94C5-50BA-487B-BD35-0654BE8881ED\100,GPS DOPDenominator
+A0E00EE1-F0C7-4D41-B8E7-26A7BD8D38B0\2,Devices Notifications StorageFull
+A0E00EE1-F0C7-4D41-B8E7-26A7BD8D38B0\3,Devices Notifications StorageFullLinkText
+A0E74609-B84D-4F49-B860-462BD9971F98\100,Photo FocalLengthInFilm
 a11c005a-ff95-4785-8617-beaf92399c3c\100,HasLeafContainers
-a1829ea2-27eb-459e-935d-b2fad7b07762\2,Devices Microphone Array Geometry
-a19fb7a9-024b-4371-a8bf-4d29c3e4e9c9\100,Contact Connected Service Supported Actions
-a26f4afc-7346-4299-be47-eb1ae613139f\16,Identity Key Provider Name
-a26f4afc-7346-4299-be47-eb1ae613139f\17,Identity Key Provider Context
-a26f4afc-7346-4299-be47-eb1ae613139f\100,Identity
-a2e541c5-4440-4ba8-867e-75cfc06828cd\100,Photo Focal Plane Y Resolution Numerator
-a3250282-fb6d-48d5-9a89-dbcace75cccf\100,GPS Dest Longitude Numerator
-a35996ab-11cf-4935-8b61-a6761081ecdf\3,Devices Aep Model Name
-a35996ab-11cf-4935-8b61-a6761081ecdf\4,Devices Aep Model Id
-a35996ab-11cf-4935-8b61-a6761081ecdf\5,Devices Aep Manufacturer
-a35996ab-11cf-4935-8b61-a6761081ecdf\6,Devices Aep Signal Strength
-a35996ab-11cf-4935-8b61-a6761081ecdf\7,Devices Aep Is Connected
-a35996ab-11cf-4935-8b61-a6761081ecdf\9,Devices Aep Is Present
-a35996ab-11cf-4935-8b61-a6761081ecdf\12,Devices Aep Device Address
-a35996ab-11cf-4935-8b61-a6761081ecdf\16,Devices Aep Is Paired
-a35996ab-11cf-4935-8b61-a6761081ecdf\17,Devices Aep Category
-a399aac7-c265-474e-b073-ffce57721716\2,Devices AepService Bluetooth Service Guid
-a3b29791-7713-4e1d-bb40-17db85f01831\100,Importance Text
+A1829EA2-27EB-459E-935D-B2FAD7B07762\2,Devices MicrophoneArray Geometry
+A19FB7A9-024B-4371-A8BF-4D29C3E4E9C9\100,Contact ConnectedServiceSupportedActions
+A26F4AFC-7346-4299-BE47-EB1AE613139F\16,Identity KeyProviderName
+A26F4AFC-7346-4299-BE47-EB1AE613139F\17,Identity KeyProviderContext
+A26F4AFC-7346-4299-BE47-EB1AE613139F\100,Identity
+A2E541C5-4440-4BA8-867E-75CFC06828CD\100,Photo FocalPlaneYResolutionNumerator
+A3250282-FB6D-48D5-9A89-DBCACE75CCCF\100,GPS DestLongitudeNumerator
+A35996AB-11CF-4935-8B61-A6761081ECDF\3,Devices Aep ModelName
+A35996AB-11CF-4935-8B61-A6761081ECDF\4,Devices Aep ModelId
+A35996AB-11CF-4935-8B61-A6761081ECDF\5,Devices Aep Manufacturer
+A35996AB-11CF-4935-8B61-A6761081ECDF\6,Devices Aep SignalStrength
+A35996AB-11CF-4935-8B61-A6761081ECDF\7,Devices Aep IsConnected
+A35996AB-11CF-4935-8B61-A6761081ECDF\9,Devices Aep IsPresent
+A35996AB-11CF-4935-8B61-A6761081ECDF\12,Devices Aep DeviceAddress
+A35996AB-11CF-4935-8B61-A6761081ECDF\16,Devices Aep IsPaired
+A35996AB-11CF-4935-8B61-A6761081ECDF\17,Devices Aep Category
+A399AAC7-C265-474E-B073-FFCE57721716\2,Devices AepService Bluetooth ServiceGuid
+A3B29791-7713-4E1D-BB40-17DB85F01831\100,ImportanceText
 a40294ef-d2b1-40ed-9512-dd3853b431f5\2,Connected Search Defer Image Prefetch
-a4108708-09df-4377-9dfc-6d99986d5a67\100,Identity Is Me Identity
-a45c254e-df1c-4efd-8020-67d146a850e0\3,Devices Hardware Ids
-a45c254e-df1c-4efd-8020-67d146a850e0\4,Devices Compatible Ids
-a45c254e-df1c-4efd-8020-67d146a850e0\10,Devices Class Guid
-a45c254e-df1c-4efd-8020-67d146a850e0\13,Devices Device Manufacturer
-a45c254e-df1c-4efd-8020-67d146a850e0\17,Devices Device Capabilities
-a45c254e-df1c-4efd-8020-67d146a850e0\29,Devices Device Characteristics
-a45c254e-df1c-4efd-8020-67d146a850e0\37,Devices Location Paths
+A4108708-09DF-4377-9DFC-6D99986D5A67\100,Identity IsMeIdentity
+A45C254E-DF1C-4EFD-8020-67D146A850E0\3,Devices HardwareIds
+A45C254E-DF1C-4EFD-8020-67D146A850E0\4,Devices CompatibleIds
+A45C254E-DF1C-4EFD-8020-67D146A850E0\10,Devices ClassGuid
+A45C254E-DF1C-4EFD-8020-67D146A850E0\13,Devices DeviceManufacturer
+A45C254E-DF1C-4EFD-8020-67D146A850E0\17,Devices DeviceCapabilities
+A45C254E-DF1C-4EFD-8020-67D146A850E0\29,Devices DeviceCharacteristics
+A45C254E-DF1C-4EFD-8020-67D146A850E0\37,Devices LocationPaths
 a4790b72-7113-4348-97ea-292bbc1f6770\5,Visio Masters Keywords
 a4790b72-7113-4348-97ea-292bbc1f6770\6,Visio Masters Details
-a4aaa5b7-1ad0-445f-811a-0f8f6e67f6b5\100,GPS Img Direction Ref
-a5477f61-7a82-4eca-9dde-98b69b2479b3\100,Recorded TV Recording Time
+A4AAA5B7-1AD0-445F-811A-0F8F6E67F6B5\100,GPS ImgDirectionRef
+A5477F61-7A82-4ECA-9DDE-98B69B2479B3\100,RecordedTV RecordingTime
 a63b464f-2ace-4d83-87ae-abaf011cc6ac\1720,Volume BitLocker Can Change Passphrase By Proxy
-a6744477-c237-475b-a075-54f34498292a\100,Communication Task Status Text
-a6f360d2-55f9-48de-b909-620e090a647c\100,Is Flagged Complete
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\101,Contact Home Address1 Street
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\102,Contact Home Address1 Locality
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\103,Contact Home Address1 Region
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\104,Contact Home Address1 Country
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\105,Contact Home Address1 Postal Code
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\106,Contact Home Address2 Street
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\107,Contact Home Address2 Locality
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\108,Contact Home Address2 Region
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\109,Contact Home Address2 Country
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\110,Contact Home Address2 Postal Code
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\111,Contact Home Address3 Street
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\112,Contact Home Address3 Locality
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\113,Contact Home Address3 Region
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\114,Contact Home Address3 Country
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\115,Contact Home Address3 Postal Code
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\116,Contact Business Address1 Street
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\117,Contact Business Address1 Locality
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\118,Contact Business Address1 Region
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\119,Contact Business Address1 Country
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\120,Contact Business Address1 Postal Code
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\121,Contact Business Address2 Street
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\122,Contact Business Address2 Locality
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\123,Contact Business Address2 Region
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\124,Contact Business Address2 Country
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\125,Contact Business Address2 Postal Code
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\126,Contact Business Address3 Street
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\127,Contact Business Address3 Locality
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\128,Contact Business Address3 Region
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\129,Contact Business Address3 Country
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\130,Contact Business Address3 Postal Code
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\131,Contact Other Address1 Street
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\132,Contact Other Address1 Locality
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\133,Contact Other Address1 Region
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\134,Contact Other Address1 Country
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\135,Contact Other Address1 Postal Code
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\136,Contact Other Address2 Street
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\137,Contact Other Address2 Locality
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\138,Contact Other Address2 Region
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\139,Contact Other Address2 Country
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\140,Contact Other Address2 Postal Code
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\141,Contact Other Address3 Street
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\142,Contact Other Address3 Locality
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\143,Contact Other Address3 Region
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\144,Contact Other Address3 Country
-a7b6f596-d678-4bc1-b05f-0203d27e8aa1\145,Contact Other Address3 Postal Code
-a7fe0840-1344-46f0-8d37-52ed712a4bf9\100,Parental Ratings Organization
-a82d9ee7-ca67-4312-965e-226bcea85023\100,Message Flags
-a8a74b92-361b-4e9a-b722-7c4a7330a312\100,Identity Provider Data
+A6744477-C237-475B-A075-54F34498292A\100,Communication TaskStatusText
+A6F360D2-55F9-48DE-B909-620E090A647C\100,IsFlaggedComplete
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\101,Contact HomeAddress1Street
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\102,Contact HomeAddress1Locality
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\103,Contact HomeAddress1Region
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\104,Contact HomeAddress1Country
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\105,Contact HomeAddress1PostalCode
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\106,Contact HomeAddress2Street
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\107,Contact HomeAddress2Locality
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\108,Contact HomeAddress2Region
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\109,Contact HomeAddress2Country
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\110,Contact HomeAddress2PostalCode
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\111,Contact HomeAddress3Street
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\112,Contact HomeAddress3Locality
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\113,Contact HomeAddress3Region
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\114,Contact HomeAddress3Country
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\115,Contact HomeAddress3PostalCode
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\116,Contact BusinessAddress1Street
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\117,Contact BusinessAddress1Locality
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\118,Contact BusinessAddress1Region
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\119,Contact BusinessAddress1Country
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\120,Contact BusinessAddress1PostalCode
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\121,Contact BusinessAddress2Street
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\122,Contact BusinessAddress2Locality
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\123,Contact BusinessAddress2Region
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\124,Contact BusinessAddress2Country
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\125,Contact BusinessAddress2PostalCode
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\126,Contact BusinessAddress3Street
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\127,Contact BusinessAddress3Locality
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\128,Contact BusinessAddress3Region
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\129,Contact BusinessAddress3Country
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\130,Contact BusinessAddress3PostalCode
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\131,Contact OtherAddress1Street
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\132,Contact OtherAddress1Locality
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\133,Contact OtherAddress1Region
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\134,Contact OtherAddress1Country
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\135,Contact OtherAddress1PostalCode
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\136,Contact OtherAddress2Street
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\137,Contact OtherAddress2Locality
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\138,Contact OtherAddress2Region
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\139,Contact OtherAddress2Country
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\140,Contact OtherAddress2PostalCode
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\141,Contact OtherAddress3Street
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\142,Contact OtherAddress3Locality
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\143,Contact OtherAddress3Region
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\144,Contact OtherAddress3Country
+A7B6F596-D678-4BC1-B05F-0203D27E8AA1\145,Contact OtherAddress3PostalCode
+A7FE0840-1344-46F0-8D37-52ED712A4BF9\100,ParentalRatingsOrganization
+A82D9EE7-CA67-4312-965E-226BCEA85023\100,Message Flags
+A8A74B92-361B-4E9A-B722-7C4A7330A312\100,Identity ProviderData
 a8a7a412-1927-4a34-b1d4-45f67cc672fb\2,Connected Search Referrer Id
-a93eae04-6804-4f24-ac81-09b266452118\100,GPS Dest Distance
-a94688b6-7d9f-4570-a648-e3dfc0ab2b3f\100,Offline Availability
-a9ea193c-c511-498a-a06b-58e2776dcc28\100,Photo Orientation Text
-aaa660f9-9865-458e-b484-01bc7fe3973e\100,Calendar Organizer Name
-aabaf6c9-e0c5-4719-8585-57b103e584fe\100,Photo Flash Manufacturer
-aaf16bac-2b55-45e6-9f6d-415eb94910df\100,Contact TTY TDD Telephone
-aaf4ee25-bd3b-4dd7-bfc4-47f77bb00f6d\100,GPS Differential
-ab205e50-04b7-461c-a18c-2f233836e627\100,Photo Exposure Bias Denominator
-acc9ce3d-c213-4942-8b48-6d0820f21c6d\100,GPS Speed Numerator
+A93EAE04-6804-4F24-AC81-09B266452118\100,GPS DestDistance
+A94688B6-7D9F-4570-A648-E3DFC0AB2B3F\100,OfflineAvailability
+A9EA193C-C511-498A-A06B-58E2776DCC28\100,Photo OrientationText
+AAA660F9-9865-458E-B484-01BC7FE3973E\100,Calendar OrganizerName
+AABAF6C9-E0C5-4719-8585-57B103E584FE\100,Photo FlashManufacturer
+AAF16BAC-2B55-45E6-9F6D-415EB94910DF\100,Contact TTYTDDTelephone
+AAF4EE25-BD3B-4DD7-BFC4-47F77BB00F6D\100,GPS Differential
+AB205E50-04B7-461C-A18C-2F233836E627\100,Photo ExposureBiasDenominator
+ACC9CE3D-C213-4942-8B48-6D0820F21C6D\100,GPS SpeedNumerator
 ad763ac7-f1ed-4039-9fb4-b7b84ef33cef\2,Search Provider Attributes
-aeac19e4-89ae-4508-b9b7-bb867abee2ed\2,DRM Is Protected
-aeac19e4-89ae-4508-b9b7-bb867abee2ed\3,DRM Description
-aeac19e4-89ae-4508-b9b7-bb867abee2ed\4,DRM Play Count
-aeac19e4-89ae-4508-b9b7-bb867abee2ed\5,DRM Date Play Starts
-aeac19e4-89ae-4508-b9b7-bb867abee2ed\6,DRM Date Play Expires
-aeac19e4-89ae-4508-b9b7-bb867abee2ed\7,DRM Is Disabled
-afc47170-14f5-498c-8f30-b0d19be449c6\11,DeviceInterface Printer Driver Name
-afd97640-86a3-4210-b67c-289c41aabe55\2,Devices Safe Removal Required
-b0b87314-fcf6-4feb-8dff-a50da6af561c\100,Contact Business Address Country
+AEAC19E4-89AE-4508-B9B7-BB867ABEE2ED\2,DRM IsProtected
+AEAC19E4-89AE-4508-B9B7-BB867ABEE2ED\3,DRM Description
+AEAC19E4-89AE-4508-B9B7-BB867ABEE2ED\4,DRM PlayCount
+AEAC19E4-89AE-4508-B9B7-BB867ABEE2ED\5,DRM DatePlayStarts
+AEAC19E4-89AE-4508-B9B7-BB867ABEE2ED\6,DRM DatePlayExpires
+AEAC19E4-89AE-4508-B9B7-BB867ABEE2ED\7,DRM IsDisabled
+AFC47170-14F5-498C-8F30-B0D19BE449C6\11,DeviceInterface PrinterDriverName
+AFD97640-86A3-4210-B67C-289C41AABE55\2,Devices SafeRemovalRequired
+B0B87314-FCF6-4FEB-8DFF-A50DA6AF561C\100,Contact BusinessAddressCountry
 b180ad60-ed3f-4d16-bd43-f5b4fcf325a9\2,Sync Conflict ItemS hort Location
 b180ad60-ed3f-4d16-bd43-f5b4fcf325a9\3,Sync Conflict Item Full Location
-b2f9b9d6-fec4-4dd5-94d7-8957488c807b\2,File Placeholder Status
-b2f9b9d6-fec4-4dd5-94d7-8957488c807b\3,Storage Provider File Identifier
-b2f9b9d6-fec4-4dd5-94d7-8957488c807b\4,Storage Provider File Version
-b2f9b9d6-fec4-4dd5-94d7-8957488c807b\5,Storage Provider File Checksum
-b2f9b9d6-fec4-4dd5-94d7-8957488c807b\6,Storage Provider File Version Waterline
-b2f9b9d6-fec4-4dd5-94d7-8957488c807b\7,Storage Provider Caller Version Information
-b33af30b-f552-4584-936c-cb93e5cda29f\100,Calendar Required Attendee Names
-b5c84c9e-5927-46b5-a3cc-933c21b78469\100,Contact Connected Service Name
+B2F9B9D6-FEC4-4DD5-94D7-8957488C807B\2,FilePlaceholderStatus
+B2F9B9D6-FEC4-4DD5-94D7-8957488C807B\3,StorageProviderFileIdentifier
+B2F9B9D6-FEC4-4DD5-94D7-8957488C807B\4,StorageProviderFileVersion
+B2F9B9D6-FEC4-4DD5-94D7-8957488C807B\5,StorageProviderFileChecksum
+B2F9B9D6-FEC4-4DD5-94D7-8957488C807B\6,StorageProviderFileVersionWaterline
+B2F9B9D6-FEC4-4DD5-94D7-8957488C807B\7,StorageProviderCallerVersionInformation
+B33AF30B-F552-4584-936C-CB93E5CDA29F\100,Calendar RequiredAttendeeNames
+B5C84C9E-5927-46B5-A3CC-933C21B78469\100,Contact ConnectedServiceName
 b769d0fe-bc33-421a-8ce6-45add82ec756\2,Connected Search Suppress Local Hero
 b771b352-8692-42e6-ac33-cc7b062ad950\100,Game Win SPR Recommended
-b7b4d61c-5a64-4187-a52e-b1539f359099\2,Devices Win Phone8 Camera Flags
-b812f15d-c2d8-4bbf-bacd-79744346113f\100,Photo Tag View Aggregate
-b96eff7b-35ca-4a35-8607-29e3a54c46ea\100,Identity Provider Name
-b9b4b3fc-2b51-4a42-b5d8-324146afcf25\2,Link Target Parsing Path
-b9b4b3fc-2b51-4a42-b5d8-324146afcf25\3,Link Status
-b9b4b3fc-2b51-4a42-b5d8-324146afcf25\5,Link Comment
+B7B4D61C-5A64-4187-A52E-B1539F359099\2,Devices WinPhone8CameraFlags
+B812F15D-C2D8-4BBF-BACD-79744346113F\100,Photo TagViewAggregate
+B96EFF7B-35CA-4A35-8607-29E3A54C46EA\100,IdentityProvider Name
+B9B4B3FC-2B51-4A42-B5D8-324146AFCF25\2,Link TargetParsingPath
+B9B4B3FC-2B51-4A42-B5D8-324146AFCF25\3,Link Status
+B9B4B3FC-2B51-4A42-B5D8-324146AFCF25\5,Link Comment
 b9b4b3fc-2b51-4a42-b5d8-324146afcf25\6,Item After
-b9b4b3fc-2b51-4a42-b5d8-324146afcf25\8,Link Target SFGAO Flags
-ba3b1da9-86ee-4b5d-a2a4-a271a429f0cf\100,GPS Dest Bearing Numerator
+B9B4B3FC-2B51-4A42-B5D8-324146AFCF25\8,Link TargetSFGAOFlags
+BA3B1DA9-86EE-4B5D-A2A4-A271A429F0CF\100,GPS DestBearingNumerator
 bb44403b-1399-4650-95eb-03c53a57c2cf\60,Game Int Update Status
-bc4e71ce-17f9-48d5-bee9-021df0ea5409\100,Contact Business Address Post Office Box
-bccc8a3c-8cef-42e5-9b1c-c69079398bc7\100,Message To Do Title
-bceee283-35df-4d53-826a-f36a3eefc6be\100,Search Container Hash
-be1a72c6-9a1d-46b7-afe7-afaf8cef4999\100,Communication Task Status
-be6e176c-4534-4d2c-ace5-31dedac1606b\100,GPS Longitude Denominator
-bebe0920-7671-4c54-a3eb-49fddfc191ee\100,PropGroup Video
-bf53d1c3-49e0-4f7f-8567-5a821d8ac542\100,Contact Callback Telephone
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\2,Devices Dnssd Service Name
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\3,Devices Dnssd Domain
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\4,Devices Dnssd Instance Name
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\5,Devices Dnssd Full Name
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\6,Devices Dnssd Text Attributes
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\7,Devices Dnssd Host Name
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\8,Devices Dnssd Weight
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\9,Devices Dnssd Priority
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\10,Devices Dnssd Ttl
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\11,Devices Dnssd Network Adapte rId
-bf79c0ab-bb74-4cee-b070-470b5ae202ea\12,Devices Dnssd Port Number
-bfee9149-e3e2-49a7-a862-c05988145cec\100,Calendar Is Online
-c06238b2-0bf9-4279-a723-25856715cb9d\100,Photo Gain Control Text
-c0ac206a-827e-4650-95ae-77e2bb74fcc9\100,Contact Mailing Address
-c107e191-a459-44c5-9ae6-b952ad4b906d\100,Photo Max Aperture Numerator
-c2ea046e-033c-4e91-bd5b-d4942f6bbe49\2,Creator App Id
-c2ea046e-033c-4e91-bd5b-d4942f6bbe49\3,Creator Open With UI Options
-c4322503-78ca-49c6-9acc-a68e2afd7b6b\100,Identity User Name
-c449d5cb-9ea4-4809-82e8-af9d59ded6d1\100,Music Is Compilation
-c4c07f2b-8524-4e66-ae3a-a6235f103beb\2,Devices Notifications Low Battery
-c4c4dbb2-b593-466b-bbda-d03d27d5e43a\100,GPS Longitude
+BC4E71CE-17F9-48D5-BEE9-021DF0EA5409\100,Contact BusinessAddressPostOfficeBox
+BCCC8A3C-8CEF-42E5-9B1C-C69079398BC7\100,Message ToDoTitle
+BCEEE283-35DF-4D53-826A-F36A3EEFC6BE\100,Search ContainerHash
+BE1A72C6-9A1D-46B7-AFE7-AFAF8CEF4999\100,Communication TaskStatus
+BE6E176C-4534-4D2C-ACE5-31DEDAC1606B\100,GPS LongitudeDenominator
+BEBE0920-7671-4C54-A3EB-49FDDFC191EE\100,PropGroup Video
+BF53D1C3-49E0-4F7F-8567-5A821D8AC542\100,Contact CallbackTelephone
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\2,Devices Dnssd ServiceName
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\3,Devices Dnssd Domain
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\4,Devices Dnssd InstanceName
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\5,Devices Dnssd FullName
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\6,Devices Dnssd TextAttributes
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\7,Devices Dnssd HostName
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\8,Devices Dnssd Weight
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\9,Devices Dnssd Priority
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\10,Devices Dnssd Ttl
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\11,Devices Dnssd NetworkAdapterId
+BF79C0AB-BB74-4CEE-B070-470B5AE202EA\12,Devices Dnssd PortNumber
+BFEE9149-E3E2-49A7-A862-C05988145CEC\100,Calendar IsOnline
+C06238B2-0BF9-4279-A723-25856715CB9D\100,Photo GainControlText
+C0AC206A-827E-4650-95AE-77E2BB74FCC9\100,Contact MailingAddress
+C107E191-A459-44C5-9AE6-B952AD4B906D\100,Photo MaxApertureNumerator
+C2EA046E-033C-4E91-BD5B-D4942F6BBE49\2,CreatorAppId
+C2EA046E-033C-4E91-BD5B-D4942F6BBE49\3,CreatorOpenWithUIOptions
+C4322503-78CA-49C6-9ACC-A68E2AFD7B6B\100,Identity UserName
+C449D5CB-9EA4-4809-82E8-AF9D59DED6D1\100,Music IsCompilation
+C4C07F2B-8524-4E66-AE3A-A6235F103BEB\2,Devices Notifications LowBattery
+C4C4DBB2-B593-466B-BBDA-D03D27D5E43A\100,GPS Longitude
 c5043536-932e-219e-5fb9-1c2807d7b03e\600,Activity App Display Name
 c5043536-932e-219e-5fb9-1c2807d7b03e\601,Activity App Image Uri
 c5043536-932e-219e-5fb9-1c2807d7b03e\602,Activity Background Color
@@ -1246,125 +1246,125 @@ c5043536-932e-219e-5fb9-1c2807d7b03e\618,Activity History Start Time
 c5043536-932e-219e-5fb9-1c2807d7b03e\619,Activity History Type
 c5043536-932e-219e-5fb9-1c2807d7b03e\620,Activity Activity Id
 c53e42a9-db3c-4bc7-b0f3-83a524adf0ec\1719,Volume BitLocker Can Change Pin
-c554493c-c1f7-40c1-a76c-ef8c0614003e\100,Contact Telex Number
+C554493C-C1F7-40C1-A76C-EF8C0614003E\100,Contact TelexNumber
 c64a866e-41ae-4c8c-b3d5-dd6dbf70c9c1\100,Is Group
-c66d4b3c-e888-47cc-b99f-9dca3ee34dea\100,GPS Dest Bearing
+C66D4B3C-E888-47CC-B99F-9DCA3EE34DEA\100,GPS DestBearing
 c6f039e7-f6a4-4185-ae48-07938262c274\100,Hide In Grep Search
-c75faa05-96fd-49e7-9cb4-9f601082d553\100,End Date
-c77724d4-601f-46c5-9b89-c53f93bceb77\100,Photo Max Aperture Denominator
-c89a23d0-7d6d-4eb8-87d4-776a82d493e5\100,Contact Home Address State
-c8d1920c-01f6-40c0-ac86-2f3a4ad00770\100,GPS Track Denominator
-c8ea94f0-a9e3-4969-a94b-9c62a95324e0\100,Contact Primary Address City
-c9944a21-a406-48fe-8225-aec7e24c211b\2,PropList Full Details
-c9944a21-a406-48fe-8225-aec7e24c211b\3,PropList Tile Info
-c9944a21-a406-48fe-8225-aec7e24c211b\4,PropList Info Tip
-c9944a21-a406-48fe-8225-aec7e24c211b\5,PropList Quick Tip
-c9944a21-a406-48fe-8225-aec7e24c211b\6,PropList Preview Title
-c9944a21-a406-48fe-8225-aec7e24c211b\8,PropList Preview Details
-c9944a21-a406-48fe-8225-aec7e24c211b\9,PropList Extended Tile Info
-c9944a21-a406-48fe-8225-aec7e24c211b\10,PropList File Operation Prompt
-c9944a21-a406-48fe-8225-aec7e24c211b\11,PropList Conflict Prompt
+C75FAA05-96FD-49E7-9CB4-9F601082D553\100,EndDate
+C77724D4-601F-46C5-9B89-C53F93BCEB77\100,Photo MaxApertureDenominator
+C89A23D0-7D6D-4EB8-87D4-776A82D493E5\100,Contact HomeAddressState
+C8D1920C-01F6-40C0-AC86-2F3A4AD00770\100,GPS TrackDenominator
+C8EA94F0-A9E3-4969-A94B-9C62A95324E0\100,Contact PrimaryAddressCity
+C9944A21-A406-48FE-8225-AEC7E24C211B\2,PropList FullDetails
+C9944A21-A406-48FE-8225-AEC7E24C211B\3,PropList TileInfo
+C9944A21-A406-48FE-8225-AEC7E24C211B\4,PropList InfoTip
+C9944A21-A406-48FE-8225-AEC7E24C211B\5,PropList QuickTip
+C9944A21-A406-48FE-8225-AEC7E24C211B\6,PropList PreviewTitle
+C9944A21-A406-48FE-8225-AEC7E24C211B\8,PropList PreviewDetails
+C9944A21-A406-48FE-8225-AEC7E24C211B\9,PropList ExtendedTileInfo
+C9944A21-A406-48FE-8225-AEC7E24C211B\10,PropList FileOperationPrompt
+C9944A21-A406-48FE-8225-AEC7E24C211B\11,PropList ConflictPrompt
 c9944a21-a406-48fe-8225-aec7e24c211b\12,PropList Set Defaults For
-c9944a21-a406-48fe-8225-aec7e24c211b\13,PropList Content View Mode For Browse
-c9944a21-a406-48fe-8225-aec7e24c211b\14,PropList Content View Mode For Search
+C9944A21-A406-48FE-8225-AEC7E24C211B\13,PropList ContentViewModeForBrowse
+C9944A21-A406-48FE-8225-AEC7E24C211B\14,PropList ContentViewModeForSearch
 c9944a21-a406-48fe-8225-aec7e24c211b\16,PropList Status Icons
-c9944a21-a406-48fe-8225-aec7e24c211b\17,Info Tip Text
+C9944A21-A406-48FE-8225-AEC7E24C211B\17,InfoTipText
 c9944a21-a406-48fe-8225-aec7e24c211b\18,PropList Status Icons Display Flag
-c9944a21-a406-48fe-8225-aec7e24c211b\500,Layout Pattern Content View Mode For Browse
-c9944a21-a406-48fe-8225-aec7e24c211b\501,Layout Pattern Content View Mode For Search
+C9944A21-A406-48FE-8225-AEC7E24C211B\500,LayoutPattern ContentViewModeForBrowse
+C9944A21-A406-48FE-8225-AEC7E24C211B\501,LayoutPattern ContentViewModeForSearch
 c9944a21-a406-48fe-8225-aec7e24c211b\502,Layout Pattern Place Holder
 c9944a21-a406-48fe-8225-aec7e24c211b\503,Layout Pattern Tiles View Mode
 c9944a21-a406-48fe-8225-aec7e24c211b\504,Layout Pattern Group
 c9944a21-a406-48fe-8225-aec7e24c211b\510,PropList Details Pane Null Select
 c9944a21-a406-48fe-8225-aec7e24c211b\511,PropList Details Pane Null Select Title
 c9b88dba-04db-4887-a200-cf0d3afe1146\99,Game Update Status
-c9c141a9-1b4c-4f17-a9d1-f298538cadb8\2,Devices Aep Service Service Id
-c9c141a9-1b4c-4f17-a9d1-f298538cadb8\5,Devices Aep Service Protocol Id
-c9c141a9-1b4c-4f17-a9d1-f298538cadb8\6,Devices Aep Service Aep Id
-c9c141a9-1b4c-4f17-a9d1-f298538cadb8\7,Devices Aep Service Parent Aep Is Paired
-c9c34f84-2241-4401-b607-bd20ed75ae7f\100,Communication Header Item
-cbf38310-4a17-4310-a1eb-247f0b67593b\2,Device Interface Hid Usage Page
-cbf38310-4a17-4310-a1eb-247f0b67593b\3,Device Interface Hid Usage Id
-cbf38310-4a17-4310-a1eb-247f0b67593b\4,Device Interface Hid Is Read Only
-cbf38310-4a17-4310-a1eb-247f0b67593b\5,Device Interface Hid Vendor Id
-cbf38310-4a17-4310-a1eb-247f0b67593b\6,Device Interface Hid Product Id
+C9C141A9-1B4C-4F17-A9D1-F298538CADB8\2,Devices AepService ServiceId
+C9C141A9-1B4C-4F17-A9D1-F298538CADB8\5,Devices AepService ProtocolId
+C9C141A9-1B4C-4F17-A9D1-F298538CADB8\6,Devices AepService AepId
+C9C141A9-1B4C-4F17-A9D1-F298538CADB8\7,Devices AepService ParentAepIsPaired
+C9C34F84-2241-4401-B607-BD20ED75AE7F\100,Communication HeaderItem
+CBF38310-4A17-4310-A1EB-247F0B67593B\2,DeviceInterface Hid UsagePage
+CBF38310-4A17-4310-A1EB-247F0B67593B\3,DeviceInterface Hid UsageId
+CBF38310-4A17-4310-A1EB-247F0B67593B\4,DeviceInterface Hid IsReadOnly
+CBF38310-4A17-4310-A1EB-247F0B67593B\5,DeviceInterface Hid VendorId
+CBF38310-4A17-4310-A1EB-247F0B67593B\6,DeviceInterface Hid ProductId
 cbf38310-4a17-4310-a1eb-247f0b67593b\7,Device Interface Hid Version Number
 cc158e89-6581-4311-9637-a8da9002f118\2,Connected Search Require Install
-cc301630-b192-4c22-b372-9f4c6d338e07\100,PropGroup General
-cc6f4f24-6083-4bd4-8754-674d0de87ab8\100,Contact Email Name
-cd102c9c-5540-4a88-a6f6-64e4981c8cd1\100,Contact Assistant Name
-cd9ed458-08ce-418f-a70e-f912c7bb9c5c\103,Message Message Class
-cdbfc167-337e-41d8-af7c-8c09205429c7\100,Application Defined Properties
-cdedcf30-8919-44df-8f4c-4eb2ffdb8d89\100,Photo Exposure Index Numerator
-ce50c159-2fb8-41fd-be68-d3e042e274bc\2,Sync Handler Name
-ce50c159-2fb8-41fd-be68-d3e042e274bc\3,Sync Item Name
-ce50c159-2fb8-41fd-be68-d3e042e274bc\4,Sync Conflict Description
-ce50c159-2fb8-41fd-be68-d3e042e274bc\6,Sync Conflict First Location
-ce50c159-2fb8-41fd-be68-d3e042e274bc\7,Sync Conflict Second Location
+CC301630-B192-4C22-B372-9F4C6D338E07\100,PropGroup General
+CC6F4F24-6083-4BD4-8754-674D0DE87AB8\100,Contact EmailName
+CD102C9C-5540-4A88-A6F6-64E4981C8CD1\100,Contact AssistantName
+CD9ED458-08CE-418F-A70E-F912C7BB9C5C\103,Message MessageClass
+CDBFC167-337E-41D8-AF7C-8C09205429C7\100,ApplicationDefinedProperties
+CDEDCF30-8919-44DF-8F4C-4EB2FFDB8D89\100,Photo ExposureIndexNumerator
+CE50C159-2FB8-41FD-BE68-D3E042E274BC\2,Sync HandlerName
+CE50C159-2FB8-41FD-BE68-D3E042E274BC\3,Sync ItemName
+CE50C159-2FB8-41FD-BE68-D3E042E274BC\4,Sync ConflictDescription
+CE50C159-2FB8-41FD-BE68-D3E042E274BC\6,Sync ConflictFirstLocation
+CE50C159-2FB8-41FD-BE68-D3E042E274BC\7,Sync ConflictSecondLocation
 ce50c159-2fb8-41fd-be68-d3e042e274bc\10,Sync Conflict Unresolvable
-cea820b9-ce61-4885-a128-005d9087c192\100,GPS Dest Latitude Ref
+CEA820B9-CE61-4885-A128-005D9087C192\100,GPS DestLatitudeRef
 cebf9b37-26ae-466b-9fe9-c7550c4b0ce8\100,Transfer Path
 cf5751fd-f4b3-443d-b31c-9a34740759ec\100,Search Scope
-cfa31b45-525d-4998-bb44-3f7d81542fa4\100,Media Dlna Profile Id
-cfc08d97-c6f7-4484-89dd-ebef4356fe76\100,Photo Focal Plane X Resolution
-d042d2a1-927e-40b5-a503-6edbd42a517e\100,Contact Phone Numbers Canonical
-d08dd4c0-3a9e-462e-8290-7b636b2576b9\2,Devices Interface Paths
-d08dd4c0-3a9e-462e-8290-7b636b2576b9\3,Devices Function Paths
-d08dd4c0-3a9e-462e-8290-7b636b2576b9\10,Devices Primary Category
-d08dd4c0-3a9e-462e-8290-7b636b2576b9\257,Devices Status 1
-d08dd4c0-3a9e-462e-8290-7b636b2576b9\258,Devices Status 2
-d08dd4c0-3a9e-462e-8290-7b636b2576b9\259,Devices Status
-d0a04f0a-462a-48a4-bb2f-3706e88dbd7d\100,Item Authors
-d0c7f054-3f72-4725-8527-129a577cb269\100,Sensitivity Text
-d0dab0ba-368a-4050-a882-6c010fd19a4f\100,PropGroup Content
-d21a7148-d32c-4624-8900-277210f79c0f\100,Image Compressed Bits Per Pixel Numerator
-d35f743a-eb2e-47f2-a286-844132cb1427\100,Photo EXIF Version
-d37d52c6-261c-4303-82b3-08b926ac6f12\100,Task Billing Information
-d4729704-8ef1-43ef-9024-2bd381187fd5\100,Contact Children
-d4bf61b3-442e-4ada-882d-fa7b70c832d9\6,Devices Aep Point Of Service Connection Types
-d4d0aa16-9948-41a4-aa85-d97ff9646993\100,Item Participants
-d55bae5a-3892-417a-a649-c6ac5aaaeab3\100,Calendar Optional Attendee Addresses
+CFA31B45-525D-4998-BB44-3F7D81542FA4\100,Media DlnaProfileID
+CFC08D97-C6F7-4484-89DD-EBEF4356FE76\100,Photo FocalPlaneXResolution
+D042D2A1-927E-40B5-A503-6EDBD42A517E\100,Contact PhoneNumbersCanonical
+D08DD4C0-3A9E-462E-8290-7B636B2576B9\2,Devices InterfacePaths
+D08DD4C0-3A9E-462E-8290-7B636B2576B9\3,Devices FunctionPaths
+D08DD4C0-3A9E-462E-8290-7B636B2576B9\10,Devices PrimaryCategory
+D08DD4C0-3A9E-462E-8290-7B636B2576B9\257,Devices Status1
+D08DD4C0-3A9E-462E-8290-7B636B2576B9\258,Devices Status2
+D08DD4C0-3A9E-462E-8290-7B636B2576B9\259,Devices Status
+D0A04F0A-462A-48A4-BB2F-3706E88DBD7D\100,ItemAuthors
+D0C7F054-3F72-4725-8527-129A577CB269\100,SensitivityText
+D0DAB0BA-368A-4050-A882-6C010FD19A4F\100,PropGroup Content
+D21A7148-D32C-4624-8900-277210F79C0F\100,Image CompressedBitsPerPixelNumerator
+D35F743A-EB2E-47F2-A286-844132CB1427\100,Photo EXIFVersion
+D37D52C6-261C-4303-82B3-08B926AC6F12\100,Task BillingInformation
+D4729704-8EF1-43EF-9024-2BD381187FD5\100,Contact Children
+D4BF61B3-442E-4ADA-882D-FA7B70C832D9\6,Devices Aep PointOfService ConnectionTypes
+D4D0AA16-9948-41A4-AA85-D97FF9646993\100,ItemParticipants
+D55BAE5A-3892-417A-A649-C6AC5AAAEAB3\100,Calendar OptionalAttendeeAddresses
 d5cdd502-2e9c-101b-9397-08002b2cf9ae\1,Codepage
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\2,Category
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\3,Document Presentation Format
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\4,Document ByteC ount
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\5,Document Line Count
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\6,Document Paragraph Count
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\7,Document Slide Count
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\8,Document Note Count
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\9,Document Hidden Slide Count
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\10,Document Multimedia Clip Count
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\2,Category
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\3,Document PresentationFormat
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\4,Document ByteCount
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\5,Document LineCount
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\6,Document ParagraphCount
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\7,Document SlideCount
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\8,Document NoteCount
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\9,Document HiddenSlideCount
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\10,Document MultimediaClipCount
 d5cdd502-2e9c-101b-9397-08002b2cf9ae\11,Scale
 d5cdd502-2e9c-101b-9397-08002b2cf9ae\12,Headingpair
 d5cdd502-2e9c-101b-9397-08002b2cf9ae\13,Document Parts
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\14,Document Manager
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\15,Company
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\14,Document Manager
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\15,Company
 d5cdd502-2e9c-101b-9397-08002b2cf9ae\16,Document Links Dirty
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\26,Content Type
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\27,Content Status
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\28,Language
-d5cdd502-2e9c-101b-9397-08002b2cf9ae\29,Document Version
-d6304e01-f8f5-4f45-8b15-d024a6296789\100,Contact Pager Telephone
-d68dbd8a-3374-4b81-9972-3ec30682db3d\100,Contact IM Address
-d6942081-d53b-443d-ad47-5e059d9cd27a\2,Shell SFGAOFlagsStrings
-d6942081-d53b-443d-ad47-5e059d9cd27a\3,Link TargetSFGAOFlagsStrings
-d6b5b883-18bd-4b4d-b2ec-9e38affeda82\2,Devices SmartCards ReaderKind
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\26,ContentType
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\27,ContentStatus
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\28,Language
+D5CDD502-2E9C-101B-9397-08002B2CF9AE\29,Document Version
+D6304E01-F8F5-4F45-8B15-D024A6296789\100,Contact PagerTelephone
+D68DBD8A-3374-4B81-9972-3EC30682DB3D\100,Contact IMAddress
+D6942081-D53B-443D-AD47-5E059D9CD27A\2,Shell SFGAOFlagsStrings
+D6942081-D53B-443D-AD47-5E059D9CD27A\3,Link TargetSFGAOFlagsStrings
+D6B5B883-18BD-4B4D-B2EC-9E38AFFEDA82\2,Devices SmartCards ReaderKind
 d6cf9145-d365-471b-bcb8-f0b4a96b891c\100,Fonts ActiveStatus
-d7313ff1-a77a-401c-8c99-3dbdd68add36\100,Item Name Prefix
+D7313FF1-A77A-401C-8C99-3DBDD68ADD36\100,ItemNamePrefix
 d76e7ba8-dfa6-48e7-9670-d62dfb07206b\2,Connected Search Contract Id
 d76e7ba8-dfa6-48e7-9670-d62dfb07206b\3,Connected Search App Min Version
 d76e7ba8-dfa6-48e7-9670-d62dfb07206b\4,Connected Search App Installed State
-d7750ee0-c6a4-48ec-b53e-b87b52e6d073\100,Image Parsing Name
-d7b61c70-6323-49cd-a5fc-c84277162c97\100,Photo Flash Energy Denominator
-d98be98b-b86b-4095-bf52-9d23b2e0a752\100,Priority Text
+D7750EE0-C6A4-48EC-B53E-B87B52E6D073\100,ImageParsingName
+D7B61C70-6323-49CD-A5FC-C84277162C97\100,Photo FlashEnergyDenominator
+D98BE98B-B86B-4095-BF52-9D23B2E0A752\100,PriorityText
 d9c22960-532c-4bc6-9876-7b12b52593d7\2,Protocol Name
-da520e51-f4e9-4739-ac82-02e0a95c9030\100,Identity Qualified User Name
-da5d0862-6e76-4e1b-babd-70021bd25494\100,GPS Speed
-dc54fd2e-189d-4871-aa01-08c2f57a4abc\100,Flag Status Text
-dc5877c7-225f-45f7-bac7-e81334b6130a\100,GPS Img Direction Numerator
-dc8f80bd-af1e-4289-85b6-3dfc1b493992\100,Message Conversation Id
-dc8f80bd-af1e-4289-85b6-3dfc1b493992\101,Message Conversation Index
-dccb10af-b4e2-4b88-95f9-031b4d5ab490\100,Photo Focal Plane X Resolution Numerator
+DA520E51-F4E9-4739-AC82-02E0A95C9030\100,Identity QualifiedUserName
+DA5D0862-6E76-4E1B-BABD-70021BD25494\100,GPS Speed
+DC54FD2E-189D-4871-AA01-08C2F57A4ABC\100,FlagStatusText
+DC5877C7-225F-45F7-BAC7-E81334B6130A\100,GPS ImgDirectionNumerator
+DC8F80BD-AF1E-4289-85B6-3DFC1B493992\100,Message ConversationID
+DC8F80BD-AF1E-4289-85B6-3DFC1B493992\101,Message ConversationIndex
+DCCB10AF-B4E2-4B88-95F9-031B4D5AB490\100,Photo FocalPlaneXResolutionNumerator
 dce33a78-aa18-4b3d-b1df-a6621ac8bdd2\2,Connected Search Bypass View Action
 dd141766-313a-4a30-90f0-056a7c968437\2,Print Status Document Count
 dd141766-313a-4a30-90f0-056a7c968437\3,Print Status Error Status
@@ -1374,14 +1374,14 @@ dd141766-313a-4a30-90f0-056a7c968437\6,Print Status Preferences
 dd141766-313a-4a30-90f0-056a7c968437\7,Print Status Warning Status
 dd141766-313a-4a30-90f0-056a7c968437\8,Print Status Info Status
 dd141766-313a-4a30-90f0-056a7c968437\9,Scan Status Profile
-ddd1460f-c0bf-4553-8ce4-10433c908fb0\100,Contact Business Address Street
-de00de32-547e-4981-ad4b-542f2e9007d8\100,PropGroup Camera
-de35258c-c695-4cbc-b982-38b0ad24ced0\2,Shell Omit From View
-de41cc29-6971-4290-b472-f59f2e2f31e2\100,Media Date Released
-de5ef3c7-46e1-484e-9999-62c5308394c1\100,Contact Primary Address Post Office Box
-de621b8f-e125-43a3-a32d-5665446d632a\25,Security Encryption Owners Display
+DDD1460F-C0BF-4553-8CE4-10433C908FB0\100,Contact BusinessAddressStreet
+DE00DE32-547E-4981-AD4B-542F2E9007D8\100,PropGroup Camera
+DE35258C-C695-4CBC-B982-38B0AD24CED0\2,Shell OmitFromView
+DE41CC29-6971-4290-B472-F59F2E2F31E2\100,Media DateReleased
+DE5EF3C7-46E1-484E-9999-62C5308394C1\100,Contact PrimaryAddressPostOfficeBox
+DE621B8F-E125-43A3-A32D-5665446D632A\25,Security EncryptionOwnersDisplay
 de9e220b-41d4-4690-8b6b-3d89e231eef1\100,Fonts Family Name
-dea7c82c-1d89-4a66-9427-a4e3debabcb1\100,Journal Contacts
+DEA7C82C-1D89-4A66-9427-A4E3DEBABCB1\100,Journal Contacts
 debda43a-37b3-4383-91e7-4498da2995ab\1,WNET Scope
 debda43a-37b3-4383-91e7-4498da2995ab\2,WNET Type
 debda43a-37b3-4383-91e7-4498da2995ab\3,WNET DisplayType
@@ -1390,13 +1390,13 @@ debda43a-37b3-4383-91e7-4498da2995ab\5,WNET Local Name
 debda43a-37b3-4383-91e7-4498da2995ab\6,WNET Remote Name
 debda43a-37b3-4383-91e7-4498da2995ab\7,WNET Comment
 debda43a-37b3-4383-91e7-4498da2995ab\8,WNET Provider
-deeb2db5-0696-4ce0-94fe-a01f77a45fb5\102,Music Artist Sort Override
-df975fd3-250a-4004-858f-34e29a3e37aa\100,Prop Group Contact
-dfb9a04d-362f-4ca3-b30b-0254b17b5b84\100,Parsing Bind Context
-e08805c8-e395-40df-80d2-54f0d6c43154\100,Document Document ID
-e1277516-2b5f-4869-89b1-2e585bd38b7a\100,Photo Len sModel
-e13d8975-81c7-4948-ae3f-37cae11e8ff7\100,Photo Shutter Speed Denominator
-e1a9a38b-6685-46bd-875e-570dc7ad7320\100,Photo Aperture Denominator
+DEEB2DB5-0696-4CE0-94FE-A01F77A45FB5\102,Music ArtistSortOverride
+DF975FD3-250A-4004-858F-34E29A3E37AA\100,PropGroup Contact
+DFB9A04D-362F-4CA3-B30B-0254B17B5B84\100,ParsingBindContext
+E08805C8-E395-40DF-80D2-54F0D6C43154\100,Document DocumentID
+E1277516-2B5F-4869-89B1-2E585BD38B7A\100,Photo LensModel
+E13D8975-81C7-4948-AE3F-37CAE11E8FF7\100,Photo ShutterSpeedDenominator
+E1A9A38B-6685-46BD-875E-570DC7AD7320\100,Photo ApertureDenominator
 e1ad4953-a752-443c-93bf-80c7525566c2\2,Connected Search Type
 e1ad4953-a752-443c-93bf-80c7525566c2\3,Connected Search Rendering Template
 e1ad4953-a752-443c-93bf-80c7525566c2\4,Connected Search Fallback Template
@@ -1425,33 +1425,33 @@ e1ad4953-a752-443c-93bf-80c7525566c2\29,Connected Search Add Open In Browser Com
 e1ad4953-a752-443c-93bf-80c7525566c2\30,Connected Search Image Url
 e1ad4953-a752-443c-93bf-80c7525566c2\31,Connected Search Image Prefetch Stage
 e1ad4953-a752-443c-93bf-80c7525566c2\32,Connected Search Is Local Item
-e1d4a09e-d758-4cd1-b6ec-34a8b5a73f80\100,Contact Business Address Postal Code
+E1D4A09E-D758-4CD1-B6EC-34A8B5A73F80\100,Contact BusinessAddressPostalCode
 e2d40928-632c-4280-a202-e0c2ad1ea0f4\2,Connected Search Qs Code
 e2d40928-632c-4280-a202-e0c2ad1ea0f4\3,Connected Search Jump List
 e2d40928-632c-4280-a202-e0c2ad1ea0f4\4,Connected Search Voice Command Examples
 e32596b0-1163-4e02-867a-12132db4ba06\2,IE FeedItem Local Id
-e3690a87-0fa8-4a2a-9a9f-fce8827055ac\100,Prop Group Image
-e3a7d2c1-80fc-4b40-8f34-30ea111bdc2e\100,Prop Group File System
-e4f10a3c-49e6-405d-8288-a23bd4eeaa6c\100,File Extension
-e53d799d-0f3f-466e-b2ff-74634a3cb7a4\100,Contact Primary Address Country
+E3690A87-0FA8-4A2A-9A9F-FCE8827055AC\100,PropGroup Image
+E3A7D2C1-80FC-4B40-8F34-30EA111BDC2E\100,PropGroup FileSystem
+E4F10A3C-49E6-405D-8288-A23BD4EEAA6C\100,FileExtension
+E53D799D-0F3F-466E-B2FF-74634A3CB7A4\100,Contact PrimaryAddressCountry
 e5473742-4611-4aaf-9c49-a3417748cbc8\100,Invalid Path Value
-e55fc3b0-2b60-4220-918e-b21e8bf16016\100,Identity Unique Id
-e6822fee-8c17-4d62-823c-8e9cfcbd1d5c\100,Audio Is Variable Bit Rate
+E55FC3B0-2B60-4220-918E-B21E8BF16016\100,Identity UniqueID
+E6822FEE-8C17-4D62-823C-8E9CFCBD1D5C\100,Audio IsVariableBitRate
 e6c3d9ad-7b32-4efe-a167-0a868ffdf3af\100,Game WinSPR Minimum
-e6ddcaf7-29c5-4f0a-9a68-d19412ec7090\100,Photo Lens Manufacturer
+E6DDCAF7-29C5-4F0A-9A68-D19412EC7090\100,Photo LensManufacturer
 e77e90df-6271-4f5b-834f-2dd1f245dda4\2,Storage Provider UI Status
 e77e90df-6271-4f5b-834f-2dd1f245dda4\3,Storage Provider State
 e77e90df-6271-4f5b-834f-2dd1f245dda4\4,Storage Provider Transfer Progress
-e7b33238-6584-4170-a5c0-ac25efd9da56\100,Prop Group Recorded TV
-e7c3fb29-caa7-4f47-8c8b-be59b330d4c5\2,Devices Aep Container Id
-e7c3fb29-caa7-4f47-8c8b-be59b330d4c5\3,Devices Aep Can Pair
-e8309b6e-084c-49b4-b1fc-90a80331b638\100,Photo PeopleNames
+E7B33238-6584-4170-A5C0-AC25EFD9DA56\100,PropGroup RecordedTV
+E7C3FB29-CAA7-4F47-8C8B-BE59B330D4C5\2,Devices Aep ContainerId
+E7C3FB29-CAA7-4F47-8C8B-BE59B330D4C5\3,Devices Aep CanPair
+E8309B6E-084C-49B4-B1FC-90A80331B638\100,Photo PeopleNames
 e88dcce0-b7b3-11d1-a9f0-00aa0060fa31\2,Zip Folder Encrypted
 e88dcce0-b7b3-11d1-a9f0-00aa0060fa31\3,Zip Folder Method
 e88dcce0-b7b3-11d1-a9f0-00aa0060fa31\4,Zip Folder Ratio
 e88dcce0-b7b3-11d1-a9f0-00aa0060fa31\5,Zip Folder CRC32
 e88dcce0-b7b3-11d1-a9f0-00aa0060fa31\6,Zip Folder Compressed Size
-e92a2496-223b-4463-a4e3-30eabba79d80\100,Photo FNumber Denominator
+E92A2496-223B-4463-A4E3-30EABBA79D80\100,Photo FNumberDenominator
 e9641eff-af25-4db7-947b-4128929f8ef5\2,Connected Search Suggestion Detail Text
 e9edd392-0b4c-4cf2-82c0-b0d139666245\102,Structured Query Virtual Bcc
 e9edd392-0b4c-4cf2-82c0-b0d139666245\103,Structured Query Virtual Cc
@@ -1471,31 +1471,31 @@ e9edd392-0b4c-4cf2-82c0-b0d139666245\116,Structured Query Virtual Is Encrypted
 e9edd392-0b4c-4cf2-82c0-b0d139666245\117,Structured Query Virtual Type
 e9edd392-0b4c-4cf2-82c0-b0d139666245\118,Structured Query Virtual Artist
 ea810849-87ff-4b54-abd6-5b71adf466f8\1,Dui Control Resource
-ec0b4191-ab0b-4c66-90b6-c6637cdebbab\100,Communication Policy Tag
-ecf4b6f6-d5a6-433c-bb92-4076650fc890\100,GPS Dest Latitude Numerator
-ecf7f4c9-544f-4d6d-9d98-8ad79adaf453\100,GPS Speed Ref
-ed4df2d3-8695-450b-856f-f5c1c53acb66\100,GPS Des tDistance Ref
+EC0B4191-AB0B-4C66-90B6-C6637CDEBBAB\100,Communication PolicyTag
+ECF4B6F6-D5A6-433C-BB92-4076650FC890\100,GPS DestLatitudeNumerator
+ECF7F4C9-544F-4D6D-9D98-8AD79ADAF453\100,GPS SpeedRef
+ED4DF2D3-8695-450B-856F-F5C1C53ACB66\100,GPS DestDistanceRef
 ee31306c-fb9b-4d62-8621-3575d972a9f9\1718,Volume BitLocker Requires Admin
-ee3d3d8a-5381-4cfa-b13b-aaf66b5f4ec9\100,Photo White Balance
-eec7b761-6f94-41b1-949f-c729720dd13c\12,Device Interface Printer Port Name
-ef1167eb-cbfc-4341-a568-a7c91a68982c\2,Devices WiFi Interface Guid
-ef884c5b-2bfe-41bb-aae5-76eedf4f9902\100,Is Shared
-ef884c5b-2bfe-41bb-aae5-76eedf4f9902\200,Shared With
-ef884c5b-2bfe-41bb-aae5-76eedf4f9902\300,Sharing Status
+EE3D3D8A-5381-4CFA-B13B-AAF66B5F4EC9\100,Photo WhiteBalance
+EEC7B761-6F94-41B1-949F-C729720DD13C\12,DeviceInterface PrinterPortName
+EF1167EB-CBFC-4341-A568-A7C91A68982C\2,Devices WiFi InterfaceGuid
+EF884C5B-2BFE-41BB-AAE5-76EEDF4F9902\100,IsShared
+EF884C5B-2BFE-41BB-AAE5-76EEDF4F9902\200,SharedWith
+EF884C5B-2BFE-41BB-AAE5-76EEDF4F9902\300,SharingStatus
 ef884c5b-2bfe-41bb-aae5-76eedf4f9902\400,Share Scope
-f04bef95-c585-4197-a2b7-df46fdc9ee6d\100,Kind Text
-f0f7984d-222e-4ad2-82ab-1dd8ea40e57e\300,Title Sort Override
-f1176dfe-7138-4640-8b4c-ae375dc70a6d\100,Contact Primary Address State
-f18dedf3-337f-42c0-9e03-cee08708a8c3\100,Identity Logon Status String
-f1a24aa7-9ca7-40f6-89ec-97def9ffe8db\100,Contact File As Name
-f1fdb4af-f78c-466c-bb05-56e92db0b8ec\103,Music Album Artist Sort Override
-f21d9941-81f0-471a-adee-4e74b49217ed\100,Provider Item Id
-f2275480-f782-4291-bd94-f13693513aec\0,Prop List XP Details Panel
-f23f425c-71a1-4fa8-922f-678ea4a60408\100,Is Attachment
-f271c659-7e5e-471f-ba25-7f77b286f836\100,Contact Business Email Addresses
+F04BEF95-C585-4197-A2B7-DF46FDC9EE6D\100,KindText
+F0F7984D-222E-4AD2-82AB-1DD8EA40E57E\300,TitleSortOverride
+F1176DFE-7138-4640-8B4C-AE375DC70A6D\100,Contact PrimaryAddressState
+F18DEDF3-337F-42C0-9E03-CEE08708A8C3\100,Identity LogonStatusString
+F1A24AA7-9CA7-40F6-89EC-97DEF9FFE8DB\100,Contact FileAsName
+F1FDB4AF-F78C-466C-BB05-56E92DB0B8EC\103,Music AlbumArtistSortOverride
+F21D9941-81F0-471A-ADEE-4E74B49217ED\100,ProviderItemID
+F2275480-F782-4291-BD94-F13693513AEC\0,PropList XPDetailsPanel
+F23F425C-71A1-4FA8-922F-678EA4A60408\100,IsAttachment
+F271C659-7E5E-471F-BA25-7F77B286F836\100,Contact BusinessEmailAddresses
 f27abe3a-7111-4dda-8cb2-29222ae23566\2,Connected Search Disambiguation Id
-f334115e-da1b-4509-9b3d-119504dc7abb\100,Document Contributor
-f3713ada-90e3-4e11-aae5-fdc17685b9be\100,Prop Group GPS
+F334115E-DA1B-4509-9B3D-119504DC7ABB\100,Document Contributor
+F3713ADA-90E3-4E11-AAE5-FDC17685B9BE\100,PropGroup GPS
 f3aecac4-5b8d-436a-ad0c-64ab194fdaf3\100,Fonts Collection Name
 f3c9b698-be85-47ce-888f-83874d9abcb4\2,App Contract Pinned
 f3c9b698-be85-47ce-888f-83874d9abcb4\3,App Contract Hidden
@@ -1503,41 +1503,41 @@ f3c9b698-be85-47ce-888f-83874d9abcb4\4,App Contract Pinned Order
 f3c9b698-be85-47ce-888f-83874d9abcb4\5,App Contract Relevance
 f3c9b698-be85-47ce-888f-83874d9abcb4\6,App Contract Category
 f3c9b698-be85-47ce-888f-83874d9abcb4\7,App Contract Supported File Types
-f3d8f40d-50cb-44a2-9718-40cb9119495d\100,Contact Initials
+F3D8F40D-50CB-44A2-9718-40CB9119495D\100,Contact Initials
 f50d2f5d-dda0-48d4-8d2b-e83729fb69a4\100,Item Query Condition
-f6272d18-cecc-40b1-b26a-3911717aa7bd\100,Calendar Location
-f628fd8c-7ba8-465a-a65b-c5aa79263a9e\100,Photo Metering Mode Text
-f7db74b4-4287-4103-afba-f1b13dcd75cf\100,Item Date
+F6272D18-CECC-40B1-B26A-3911717AA7BD\100,Calendar Location
+F628FD8C-7BA8-465A-A65B-C5AA79263A9E\100,Photo MeteringModeText
+F7DB74B4-4287-4103-AFBA-F1B13DCD75CF\100,ItemDate
 f8245476-2ec6-44be-b2f7-82ec2537fa2e\100,Condition
 f8245476-2ec6-44be-b2f7-82ec2537fa2e\101,Condition Key
-f85bf840-a925-4bc2-b0c4-8e36b598679e\100,Photo Digital Zoom
-f8d3f6ac-4874-42cb-be59-ab454b30716a\100,Sensitivity
-f8fa7fa3-d12b-4785-8a4e-691a94f7a3e7\100,Contact Email Address
-fa303353-b659-4052-85e9-bcac79549b84\100,Photo Maker Note
-fa304789-00c7-4d80-904a-1e4dcc7265aa\100,Photo Gain Control
-fb1de864-e06d-47f4-82a6-8a0aef44493c\2,Devices Audio Device Speech Processing Supported
-fb3842cd-9e2a-4f83-8fcc-4b0761139ae9\2,Device Interface Proximity Supports Nfc
-fc6976db-8349-4970-ae97-b3c5316a08f0\100,Photo Sharpness
-fc9f7306-ff8f-4d49-9fb6-3ffe5c0951ec\100,Contact Department
-fcad3d3d-0858-400f-aaa3-2f66cce2a6bc\100,Photo Flash Energy Numerator
-fcc16823-baed-4f24-9b32-a0982117f7fa\100,Identity Primary Email Address
-fceff153-e839-4cf3-a9e7-ea22832094b8\100,File Offline Availability Status
-fceff153-e839-4cf3-a9e7-ea22832094b8\101,Folder Kind
-fceff153-e839-4cf3-a9e7-ea22832094b8\103,Sync Transfer Status
-fceff153-e839-4cf3-a9e7-ea22832094b8\104,Transfer Position
-fceff153-e839-4cf3-a9e7-ea22832094b8\105,Transfer Size
-fceff153-e839-4cf3-a9e7-ea22832094b8\106,Transfer Order
-fceff153-e839-4cf3-a9e7-ea22832094b8\107,Last Sync Error
-fceff153-e839-4cf3-a9e7-ea22832094b8\108,Storage Provider Id
-fceff153-e839-4cf3-a9e7-ea22832094b8\109,Storage Provider Error
-fceff153-e839-4cf3-a9e7-ea22832094b8\110,Storage Provider Status
-fceff153-e839-4cf3-a9e7-ea22832094b8\111,Storage Provider Share Statuses
-fceff153-e839-4cf3-a9e7-ea22832094b8\112,Storage Provider File Remote Uri
-fceff153-e839-4cf3-a9e7-ea22832094b8\113,Cached File Updater Content Id For Stream
-fceff153-e839-4cf3-a9e7-ea22832094b8\114,Cached File Updater Content Id For Conflict Resolution
-fceff153-e839-4cf3-a9e7-ea22832094b8\115,Remote Conflicting File
+F85BF840-A925-4BC2-B0C4-8E36B598679E\100,Photo DigitalZoom
+F8D3F6AC-4874-42CB-BE59-AB454B30716A\100,Sensitivity
+F8FA7FA3-D12B-4785-8A4E-691A94F7A3E7\100,Contact EmailAddress
+FA303353-B659-4052-85E9-BCAC79549B84\100,Photo MakerNote
+FA304789-00C7-4D80-904A-1E4DCC7265AA\100,Photo GainControl
+FB1DE864-E06D-47F4-82A6-8A0AEF44493C\2,Devices AudioDevice SpeechProcessingSupported
+FB3842CD-9E2A-4F83-8FCC-4B0761139AE9\2,DeviceInterface Proximity SupportsNfc
+FC6976DB-8349-4970-AE97-B3C5316A08F0\100,Photo Sharpness
+FC9F7306-FF8F-4D49-9FB6-3FFE5C0951EC\100,Contact Department
+FCAD3D3D-0858-400F-AAA3-2F66CCE2A6BC\100,Photo FlashEnergyNumerator
+FCC16823-BAED-4F24-9B32-A0982117F7FA\100,Identity PrimaryEmailAddress
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\100,FileOfflineAvailabilityStatus
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\101,FolderKind
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\103,SyncTransferStatus
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\104,TransferPosition
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\105,TransferSize
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\106,TransferOrder
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\107,LastSyncError
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\108,StorageProviderId
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\109,StorageProviderError
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\110,StorageProviderStatus
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\111,StorageProviderShareStatuses
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\112,StorageProviderFileRemoteUri
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\113,CachedFileUpdaterContentIdForStream
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\114,CachedFileUpdaterContentIdForConflictResolution
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\115,RemoteConflictingFile
 fceff153-e839-4cf3-a9e7-ea22832094b8\116,Storage Provider Thumbnail Dimensions
-fceff153-e839-4cf3-a9e7-ea22832094b8\117,Storage Provider Sharing Status
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\117,StorageProviderSharingStatus
 fceff153-e839-4cf3-a9e7-ea22832094b8\118,Storage Provider Descendant Sharing Status
 fceff153-e839-4cf3-a9e7-ea22832094b8\119,Storage Provider Fully Qualified Id
 fceff153-e839-4cf3-a9e7-ea22832094b8\120,Storage Provider Custom States
@@ -1549,25 +1549,25 @@ fceff153-e839-4cf3-a9e7-ea22832094b8\125,Storage Provider Network Connected
 fceff153-e839-4cf3-a9e7-ea22832094b8\126,Storage Provider Warning Error State
 fceff153-e839-4cf3-a9e7-ea22832094b8\127,Storage Provider Protection Mode
 fcfb52aa-c1e5-4cd8-88bc-f80fd7390f20\100,Not User Content
-fd122953-fa93-4ef7-92c3-04c946b2f7c8\100,Music Display Artist
+FD122953-FA93-4EF7-92C3-04C946B2F7C8\100,Music DisplayArtist
 fd9d9fc7-38ec-436d-8fc6-ec39bad301e6\100,Computer Processor
 fd9d9fc7-38ec-436d-8fc6-ec39bad301e6\101,Computer Memory
-fdf84370-031a-4add-9e91-0d775f1c6605\100,Mileage Information
-fe83bb35-4d1a-42e2-916b-06f3e1af719e\100,Photo Flash Model
+FDF84370-031A-4ADD-9E91-0D775F1C6605\100,MileageInformation
+FE83BB35-4D1A-42E2-916B-06F3E1AF719E\100,Photo FlashModel
 fe9e4c12-aacb-4aa3-966d-91a29e6128b5\3,Printer Default
 fe9e4c12-aacb-4aa3-966d-91a29e6128b5\4,Printer Location
 fe9e4c12-aacb-4aa3-966d-91a29e6128b5\5,Printer Model
 fe9e4c12-aacb-4aa3-966d-91a29e6128b5\6,Printer Queue Size
 fe9e4c12-aacb-4aa3-966d-91a29e6128b5\7,Printer Status
-fec690b7-5f30-4646-ae47-4caafba884a3\100,Photo Exposure Program Text
+FEC690B7-5F30-4646-AE47-4CAAFBA884A3\100,Photo ExposureProgramText
 fec7952b-4bf0-4c03-b6e1-2796818b7ca9\100,Fonts Version
-ff1167eb-cbfc-4341-a568-a7c91a68982c\2,Devices Wwan Interface Guid
-ff962609-b7d6-4999-862d-95180d529aea\100,Contact Other Address Street
-ffae9db7-1c8d-43ff-818c-84403aa3732d\100,Source Package Family Name
+FF1167EB-CBFC-4341-A568-A7C91A68982C\2,Devices Wwan InterfaceGuid
+FF962609-B7D6-4999-862D-95180D529AEA\100,Contact OtherAddressStreet
+FFAE9DB7-1C8D-43FF-818C-84403AA3732D\100,SourcePackageFamilyName
 1E3EE840-BC2B-476C-8237-2ACD1A839B22\2,System FilterInfo
-1E3EE840-BC2B-476C-8237-2ACD1A839B22\3,System Kind
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\3,Kind
 1E3EE840-BC2B-476C-8237-2ACD1A839B22\5,System WordWheel
-1E3EE840-BC2B-476C-8237-2ACD1A839B22\6,System FullText
+1E3EE840-BC2B-476C-8237-2ACD1A839B22\6,FullText
 1E3EE840-BC2B-476C-8237-2ACD1A839B22\7,System ItemsInStack
 1E3EE840-BC2B-476C-8237-2ACD1A839B22\8,System ItemId
 1E3EE840-BC2B-476C-8237-2ACD1A839B22\9,System DelegationFlags
@@ -1584,3 +1584,90 @@ ffae9db7-1c8d-43ff-818c-84403aa3732d\100,Source Package Family Name
 1E3EE840-BC2B-476C-8237-2ACD1A839B22\23,System WebPreviewUrl
 1E3EE840-BC2B-476C-8237-2ACD1A839B22\24,System ThumbnailCacheIdParts
 1E3EE840-BC2B-476C-8237-2ACD1A839B22\25,System ItemContext
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\5,DeviceInterface Bluetooth ModelNumber
+2DAD1EB7-816D-40D3-9EC3-C9773BE2AADE\100,GPS AltitudeNumerator
+2CBAA8F5-D81F-47CA-B17A-F8D822300131\100,DateAcquired
+2BDA47DA-08C6-4FE1-80BC-A72FC517C5D0\100,GPS DestDistanceNumerator
+B2F9B9D6-FEC4-4DD5-94D7-8957488C807B\9,StorageProviderFileHasConflict
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\4,DeviceInterface Bluetooth Manufacturer
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\6,Hardware Manufacturer
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\1,DeviceInterface Bluetooth DeviceAddress
+2BE9260A-2012-4742-A555-F41B638B7DCB\2,Devices Notifications NewMessage
+C07B4199-E1DF-4493-B1E1-DE5946FB58F8\100,Address Country
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\37,AppUserModel UninstallCommand
+9B174B35-40FF-11D2-A27E-00C04FC30871\7 ,Computer DecoratedFreeSpace
+F29F85E0-4FF9-1068-AB91-08002B27B3D9\2,Title
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\12,Devices Aep Bluetooth LastSeenTime
+26DC287C-6E3D-4BD3-B2B0-6A26BA2E346D\3,StatusBarSelectedItemCount
+2425166F-5642-4864-992F-98FD98F294C3\100,IdentityProvider Picture
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\9,Hardware DriverVersion
+1D6179A6-A876-4031-B013-3347B2B64DC8\100,Photo FocalPlaneYResolutionDenominator
+5CBF2787-48CF-4208-B90E-EE5E5D420294\2 ,Link TargetUrl
+22704DA4-C6B2-4A99-8E56-F16DF8C92599\100,GPS VersionID
+000214A1-0000-0000-C000-000000000046\9,Status
+276D7BB0-5B34-4FB0-AA4B-158ED12A1809\100,Document ClientID
+8943B373-388C-4395-B557-BC6DBAFFAFDB\6,Devices AudioDevice Microphone IsFarField
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\8,DeviceInterface Bluetooth ProductId
+2598D2FB-5569-4367-95DF-5CD3A177E1A5\100,PropGroup Origin
+0C73B141-39D6-4653-A683-CAB291EAF95B\6,Supplemental Album
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\10,Hardware DriverProvider
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\11,Hardware DriverDate
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\2,Hardware Name
+8DBC9C86-97A9-4BFF-9BC6-BFE95D3E6DAD\2,Devices Panel PanelId
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\4096,Hardware Status
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\4098,Hardware Image
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\4099,Hardware Function
+2B1B801E-C0C1-4987-9EC5-72FA89814787\100,Identity PrimarySid
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\128,LastSyncWarning
+9B174B35-40FF-11D2-A27E-00C04FC30871\5 ,PercentFull
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\11,DeviceInterface Bluetooth LastConnectedTime
+C07B4199-E1DF-4493-B1E1-DE5946FB58F8\101,Address CountryCode
+2A785BA9-8D23-4DED-82E6-60A350C86A10\100,Photo Contrast
+2579E5D0-1116-4084-BD9A-9B4F7CB4DF5E\100,Audio PeakValue
+32CE38B2-2C9A-41B1-9BC5-B3784394AA44\2,EdgeGesture DisableTouchWhenFullscreen
+5CBF2787-48CF-4208-B90E-EE5E5D420294\21 ,Link Description
+5CBF2787-48CF-4208-B90E-EE5E5D420294\23 ,Link DateVisited
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\6,DeviceInterface Bluetooth VendorIdSource
+AECF2FE8-1D00-4FEE-8A6D-A70D719B772B\2,Devices PhoneLineTransportDevice Connected
+0774315E-B714-48EC-8DE8-8125C077AC11\2,Devices ChallengeAep
+CBF38310-4A17-4310-A1EB-247F0B67593B\9,DeviceInterface Hid VersionNumber
+257E44E2-9031-4323-AC38-85C552871B2E\100,Photo ExposureTimeNumerator
+2C53C813-FB63-4E22-A1AB-0B331CA1E273\100,RecordedTV NetworkAffiliation
+9B174B35-40FF-11D2-A27E-00C04FC30871\10 ,Volume IsRoot
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\5,Hardware DisplayAttribute
+7B03B546-FA4F-4A52-A2FE-03D5311E5865\100,Search ExtendedProperties
+1CE0D6BC-536C-4600-B0DD-7E0C66B350D5\8,History SelectionCount
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\2,DeviceInterface Bluetooth ServiceGuid
+C07B4199-E1DF-4493-B1E1-DE5946FB58F8\102,Address Region
+0C73B141-39D6-4653-A683-CAB291EAF95B\7,Supplemental Person
+1CE0D6BC-536C-4600-B0DD-7E0C66B350D5\9,History TargetUrlHostName
+026E516E-B814-414B-83CD-856D6FEF4822\9,Devices SchematicName
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\31,AppUserModel VisualElementsManifestHintPath
+2CA2DAE6-EDDC-407D-BEF1-773942ABFA95\100,GPS MapDatum
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\3,Hardware Icon
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\131,ContentUri
+2E4B640D-5019-46D8-8881-55414CC5CAA0\100,Media DateEncoded
+305BC615-DCA1-44A5-9FD4-10C0BA79412E\100,Photo FocalLengthDenominator
+B2F9B9D6-FEC4-4DD5-94D7-8957488C807B\8,StorageProviderFileFlags
+293CA35A-09AA-4DD2-B180-1FE245728A52\100,Calendar Duration
+8DBC9C86-97A9-4BFF-9BC6-BFE95D3E6DAD\3,Devices Panel PanelGroup
+8943B373-388C-4395-B557-BC6DBAFFAFDB\5,Devices AudioDevice Microphone SensitivityInDbfs2
+1E81A3F8-A30F-4247-B9EE-1D0368A9425C\2,DataObjectFormat
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\7,DeviceInterface Bluetooth VendorId
+0C73B141-39D6-4653-A683-CAB291EAF95B\5,Supplemental Location
+FCEFF153-E839-4CF3-A9E7-EA22832094B8\132,ContentId
+26DC287C-6E3D-4BD3-B2B0-6A26BA2E346D\2,StatusBarViewItemCount
+1F8844E1-24AD-4508-9DFD-5326A415CE02\100,Image CompressedBitsPerPixelDenominator
+9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3\38,AppUserModel SettingsCommand
+C07B4199-E1DF-4493-B1E1-DE5946FB58F8\103,Address RegionCode
+1E005EE6-BF27-428B-B01C-79676ACD2870\100,Document Division
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\9,DeviceInterface Bluetooth ProductVersion
+2BD67D8B-8BEB-48D5-87E0-6CDA3428040A\3,DeviceInterface Bluetooth Flags
+C07B4199-E1DF-4493-B1E1-DE5946FB58F8\104,Address Town
+1F856A9F-6900-4ABA-9505-2D5F1B4D66CB\100,Message ToDoFlags
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\4100,Hardware ShellAttributes
+2804D469-788F-48AA-8570-71B9C187E138\100,PropGroup Audio
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\8,Hardware SerialNumber
+0C73B141-39D6-4653-A683-CAB291EAF95B\4,Supplemental Tag
+5EAF3EF2-E0CA-4598-BF06-71ED1D9DD953\7,Hardware Model
+5CBF2787-48CF-4208-B90E-EE5E5D420294\7 ,History VisitCount
