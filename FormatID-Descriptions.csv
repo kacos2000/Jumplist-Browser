@@ -734,7 +734,7 @@ EAEE7F1D-6A33-44D1-9441-5F46DEF23198\9,Device BIOSVersion
 78C34FC8-104A-4aca-9EA4-524D52996E57\100,DeviceDisplay DeviceFunctionSubRank
 78C34FC8-104A-4aca-9EA4-524D52996E57\101,DeviceDisplay AlwaysShowDeviceAsConnected
 53808008-07BB-4661-BC3C-B5953E708560\1,DeviceInterface Device Path
-656a3bb3-ecc0-43fd-8477-4ae0404a96cd\1,Devnode, PnPXDevNode
+656a3bb3-ecc0-43fd-8477-4ae0404a96cd\1,PnPXDevNode
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\2,AssociationState
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\3,AssociatedInstanceId
 656a3bb3-ecc0-43fd-8477-4ae0404a96cd\4,LastNotificationTime
