@@ -5,6 +5,7 @@
     --------------------------------------------------------------------------------
 #>
 
+
 function Main {
 <#
     .SYNOPSIS
@@ -4014,7 +4015,11 @@ function Show-MainForm_psf
 					$w32Modifiednode = $IDListItemsNode.Nodes["IDListItem$($ic)"].Nodes.Add("w32Modified", "Modified: $($ItemIdList[$ic].w32Modified)")
 					$w32Modifiednode.ForeColor = 'Cyan'
 				}
-				if (!!$ItemIdList[$ic].ItemIdExtensions -and $ItemIdList[$ic].ItemIdExtensions.count -ge 1)
+				if ($null -ne $ItemIdList[$ic].PropertyStoreEntries)
+				{
+					Populate-SPS1 -Node $IDListItemsNode.Nodes["IDListItem$($ic)"] -SPS1properties @($ItemIdList[$ic].PropertyStoreEntries)
+				}
+				if (!!$ItemIdList[$ic].ItemIdExtensions <#-and $ItemIdList[$ic].ItemIdExtensions.count -ge 1#>)
 				{
 					$x = 0
 					Foreach ($extension in $ItemIdList[$ic].ItemIdExtensions)
@@ -4216,10 +4221,6 @@ function Show-MainForm_psf
 						}
 						$x++
 					}
-				}
-				if ($null -ne $ItemIdList[$ic].PropertyStoreEntries)
-				{
-					Populate-SPS1 -Node $IDListItemsNode.Nodes["IDListItem$($ic)"] -SPS1properties @($ItemIdList[$ic].PropertyStoreEntries)
 				}
 				if ($null -ne $ItemIdList[$ic].EmbeddedIdList)
 				{
@@ -4555,6 +4556,7 @@ function Show-MainForm_psf
 		$ClassType = [System.BitConverter]::ToString($ByteArray[1])
 		
 		$Signature = [System.BitConverter]::ToString($ByteArray[2 .. 5]) -replace '-', ''
+		
 		if ($Signature -eq '47465349') # GFSI
 		{
 			$CLSID = if ($ByteArray -ge 22) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[6 .. 21]))" }
@@ -4567,7 +4569,7 @@ function Show-MainForm_psf
 				'CLSID'	     = if ($CLSID) { Get-CLSID -CLSIDstring $CLSID }else { $null }
 			}
 		}
-		elseif ($Signature -eq '1A00EEBB') # Embedded ITemID items 1
+		elseif ($Signature -eq '1A00EEBB') # Embedded ITemID items 1 + extensions
 		{
 			$Attributes = Get-Attributes -Bytes $ByteArray[8 .. 11]
 			$CLSID = if ($ItemIDSize -ge 28) { Get-GUIDfromHexString -Hex "$([System.BitConverter]::ToString($ByteArray[12 .. 27]))" }	else { $null }
@@ -4805,7 +4807,7 @@ function Show-MainForm_psf
 			}
 			
 		}
-		elseif (([System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', '') -in ('41505053', '45740304')) # PropertyStore 6 # APPS
+		elseif (([System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', '') -in ('41505053', '45740304')) # PropertyStore 6 # APPS => May have extensions
 		{
 			$Signature = [System.BitConverter]::ToString($ByteArray[4 .. 7]) -replace '-', ''
 			$ItemIdListProperties = [PSCustomObject]@{
@@ -4818,6 +4820,7 @@ function Show-MainForm_psf
 				$ExtraData = $ByteArray[16.. ($ByteArray.count - 1)]
 				$PropertyStoreEntries = [System.Collections.ArrayList]::new()
 				$Items = Get-Ext_SPS1 -ByteArray $ExtraData
+				$TotalSPSize = $null
 				foreach ($property in $items)
 				{
 					$PropertyStoreEntry = [PSCustomObject]::new()
@@ -4825,8 +4828,17 @@ function Show-MainForm_psf
 					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'FormatID' -Value $property.FormatID
 					$PropertyStoreEntry | Add-Member -MemberType NoteProperty -Name 'TypedProperty' -Value $property.PropertyStore
 					$null = $PropertyStoreEntries.Add($PropertyStoreEntry)
+					$TotalSPSize = $TotalSPSize + $property.'Storage Size'
 				}
 				$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "PropertyStoreEntries" -Value $PropertyStoreEntries
+				
+				if (($ExtraData.Count - $TotalSPSize) -ge 8)
+				{
+					$extData = $ExtraData[$TotalSPSize .. ($ExtraData.count - 1)]
+					$idx = $extData.IndexOf($extData.Where{ $_ -ne 0 }[0])
+					$ItemIdExtensions = Get-ItemIdExtensions -ByteArray $extData -idx $idx
+					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'ItemIdExtensions' -Value $ItemIdExtensions
+				} 
 			}
 			
 		}
@@ -6810,7 +6822,28 @@ function Show-MainForm_psf
 		
 		try
 		{
-			if ($ItemIDType -eq '01') # Control Panel Category
+			if ($ItemIDType -eq '00')
+			{
+				try
+				{
+					$ItemIdListProperties = [PSCustomObject]@{ }
+					$Items = Get-Ext_00 -ByteArray $ItemIdListItem.Data
+					
+					foreach ($property in $items.psobject.Properties)
+					{
+						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
+					}
+				}
+				catch
+				{
+					$ItemIdListProperties = [PSCustomObject]@{
+						'ItemIDSize' = $ItemIdListItem.ItemIDSize
+						'ItemIDType' = $ItemIDType
+						'Data'	     = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
+					}
+				}
+			}
+			elseif ($ItemIDType -eq '01') # Control Panel Category
 			{
 				$Signature = if ($ItemIdListItem.Data.length -ge 5) { [System.BitConverter]::ToString($ItemIdListItem.Data[2 .. 5]) -replace '-', '' }
 				else { $null }
@@ -7182,27 +7215,6 @@ function Show-MainForm_psf
 					'Name'       = $Name
 				}
 			}#>
-			elseif ($ItemIDType -eq '00')
-			{
-				try
-				{
-					$ItemIdListProperties = [PSCustomObject]@{ }
-					$Items = Get-Ext_00 -ByteArray $ItemIdListItem.Data
-					
-					foreach ($property in $items.psobject.Properties)
-					{
-						$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name $property.Name -Value $Property.Value
-					}
-				}
-				catch
-				{
-					$ItemIdListProperties = [PSCustomObject]@{
-						'ItemIDSize'  = $ItemIdListItem.ItemIDSize
-						'ItemIDType'  = $ItemIDType
-						'Data'	      = [System.BitConverter]::ToString($ItemIdListItem.Data) -replace '-', ''
-					}
-				}
-			}
 			else
 			{
 				$ItemIdListProperties = [PSCustomObject]@{
@@ -12865,8 +12877,8 @@ Main ($CommandLine)
 # SIG # Begin signature block
 # MIIviAYJKoZIhvcNAQcCoIIveTCCL3UCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDqd1r3igghHpxI
-# mNNZCX3HICmM+hSyfv8ahN3vuNMqx6CCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCD2+LVmexO+TdUp
+# 621UAoOXb6ouzeHVN/K0b/NTniA1CqCCKI0wggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -13086,35 +13098,35 @@ Main ($CommandLine)
 # AQEwaDBUMQswCQYDVQQGEwJHQjEYMBYGA1UEChMPU2VjdGlnbyBMaW1pdGVkMSsw
 # KQYDVQQDEyJTZWN0aWdvIFB1YmxpYyBDb2RlIFNpZ25pbmcgQ0EgUjM2AhALYufv
 # MdbwtA/sWXrOPd+kMA0GCWCGSAFlAwQCAQUAoEwwGQYJKoZIhvcNAQkDMQwGCisG
-# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIGe05LJoAHdSPzwutQE8E/aUUFz+2giC
-# D2k+0vcE6qiRMA0GCSqGSIb3DQEBAQUABIICAAQOM8cqEv3OCDbj9ToIFcp19l9K
-# WUZeZyERs/Q5B/41+l/KjmmhqwAcmLWQHX/IDcLD/x4ixs35/WVrTlqlkIT6Pn/g
-# rIVAgd1ckdWpjKVnmfpLCVECtC4dZggokWOORiHkuV5rn/tbhB5Yw4CLUnYwd2MV
-# aGmKg3qJ4Rm3ad2P4jZvvB2lToZ5JIjuv1T+novb/u80MhI2fNWUYrZz1y2fxjbh
-# pdDKc3UdwKavqzCeZYT/PXsYGFp3L6lDWbOWSYJA2nkJK57TtrJROHmY7VT/pKZJ
-# uCuSOSpP0KgLWJySvf7zJbZlidOliInmMqMkyD7Koz60jn/n2MSbAXtY2o6yw33g
-# VrS5LPhF+mi55AZ8R6aVI8SITpHkge0N9qgRPBKZGq1GRiVZLtD0oiUt/kkF4B8X
-# +RbUkAj9W7movi7+422dUZiW0eq6vKCYwEpPQSWdJOTln7aY5p7PPVJi87IbZi67
-# J1hKGn7i+m3YQAjabuR0wy8t454suejisZpSFsxA3d8teR3eLxt6SGah7GOP5Khp
-# M+/7nZSYoOJH5w86QoYEIMqL7m07fvByD5NypwqDlFTYhQShrW/rzmRffD8zh3Af
-# I9HR6eQYt433yg8gWxBCWXwMiEGn6aYIOjxh4JPP6sMLnn/FaJzv6Vs11KGFNuN8
-# EPUuvpxVY0V+SAWloYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
+# AQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIDhjCfoda9w5/Zbs5N5MbS5zZ/CiVrPQ
+# lKPRta1LLBUOMA0GCSqGSIb3DQEBAQUABIICAAi5Isj6P6AarSaAmsgL4ADs/YlY
+# 5VVabYaBrVKZdrpm1FbqePCG8WZ9WY9YAf87fvDIfKbc4W5WRER8PrxOh0+wq6XU
+# RVs2zZkQtkmYyBksA5x2eUZtdSm7tpD13fPSdebASeF4StKzqNdUpiIwao217fiM
+# psZJrPoNN1TcBDTAKLG9LrNVYjb0x2o0JAm6kMDHq2Nw9aEn3j1DSyPuhBv0ov+1
+# tyrpuvxLT3KKUNrnOssCO7QSyF1TYkNjxKu1LlEz60MiLvQTsDZ+sWgvOA/5XA4Z
+# EQPx9pB7KOSGs3p0AhUuY4EQYTgVK1Vt4neDIpllNkH8A43Txd31jD/YWJilC68c
+# l+BjDy1HFeDS6YaAIAWm4q2mx35QuGju1dvLBAhMwhcVwDGaB2dPwWcSg5TS/tU5
+# 8l4gYUu/URiMpdP31DjaEleLkPombU5A41ICM5RsUm8dyHqeejD2NaxfFIIhMuiQ
+# pa/Khi9oYOloMUORYcOu/HOuO7JwGNBRD2y1WsaUDDQXHWwKIZrDqjzjTQkbIUWJ
+# p5VXP6mzp0mpONAzGs/OVBkCLIy5d5+D6Ta9sdAPjELPVfkMw6lpjENr+OA5VX11
+# c/uQBSqkXuVmGKbEgU34Si+tyNF55BWp7cK5wTUacR8QKYN6QWhKlEYpFDLfn4kf
+# 0BetL/KXV/3/+x/goYIDbDCCA2gGCSqGSIb3DQEJBjGCA1kwggNVAgEBMG8wWzEL
 # MAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExMTAvBgNVBAMT
 # KEdsb2JhbFNpZ24gVGltZXN0YW1waW5nIENBIC0gU0hBMzg0IC0gRzQCEAFIkD3C
 # irynoRlNDBxXuCkwCwYJYIZIAWUDBAIBoIIBPTAYBgkqhkiG9w0BCQMxCwYJKoZI
-# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzEyMTQxODI4MzFaMCsGCSqGSIb3DQEJ
+# hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzEyMTQyMzQzNTNaMCsGCSqGSIb3DQEJ
 # NDEeMBwwCwYJYIZIAWUDBAIBoQ0GCSqGSIb3DQEBCwUAMC8GCSqGSIb3DQEJBDEi
-# BCBYB2MyUareyt/qqTeJaVZnXunDGXu82e9dRfC8vCut1zCBpAYLKoZIhvcNAQkQ
+# BCDJLrVbeqdTpsk0Oi9pgyDcZ3Ox+eXrK//uRgR7EadVSzCBpAYLKoZIhvcNAQkQ
 # AgwxgZQwgZEwgY4wgYsEFDEDDhdqpFkuqyyLregymfy1WF3PMHMwX6RdMFsxCzAJ
 # BgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 # bG9iYWxTaWduIFRpbWVzdGFtcGluZyBDQSAtIFNIQTM4NCAtIEc0AhABSJA9woq8
-# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgDtffipwQkBTAsyfhR3ZjHrL6YZ0
-# Cme5dzJexdv3ErAt/WWsO5DiyDfaR515ad52GUAe9qLkN4ATa+RA+1h+cz5+RofW
-# tjb2lKi7vF56+rVOpmJT1GfizTi2PrJvxR8dedak9/5w1Am7syHkodF0qb0xB2Jn
-# yohzwJunYLDP19JBhHA7JfT+9Cw7Gy1jZmGzuEYkpwBDM6HdnuJWCDuffjITakok
-# XyxLRg7r7JKtDdpiHhcDR7BsU7+45FLMQ+VB9M/+NQOEGqpG5lsqy3RhUuWEy2rk
-# JCGPKW0tnX+1eiZLD6UoyEA8dxkM1BAJEiYPMjyJFdSLbvZJ/yrWa1JAZC9Gg31X
-# s8IkluK9p2nfFXioPY2dBhHprHdFOrwe0ap/4B8Px7EFYi7VE33nw2jLasIfqgxe
-# GnQ8rHc/Chuempf247CFPdPPl7YIs6EXD3YZAwr5upFZRv63gcs7+Yylgf19LlwZ
-# rT54tBNFu4vfHHlIVN8H6iDsZykmtnGDK9pHcw==
+# p6EZTQwcV7gpMA0GCSqGSIb3DQEBCwUABIIBgBb/TPYKrva6y3A1krp8xTKzIvZ+
+# AWzB8pJIg/otXStDQ5a5x6nHvfHy/VHjJYfdCSZ6N8aFdrT8/KDhcqC9heXdp8uv
+# i5eUXkg8vs/B1VFeNPCKmQUJMmfn2SwkjO//N+KlsPYkKAA0qbbHZY7lgLcq2Z30
+# sSsAihrwz1nKen+X54r4QRrRFFj10O7I4kPOtvIVx9Ezx50uv2NAwE4XeB5F0b/K
+# avKlK5j0OcLGr1zDGTfXyaIZtVNklMsePAFszyW+PFoui10FZYgK5EhSlhWBdn/S
+# W8AZXAYecdRSzEjv+Q4rjBPlV5fm1MUlmZPNg8DqdKba53jgL/dc+Sz0Z94j3b+H
+# cVNOfA4Eht0AYnEKesNmYZx9pkHxe+1euaz7ESw67NMuwFnhj1cTatcMtnXw+eQB
+# Te7IN9JKdTLxtCNzAruaseBIPK74ntw1LJT2mUfgmOI2k4YJIHzvYwPzM8eM1MYV
+# VTjuqnhMeGzx1VQbOaWFCeIGdevAghBDopk6UA==
 # SIG # End signature block
