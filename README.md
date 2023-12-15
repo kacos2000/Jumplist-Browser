@@ -15,6 +15,8 @@ Sample screenshots:<br>
 
   <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/8c57f55f-1fc0-4f81-bcbf-b18207695243" width="500"><br>
 
+  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/474966bd-a77b-4f9f-9775-b9f2dbb9abeb" width="500"><br>
+
   <img src="https://user-images.githubusercontent.com/11378310/220354146-a502d9bf-3b04-454a-ae37-a41db1899c15.png" width="500"><br>
 
 <!-- Commented out -->
