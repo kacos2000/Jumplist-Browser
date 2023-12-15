@@ -9,11 +9,11 @@ Dependencies:
 
 Sample screenshots:<br>
 
-![image](https://user-images.githubusercontent.com/11378310/220353405-4386ed59-e70e-4587-85cd-0c41d88f5851.png)
+ <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/8c57f55f-1fc0-4f81-bcbf-b18207695243" width="500"><br>
 
-![image](https://user-images.githubusercontent.com/11378310/220354146-a502d9bf-3b04-454a-ae37-a41db1899c15.png)
+ <img src="https://user-images.githubusercontent.com/11378310/220354146-a502d9bf-3b04-454a-ae37-a41db1899c15.png" width="500"><br>
 
-![image](https://user-images.githubusercontent.com/11378310/220356910-0085c017-c4c1-45da-96a0-24f7be69f13f.png)
+ <img src="https://user-images.githubusercontent.com/11378310/220356910-0085c017-c4c1-45da-96a0-24f7be69f13f.png" width="500">
 
 <!-- Commented out -->
 <!-- ![image](https://user-images.githubusercontent.com/11378310/212580495-e4c6afe8-68a3-4504-b831-b92c1728b36a.png) -->
