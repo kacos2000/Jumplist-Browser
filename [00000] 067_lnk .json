@@ -1,0 +1,671 @@
+﻿{
+    "Shortcut Size":  3335,
+    "Header Block Size":  76,
+    "LinkCLSID":  "00021401-0000-0000-c000-000000000046",
+    "Link_Flags":  "HasLinkTargetIDList, HasLinkInfo, HasRelativePath, HasWorkingDir, IsUnicode, EnableTargetMetadata, DisableKnownFolderTracking",
+    "FileAttributes":  "archive",
+    "CreationTime":  "19-Oct-2013 02:17:39.0000000",
+    "AccessTime":  "19-Oct-2013 02:17:39.0000000",
+    "WriteTime":  "19-Oct-2013 02:17:39.0000000",
+    "Target File Size":  2196383,
+    "Icon Idx":  "[0] Document with no associated application",
+    "ShowCommand":  "[SW_SHOWNORMAL] Window is activated and restored to its original size and position.",
+    "HotKey":  "----",
+    "TargetID Block Size":  2818,
+    "Path":  "C:\\Users\\Donald\\Pictures\\2013-10-21\\067.jpg",
+    "ItemIdListItems":  [
+                            {
+                                "ItemIDSize":  18,
+                                "ItemIDType":  "1F",
+                                "SortOrderIndex":  "Users Libraries [54]",
+                                "GUID":  "UsersLibraries [031E4825-7B94-4DC3-B131-E946B44C8DD5]"
+                            },
+                            {
+                                "ItemIDSize":  30,
+                                "ItemIDType":  "00",
+                                "Signature":  "0x1A00EEBB",
+                                "Attributes":  "Unpinned (0x00100000)",
+                                "CLSID":  "PicturesLibrary [A990AE9F-A03B-4E80-94BC-9912D7504104]"
+                            },
+                            {
+                                "ItemIDSize":  629,
+                                "ItemIDType":  "00",
+                                "Signature":  "0x81191410",
+                                "PropertyStoreEntries":  [
+                                                             {
+                                                                 "Storage Size":  272,
+                                                                 "FormatID":  "28636AA6-953D-11D2-B5D6-00C04FD918D0",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  37,
+                                                                                           "ID":  11,
+                                                                                           "Description":  "ItemType [28636AA6-953D-11D2-B5D6-00C04FD918D0\\11]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "Directory"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  89,
+                                                                                           "ID":  32,
+                                                                                           "Description":  "Delegate ID List [28636AA6-953D-11D2-B5D6-00C04FD918D0\\32]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI1, VT_VECTOR [0x1011]"
+                                                                                                         },
+                                                                                           "DelegateIDlist":  {
+                                                                                                                  "ItemIDSize":  18,
+                                                                                                                  "ItemIDType":  "1F",
+                                                                                                                  "SortOrderIndex":  "This PC [50]",
+                                                                                                                  "GUID":  "This PC [20D04FE0-3AEA-1069-A2D8-08002B30309D]"
+                                                                                                              }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  17,
+                                                                                           "ID":  25,
+                                                                                           "Description":  "SFGAOFlags [28636AA6-953D-11D2-B5D6-00C04FD918D0\\25]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI4 [0x0013]",
+                                                                                                             "Value":  1887436877
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  101,
+                                                                                           "ID":  24,
+                                                                                           "Description":  "ParsingName [28636AA6-953D-11D2-B5D6-00C04FD918D0\\24]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "::{3ADD1653-EB32-4CB0-BBD7-DFA0ABB5ACCA}"
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             },
+                                                             {
+                                                                 "Storage Size":  124,
+                                                                 "FormatID":  "B725F130-47EF-101A-A5F1-02608C9EEBAC",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  37,
+                                                                                           "ID":  10,
+                                                                                           "Description":  "ItemNameDisplay [B725F130-47EF-101A-A5F1-02608C9EEBAC\\10]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "Pictures"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  15,
+                                                                                           "Description":  "DateCreated [B725F130-47EF-101A-A5F1-02608C9EEBAC\\15]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_FILETIME [0x0040]",
+                                                                                                             "Value":  "10-Aug-2013 03:03:24.0000000"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  14,
+                                                                                           "Description":  "DateModified [B725F130-47EF-101A-A5F1-02608C9EEBAC\\14]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_FILETIME [0x0040]",
+                                                                                                             "Value":  "21-Oct-2013 17:39:09.5234571"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  17,
+                                                                                           "ID":  13,
+                                                                                           "Description":  "FileAttributes [B725F130-47EF-101A-A5F1-02608C9EEBAC\\13]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI4 [0x0013]",
+                                                                                                             "Value":  17
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             },
+                                                             {
+                                                                 "Storage Size":  134,
+                                                                 "FormatID":  "1E3EE840-BC2B-476C-8237-2ACD1A839B22",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  69,
+                                                                                           "ID":  8,
+                                                                                           "Description":  "System ItemId [1E3EE840-BC2B-476C-8237-2ACD1A839B22\\8]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "C:\\Users\\Donald\\Pictures"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  37,
+                                                                                           "ID":  3,
+                                                                                           "Description":  "Kind [1E3EE840-BC2B-476C-8237-2ACD1A839B22\\3]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR, VT_VECTOR [0x101F]",
+                                                                                                             "Value":  "folder"
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             },
+                                                             {
+                                                                 "Storage Size":  49,
+                                                                 "FormatID":  "446D16B1-8DAD-4870-A748-402EA43D788C",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  100,
+                                                                                           "Description":  "ThumbnailCacheId [446D16B1-8DAD-4870-A748-402EA43D788C\\100]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI8 [0x0015]",
+                                                                                                             "Value":  14266451956699802540
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             }
+                                                         ]
+                            },
+                            {
+                                "ItemIDSize":  1018,
+                                "ItemIDType":  "00",
+                                "Signature":  "0x81191410",
+                                "PropertyStoreEntries":  [
+                                                             {
+                                                                 "Storage Size":  616,
+                                                                 "FormatID":  "28636AA6-953D-11D2-B5D6-00C04FD918D0",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  37,
+                                                                                           "ID":  11,
+                                                                                           "Description":  "ItemType [28636AA6-953D-11D2-B5D6-00C04FD918D0\\11]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "Directory"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  493,
+                                                                                           "ID":  32,
+                                                                                           "Description":  "Delegate ID List [28636AA6-953D-11D2-B5D6-00C04FD918D0\\32]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI1, VT_VECTOR [0x1011]"
+                                                                                                         },
+                                                                                           "DelegateIDlist":  [
+                                                                                                                  {
+                                                                                                                      "ItemIDSize":  18,
+                                                                                                                      "ItemIDType":  "1F",
+                                                                                                                      "SortOrderIndex":  "This PC [50]",
+                                                                                                                      "GUID":  "This PC [20D04FE0-3AEA-1069-A2D8-08002B30309D]"
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "ItemIDSize":  23,
+                                                                                                                      "ItemIDType":  "2F",
+                                                                                                                      "DriveLetter":  "C:\\\u0000"
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "ItemIDType":  "31",
+                                                                                                                      "ItemIDSize":  118,
+                                                                                                                      "w32Modified":  "23-Sep-2013 19:20:28.00",
+                                                                                                                      "Attributes":  "ReadOnly, Directory (0x0011)",
+                                                                                                                      "Ansi_Name":  "Users",
+                                                                                                                      "ItemIdExtensions":  [
+                                                                                                                                               {
+                                                                                                                                                   "extLength":  100,
+                                                                                                                                                   "extversion":  9,
+                                                                                                                                                   "itemIdExtType":  "BEEF0004",
+                                                                                                                                                   "w32Created":  "22-Aug-2013 13:36:16.00",
+                                                                                                                                                   "w32Accessed":  "23-Sep-2013 19:20:28.00",
+                                                                                                                                                   "Host":  "Windows 8.1/10/11",
+                                                                                                                                                   "FileSystem":  "NTFS",
+                                                                                                                                                   "MFTrecordNr":  200313,
+                                                                                                                                                   "MFTrecordSeqNr":  3,
+                                                                                                                                                   "Unicode_Name":  "Users",
+                                                                                                                                                   "Localized_Name":  "@shell32.dll,-21813"
+                                                                                                                                               }
+                                                                                                                                           ]
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "ItemIDType":  "31",
+                                                                                                                      "ItemIDSize":  82,
+                                                                                                                      "w32Modified":  "19-Oct-2013 01:49:58.00",
+                                                                                                                      "Attributes":  "Directory (0x0010)",
+                                                                                                                      "Ansi_Name":  "Donald",
+                                                                                                                      "ItemIdExtensions":  [
+                                                                                                                                               {
+                                                                                                                                                   "extLength":  62,
+                                                                                                                                                   "extversion":  9,
+                                                                                                                                                   "itemIdExtType":  "BEEF0004",
+                                                                                                                                                   "w32Created":  "23-Sep-2013 19:17:32.00",
+                                                                                                                                                   "w32Accessed":  "19-Oct-2013 01:49:58.00",
+                                                                                                                                                   "Host":  "Windows 8.1/10/11",
+                                                                                                                                                   "FileSystem":  "NTFS",
+                                                                                                                                                   "MFTrecordNr":  232315,
+                                                                                                                                                   "MFTrecordSeqNr":  3,
+                                                                                                                                                   "Unicode_Name":  "Donald"
+                                                                                                                                               }
+                                                                                                                                           ]
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "ItemIDType":  "31",
+                                                                                                                      "ItemIDSize":  128,
+                                                                                                                      "w32Modified":  "21-Oct-2013 17:39:10.00",
+                                                                                                                      "Attributes":  "ReadOnly, Directory (0x0011)",
+                                                                                                                      "Ansi_Name":  "Pictures",
+                                                                                                                      "ItemIdExtensions":  [
+                                                                                                                                               {
+                                                                                                                                                   "extLength":  106,
+                                                                                                                                                   "extversion":  9,
+                                                                                                                                                   "itemIdExtType":  "BEEF0004",
+                                                                                                                                                   "w32Created":  "10-Aug-2013 03:03:24.00",
+                                                                                                                                                   "w32Accessed":  "21-Oct-2013 17:39:10.00",
+                                                                                                                                                   "Host":  "Windows 8.1/10/11",
+                                                                                                                                                   "FileSystem":  "NTFS",
+                                                                                                                                                   "MFTrecordNr":  4011,
+                                                                                                                                                   "MFTrecordSeqNr":  2,
+                                                                                                                                                   "Unicode_Name":  "Pictures",
+                                                                                                                                                   "Localized_Name":  "@shell32.dll,-21779"
+                                                                                                                                               }
+                                                                                                                                           ]
+                                                                                                                  }
+                                                                                                              ]
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  17,
+                                                                                           "ID":  25,
+                                                                                           "Description":  "SFGAOFlags [28636AA6-953D-11D2-B5D6-00C04FD918D0\\25]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI4 [0x0013]",
+                                                                                                             "Value":  1887437183
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  41,
+                                                                                           "ID":  24,
+                                                                                           "Description":  "ParsingName [28636AA6-953D-11D2-B5D6-00C04FD918D0\\24]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "2013-10-21"
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             },
+                                                             {
+                                                                 "Storage Size":  149,
+                                                                 "FormatID":  "B725F130-47EF-101A-A5F1-02608C9EEBAC",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  41,
+                                                                                           "ID":  10,
+                                                                                           "Description":  "ItemNameDisplay [B725F130-47EF-101A-A5F1-02608C9EEBAC\\10]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "2013-10-21"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  15,
+                                                                                           "Description":  "DateCreated [B725F130-47EF-101A-A5F1-02608C9EEBAC\\15]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_FILETIME [0x0040]",
+                                                                                                             "Value":  "21-Oct-2013 17:39:10.0000000"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  14,
+                                                                                           "Description":  "DateModified [B725F130-47EF-101A-A5F1-02608C9EEBAC\\14]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_FILETIME [0x0040]",
+                                                                                                             "Value":  "21-Oct-2013 17:39:53.3917327"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  16,
+                                                                                           "Description":  "DateAccessed [B725F130-47EF-101A-A5F1-02608C9EEBAC\\16]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_FILETIME [0x0040]",
+                                                                                                             "Value":  "21-Oct-2013 17:39:54.0000000"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  17,
+                                                                                           "ID":  13,
+                                                                                           "Description":  "FileAttributes [B725F130-47EF-101A-A5F1-02608C9EEBAC\\13]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI4 [0x0013]",
+                                                                                                             "Value":  16
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             },
+                                                             {
+                                                                 "Storage Size":  154,
+                                                                 "FormatID":  "1E3EE840-BC2B-476C-8237-2ACD1A839B22",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  89,
+                                                                                           "ID":  8,
+                                                                                           "Description":  "System ItemId [1E3EE840-BC2B-476C-8237-2ACD1A839B22\\8]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "C:\\Users\\Donald\\Pictures\\2013-10-21"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  37,
+                                                                                           "ID":  3,
+                                                                                           "Description":  "Kind [1E3EE840-BC2B-476C-8237-2ACD1A839B22\\3]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR, VT_VECTOR [0x101F]",
+                                                                                                             "Value":  "folder"
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             },
+                                                             {
+                                                                 "Storage Size":  49,
+                                                                 "FormatID":  "446D16B1-8DAD-4870-A748-402EA43D788C",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  100,
+                                                                                           "Description":  "ThumbnailCacheId [446D16B1-8DAD-4870-A748-402EA43D788C\\100]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI8 [0x0015]",
+                                                                                                             "Value":  7369677658012784829
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             }
+                                                         ]
+                            },
+                            {
+                                "ItemIDSize":  1111,
+                                "ItemIDType":  "00",
+                                "Signature":  "0x81191410",
+                                "PropertyStoreEntries":  [
+                                                             {
+                                                                 "Storage Size":  688,
+                                                                 "FormatID":  "28636AA6-953D-11D2-B5D6-00C04FD918D0",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  29,
+                                                                                           "ID":  11,
+                                                                                           "Description":  "ItemType [28636AA6-953D-11D2-B5D6-00C04FD918D0\\11]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  ".jpg"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  581,
+                                                                                           "ID":  32,
+                                                                                           "Description":  "Delegate ID List [28636AA6-953D-11D2-B5D6-00C04FD918D0\\32]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI1, VT_VECTOR [0x1011]"
+                                                                                                         },
+                                                                                           "DelegateIDlist":  [
+                                                                                                                  {
+                                                                                                                      "ItemIDSize":  18,
+                                                                                                                      "ItemIDType":  "1F",
+                                                                                                                      "SortOrderIndex":  "This PC [50]",
+                                                                                                                      "GUID":  "This PC [20D04FE0-3AEA-1069-A2D8-08002B30309D]"
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "ItemIDSize":  23,
+                                                                                                                      "ItemIDType":  "2F",
+                                                                                                                      "DriveLetter":  "C:\\\u0000"
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "ItemIDType":  "31",
+                                                                                                                      "ItemIDSize":  118,
+                                                                                                                      "w32Modified":  "23-Sep-2013 19:20:28.00",
+                                                                                                                      "Attributes":  "ReadOnly, Directory (0x0011)",
+                                                                                                                      "Ansi_Name":  "Users",
+                                                                                                                      "ItemIdExtensions":  [
+                                                                                                                                               {
+                                                                                                                                                   "extLength":  100,
+                                                                                                                                                   "extversion":  9,
+                                                                                                                                                   "itemIdExtType":  "BEEF0004",
+                                                                                                                                                   "w32Created":  "22-Aug-2013 13:36:16.00",
+                                                                                                                                                   "w32Accessed":  "23-Sep-2013 19:20:28.00",
+                                                                                                                                                   "Host":  "Windows 8.1/10/11",
+                                                                                                                                                   "FileSystem":  "NTFS",
+                                                                                                                                                   "MFTrecordNr":  200313,
+                                                                                                                                                   "MFTrecordSeqNr":  3,
+                                                                                                                                                   "Unicode_Name":  "Users",
+                                                                                                                                                   "Localized_Name":  "@shell32.dll,-21813"
+                                                                                                                                               }
+                                                                                                                                           ]
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "ItemIDType":  "31",
+                                                                                                                      "ItemIDSize":  82,
+                                                                                                                      "w32Modified":  "19-Oct-2013 01:49:58.00",
+                                                                                                                      "Attributes":  "Directory (0x0010)",
+                                                                                                                      "Ansi_Name":  "Donald",
+                                                                                                                      "ItemIdExtensions":  [
+                                                                                                                                               {
+                                                                                                                                                   "extLength":  62,
+                                                                                                                                                   "extversion":  9,
+                                                                                                                                                   "itemIdExtType":  "BEEF0004",
+                                                                                                                                                   "w32Created":  "23-Sep-2013 19:17:32.00",
+                                                                                                                                                   "w32Accessed":  "19-Oct-2013 01:49:58.00",
+                                                                                                                                                   "Host":  "Windows 8.1/10/11",
+                                                                                                                                                   "FileSystem":  "NTFS",
+                                                                                                                                                   "MFTrecordNr":  232315,
+                                                                                                                                                   "MFTrecordSeqNr":  3,
+                                                                                                                                                   "Unicode_Name":  "Donald"
+                                                                                                                                               }
+                                                                                                                                           ]
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "ItemIDType":  "31",
+                                                                                                                      "ItemIDSize":  128,
+                                                                                                                      "w32Modified":  "21-Oct-2013 17:39:10.00",
+                                                                                                                      "Attributes":  "ReadOnly, Directory (0x0011)",
+                                                                                                                      "Ansi_Name":  "Pictures",
+                                                                                                                      "ItemIdExtensions":  [
+                                                                                                                                               {
+                                                                                                                                                   "extLength":  106,
+                                                                                                                                                   "extversion":  9,
+                                                                                                                                                   "itemIdExtType":  "BEEF0004",
+                                                                                                                                                   "w32Created":  "10-Aug-2013 03:03:24.00",
+                                                                                                                                                   "w32Accessed":  "21-Oct-2013 17:39:10.00",
+                                                                                                                                                   "Host":  "Windows 8.1/10/11",
+                                                                                                                                                   "FileSystem":  "NTFS",
+                                                                                                                                                   "MFTrecordNr":  4011,
+                                                                                                                                                   "MFTrecordSeqNr":  2,
+                                                                                                                                                   "Unicode_Name":  "Pictures",
+                                                                                                                                                   "Localized_Name":  "@shell32.dll,-21779"
+                                                                                                                                               }
+                                                                                                                                           ]
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "ItemIDType":  "31",
+                                                                                                                      "ItemIDSize":  92,
+                                                                                                                      "w32Modified":  "21-Oct-2013 17:39:54.00",
+                                                                                                                      "Attributes":  "Directory (0x0010)",
+                                                                                                                      "Ansi_Name":  "2013-1~2",
+                                                                                                                      "ItemIdExtensions":  [
+                                                                                                                                               {
+                                                                                                                                                   "extLength":  70,
+                                                                                                                                                   "extversion":  9,
+                                                                                                                                                   "itemIdExtType":  "BEEF0004",
+                                                                                                                                                   "w32Created":  "21-Oct-2013 17:39:10.00",
+                                                                                                                                                   "w32Accessed":  "21-Oct-2013 17:39:54.00",
+                                                                                                                                                   "Host":  "Windows 8.1/10/11",
+                                                                                                                                                   "FileSystem":  "NTFS",
+                                                                                                                                                   "MFTrecordNr":  47092,
+                                                                                                                                                   "MFTrecordSeqNr":  3,
+                                                                                                                                                   "Unicode_Name":  "2013-10-21"
+                                                                                                                                               }
+                                                                                                                                           ]
+                                                                                                                  }
+                                                                                                              ]
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  17,
+                                                                                           "ID":  25,
+                                                                                           "Description":  "SFGAOFlags [28636AA6-953D-11D2-B5D6-00C04FD918D0\\25]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI4 [0x0013]",
+                                                                                                             "Value":  1077936503
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  33,
+                                                                                           "ID":  24,
+                                                                                           "Description":  "ParsingName [28636AA6-953D-11D2-B5D6-00C04FD918D0\\24]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "067.jpg"
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             },
+                                                             {
+                                                                 "Storage Size":  154,
+                                                                 "FormatID":  "B725F130-47EF-101A-A5F1-02608C9EEBAC",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  25,
+                                                                                           "ID":  10,
+                                                                                           "Description":  "ItemNameDisplay [B725F130-47EF-101A-A5F1-02608C9EEBAC\\10]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "067"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  12,
+                                                                                           "Description":  "Size [B725F130-47EF-101A-A5F1-02608C9EEBAC\\12]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI8 [0x0015]",
+                                                                                                             "Value":  2196383
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  15,
+                                                                                           "Description":  "DateCreated [B725F130-47EF-101A-A5F1-02608C9EEBAC\\15]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_FILETIME [0x0040]",
+                                                                                                             "Value":  "19-Oct-2013 02:17:40.0000000"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  14,
+                                                                                           "Description":  "DateModified [B725F130-47EF-101A-A5F1-02608C9EEBAC\\14]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_FILETIME [0x0040]",
+                                                                                                             "Value":  "19-Oct-2013 02:17:39.0000000"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  16,
+                                                                                           "Description":  "DateAccessed [B725F130-47EF-101A-A5F1-02608C9EEBAC\\16]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_FILETIME [0x0040]",
+                                                                                                             "Value":  "19-Oct-2013 02:17:40.0000000"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  17,
+                                                                                           "ID":  13,
+                                                                                           "Description":  "FileAttributes [B725F130-47EF-101A-A5F1-02608C9EEBAC\\13]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI4 [0x0013]",
+                                                                                                             "Value":  32
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             },
+                                                             {
+                                                                 "Storage Size":  170,
+                                                                 "FormatID":  "1E3EE840-BC2B-476C-8237-2ACD1A839B22",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  105,
+                                                                                           "ID":  8,
+                                                                                           "Description":  "System ItemId [1E3EE840-BC2B-476C-8237-2ACD1A839B22\\8]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR [0x001F]",
+                                                                                                             "Value":  "C:\\Users\\Donald\\Pictures\\2013-10-21\\067.jpg"
+                                                                                                         }
+                                                                                       },
+                                                                                       {
+                                                                                           "ValueSize":  37,
+                                                                                           "ID":  3,
+                                                                                           "Description":  "Kind [1E3EE840-BC2B-476C-8237-2ACD1A839B22\\3]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_LPWSTR, VT_VECTOR [0x101F]",
+                                                                                                             "Value":  "picture"
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             },
+                                                             {
+                                                                 "Storage Size":  49,
+                                                                 "FormatID":  "446D16B1-8DAD-4870-A748-402EA43D788C",
+                                                                 "TypedProperty":  [
+                                                                                       {
+                                                                                           "ValueSize":  21,
+                                                                                           "ID":  100,
+                                                                                           "Description":  "ThumbnailCacheId [446D16B1-8DAD-4870-A748-402EA43D788C\\100]",
+                                                                                           "TypedProp":  {
+                                                                                                             "Type":  "VT_UI8 [0x0015]",
+                                                                                                             "Value":  8049028389998424703
+                                                                                                         }
+                                                                                       }
+                                                                                   ]
+                                                             }
+                                                         ]
+                            }
+                        ],
+    "StringData Block Size":  162,
+    "Working Dir.":  "C:\\Users\\Donald\\Pictures\\2013-10-21",
+    "Relative Path":  "..\\..\\..\\..\\..\\Pictures\\2013-10-21\\067.jpg",
+    "Link Info Block Size":  137,
+    "Link Info Flags":  "VolumeIDAndLocalBasePath, CommonNetworkRelativeLinkAndPathSuffix",
+    "Drive Type":  "FIXED",
+    "Volume Label":  "Windows8_OS",
+    "Drive s/n":  "7E58AAB0",
+    "Local Base Path":  "C:\\Users\\",
+    "CommonPathSuffix":  "Donald\\Pictures\\2013-10-21\\067.jpg",
+    "Common Network Relative Link Flags":  "ValidNetType",
+    "NetworkProviderType":  "0x00020000 (WNNC_NET_LANMAN)",
+    "NetName":  "\\\\BIFROST\\Users",
+    "ExtraData Block Size":  140,
+    "Machine Id":  "BIFROST",
+    "Guid 1":  {
+                   "ObjectID":  "6BC0AB92-F111-496F-9067-EC5C94FFA9F5",
+                   "Version":  4,
+                   "Variant":  2,
+                   "Sequence":  4199
+               },
+    "Birth Guid 1":  {
+                         "ObjectID":  "6BC0AB92-F111-496F-9067-EC5C94FFA9F5",
+                         "Version":  4,
+                         "Variant":  2,
+                         "Sequence":  4199
+                     },
+    "Guid 2":  {
+                   "ObjectID":  "DC8FFB09-3A6B-11E3-BE8A-24FD52566EDE",
+                   "Version":  1,
+                   "Variant":  2,
+                   "Sequence":  16010,
+                   "Created":  "21-Oct-2013 16:14:28.7581961",
+                   "MAC":  "24:FD:52:56:6E:DE"
+               },
+    "Birth Guid 2":  {
+                         "ObjectID":  "DC8FFB09-3A6B-11E3-BE8A-24FD52566EDE",
+                         "Version":  1,
+                         "Variant":  2,
+                         "Sequence":  16010,
+                         "Created":  "21-Oct-2013 16:14:28.7581961",
+                         "MAC":  "24:FD:52:56:6E:DE"
+                     }
+}
