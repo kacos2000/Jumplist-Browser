@@ -7316,6 +7316,7 @@ function Show-MainForm_psf
 							$RawFilesize = $data[12 .. 15]
 						}
 						$w32Modified = DosDateTime-FromHex -Hex ([System.BitConverter]::ToString($data[19 .. 16]) -replace '-', '')
+      						if (!!$w32Modified) { $w32Modified = $w32Modified.ToString("dd-MMM-yyyy HH:mm:ss.ff") }
 						$Attributes = Get-Attributes -Bytes $data[20..21]
 						$Ansi_Name = [System.Text.Encoding]::UTF8.GetString($data[22 .. ($idx + 22 - 1)])
 						$padding = if (($Ansi_Name.Length % 2) -eq 0) { 2 }	else { 1 }
