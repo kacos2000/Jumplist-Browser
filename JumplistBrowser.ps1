@@ -4608,7 +4608,7 @@ function Show-MainForm_psf
 		$month = $bin_d.substring(7, 4)
 		$day = $bin_d.substring(11, 5)
 		$Date = "$([Convert]::toInt32($day, 2))/$([Convert]::toInt32($month, 2))/$([Convert]::toInt32($year, 2) + 1980)"
-		try	{ $DosDate = [System.DateTime]::Parse("$($Date) $($Time)")	} #	Get-Date "$($Date) $($Time)" -Format s
+		try { $DosDate = [System.DateTime]::Parse("$($Date) $($Time)", [System.Globalization.CultureInfo]::GetCultureInfo("el-GR"))	} #	Get-Date "$($Date) $($Time)" -Format s
 		catch { $DosDate = $null }
 		
 		return $DosDate
