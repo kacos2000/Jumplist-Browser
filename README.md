@@ -12,6 +12,8 @@ Dependencies:
 
 Sample screenshots:<br>
 
+  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/414e02c2-6cd6-412f-882d-0bb0fdeb0483" width="600">
+
   <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/d3f08278-59a0-404f-a95d-bde23d2432f1" width="600">
 
   <img src="https://user-images.githubusercontent.com/11378310/220356910-0085c017-c4c1-45da-96a0-24f7be69f13f.png" width="500">
