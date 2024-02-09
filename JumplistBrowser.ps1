@@ -6097,10 +6097,9 @@ function Show-MainForm_psf
 				$Ansi_8_3_Name = [System.Text.Encoding]::UTF8.GetString($ByteArray[(12 + $Ansi_Name.Length + 1) .. ($ItemIDSize - 1)])
 				$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "Ansi_8_3_Name" -Value $Ansi_8_3_Name
 			}
-		}
-		
 		$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "Data" -Value "$([System.BitConverter]::ToString($ByteArray) -replace '-', '')"
-		
+  		}
+				
 		return $ItemIdListProperties
 	} # End Get-Ext_B1 
 	
