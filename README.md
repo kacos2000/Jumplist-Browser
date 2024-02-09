@@ -12,9 +12,11 @@ Dependencies:
 
 Sample screenshots:<br>
 
-  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/f2f7e462-9f1c-4c07-a4d3-3ce340730905" width="600">
+  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/f2f7e462-9f1c-4c07-a4d3-3ce340730905" width="600"><br>
 
-  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/d3f08278-59a0-404f-a95d-bde23d2432f1" width="600">
+   <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/afa43473-6f70-4b76-b6ce-366458c6eb17" width="500">
+
+  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/d3f08278-59a0-404f-a95d-bde23d2432f1" width="600"><br>
 
   <img src="https://user-images.githubusercontent.com/11378310/220356910-0085c017-c4c1-45da-96a0-24f7be69f13f.png" width="500">
 
