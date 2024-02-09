@@ -12,7 +12,7 @@ Dependencies:
 
 Sample screenshots:<br>
 
-  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/414e02c2-6cd6-412f-882d-0bb0fdeb0483" width="600">
+  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/f2f7e462-9f1c-4c07-a4d3-3ce340730905" width="600">
 
   <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/d3f08278-59a0-404f-a95d-bde23d2432f1" width="600">
 
