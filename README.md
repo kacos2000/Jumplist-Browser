@@ -3,18 +3,57 @@ Automatic/Custom Destinations &amp; LNK (ShellLNK) Browser
 
 ==> [Latest version](https://github.com/kacos2000/Jumplist-Browser/releases/latest) <==
 
-**Note**: See the [Releases](https://github.com/kacos2000/Jumplist-Browser/releases) for updates & features
 ___________________________________________
 Dependencies: 
 - Operating system: Microsoft Windows 10+ 64 Bit
 - [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
 - [Powershell Version:  5.1](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-5.1)
+___________________________________________
+Supports:
+   - Link: (.lnk) shortcut files
+   - Frequent Places Lists: '.customDestinations-ms' and '.automaticDestinations-ms' files
+   - Raw image files: '.001', '.raw','.dd', '.img', '.ima' *via the 'Open File' dialog* - *(carves and shows .lnk files and their offsets)* 
+   - Current User (HKCU) keys which contain Shellink items:
+      - 'Software\Microsoft\Windows\Shell\BagMRU'
+      - 'Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\BagMRU'
+      - 'Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs'
+      - 'Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\':
+         - 'OpenSavePidlMRU'
+         - 'LastVisitedPidlMRU'
+         - 'LastVisitedPidlMRULegacy'
+      - 'Software\Microsoft\Windows\CurrentVersion\Explorer\TWinUI\FilePicker\LastVisitedPidlMRU'
+      - 'Software\Microsoft\Windows\CurrentVersion\Explorer\Streams'
+      - 'Software\Microsoft\Windows\CurrentVersion\Explorer\StreamMRU'
+      - 'Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery'
+      - 'Software\Microsoft\Windows\CurrentVersion\Search' *(JumplistData & RecentApps)* # Items pinned to the Taskbar 
+      - 'Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband':
+         - Favorites'
+         - 'FavoritesResolve'
+      - 'Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage2':
+         - 'Favorites'
+         - 'FavoritesResolve'
+         - 'ProgramsCache'
+         - 'ProgramsCacheSMP'
+         - 'ProgramsCacheTBP'
+      - 'Software\Microsoft\Windows\CurrentVersion\Lock Screen' *(Lock screen background image(s))*
+___________________________________________
+Features:
+   - Shows the [64-bit file size *(when a target file size is greater than 4Gb (0xFFFFFFFF))*](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.0.0.37.0)
+   - Shows [Reparse Point Tags](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.0.0.33.0) & their description
+   - Shows customDestinations ['CustomCategory' titles](https://github.com/kacos2000/Jumplist-Browser/assets/11378310/0c1f9909-59ce-4330-b036-a21d995a1406)
+   - Shows Pin Entry *(item order)* number of items pinned in Jumplists
+   - Shows Serialized Property descriptions for most [FormatID/PropertyID combinations](https://github.com/kacos2000/Jumplist-Browser/blob/master/FormatID-Descriptions.csv)
+   - Shows the [Application name](https://github.com/kacos2000/Jumplist-Browser/blob/master/AppIdlist.csv) for known [CRC64 hashes](https://www.hexacorn.com/blog/2013/04/30/jumplists-file-names-and-appid-calculator/) in Destinations-ms files
+   - Resolves CLSIDs, [SID](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.1.0.3.0)s, File Attribute & SFGAO flags, Stock Icon IDs, [MAC address/manufacturer](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.1.0.5.0) etc
+   - [Single .exe](https://github.com/kacos2000/Jumplist-Browser/releases/latest) => can be used with [Arsenal Image Mounter](https://arsenalrecon.com/products/arsenal-image-mounter) & [Virtual machines](https://github.com/kacos2000/Jumplist-Browser/assets/11378310/5371c027-3155-4d81-9d32-b7035ea510fa)
+   - Can [export to .JSON](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.0.0.52.0) 
 
+___________________________________________
 Sample screenshots:<br>
 
   <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/f2f7e462-9f1c-4c07-a4d3-3ce340730905" width="600"><br>
 
-   <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/afa43473-6f70-4b76-b6ce-366458c6eb17" width="500">
+  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/afa43473-6f70-4b76-b6ce-366458c6eb17" width="500">
 
   <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/d3f08278-59a0-404f-a95d-bde23d2432f1" width="600"><br>
 
@@ -29,36 +68,32 @@ Sample screenshots:<br>
 <!-- Commented out -->
 <!-- ![image](https://user-images.githubusercontent.com/11378310/212580495-e4c6afe8-68a3-4504-b831-b92c1728b36a.png) -->
 
-- **Note:** *Uses the following Libraries:*
-   - [ShellLink .NET Class Library](https://github.com/securifybv/ShellLink) and
-   - [PropertyStore .NET Class Library](https://github.com/securifybv/PropertyStore)
-
 ---------------------------------------------------------------------------------------------------------------
 
 ### [TIP]:
 In **'automaticDestinations-ms'** files, with the exception of *Windows Control Panel*, *Windows Explorer* and *Quick Access*, 
 entries usually include a 'Hint' on which Application they are related to. 
-These hints are seen in the last IDlist entry (type [32] *(File)*):
+These 'hints' are seen in the last IDlist entry (type [32] *(File)*):
 
 either indirectly: <br>
 MPC-HC *(Media Player Classic - Home Cinema)*:<br>
-![image](https://user-images.githubusercontent.com/11378310/219865398-65ceda89-8e6c-4a53-9f20-228d1fda0458.png)<br>
+  <img src="https://user-images.githubusercontent.com/11378310/219865398-65ceda89-8e6c-4a53-9f20-228d1fda0458.png" width="300"><br>
 MS Excel:<br>
-![image](https://user-images.githubusercontent.com/11378310/219865245-1f6203be-08df-4499-bb70-27b13ce87ab1.png)<br>
+  <img src="https://user-images.githubusercontent.com/11378310/219865245-1f6203be-08df-4499-bb70-27b13ce87ab1.png" width="300"><br>
 Edge Browser:<br>
-![image](https://user-images.githubusercontent.com/11378310/219864945-70219bcd-a189-45ab-bf87-55b0a24dcece.png)<br>
+  <img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/d4761eeb-5b1b-4aa9-8470-f5cf692a2a34" width="500"><br>
 *(the "**AppX**d4nrz8ff68srnhf9t5a8sbjyar1cr723" type entries can be looked up in:<br>
 'HKLM::Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\PackageRepository\Extensions\ProgIDs')*
 
 or Directly:<br>
 Windows Wordpad:<br>
-![image](https://user-images.githubusercontent.com/11378310/219865461-223076e7-4195-4089-97e3-6a8b00baa5bd.png)<br>
+  <img src="https://user-images.githubusercontent.com/11378310/219865461-223076e7-4195-4089-97e3-6a8b00baa5bd.png" width="300"><br>
 Modern CSV:<br>
-![image](https://user-images.githubusercontent.com/11378310/219865578-234ea46d-0ac0-4fca-afaa-64a870501137.png)<br>
+  <img src="https://user-images.githubusercontent.com/11378310/219865578-234ea46d-0ac0-4fca-afaa-64a870501137.png" width="300"><br>
 Maël Hörz's [HxD Hex Editor](https://mh-nexus.de/en/hxd/)<br>
-![image](https://user-images.githubusercontent.com/11378310/221018836-62cbc8e4-4dbf-4eda-8892-82230db48c0f.png)<br>
+  <img src="https://user-images.githubusercontent.com/11378310/221018836-62cbc8e4-4dbf-4eda-8892-82230db48c0f.png" width="300"><br>
 
 ---------------------------------------------------------------------------------------------------------------
-
-
-
+- **Note:** *Uses the following Libraries:*
+   - [ShellLink .NET Class Library](https://github.com/securifybv/ShellLink) and
+   - [PropertyStore .NET Class Library](https://github.com/securifybv/PropertyStore)
