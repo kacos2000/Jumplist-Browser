@@ -10812,7 +10812,7 @@ target file size."
 				$Null = $BGuid2Node.Nodes.Add("version", "GUID Version: $($LNKData.'Birth Guid 2'.version)")
 				$Null = $BGuid2Node.Nodes.Add("variant", "GUID Variant: $($LNKData.'Birth Guid 2'.variant)")
 				$Null = $BGuid2Node.Nodes.Add("Sequence", "GUID Sequence: $($LNKData.'Birth Guid 2'.Sequence)")
-				if (!!$LNKData.'Guid 2'.MAC)
+				if (!!$LNKData.'Birth Guid 2'.MAC)
 				{
 					# Add to tree
 					$Null = $BGuid2Node.Nodes.Add("GUIDcreated", "GUID created at: $($LNKData.'Birth Guid 2'.Created)")
