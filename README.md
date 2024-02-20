@@ -36,9 +36,11 @@ Supports:
          - 'ProgramsCacheSMP'
          - 'ProgramsCacheTBP'
       - 'Software\Microsoft\Windows\CurrentVersion\Lock Screen' *(Lock screen background image(s))*
+   
 ___________________________________________
 Features:
-   - Shows the [64-bit file size *(when a target file size is greater than 4Gb (0xFFFFFFFF))*](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.0.0.37.0)
+   - Shows the [64-bit file size *(when a target file size is greater than 4Gb (0xFFFFFFFF))*](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.0.0.37.0)<br>
+     *(DWORD nFileSizeHigh + DWORD nFileSizeLow)*
    - Shows [Reparse Point Tags](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.0.0.33.0) & their description
    - Shows customDestinations ['CustomCategory' titles](https://github.com/kacos2000/Jumplist-Browser/assets/11378310/0c1f9909-59ce-4330-b036-a21d995a1406)
    - Shows Pin Entry *(item order)* number of pinned items in automaticDestinations-ms
@@ -97,6 +99,16 @@ Modern CSV:<br>
 Maël Hörz's [HxD Hex Editor](https://mh-nexus.de/en/hxd/)<br>
   <img src="https://user-images.githubusercontent.com/11378310/221018836-62cbc8e4-4dbf-4eda-8892-82230db48c0f.png" width="300"><br>
 
+___________________________________________
+References:
+- [Shell Link (.LNK) Binary File Format](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/a6c2f32d-2297-4727-bcd3-5d3669573bcb)<br>
+  *The most important component of a link target namespace is a link target in the form of an item ID list (IDList)*
+- [Serialized Property Store](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-propstore/3453fb82-0e4f-4c2c-bc04-64b4bd2c51ec)
+- [Shell Namespace](https://learn.microsoft.com/en-us/windows/win32/shell/namespace-intro?redirectedfrom=MSDN)
+- [Windows Data Types](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/cca27429-5689-4a16-b2b4-9325d93e4ba2)
+- [LnkSearchMachine](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dltw/6cbc37d6-c74a-4078-8030-19d4de1807bf)<br>
+   *FileLocation: A VolumeID with an appended ObjectID, which together represent the location of a file at some point in time, though the file might no longer be there. FileLocation values are stored in droid (CDomainRelativeObjId) data structures.*
+  
 ---------------------------------------------------------------------------------------------------------------
 - **Note:** *Uses the following Libraries:*
    - [ShellLink .NET Class Library](https://github.com/securifybv/ShellLink) and
