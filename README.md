@@ -44,14 +44,15 @@ Features:
    - Shows [Reparse Point Tags](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.0.0.33.0) & their description
    - Shows customDestinations ['CustomCategory' titles](https://github.com/kacos2000/Jumplist-Browser/assets/11378310/0c1f9909-59ce-4330-b036-a21d995a1406)
    - Shows Pin Entry *(item order)* number of pinned items in automaticDestinations-ms
-   - Shows Quick Access position (order) of items in the Quick Access in automaticDestinations-ms
+   - Shows Quick Access position *(item order)* in automaticDestinations-ms
    - Supports the 'DestListPropertyStore' stream in automaticDestinations-ms
-   - Suports PropertyStore extensions in automaticDestinations-ms 'DestList' stream entries 
+   - Supports PropertyStore extensions in automaticDestinations-ms 'DestList' stream entries 
    - Shows Serialized Property descriptions for most [FormatID/PropertyID combinations](https://github.com/kacos2000/Jumplist-Browser/blob/master/FormatID-Descriptions.csv)
    - Shows the [Application name](https://github.com/kacos2000/Jumplist-Browser/blob/master/AppIdlist.csv) for known [CRC64 hashes](https://www.hexacorn.com/blog/2013/04/30/jumplists-file-names-and-appid-calculator/) in Destinations-ms files
    - Resolves CLSIDs, [SID](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.1.0.3.0)s, File Attribute & SFGAO flags, Stock Icon IDs, [MAC address/manufacturer](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.1.0.5.0) etc
-   - [Single .exe](https://github.com/kacos2000/Jumplist-Browser/releases/latest) => can be used with [Arsenal Image Mounter](https://arsenalrecon.com/products/arsenal-image-mounter) & [Virtual machines](https://github.com/kacos2000/Jumplist-Browser/assets/11378310/5371c027-3155-4d81-9d32-b7035ea510fa)
-   - Can [export to .JSON](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.0.0.52.0) 
+   - [Single executable *(x64)*](https://github.com/kacos2000/Jumplist-Browser/releases/latest) => can be used with [Arsenal Image Mounter](https://arsenalrecon.com/products/arsenal-image-mounter) & [Virtual machines](https://github.com/kacos2000/Jumplist-Browser/assets/11378310/5371c027-3155-4d81-9d32-b7035ea510fa)
+   - Can [export to .JSON](https://github.com/kacos2000/Jumplist-Browser/releases/tag/v.0.0.52.0)
+
 ___________________________________________
 Sample screenshots:<br>
 
