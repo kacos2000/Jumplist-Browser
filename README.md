@@ -25,7 +25,9 @@ Supports:
       - 'Software\Microsoft\Windows\CurrentVersion\Explorer\Streams'
       - 'Software\Microsoft\Windows\CurrentVersion\Explorer\StreamMRU'
       - 'Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery'
-      - 'Software\Microsoft\Windows\CurrentVersion\Search' *(JumplistData & RecentApps)* # Items pinned to the Taskbar 
+      - 'Software\Microsoft\Windows\CurrentVersion\Search'
+         - 'JumplistData' &
+         - 'RecentApps'
       - 'Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband':
          - Favorites'
          - 'FavoritesResolve'
