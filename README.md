@@ -9,6 +9,15 @@ Dependencies:
 - [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
 - [Powershell Version:  5.1](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-5.1)
 ___________________________________________
+Additional info:  
+[ItemID & ItemID Extension Structures](https://github.com/kacos2000/Jumplist-Browser/blob/master/ItemID%20Structure%20Document.md)  
+[LNK Target File Size (64bit).pdf](https://github.com/kacos2000/Jumplist-Browser/blob/master/LNK%20Target%20File%20Size%20(64bit).pdf)  
+[ZIP file with 3 test LNK (Shortcut) files for testing of 64bit target File Size](https://github.com/kacos2000/Jumplist-Browser/releases/download/v.0.0.37.0/LNK.32-64bit.size.test.files.zip)  
+
+<img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/83e52819-7da8-442f-a83b-a19a7d4f2b8f" width="290">  
+<img src="https://github.com/kacos2000/Jumplist-Browser/assets/11378310/21e11f88-7cfc-4526-8559-6b6fb3a7dc10" width="380">  
+
+___________________________________________
 Supports:
    - Link: (.lnk) shortcut files
    - Frequent Places Lists: '.customDestinations-ms' and '.automaticDestinations-ms' files
