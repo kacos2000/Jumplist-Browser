@@ -1,4 +1,4 @@
-# **MS-SHLLINK LinkTargetIDList (ItemID) Structure Document**
+# **MS-SHLLINK ItemID Structure Document**
 ## **Combined with ItemID Extension Analysis**
 
 ---
