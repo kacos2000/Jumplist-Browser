@@ -11,6 +11,7 @@ Dependencies:
 ___________________________________________
 Additional info:  
 [ItemID & ItemID Extension Structures](https://github.com/kacos2000/Jumplist-Browser/blob/master/ItemID%20Structure%20Document.md)  
+[BEEF0004 ItemID extension with info on the embedded metadata](https://github.com/kacos2000/Jumplist-Browser/blob/master/ItemID%20Structure%20Document.md#41-beef0004---filefolder-extension)   
 [LNK Target File Size (64bit).pdf](https://github.com/kacos2000/Jumplist-Browser/blob/master/LNK%20Target%20File%20Size%20(64bit).pdf)  
 [ZIP file with 3 test LNK (Shortcut) files for testing of 64bit target File Size](https://github.com/kacos2000/Jumplist-Browser/releases/download/v.0.0.37.0/LNK.32-64bit.size.test.files.zip)  
 
