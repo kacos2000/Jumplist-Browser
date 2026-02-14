@@ -1038,23 +1038,6 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 	'2147483648' = 'Reserved' # 0x80000000 - Highest bit (MSB)
 	# Reserved for future use
 ```
-
-**Note**:
-The LNK file might contain two different attributes for the same target. Example *(OneDrive folder)*:
-
- - NTFS *(fsutil file layout of target folder)*:
- 
-   <img width="650" src="https://github.com/user-attachments/assets/40fb83da-5a8c-46c9-a57b-9bd6348307a3" />
-    
- - LNK Header: `Physical file system` attributes *(includes Reparse_Point)*:
- 
-   <img width="200" src="https://github.com/user-attachments/assets/cb2a36aa-d3fd-4a74-b39d-1cfbd8ea7a1a" />
-   
- - BEEF00xx Extension: `Shell namespace` attributes *(doesn't include Reparse_Point)*:
- 
-   <img width="330" src="https://github.com/user-attachments/assets/1bfc99c7-f2e3-4b03-b964-6ed0d45826cd" />
- 
-
 *[FileAttributes Enum](https://learn.microsoft.com/en-us/dotnet/api/system.io.fileattributes?view=net-7.0)*  
 *[File Attribute Constants](https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants)*  
 *C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winnt.h*  
