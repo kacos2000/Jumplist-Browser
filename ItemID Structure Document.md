@@ -125,16 +125,18 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```typescript
 +0x00: BYTE      ItemIDType = 0x01
 +0x02: DWORD     Signature (optional)
-+0x06: BYTE      CategoryID
++0x06: BYTE      CategoryID (*)
 ```
+(*) *[Control PanelIDs & Descriptions](ItemID%20Structure%20Document.md#710-control-panel-categoryid--description)*
 
 ## **Type 0x1F - ShellDesktop/GUID Item**
 ```typescript
 +0x00: BYTE      ItemIDType = 0x1F
-+0x01: BYTE      ClassType (SortOrderIndex)
++0x01: BYTE      ClassType (SortOrderIndex] (*)
 +0x02: GUID      CLSID
 +0x12: OPTIONAL Extension Block
 ```
+(*) *[Sort Order Indexes](ItemID%20Structure%20Document.md#78-sort-order-index)*
 
 ### **ClassType Values for Type 0x1F:**
 - **0x00** - Regular GUID Item
@@ -167,6 +169,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 +0x0C: CHAR[]    Name (ANSI, null-terminated)
 +? : OPTIONAL Extension Block
 ```
+*[FileAttributes](ItemID%20Structure%20Document.md#74-file-attributes-flags-word)*
 
 ### **Types 0x31/0x32 - File/Folder Entry (Uses ANSI encoding exclusively)**
 ```typescript
@@ -177,6 +180,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 +0x0C: CHAR[]    Name (ANSI, null-terminated)
 +? : OPTIONAL Extension Block
 ```
+*[FileAttributes](ItemID%20Structure%20Document.md#74-file-attributes-flags-word)*
 
 ### **Types 0x35/0x36 - File/Folder Entry (Unicode/ANSI)**
 ```typescript
@@ -187,6 +191,8 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 +0x0C: CHAR[]/WCHAR[] Name (mixed encoding)
 +? : OPTIONAL Extension Block
 ```
+*[FileAttributes](ItemID%20Structure%20Document.md#74-file-attributes-flags-word)*
+
 
 ### **`File Entry` Notes (for ItemID types: 0x32, 0x36 and 0x3A)**
 1. Type 0x32: Uses ANSI encoding exclusively (no encoding flag)
@@ -256,6 +262,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 +...: GUID       GUID2
 +...: OPTIONAL Extension Block
 ```
+*[FileAttributes](ItemID%20Structure%20Document.md#74-file-attributes-flags-word)*
 
 ## **Type 0xB1 - File/Folder Entry (Alternate)**
 ```typescript
@@ -265,6 +272,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 +0x0C: CHAR[]    Name (ANSI, null-terminated)
 +? : OPTIONAL Extension Block or 8.3 Name
 ```
+*[FileAttributes](ItemID%20Structure%20Document.md#74-file-attributes-flags-word)*
 
 ## **Type 0xC3 - Network Item (*Three Strings*)**
 ```typescript
@@ -689,7 +697,7 @@ Two variations:
 ```
 URI Entry Structure (per entry):
 
-- 4 bytes: Entry Type
+- 4 bytes: [Entry Type](ItemID%20Structure%20Document.md#79-uri-entry-types)
 - 4 bytes: Entry Length
 - Variable: Entry Data (either 4-byte value or Unicode string)
 
@@ -875,11 +883,15 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 
 ## **7. APPENDIX: KNOWN VALUES**
 
-### **7.1 Common CLSIDs in Extensions**
+### **7.1 GUID/CLSIDs**
+*example:*
 ```
 0C39A5CF-1A7A-40C8-BA74-8900E6DF5FCD = NoPreviousVersions
+528d46b3-3a4b-4b13-bf74-d9cbd7306e07 = XML Feed Document
+...
 ```
-(others from [CLSID database/CSV](https://github.com/kacos2000/Jumplist-Browser/blob/master/GUIDs.csv) )
+- [GUID csv](https://github.com/kacos2000/Jumplist-Browser/blob/master/GUIDs.csv)
+- [CLSIDs csv](Windows-CLSIDs.csv)
 
 
 ### **7.2 Reparse Point Tags**
@@ -940,7 +952,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 	"C0000014" = "IO_REPARSE_TAG_APPXSTRM"
 ```
 
-### **7.3 OS Type to Version Mapping**
+### **7.3 Windows Operating System (OS) Type to Version Mapping**
 ```
 '46' = 'Windows 8.1/10/11'
 '42' = 'Windows 2000/7/8'
@@ -948,32 +960,85 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 '20' = 'Windows XP/2003'
 ```
 
-## **7.4 File Attributes Flags (WORD)**
+## **7.4 File Attributes Flags**
+```powershell
+	# ==============================================================================
+	# LEGACY DOS/WORD ATTRIBUTES (2 bytes = 16 bits)
+	# These work in both WORD (16-bit) and DWORD (32-bit) contexts
+	# ==============================================================================
+	
+	'1'		     = 'ReadOnly' # 0x00000001 - FILE_ATTRIBUTE_READONLY
+	'2'		     = 'Hidden' # 0x00000002 - FILE_ATTRIBUTE_HIDDEN  
+	'4'		     = 'System' # 0x00000004 - FILE_ATTRIBUTE_SYSTEM
+	'8'		     = 'Volume_Label' # 0x00000008 - DOS volume label (rarely used for files)
+	
+	'16'		 = 'Directory' # 0x00000010 - FILE_ATTRIBUTE_DIRECTORY
+	'32'		 = 'Archive' # 0x00000020 - FILE_ATTRIBUTE_ARCHIVE
+	'64'		 = 'Device' # 0x00000040 - FILE_ATTRIBUTE_DEVICE (reserved)
+	'128'	     = 'Normal' # 0x00000080 - FILE_ATTRIBUTE_NORMAL
+	
+	# ==============================================================================
+	# EXTENDED NTFS ATTRIBUTES (DWORD-only, bits 8-15)
+	# These require 4-byte (32-bit) storage
+	# ==============================================================================
+	
+	'256'	     = 'Temporary' # 0x00000100 - FILE_ATTRIBUTE_TEMPORARY
+	'512'	     = 'Sparse_File' # 0x00000200 - FILE_ATTRIBUTE_SPARSE_FILE
+	'1024'	     = 'Reparse_Point' # 0x00000400 - FILE_ATTRIBUTE_REPARSE_POINT
+	'2048'	     = 'Compressed' # 0x00000800 - FILE_ATTRIBUTE_COMPRESSED
+	
+	'4096'	     = 'Offline' # 0x00001000 - FILE_ATTRIBUTE_OFFLINE
+	'8192'	     = 'Not_Content_Indexed' # 0x00002000 - FILE_ATTRIBUTE_NOT_CONTENT_INDEXED
+	'16384'	     = 'Encrypted' # 0x00004000 - FILE_ATTRIBUTE_ENCRYPTED
+	'32768'	     = 'Integrity_Stream' # 0x00008000 - FILE_ATTRIBUTE_INTEGRITY_STREAM (ReFS)
+	
+	# ==============================================================================
+	# WINDOWS 8+ EXTENDED ATTRIBUTES (DWORD-only, bits 16-23)
+	# ==============================================================================
+	
+	'65536'	     = 'Virtual' # 0x00010000 - FILE_ATTRIBUTE_VIRTUAL
+	'131072'	 = 'No_Scrub_Data' # 0x00020000 - FILE_ATTRIBUTE_NO_SCRUB_DATA
+	
+	# ==============================================================================
+	# CLOUD FILTER / PLACEHOLDER ATTRIBUTES (DWORD-only, bits 18-22)
+	# These are NOT standard FILE_ATTRIBUTE_* constants!
+	# They appear in WIN32_FIND_DATA's dwFileAttributes for cloud files
+	# ==============================================================================
+	
+	# IMPORTANT: These are shell/cloud-specific states, not traditional file attributes
+	# They indicate placeholder file states in OneDrive, SharePoint, etc.
+	
+	'262144'	 = 'Recall_On_Open' # 0x00040000 - Cloud: Hydrate when opened
+	# FILE_ATTRIBUTE_RECALL_ON_OPEN (cfapi.h)
+	# Set when file is online-only and needs recall
+	
+	'524288'	 = 'Pinned' # 0x00080000 - Cloud: Always available locally
+	# FILE_ATTRIBUTE_PINNED (cfapi.h)
+	# File is pinned to local storage
+	
+	'1048576'    = 'Unpinned' # 0x00100000 - Cloud: Online-only placeholder
+	# FILE_ATTRIBUTE_UNPINNED (cfapi.h)
+	# File exists only in cloud until accessed
+	
+	'4194304'    = 'Recall_On_DataAccess' # 0x00400000 - Cloud: Hydrate on data access
+	# FILE_ATTRIBUTE_RECALL_ON_DATA_ACCESS (cfapi.h)
+	# More granular than RECALL_ON_OPEN
+	
+	'16777216'   = 'Partially_Hydrated' # 0x01000000 - Cloud: Partially downloaded
+	# Partial placeholder state
+	
+	# ==============================================================================
+	# OTHER/UNKNOWN ATTRIBUTES
+	# ==============================================================================
+	
+	'536870912'  = 'View_Index' # 0x20000000 - Possibly shell namespace/view index
+	# Not a standard file attribute
+	# Might indicate file is part of an indexed view
+
+	'2147483648' = 'Reserved' # 0x80000000 - Highest bit (MSB)
+	# Reserved for future use
 ```
-	'1'		    = 'ReadOnly'
-	'2'		    = 'Hidden'
-	'4'		    = 'System'
-	'16'	    = 'Directory'
-	'32'	    = 'Archive'
-	'64'	    = 'Device'
-	'128'	    = 'Normal'
-	'256'	    = 'Temporary'
-	'512'	    = 'Sparse_File' # LocallyIncomplete
-	'1024'	    = 'Reparse_Point'
-	'2048'	    = 'Compressed'
-	'4096'	    = 'Offline'
-	'8192'	    = 'Not_Content_Indexed'
-	'16384'	    = 'Encrypted'
-	'32768'	    = 'Integrity_Stream'
-	'65536'	    = 'Virtual'
-	'131072'    = 'No_Scrub_Data'
-	'524288'    = 'Pinned'
-	'262144'    = 'Recall_On_Open'
-	'1048576'   = 'Unpinned'
-	'4194304'   = 'Recall_On_DataAccess'
-	'536870912' = 'View_Index' # Strictly_Sequential
-```
-*[FileAttributes Enum(]https://learn.microsoft.com/en-us/dotnet/api/system.io.fileattributes?view=net-7.0)*  
+*[FileAttributes Enum](https://learn.microsoft.com/en-us/dotnet/api/system.io.fileattributes?view=net-7.0)*  
 *[File Attribute Constants](https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants)*  
 *C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winnt.h*  
 
@@ -1063,10 +1128,11 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 *..Include\10.0.22621.0\um\ShObjIdl_core.h*
 
 ### **7.7 PS1 FormatIDHashTable**
+*example*
 ```
 028636aa6-953d-11d2-b5d6-00c04fd918d0\4	= Network Location
 ```
-(others from [FormatID-Descriptions](https://github.com/kacos2000/Jumplist-Browser/blob/master/FormatID-Descriptions.csv) )
+[FormatID-Descriptions csv](FormatID-Descriptions.csv) )
 *[Utils.cs](https://github.com/EricZimmerman/ExtensionBlocks/blob/e0cef99c81776641e68a3f436bfcde21f6807334/ExtensionBlocks/Utils.cs)*
 *'C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\propkey.h'*  
 *'C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\functiondiscoverykeys.h'*  
@@ -1136,6 +1202,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 	"10" = "Security Center"
 	"11" = "Mobile PC"
 ```
+
 ---
 
 ## **8. REFERENCES**
