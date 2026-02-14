@@ -11,7 +11,7 @@ The **LinkTargetIDList** structure in MS-SHLLINK files contains a sequence of **
 ## **2. BASE ITEMID STRUCTURE**
 
 ### **2.1 Basic Format**
-```
+```typescript
 ITEMID (Base Structure)
 ├── ItemIDSize (2 bytes) - Size of this ItemID (including this field)
 ├── Data (variable)     - Shell namespace data
@@ -34,13 +34,13 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ## Windows Shell ItemID Structure Breakdown
 
 ## **Common ItemID Header**
-```
+```typescript
 +0x00: USHORT   ItemIDSize      // Total size including this field (little-endian)
 +0x02: BYTE[ItemIDSize-2] Data  // Item-specific data
 ```
 
 ## **Type 0x0F/0x09/0x16/0x52 - Compressed File/Folder Entry**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0x0F/0x09/0x16/0x52
 +0x01: BYTE[17]  Unknown Header (17 bytes)
 +0x12: WORD      Type/Attributes (mixed field)
@@ -78,32 +78,32 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 
 ### **Signature Subtypes for Type 0x00:**
 1. **'47465349' (GFSI)** - GUID Folder Shell Item
-   ```
+   ```typescript
    +0x06: GUID    FolderCLSID
    +0x16: OPTIONAL Extension Block
    ```
 
 2. **'1A00EEBB'** - Embedded ItemID with Attributes
-   ```
+   ```typescript
    +0x08: DWORD    Attributes
    +0x0C: GUID     FolderCLSID
    +0x1C: OPTIONAL Extension Block
    ```
 
 3. **'4175674D' (AugM)** - Embedded ItemID List
-   ```
+   ```typescript
    +0x0E: EMBEDDED ItemID List
    ```
 
 4. **'FFFFFFFF'** - Path/Description Item
-   ```
+   ```typescript
    +0x06: WORD     PathSize
    +0x08: CHAR[]   Path (ANSI)
    +? : CHAR[]     Description (ANSI)
    ```
 
 5. **'00DBBABE'** - Name Item
-   ```
+   ```typescript
    +0x0A: WCHAR[]  Name (Unicode)
    ```
 
@@ -122,14 +122,14 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
    - With attribute 0x10 at offset 0x12 - Directory Entry
 
 ## **Type 0x01 - Control Panel Category**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0x01
 +0x02: DWORD     Signature (optional)
 +0x06: BYTE      CategoryID
 ```
 
 ## **Type 0x1F - ShellDesktop/GUID Item**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0x1F
 +0x01: BYTE      ClassType (SortOrderIndex)
 +0x02: GUID      CLSID
@@ -143,7 +143,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ## **Types 0x23, 0x2E, 0x2F - Volume/MyComputer Items**
 
 ### **Type 0x23/0x2F - Drive Letter Item**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0x23/0x2F
 +0x01: CHAR[4]   DriveLetter (e.g., "C:\")
 +0x05: GUID      CLSID0 (optional)
@@ -151,35 +151,15 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```
 
 ### **Type 0x2E - MyComputer Item**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0x2E
 +0x01: BYTE      Subtype
 +0x02: GUID      CLSID (if Subtype = 0x80)
 +0x12: OPTIONAL Extension Block
 ```
 
-## **Types 0x31/0x32 - File/Folder Entry (Legacy)**
-```
-+0x00: BYTE      ItemIDType = 0x31 (Folder) / 0x32 (File)
-+0x02: DWORD     FileSize (0x32 only)
-+0x06: FILETIME  ModifiedTime (DOS format)
-+0x0A: WORD      FileAttributes
-+0x0C: CHAR[]    Name (ANSI, null-terminated)
-+? : OPTIONAL Extension Block
-```
-
-## **Types 0x35/0x36 - File/Folder Entry (Unicode/ANSI)**
-```
-+0x00: BYTE      ItemIDType = 0x35 (Folder) / 0x36 (File)
-+0x02: DWORD     FileSize (0x36 only)
-+0x06: FILETIME  ModifiedTime (DOS format)
-+0x0A: WORD      FileAttributes
-+0x0C: CHAR[]/WCHAR[] Name (mixed encoding)
-+? : OPTIONAL Extension Block
-```
-
-## **Type 0x3A - File Entry**
-```
+### **Type 0x3A - File Entry (Uses ANSI encoding exclusively)**
+```typescript
 +0x00: BYTE      ItemIDType = 0x3A
 +0x02: DWORD     FileSize
 +0x06: FILETIME  ModifiedTime (DOS format)
@@ -188,8 +168,40 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 +? : OPTIONAL Extension Block
 ```
 
-## **Type 0x46 - Network Item (Two Strings)**
+### **Types 0x31/0x32 - File/Folder Entry (Uses ANSI encoding exclusively)**
+```typescript
++0x00: BYTE      ItemIDType = 0x31 (Folder) / 0x32 (File)
++0x02: DWORD     FileSize (0x32 only)
++0x06: FILETIME  ModifiedTime (DOS format)
++0x0A: WORD      FileAttributes
++0x0C: CHAR[]    Name (ANSI, null-terminated)
++? : OPTIONAL Extension Block
 ```
+
+### **Types 0x35/0x36 - File/Folder Entry (Unicode/ANSI)**
+```typescript
++0x00: BYTE      ItemIDType = 0x35 (Folder) / 0x36 (File)
++0x02: DWORD     FileSize (0x36 only)
++0x06: FILETIME  ModifiedTime (DOS format)
++0x0A: WORD      FileAttributes
++0x0C: CHAR[]/WCHAR[] Name (mixed encoding)
++? : OPTIONAL Extension Block
+```
+
+### **`File Entry` Notes (for ItemID types: 0x32, 0x36 and 0x3A)**
+1. Type 0x32: Uses ANSI encoding exclusively (no encoding flag)
+2. Type 0x36: Has an encoding flag at Name field offset 0x00 (0x01 = Unicode)
+3. Type 0x3A: Appears structurally identical to 0x32
+4. FileSize: Is at offset +0x02 for all three types (DWORD, little-endian)
+5. FileSize: Two independent sources of file size data:
+   - `LNK header` (32-bit, may be truncated for large files)
+   - `ItemID` + `BEEF0004` (64-bit, complete size)
+6. Consistency: The FileSize (low 32 bits) in both `LNK Header` and `ItemID` should match ✓
+
+
+
+## **Type 0x46 - Network Item (Two Strings)**
+```typescript
 +0x00: BYTE      ItemIDType = 0x46
 +0x02: BYTE      Flags
 +0x03: CHAR[]    Name (ANSI)
@@ -198,7 +210,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```
 
 ## **Type 0x47 - Network Item (One String)**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0x47
 +0x02: BYTE      Flags
 +0x03: CHAR[]    Name (ANSI)
@@ -206,7 +218,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```
 
 ## **Type 0x61 - URI Shell Item**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0x61
 +0x01: BYTE      Flags
 +...:           Variable structure based on Flags
@@ -215,7 +227,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ### **Flags for Type 0x61:**
 - **0x80** - Unicode URI
 - **0x03** - FTP Connection
-  ```
+  ```typescript
   +0x02: QWORD    Timestamp (FILETIME)
   +0x0A: WORD     Port
   +0x0C: WORD     URILength
@@ -225,14 +237,14 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
   ```
 
 ## **Type 0x71 - Property Store GUID**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0x71
 +0x0C: GUID      CLSID
 +0x1C: OPTIONAL Extension Block
 ```
 
 ## **Types 0x73/0x74/0x77 - Delegate Folder**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0x73/0x74/0x77
 +0x04: DWORD     Signature = '43465346' (CFSF)
 +0x08: GUID      DelegateCLSID
@@ -246,7 +258,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```
 
 ## **Type 0xB1 - File/Folder Entry (Alternate)**
-```
+```typescript
 +0x00: BYTE      ItemIDType = 0xB1
 +0x06: FILETIME  ModifiedTime (DOS format)
 +0x0A: WORD      FileAttributes
@@ -254,8 +266,8 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 +? : OPTIONAL Extension Block or 8.3 Name
 ```
 
-## **Type 0xC3 - Network Item (Three Strings)**
-```
+## **Type 0xC3 - Network Item (*Three Strings*)**
+```typescript
 +0x00: BYTE      ItemIDType = 0xC3
 +0x02: BYTE      Flags
 +0x03: CHAR[]    Path (ANSI)
@@ -266,14 +278,14 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```
 
 ## **Type 0x0F/0x09/0x16/0x52 - Compressed w32 Entry**
-```
+```typescript
 +0x00: BYTE      ItemIDType
 +0x08: BYTE      CompressionFlag = 0x10
 +...:           Compressed data structure
 ```
 
 ## **Types 0x00/0x10/0x0E/0x08 - Folder with Names**
-```
+```typescript
 +0x00: BYTE      ItemIDType
 +0x08: BYTE      NameFlag = 0x90
 +0x09: CHAR[]    SubfolderName (ANSI)
@@ -281,7 +293,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```
 
 ## **Network Place Types (0x47/0x46/0x41/0x42)**
-```
+```typescript
 +0x00: BYTE      ItemIDType
 +0x02: BYTE      NetworkType (0x02, 0x82, 0xC2)
 +0x03: CHAR[]    Path (ANSI)
@@ -290,7 +302,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```
 
 ## **Extension Block Structure**
-```
+```typescript
 +0x00: WORD      ExtensionSize (including this field)
 +0x02: WORD      ExtensionVersion (usually 0xBEEF)
 +0x04: DWORD     ExtensionSignature
@@ -298,7 +310,7 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```
 
 ## **Serialized Property Store (1SPS) Structure**
-```
+```typescript
 +0x00: DWORD     TotalSize
 +0x04: CHAR[4]   Signature = "1SPS"
 +0x08: DWORD     Version (usually 0x53505331)
@@ -307,14 +319,14 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 ```
 
 ### **FormatID Entry:**
-```
+```typescript
 +0x00: GUID      FormatID
 +0x10: DWORD     PropertyCount
 +0x14: PROPERTY_ENTRY[] Properties
 ```
 
 ### **Property Entry:**
-```
+```typescript
 +0x00: DWORD     ValueSize
 +0x04: WORD      NameSize
 +0x06: WCHAR[]   PropertyName (optional)
@@ -322,7 +334,6 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 +0x? : WORD      PropertyType
 +0x? : BYTE[]    PropertyValue
 ```
-
 
 
 ## **Notes**
@@ -333,12 +344,8 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 5. Some ItemID types support multiple structure versions based on size or flags
 6. Property Store structures can be deeply nested with complex type systems
 
-This breakdown represents the ItemID structures as implemented in the Windows Shell based on the provided parsing code. The actual Windows implementation may contain additional types and variations.
-
-
-
-
-
+This breakdown represents the ItemID structures as implemented in the Windows Shell based on the coed of JumplistBroswer. 
+The actual Windows implementation may contain additional types and variations.
 
 ---
 
@@ -346,7 +353,7 @@ This breakdown represents the ItemID structures as implemented in the Windows Sh
 
 ### **3.1 Extension Header Structure**
 All extensions share a common header:
-```
+```typescript
 EXTENSION HEADER (8 bytes)
 ├── extLength (2 bytes)  - Total extension size (including header)
 ├── extVersion (2 bytes) - Extension version
@@ -385,12 +392,51 @@ EXTENSION HEADER (8 bytes)
 
 ## **4. DETAILED EXTENSION STRUCTURES**
 
-### **4.1 BEEF0004 - File/Folder Extension**
-## **Purpose**
-Stores comprehensive filesystem metadata including timestamps, MFT information, reparse point data, and 64-bit file size for large files (>4GB).
+### **4.1 BEEF0000 - Removed Extension**
+**Purpose**: Legacy/deleted extension
+
+Two major variations:
+
+**Variation 1** (Extension length: 42 bytes total):
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 16 | First CLSID | GUID #1 |
+| 0x18 | 16 | Second CLSID | GUID #2 |
+```
+**Variation 2** (Extension length: >42 bytes, OS-specific):
+Parsed similarly to `BEEF0004` based on OS type.
+
+**OS-Specific parsing:**
+
+OS = 46 (Windows 8.1/10/11): Same as BEEF0004 v9
+OS = 38 (Windows Vista/7): Same as BEEF0004 v7
+OS = 22 or 42 (Windows 8): Same as BEEF0004 v8
+OS = 20 (Windows XP/2003): Same as BEEF0004 v3
+
+
+### **4.2 BEEF0001 - Selection Data**
+**Purpose**: Contains user selection strings
+```typescript
+| Offset | Size | Field | Description | Example |
+|--------|------|-------|-------------|---------|
+| 0x08 | 2 | Unknown | Typically 0x0000 | 0x0000 |
+| 0x0A | (extLength-10) | Selection | Unicode string data | User selection |
+```
+
+### **4.3 BEEF0003 - SPrevious Versions**
+**Purpose**: GUID-based version tracking
+```typescript
+| Offset | Size | Field | Description | Notes |
+|--------|------|-------|-------------|-------|
+| 0x08 | 16 | CLSID | GUID of previous version | If 0C39A5CF-1A7A-40C8-BA74-8900E6DF5FCD = "NoPreviousVersions" |
+```
+
+### **4.4 BEEF0004 - File/Folder Extension**
+## **Purpose**: Stores comprehensive filesystem metadata including timestamps, MFT information, reparse point data, and 64-bit file size for large files (>4GB).
 
 ## **Structure Overview**
-```
+```typescript
 BEEF0004 EXTENSION (Variable Length)
 ├── EXTENSION HEADER (8 bytes)
 │   ├── 00-01: extLength (2 bytes) - Total size including header
@@ -419,7 +465,7 @@ BEEF0004 EXTENSION (Variable Length)
 ## **Version-Specific Structures**
 
 ### **Version 9 (Windows 8/10/11)**
-```
+```typescript
 OFFSET | FIELD                     | SIZE | DESCRIPTION
 -------|---------------------------|------|------------
 18-25  | MFT Record Number         | 8    | File's MFT record number (64-bit)
@@ -433,7 +479,7 @@ OFFSET | FIELD                     | SIZE | DESCRIPTION
 ```
 
 ### **Version 8 (Windows 7)**
-```
+```typescript
 OFFSET | FIELD                     | SIZE | DESCRIPTION
 -------|---------------------------|------|------------
 18-25  | MFT Record Number         | 8    | File's MFT record number (64-bit)*
@@ -448,7 +494,7 @@ OFFSET | FIELD                     | SIZE | DESCRIPTION
 ```
 
 ### **Version 7 (Windows Vista)**
-```
+```typescript
 OFFSET | FIELD                     | SIZE | DESCRIPTION
 -------|---------------------------|------|------------
 18-25  | MFT Record Number         | 8    | File's MFT record number (64-bit)
@@ -461,7 +507,7 @@ OFFSET | FIELD                     | SIZE | DESCRIPTION
 ```
 
 ### **Version 3 (Windows 2000)**
-```
+```typescript
 OFFSET | FIELD                     | SIZE | DESCRIPTION
 -------|---------------------------|------|------------
 18-XX  | Unicode Name String       | Var  | UTF-16LE filename (null-terminated)
@@ -489,13 +535,18 @@ The Reparse Point Tag is present when:
 ### **Two-Part Storage**
 Large files (>4GB) store their size in two parts:
 
-1. **Low 32 bits**: Stored in the base ItemID at offset 0x02-0x05 (standard filesize field)
+1. **Low 32 bits**: Stored in the Shell Link Header at offset 52-55 (0x34-0x37) 
    ```csharp
    // From ShellLinkHeader
-   DWORD FileSize;  // Low 32 bits of file size
+   +0x34: DWORD FileSize;  // Low 32 bits of file size
+   ```
+   or in the base ItemID at offset 0x02-0x05 *(standard filesize field)*
+   ```csharp
+   // From ItemID
+   +0x02: DWORD  FileSize // Low 32 bits of file size
    ```
 
-2. **High 32 bits**: Stored in BEEF0004 extension at offset 28-31 (0x1C-0x1F)
+3. **High 32 bits**: Stored in BEEF0004 extension at offset 28-31 (0x1C-0x1F)
    ```powershell
    // In extension parsing code
    $unknown_1 = "0x$([System.BitConverter]::ToString($ByteArray[($idx + 20) .. ($idx + 23)]) -replace '-', '')"
@@ -523,10 +574,45 @@ Example 2: 1.5GB File (<4GB)
   Full size: 1,610,612,736 bytes = 1.5GB
 ```
 
+## **4.5 BEEF0005 - Embedded IDList**
+**Purpose**: Contain nested shell namespace paths (Nested ItemID list)
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 12 | Unknown | Typically zeros or headers |
+| 0x14 | (extLength-20) | Embedded ID List | Nested ID list structure |
 
-### **4.2 BEEF000B - Link/AUMID Extension**
-**Purpose**: Application launching metadata for modern Windows apps
+Typical Structure:
+00-01: extLength
+02-03: extVersion
+04-07: itemIdExtType
+08-13: Unknown
+14-xx: Complete ItemIDList structure
+    [ItemID1]
+    [ItemID2]
+    ...
+    [Terminator 0x0000]
 ```
+
+## **4.6 BEEF0006 - User Name**
+**Purpose**: User information
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | Variable | User Name | Unicode string |
+```
+
+## **4.7 BEEF000A - Entry Number**
+**Purpose**: Index/position information
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 4 | Entry Number | Integer value |
+```
+
+### **4.8 BEEF000B - Link/AUMID Extension**
+**Purpose**: Application launching metadata for modern Windows apps
+```typescript
 STRUCTURE:
 00-01: extLength
 02-03: extVersion
@@ -543,9 +629,9 @@ STRUCTURE:
     Extra Path (Unicode, null-terminated)
 ```
 
-### **4.3 BEEF0010/BEEF0024/BEEF0027 - Property Store Extensions**
+### **4.9 BEEF0010/BEEF0024/BEEF0027 - Seriaslized Property Store Extensions (1SPS)**
 **Purpose**: Store shell property system data
-```
+```typescript
 COMMON STRUCTURE:
 00-01: extLength
 02-03: extVersion
@@ -558,9 +644,9 @@ COMMON STRUCTURE:
 - Contains typed property values with FormatID (GUID) and PropertyID
 - Supports various data types (string, integer, date, blob, etc.)
 
-### **4.4 BEEF0005/BEEF000E - Embedded IDList Extensions**
+### **4.10 BEEF0005/BEEF000E - Embedded IDList Extensions**
 **Purpose**: Contain nested shell namespace paths
-```
+```typescript
 STRUCTURE:
 00-01: extLength
 02-03: extVersion
@@ -572,26 +658,160 @@ STRUCTURE:
     [Terminator 0x0000]
 ```
 
-### **4.5 BEEF0014 - URI Property Extension**
-**Purpose**: Store URI-related metadata for internet shortcuts
+### **4.11 BEEF0013 - Attributes**
+**Purpose**: File attributes
+
+Two variations:
+
+*Variation 1* (Extension length: ≤10 bytes total):
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 2 | Attributes | File attributes (WORD) |
 ```
-STRUCTURE:
-00-01: extLength
-02-03: extVersion
-04-07: itemIdExtType = BEEF0014
-08-23: CLSID (16 bytes)
-24-27: Data Length (4 bytes)
-28-xx: URI Property Entries
-    [Entry Count (4 bytes)]
-    [Entry1: Type (4), Length (4), Data]
-    [Entry2: ...]
+*Variation 2* (Extension length: ≥12 bytes):
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 4 | Attributes | File attributes (DWORD) |
 ```
 
-**Common URI Entry Types**:
-- 16 = URI Flags (DWORD)
-- 17 = URI String (Unicode)
-- 18 = Display Name (Unicode)
-- 19 = Icon File (Unicode)
+### **4.12 BEEF0014 - URI Property**
+**Purpose**: URI-related metadata
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 16 | CLSID | GUID identifier |
+| 0x18 | 4 | Data Length | Length of URI data |
+| 0x1C | 24 | Unknown | Padding/header |
+| 0x34 | 4 | Number of Entries | Count of URI entries |
+| 0x38 | Variable | URI Entries | Array of URI entry structures |
+```
+URI Entry Structure (per entry):
+
+- 4 bytes: Entry Type
+- 4 bytes: Entry Length
+- Variable: Entry Data (either 4-byte value or Unicode string)
+
+
+### **4.13 BEEF0019 - CLSID/GUID**
+**Purpose**: Folder/object identifiers
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 16 | First CLSID | GUID #1 |
+| 0x18 | 16 | Second CLSID | GUID #2 (optional if extLength < 39) |
+```
+
+### **4.14 BEEF001A - Document Type**
+**Purpose**: Application/document association
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 2 | Unknown | Typically 0x0000 |
+| 0x0A | Variable | Document Type | Unicode string |
+```
+
+### **4.15 BEEF001A - Document Type**
+**Purpose**: Application/document association
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 2 | Unknown | Typically 0x0000 |
+| 0x0A | Variable | Document Type | Unicode string |
+```
+
+### **4.16 BEEF001B - Application Name**
+**Purpose**: Associated application
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 2 | Unknown | Typically 0x0000 |
+| 0x0A | Variable | Application Name | Unicode string |
+```
+
+### **4.17 BEEF001D - AppUserModelID**
+**Purpose**: Modern application ID
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 2 | Unknown | Typically 0x0000 |
+| 0x0A | Variable | AppUserModelID | Unicode string |
+```
+
+### **4.18 BEEF001E - Pin Status**
+**Purpose**: Taskbar/jump list pinning info
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 2 | Unknown | Typically 0x0000 |
+| 0x0A | Variable | Pin Status | Unicode string |
+```
+
+### **4.19 BEEF0024 - Serialized Property Store (1SPS)**
+**Purpose**: Enhanced property storage
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | Variable | Property Store Data | Serialized property storage |
+```
+
+### **4.20 BEEF0025 - Timestamps + Attributes**
+**Purpose**: File times with attributes
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 4 | Attributes | File attributes (DWORD) |
+| 0x0C | 8 | Created | FILETIME |
+| 0x14 | 8 | Modified | FILETIME |
+| 0x1C | 8 | Accessed | FILETIME |
+```
+
+### **4.21 BEEF0026 - Timestamps + Attributes + Serialized Property Store (1SPS)**
+**Purpose**: Combined time/attr/property
+
+Two variations:
+
+**Variation 1 (Contains "1SPS" marker):**
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | Variable | Property Store Data | Serialized property storage |
+```
+**Variation 2 (No "1SPS" marker):**
+Same as `BEEF0025` structure.
+
+### **4.22 BEEF0027 - Serialized Property Store (1SPS)**
+**Purpose**: Enhanced property storage (v3)
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | Variable | Property Store Data | Serialized property storage |
+```
+
+### **4.23 BEEF0029 - File Attributes**
+**Purpose**: File system attributes
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 2 | Attributes | File attributes (WORD) |
+```
+
+### **4.24 BEEF002B - LastWriteTime**
+**Purpose**: Last modification timestamp
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 8 | LastWriteTime | FILETIME |
+```
+
+### **4.25 BEEF002C - LastAccessedTime**
+**Purpose**: Last access timestamp
+```typescript
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x08 | 8 | LastAccessed | FILETIME |
+```
 
 ---
 
@@ -634,58 +854,35 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 
 ---
 
-## **6. FORENSIC SIGNIFICANCE**
+## **6. IMPLEMENTATION NOTES**
 
-### **6.1 Key Evidence Sources**
-1. **Timestamps**: Creation, access, modification times across multiple extensions
-2. **User Context**: User names, AUMIDs, application associations
-3. **Filesystem Artifacts**: MFT records, reparse points, volume info
-4. **User Activity**: Pinned items, recent documents, navigation history
-5. **Application Usage**: Associated programs, command-line parameters
-
-### **6.2 Anti-Forensic Considerations**
-1. **Timestamp Manipulation**: Multiple timestamp sources allow cross-validation
-2. **Extension Removal**: BEEF0000 indicates deleted extensions
-3. **Custom Extensions**: Unknown BEEFxxxx types may contain custom data
-4. **Compression**: Some paths may use custom compression (see Get-Compressed_w32)
-
-### **6.3 Analysis Techniques**
-1. **Timeline Analysis**: Correlate timestamps from different extensions
-2. **Path Reconstruction**: Combine ItemIDs and extension path data
-3. **User Profiling**: Analyze AUMIDs, document types, pinned items
-4. **System Context**: OS version, filesystem type, network paths
-
----
-
-## **7. IMPLEMENTATION NOTES**
-
-### **7.1 Byte Order Considerations**
+### **6.1 Byte Order Considerations**
 - All multi-byte values are little-endian
 - itemIdExtType is stored as little-endian but parsed as reversed hex string
 - GUIDs use Microsoft byte order (mixed endian)
 
-### **7.2 String Encoding**
+### **6.2 String Encoding**
 - Primary: UTF-16LE (Windows Unicode)
 - Secondary: UTF-8 (for localized names in older extensions)
 - Null termination: Usually double null (UTF-16) or single null (UTF-8)
 
-### **7.3 Alignment Rules**
+### **6.3 Alignment Rules**
 - Some extensions align to 16-byte boundaries after strings
 - Property stores have internal alignment requirements
 - MFT record numbers are 8-byte aligned
 
 ---
 
-## **8. APPENDIX: KNOWN VALUES**
+## **7. APPENDIX: KNOWN VALUES**
 
-### **8.1 Common CLSIDs in Extensions**
+### **7.1 Common CLSIDs in Extensions**
 ```
 0C39A5CF-1A7A-40C8-BA74-8900E6DF5FCD = NoPreviousVersions
 ```
 (others from [CLSID database/CSV](https://github.com/kacos2000/Jumplist-Browser/blob/master/GUIDs.csv) )
 
 
-### **8.2 Reparse Point Tags**
+### **7.2 Reparse Point Tags**
 ```
 	"00000000" = "IO_REPARSE_TAG_RESERVED_ZERO"
 	"00000001" = "IO_REPARSE_TAG_RESERVED_ONE"
@@ -743,7 +940,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 	"C0000014" = "IO_REPARSE_TAG_APPXSTRM"
 ```
 
-### **8.3 OS Type to Version Mapping**
+### **7.3 OS Type to Version Mapping**
 ```
 '46' = 'Windows 8.1/10/11'
 '42' = 'Windows 2000/7/8'
@@ -751,7 +948,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 '20' = 'Windows XP/2003'
 ```
 
-## **8.4 File Attributes Flags (WORD)**
+## **7.4 File Attributes Flags (WORD)**
 ```
 	'1'		    = 'ReadOnly'
 	'2'		    = 'Hidden'
@@ -780,7 +977,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 *[File Attribute Constants](https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants)*  
 *C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winnt.h*  
 
-## **8.5 Property Types (VT_*)**
+## **7.5 Property Types (VT_*)**
 ```
 0x0001: VT_NULL
 0x0002: VT_I2 (SHORT)
@@ -826,7 +1023,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 0x2000: VT_ARRAY
 ```
 
-## **8.6 SFGAO flags**
+## **7.6 SFGAO flags**
 ```
 	'0x00000001' = 'Can be Copied'
 	'0x00000002' = 'Can be Moved'
@@ -865,7 +1062,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 *[SFGAO](https://learn.microsoft.com/en-us/windows/win32/shell/sfgao)*
 *..Include\10.0.22621.0\um\ShObjIdl_core.h*
 
-### **8.7 PS1 FormatIDHashTable**
+### **7.7 PS1 FormatIDHashTable**
 ```
 028636aa6-953d-11d2-b5d6-00c04fd918d0\4	= Network Location
 ```
@@ -877,7 +1074,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 *'C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\ntddser.h'*
 
 
-### **8.8 Sort Order Index**
+### **7.8 Sort Order Index**
 ```
 	'00' = "Shell User's Folder" # ThisPCDesktopRegFolder
 	'20' = 'Box'
@@ -901,7 +1098,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
   '1000' = 'Frequent Places Folder'
 ```
 
-### **8.9 Uri Entry Types**
+### **7.9 Uri Entry Types**
 ```
 	'1'  = 'Authority'
 	'2'  = 'Display URI'
@@ -924,7 +1121,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 ```
 *[Uri_PROPERTY enumeration](https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775141(v=vs.85))*
 
-### **8.10 Control Panel CategoryID / Description**
+### **7.10 Control Panel CategoryID / Description**
 ```
 	"00" = "All Control Panel Items"
 	"01" = "Appearance and Personalization"
@@ -941,7 +1138,7 @@ FUNCTION ParseExtension(ByteArray, StartIndex):
 ```
 ---
 
-## **9. REFERENCES**
+## **8. REFERENCES**
 1. [MS-SHLLINK Specification (Microsoft)](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943)
 2. [Windows Shell Namespace Documentation](https://learn.microsoft.com/en-us/windows/win32/shell/namespace-intro)
 3. NTFS Documentation (Microsoft)
