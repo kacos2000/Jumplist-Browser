@@ -6,7 +6,7 @@
 ```
 %APPDATA%\Microsoft\Windows\Recent\CustomDestinations\
 ```
-Each file is named by an **Application ID** (AppID) – a hash of the application's executable path – and contains a collection of **jump list groups**. Each group holds one or more **shell links (LNK)** that represent tasks, pinned items, or recent/frequent destinations.
+Each file is named by an **Application ID** (AppID) – *a hash of the application's executable path* – and contains a collection of **jump list groups**. Each group holds one or more **shell links (LNK)** that represent tasks, pinned items, or recent/frequent destinations.
 
 The file format is a binary container that groups LNK records. The structure consists of:
 - A **global header** (optional, but usually present).
@@ -16,14 +16,22 @@ The file format is a binary container that groups LNK records. The structure con
 
 ## 2. File‑Level Structure
 
-### 2.1. Global Header (first 8+ bytes)
-| Offset | Size | Description |
-|--------|------|-------------|
-| 0x00   | 4    | Unknown – often `0x02` |
-| 0x04   | 4    | **Number of groups** (little‑endian `UInt32`) |
-| 0x08   | ...  | Variable data leading to first group |
+### **2.1. Global Header (First 20+ bytes)**
+| Offset | Size | Field Name (Code) | Description |
+|--------|------|-------------------|-------------|
+| 0x00-0x03 | 4 | (Unknown/Header ID) | Often `0x02` or other identifier |
+| 0x04-0x07 | 4 | **TypeCount** (UInt32) | Number of groups/task sections |
+| 0x08-0x0F | 8 | Reserved/Unknown | Not parsed in code |
+| 0x10-0x11 | 2 | **ECount** (UInt16) | Variable: First group's title size OR entry count sentinel (0xFFFF) |
+| 0x12+ | Variable | Variable Data | Data leading to first group |
 
-A known signature `0x01140200 00000000 C0000000 00000046` (16 bytes) is often found at offset 0x14, but its presence is not mandatory for parsing.
+**Important Signatures:**
+- **16-byte group signature**: `\x01\x14\x02\x00\x00\x00\x00\x00\xC0\x00\x00\x00\x00\x00\x00\x46`
+  - Often found at offset 0x14 (20 decimal)
+  - Marks start of first group in many files
+- **20-byte LNK signature**: `\x4C\x00\x00\x00\x01\x14\x02\x00\x00\x00\x00\x00\xC0\x00\x00\x00\x00\x00\x00\x46`
+  - Standard LNK header (76 bytes + CLSID)
+  - Marks start of each embedded LNK file
 
 ### 2.2. Group Markers
 Groups are separated by a 4‑byte marker:  
@@ -46,6 +54,43 @@ If the file contains the 16‑byte signature at offset 0x14, the first group may
 
 If the group is unnamed (e.g., the default "Tasks" group), the `TitleSize` field is often `0xFFFF` (`65535`) and the entry count is stored at the same location where the title would be.
 
+##### **Format A: Named Groups (has title)**
+```
+[4 bytes] Type = 0x00000000
+[2 bytes] TitleSize (UInt16) - character count (UTF-16)
+[TitleSize × 2] Title (UTF-16 string)
+[2 bytes] EntryCount (UInt16)
+```
+
+##### **Format B: Unnamed "Tasks" Groups**
+```
+[4 bytes] Type ≠ 0 (e.g., 0x00000001)
+[2 bytes] EntryCount (UInt16) - stored at offset 4-5
+```
+
+**Special Cases:**
+1. **First group at offset 20**: If 16-byte signature at offset 20 AND no title present
+   - Treated as "Tasks" group
+   - EntryCount read from offset 16-17
+
+2. **First group with title**: If `ECount` ≠ 65535 (0xFFFF)
+   - `ECount` = TitleSize in characters
+   - Title follows at offset 18
+   - EntryCount follows title
+
+### **2.3.3. Group Location Determination**
+```powershell
+First Group Start = 
+  IF (16-byte sig at offset 20) THEN offset 20 
+  ELSE offset 0 OR first regex match location
+
+Subsequent Groups Start = 
+  Next ABFBBFBA delimiter + 4 bytes
+
+Group End = 
+  Next ABFBBFBA delimiter OR file end
+```
+
 ### 2.4. LNK Embedding
 LNK files are stored **back‑to‑back** within the group. Each LNK begins with a 20‑byte signature:
 
@@ -58,46 +103,35 @@ This is the concatenation of:
 
 Therefore, to locate LNKs, scan the file (or a group’s byte range) for the pattern `0x4C0000000114020000000000C0000000000046`. Each occurrence marks the start of a valid LNK record.
 
-## 3. LNK Structure (Simplified)
-Once a LNK is located, its internal format follows the **Shell Link (.LNK) Binary File Format** ([MS‑SHLLINK]). The essential parts extracted for jump list purposes are:
+## 3. Embedded LNK Structure
+Once a LNK is located, its internal format follows the **Shell Link (.LNK) Binary File Format** 
 
 ### 3.1. ShellLinkHeader (76 bytes)
-| Offset | Size | Field |
-|--------|------|-------|
-| 0x00   | 4    | HeaderSize (always 0x4C) |
-| 0x04   | 16   | LinkCLSID (as above) |
-| 0x14   | 4    | LinkFlags (bitmask) |
-| 0x18   | 4    | FileAttributes |
-| 0x1C   | 8    | CreationTime (FILETIME) |
-| 0x24   | 8    | AccessTime |
-| 0x2C   | 8    | WriteTime |
-| 0x34   | 4    | FileSize |
-| 0x38   | 4    | IconIndex |
-| 0x3C   | 4    | ShowCommand |
-| 0x40   | 2    | HotKey |
-| 0x42   | 10   | Reserved |
+| Field | Offset | Size | Description |
+|-------|--------|------|-------------|
+| HeaderSize | 0x00 | 4 | Always 0x4C (76) |
+| LinkCLSID | 0x04 | 16 | `00021401-0000-0000-C000-000000000046` |
+| LinkFlags | 0x14 | 4 | Bitmask of optional structures |
+| FileAttributes | 0x18 | 4 | DOS file attributes |
+| CreationTime | 0x1C | 8 | FILETIME |
+| AccessTime | 0x24 | 8 | FILETIME |
+| WriteTime | 0x2C | 8 | FILETIME |
+| FileSize | 0x34 | 4 | Target file size |
+| IconIndex | 0x38 | 4 | Icon index in resource |
+| ShowCommand | 0x3C | 4 | SW_* constant |
+| HotKey | 0x40 | 2 | Keyboard shortcut |
+| Reserved | 0x42 | 10 | Zero-filled |
 
-### 3.2. Optional Structures (depending on LinkFlags)
-- **LinkTargetIDList** – a shell namespace path (skipped in our simple target extraction).
-- **LinkInfo** – contains drive and path information (critical for target path).
-- **StringData** – holds Name, RelativePath, WorkingDir, Arguments, IconLocation.
-- **ExtraData** – various extensions (often ignored).
+### 3.2. Optional Structures (determined on LinkFlags)
+```
+1. LinkTargetIDList    (if HasLinkTargetIDList flag)
+2. LinkInfo           (if HasLinkInfo flag) - CRITICAL for path
+3. StringData         (if HasName/HasRelativePath/HasWorkingDir/HasArguments/HasIconLocation)
+4. ExtraData          (various extensions)
+```
 
 ### 3.3. Extracting the Target Path
 The target path is assembled from the **LinkInfo** structure:
-
-#### LinkInfo Header
-| Offset | Size | Field |
-|--------|------|-------|
-| 0x00   | 4    | LinkInfoSize |
-| 0x04   | 4    | LinkInfoHeaderSize |
-| 0x08   | 4    | LinkInfoFlags |
-| 0x0C   | 4    | VolumeIDOffset |
-| 0x10   | 4    | LocalBasePathOffset |
-| 0x14   | 4    | CommonNetworkRelativeLinkOffset |
-| 0x18   | 4    | CommonPathSuffixOffset |
-| 0x1C   | 4    | (if LinkInfoHeaderSize ≥ 0x24) LocalBasePathOffsetUnicode |
-| 0x20   | 4    | (if LinkInfoHeaderSize ≥ 0x24) CommonPathSuffixOffsetUnicode |
 
 #### Path Extraction Method
 1. **LocalBasePath** – read from `LinkInfoStart + LocalBasePathOffset` as a null‑terminated string. If the Unicode offset is present and non‑zero, prefer the Unicode version (UTF‑16).
@@ -106,42 +140,72 @@ The target path is assembled from the **LinkInfo** structure:
 
 If the LNK points to a network resource, the `CommonNetworkRelativeLink` structure can be parsed to obtain a UNC path.
 
+```powershell
+IF (LinkInfoHeaderSize ≥ 0x24 AND LocalBasePathOffsetUnicode ≠ 0) THEN
+    Use Unicode path from LocalBasePathOffsetUnicode
+ELSE
+    Use ANSI path from LocalBasePathOffset
+
+Combine: LocalBasePath + (optional backslash) + CommonPathSuffix
+```
+
 ### 3.4. Arguments and Other String Data
 The **StringData** section contains strings with a leading character count (UTF‑16). These are stored in the order determined by the LinkFlags (Name, RelativePath, WorkingDir, Arguments, IconLocation). Each string is preceded by a `UInt16` character count (excluding the null terminator), followed by that many UTF‑16 characters.
 
-## 4. Parsing Algorithm (as implemented in PowerShell)
+## 4. Parsing Algorithm 
 
-### 4.1. Group Detection
-- Read the entire file as a byte array.
-- Locate all occurrences of the marker `AB FB BF BA` using a byte‑search function.
-- The number of markers + 1 usually equals the number of groups (except when the first group lacks a leading marker).
-- The group count can also be read from the `UInt32` at offset `0x04` (often reliable).
+### **Step 1: File Validation**
+- Check file size ≥ 512 bytes
+- Verify no sparse/offline/reparse point attributes
 
-### 4.2. Group Range Determination
-- The first group starts at offset `0x20` if the 16‑byte signature is present; otherwise at offset `0x00`.
-- Each group ends at the next marker (or the end of the file).
-- For each group, extract the byte range `[groupStart..groupEnd-1]`.
+### **Step 2: Signature Detection**
+```powershell
+# Find group start signatures
+$regex = "(\x01\x14\x02\x00\x00\x00\x00\x00\xC0\x00\x00\x00\x00\x00\x00\x46)"
 
-### 4.3. LNK Location within Group
-- Scan the group’s byte range for the 20‑byte LNK signature `0x4C0000000114020000000000C0000000000046`.
-- Each found offset (absolute within the file) is the start of an LNK.
-- The LNK’s length is assumed to extend until the next signature or the end of the group.
+# Find group delimiters
+$regexC = "(\xAB\xFB\xBF\xBA)"
+```
 
-### 4.4. LNK Parsing
-For each LNK:
-- Verify the header size and CLSID.
-- Read LinkFlags and timestamps.
-- If the `HasLinkInfo` flag is set, parse the LinkInfo block as described above to obtain `LocalBasePath` and `CommonPathSuffix`. Prefer Unicode if available.
-- If the `HasArguments` flag is set, read the arguments string from the StringData section.
-- If the `HasName` flag is set, read the LNK name (display name).
-- If the `HasIconLocation` flag is set, read the icon location.
-- Build the target path from the LinkInfo strings.
-- Return a structured object with all extracted fields.
+### **Step 3: Group Discovery Logic**
+```powershell
+IF (16-byte signature at offset 20) THEN
+    First Group:
+        Offset = 20
+        IF (ECount = 65535) THEN
+            Type = "Tasks"
+            EntryCount = FileBytes[16-17]
+        ELSE
+            TitleSize = ECount
+            Title = Unicode(FileBytes[18..(18+TitleSize×2-1)])
+            EntryCount = FileBytes[18+TitleSize×2..(19+TitleSize×2)]
+ELSE
+    # Alternative detection via regex matching
 
-## 5. Example (from a working parser)
-*Given a `.customDestinations‑ms` file, the parser outputs:  
-(example from [Microsoft.GamingApp])*
-```ruby
+FOR each delimiter at tidx[i]:
+    Group Start = tidx[i] + 4
+    Read Type from FileBytes[GroupStart..(GroupStart+3)]
+  
+    IF (Type = 0) THEN
+        Parse as Named Group
+    ELSE
+        Parse as "Tasks" Group
+```
+
+### **Step 4: LNK Extraction**
+```
+FOR each group:
+    Scan group byte range for 20-byte LNK signature
+    FOR each signature found:
+        LNK Start = Signature offset
+        LNK End = Next signature OR group end
+        Parse LNK structure using standard [MS-SHLLINK] format
+```
+
+## 5. Example (from a simple parser)
+*(AppID: 497f749b9f1a5d16 => Microsoft.GamingApp)  
+Given a `.customDestinations‑ms` file, the parser outputs:*  
+```powershell
 File: 497f749b9f1a5d16.customDestinations-ms
 AppID: 497f749b9f1a5d16
 
@@ -161,10 +225,109 @@ Groups:
     [60] LNK #000 - New additions to Game Pass
       Name: New additions to Game Pass
 ```
+*Example Structure with Offsets*
+```
+File: 497f749b9f1a5d16.customDestinations-ms (AppID: 497f749b9f1a5d16)
 
-# 6. Parsing examples
-- [`Parse-CustomDestination.ps1` - will only show the Groups & Number of LNK files within each group.](https://github.com/kacos2000/Jumplist-Browser/blob/master/Parse-CustomDestination.ps1)
-- [`Parse-CustomDestinationFull.ps1` - adds basic LNK parsing to the above.](https://github.com/kacos2000/Jumplist-Browser/blob/master/Parse-CustomDestinationFull.ps1)
+0x00-0x03: [02 00 00 00]           // Header ID
+0x04-0x07: [03 00 00 00]           // TypeCount = 3 groups
+0x08-0x0F: [00 00 00 00 00 00 00 00] // Reserved
+0x10-0x11: [FF FF]                 // ECount = 65535 (no title)
+0x12-0x13: [00 00]                 // Unknown
+0x14-0x23: [01 14 02 00 00 00 00 00 C0 00 00 00 00 00 00 46] // 1st group sig
+
+// Group 1: "Tasks" (untitled)
+0x24-0x27: [01 00 00 00]           // Type ≠ 0 = "Tasks"
+0x28-0x29: [02 00]                 // EntryCount = 2
+0x2A-0x??: [LNK data...]
+
+0x???-0x???+3: [AB FB BF BA]       // Group delimiter
+
+// Group 2: "Store" (titled)
+[+4] 0x???+4-0x???+7: [00 00 00 00] // Type = 0
+[+4] 0x???+8-0x???+9: [05 00]       // TitleSize = 5 chars
+[+10] 0x???+A-0x???+13: [53 00 74 00 6F 00 72 00 65 00] // "Store" (UTF-16)
+[+14] 0x???+E-0x???+F: [03 00]       // EntryCount = 3
+```
+
+
+
+## 6. Simple Parser examples
+
+*AppID: 9E312F4ADEE9107 => Opera Browser*
+
+- [`Parse-CustomDestination.ps1`](https://github.com/kacos2000/Jumplist-Browser/blob/master/Parse-CustomDestination.ps1) - will only show the Groups & Number of LNK files within each group:
+```powershell
+File: 9e312f4adee9107.customDestinations-ms
+AppID: 9e312f4adee9107
+Group Count (from header): 2
+
+Groups Found:
+  [42..14336] 'Speed Dial' - Entries: 7
+  [14340..19406] 'Tasks' - Entries: 3
+```
+
+- [`Parse-CustomDestinationFull.ps1`](https://github.com/kacos2000/Jumplist-Browser/blob/master/Parse-CustomDestinationFull.ps1) - adds basic LNK parsing to the above:
+```powershell
+File: 9e312f4adee9107.customDestinations-ms
+AppID: 9e312f4adee9107
+
+Groups:
+  [42] Speed Dial
+    Number of Entries: 7
+    [58] LNK #000
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  http://www.amazon.co.uk/?tag=operadesktop14-sd-uk-21
+      Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\e9cf71a8-df9c-4551-bc4b-5a4c7972fa51.tmp
+      Created: 17-Nov-2022 17:59:50.9839760
+    [2028] LNK #001
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  http://www.awin1.com/cread.php?awinmid=3090&awinaffid=141629&clickref=Speed+Dial&p=http%3A%2F%2Fwww.very.co.uk
+      Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\5761cdf8-b312-4b86-9660-b549c178d366.tmp
+      Created: 17-Nov-2022 17:59:50.9839760
+    [4110] LNK #002
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  https://s.click.aliexpress.com/e/Fg3oCAJO
+      Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\a887f1f7-e24a-418f-9318-8a5c17ef0ac9.tmp
+      Created: 17-Nov-2022 17:59:50.9839760
+    [6066] LNK #003
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  https://www.booking.com/index.html?aid=343339&label=operasoft-sdg015-343339&utm_source=Opera&utm_medium=web&utm_campaign=sdg015
+      Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\0202683f-8e77-4173-98be-e1e85e30bb82.tmp
+      Created: 17-Nov-2022 17:59:50.9839760
+    [8194] LNK #004
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  http://solarmovie.sc/movie/the-grand-tour-season-1-17912/563174-8/watching.html#player-area
+      Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\c54d665f-0285-4fe5-b2ff-57a36fa7b879.tmp
+      Created: 17-Nov-2022 17:59:50.9839760
+    [10342] LNK #005
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  https://www.amazon.co.uk/gp/prime/pipeline/landing/?tag=operadesktop14-sdf-uk-prime-21
+      Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\59a60404-c4e9-4fa6-89f4-1b865f725399.tmp
+      Created: 17-Nov-2022 17:59:50.9839760
+    [12392] LNK #006
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  https://www.facebook.com/
+      Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\be5cfec9-1acd-4c69-836b-e39f4609eaca.tmp
+      Created: 17-Nov-2022 17:59:50.9839760
+  [14340] Tasks
+    Number of Entries: 3
+    [14364] LNK #000
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  --new-tab
+      Icon: C:\Program Files\Opera\opera.exe
+      Created: 17-Nov-2022 17:59:50.9839760
+    [16036] LNK #001
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  --new-window
+      Icon: C:\Program Files\Opera\opera.exe
+      Created: 17-Nov-2022 17:59:50.9839760
+    [17722] LNK #002
+      Target: C:\Program Files\Opera\opera.exe
+      Args:  --incognito
+      Icon: C:\Program Files\Opera\opera.exe
+      Created: 17-Nov-2022 17:59:50.9839760
+```
 
 ## 7. References
 - [`MS‑SHLLINK`](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/) Shell Link (.LNK) Binary File Format
