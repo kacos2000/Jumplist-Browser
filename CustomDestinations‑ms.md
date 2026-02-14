@@ -1,5 +1,4 @@
-# Documentation: Structure of Windows .customDestinations‑ms Files 
-*Based on reverse engineering and successful parsing of Jump List files.*
+# .customDestinations‑ms File Structure
 
 ## 1. Overview
 `.customDestinations‑ms` files are used by Windows to store per‑application jump lists. They are found in:
