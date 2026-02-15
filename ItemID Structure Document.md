@@ -548,6 +548,7 @@ OFFSET | FIELD                     | SIZE | DESCRIPTION
 0x0A-XX   | Unicode Name String    | Var  | UTF-16LE filename (null-terminated)
 [XX+2]-   | Localized Name String  | Var  | UTF-8 localized name (null-terminated, optional)
 ```
+*Note: Version 3 does not store MFT information and uses UTF-8 for localized names instead of UTF-16LE.
 
 ## **Reparse Point Tag Details**
 
