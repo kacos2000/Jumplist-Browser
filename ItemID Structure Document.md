@@ -416,12 +416,12 @@ Two major variations:
 Parsed similarly to `BEEF0004` based on OS type.
 
 **OS-Specific parsing:**
-
+```typescript
 OS = 46 (Windows 8.1/10/11): Same as BEEF0004 v9
 OS = 38 (Windows Vista/7): Same as BEEF0004 v7
 OS = 22 or 42 (Windows 8): Same as BEEF0004 v8
 OS = 20 (Windows XP/2003): Same as BEEF0004 v3
-
+```
 
 ### **4.2 BEEF0001 - Selection Data**
 **Purpose**: Contains user selection strings
