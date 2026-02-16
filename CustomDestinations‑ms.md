@@ -1,4 +1,4 @@
-# .customDestinations‑ms File Structure
+# CustomDestinations‑ms File Structure
 
 ## 1. Overview
 `.customDestinations‑ms` files are used by Windows to store per‑application jump lists. They are found in:
@@ -255,7 +255,7 @@ File: 497f749b9f1a5d16.customDestinations-ms (AppID: 497f749b9f1a5d16)
 
 *AppID: 9E312F4ADEE9107 => Opera Browser*
 
-- [`Parse-CustomDestination.ps1`](https://github.com/kacos2000/Jumplist-Browser/blob/master/Parse-CustomDestination.ps1) - will only show the Groups & Number of LNK files within each group:
+- [`Parse-CustomDestination.ps1`](Parse-CustomDestination.ps1) - will only show the Groups & Number of LNK files within each group:
 ```powershell
 File: 9e312f4adee9107.customDestinations-ms
 AppID: 9e312f4adee9107
@@ -266,7 +266,7 @@ Groups Found:
   [14340..19406] 'Tasks' - Entries: 3
 ```
 
-- [`Parse-CustomDestinationFull.ps1`](https://github.com/kacos2000/Jumplist-Browser/blob/master/Parse-CustomDestinationFull.ps1) - adds basic LNK parsing to the above:
+- [`Parse-CustomDestinationFull.ps1`](Parse-CustomDestinationFull.ps1) - adds basic LNK parsing to the above:
 ```powershell
 File: 9e312f4adee9107.customDestinations-ms
 AppID: 9e312f4adee9107
@@ -327,6 +327,217 @@ Groups:
       Icon: C:\Program Files\Opera\opera.exe
       Created: 17-Nov-2022 17:59:50.9839760
 ```
+- [`Parse-LNKandCustomDestination-ms.ps1`](Parse-LNKandCustomDestination-ms.ps1) - adds more LNK details & parsing to the above:
+```powershell
+      File: 9e312f4adee9107.customDestinations-ms
+      AppID: 9e312f4adee9107
+      
+      Groups:
+        [42] Speed Dial
+          Number of Entries: 7
+          [58] LNK #000
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  http://www.amazon.co.uk/?tag=operadesktop14-sd-uk-21
+            Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\e9cf71a8-df9c-4551-bc4b-5a4c7972fa51.tmp
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+          [2028] LNK #001
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  http://www.awin1.com/cread.php?awinmid=3090&awinaffid=141629&clickref=Speed+Dial&p=http%3A%2F%2Fwww.very.co.uk
+            Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\5761cdf8-b312-4b86-9660-b549c178d366.tmp
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+          [4110] LNK #002
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  https://s.click.aliexpress.com/e/Fg3oCAJO
+            Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\a887f1f7-e24a-418f-9318-8a5c17ef0ac9.tmp
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+          [6066] LNK #003
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  https://www.booking.com/index.html?aid=343339&label=operasoft-sdg015-343339&utm_source=Opera&utm_medium=web&utm_campaign=sdg015
+            Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\0202683f-8e77-4173-98be-e1e85e30bb82.tmp
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+          [8194] LNK #004
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  http://solarmovie.sc/movie/the-grand-tour-season-1-17912/563174-8/watching.html#player-area
+            Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\c54d665f-0285-4fe5-b2ff-57a36fa7b879.tmp
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+          [10342] LNK #005
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  https://www.amazon.co.uk/gp/prime/pipeline/landing/?tag=operadesktop14-sdf-uk-prime-21
+            Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\59a60404-c4e9-4fa6-89f4-1b865f725399.tmp
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+          [12392] LNK #006
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  https://www.facebook.com/
+            Icon: C:\Users\Username\AppData\Roaming\Opera Software\Opera Stable\Default\Jump List Icons\be5cfec9-1acd-4c69-836b-e39f4609eaca.tmp
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+        [14340] Tasks
+          Number of Entries: 3
+          [14364] LNK #000
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  --new-tab
+            Icon: C:\Program Files\Opera\opera.exe
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+          [16036] LNK #001
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  --new-window
+            Icon: C:\Program Files\Opera\opera.exe
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+          [17722] LNK #002
+            Target: C:\Program Files\Opera\opera.exe
+            Args:  --incognito
+            Icon: C:\Program Files\Opera\opera.exe
+            Created: 17-Nov-2022 17:59:50.9839760
+            File Size (64-bit): 1588640
+            IDList Extension (v9):
+              Unicode Name: opera.exe
+              MFT Record: 165538
+              MFT Sequence: 327
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 11/17/2022 17:59:52
+              DOS Access: 02/24/2024 00:06:26
+```
+or just gets some basic LNK details:
+```powershell
+      File: NSY-NE-19002459.004.b.E01.lnk
+      LNK Details:
+        Target: F:\Virtual Disks\NSY-NE-19002459.004.b.E01
+        Header Info:
+          Created (UTC): 20-Jan-2020 10:20:11.0902264
+          Accessed (UTC): 07-Nov-2022 13:16:56.4058246
+          Modified (UTC): 02-Oct-2019 11:17:37.9755274
+          Attributes: Archive
+          Link Flags: HasLinkInfo, HasLinkTargetIDList, IsUnicode, AllowLinkToLink, HasWorkingDir
+        IDList Items:
+          [Offset 0] Type 0x1F, Size 20
+            ClassType: 0x50
+            SortOrder: This PC
+            CLSID: My Computer [20D04FE0-3AEA-1069-A2D8-08002B30309D]
+          [Offset 20] Type 0x2F, Size 25
+          [Offset 45] Type 0x31, Size 104
+            DOS Modified: 11/07/2022 12:14:14
+            Attributes: ReadOnly, Directory
+            Short Name: Virtual Disks
+            BEEF0004 Extension (v9):
+              Unicode Name: Virtual Disks
+              MFT Record: 434510
+              MFT Sequence: 1
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 12/07/2014 00:43:52
+              DOS Access: 11/13/2022 11:26:24
+          [Offset 149] Type 0x32, Size 140
+            File Size (low 32): 2918257597
+            DOS Modified: 10/02/2019 11:17:38
+            Attributes: Archive
+            Short Name: NSY-NE-19002459.004.b.E01
+            BEEF0004 Extension (v9):
+              Unicode Name: NSY-NE-19002459.004.b.E01
+              MFT Record: 466143
+              MFT Sequence: 3
+              Reparse Tag: 0x00000000
+              OS Type: Windows 8/8.1/10/11
+              DOS Creation: 01/20/2020 10:20:12
+              DOS Access: 11/07/2022 13:16:58
+        File Size (64-bit): 45867930557
+        IDList Extension (v9):
+          Unicode Name: NSY-NE-19002459.004.b.E01
+          MFT Record: 466143
+          MFT Sequence: 3
+          Reparse Tag: 0x00000000
+          OS Type: Windows 8/8.1/10/11
+          DOS Creation: 01/20/2020 10:20:12
+          DOS Access: 11/07/2022 13:16:58
+        LinkInfo:
+          Volume: DriveType=Unknown (3), Serial=6X0PCIR0, Label='Data - Storage Pool'
+          LocalBasePath (ANSI): F:\Virtual Disks\
+          CommonPathSuffix (ANSI): NSY-NE-19002459.004.b.E01
+          CommonNetworkRelativeLink:
+            NetName (ANSI): \\Server\Virtual Disks
+            NetType: WNNC_NET_LANMAN
+```
+
 
 ## 7. References
 - [`MS‑SHLLINK`](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/) Shell Link (.LNK) Binary File Format
