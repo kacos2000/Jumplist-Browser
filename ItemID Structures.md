@@ -474,9 +474,9 @@ OS = 20 (Windows XP/2003): Same as BEEF0004 v3
 ```
 
 ### **4.4 BEEF0004 - File/Folder Extension**
-## **Purpose**: Stores comprehensive filesystem metadata including timestamps, MFT information, reparse point data, and 64-bit file size for large files (>4GB).
+**Purpose**: Stores comprehensive filesystem metadata including timestamps, MFT information, reparse point data, and 64-bit file size for large files (>4GB).
 
-## **Structure Overview**
+ **Structure Overview**
 ```typescript
 BEEF0004 EXTENSION (Variable Length)
 ├── EXTENSION HEADER (8 bytes)
@@ -503,9 +503,9 @@ BEEF0004 EXTENSION (Variable Length)
 42 = Windows 7
 46 = Windows 8/8.1/10/11
 ```
-## **Version-Specific Structures**
+**Version-Specific Structures**
 
-### **Version 9 (Windows 8/10/11)** - Extension Size ≥ 92 bytes
+**Version 9 (Windows 8/10/11)** - Extension Size ≥ 92 bytes
 ```typescript
 OFFSET | FIELD                     | SIZE | DESCRIPTION
 -------|---------------------------|------|------------
@@ -515,7 +515,7 @@ OFFSET | FIELD                     | SIZE | DESCRIPTION
 0x0A-0x0B | MFT Record Number (High) | 2    | High 2 bytes of 64-bit MFT record number
 0x0C-0x11 | MFT Record Number (Low)  | 6    | Low 6 bytes of 64-bit MFT record number
 0x12-0x13 | MFT Sequence Number    | 2    | MFT entry sequence number (16-bit)
-0x14-0x17 | File Size High Bits    | 4    | High 32 bits of 64-bit file size (or unknown)
+0x14-0x17 | File Size High Bits    | 4    | High 32 bits of 64-bit file size
 0x18-0x1B | Reparse Point Tag      | 4    | NTFS reparse point tag (if applicable)
 0x1C-0x21 | Unknown/Reserved 1      | 6    | Typically 0x000000000000
 0x22-0x25 | Unknown/Reserved 2      | 4    | Typically 0x00000000
@@ -535,7 +535,7 @@ OFFSET | FIELD                     | SIZE | DESCRIPTION
 
 
 
-### **Version 8 (Windows 7)** - Extension Size typically 80-100 bytes
+**Version 8 (Windows 7)** - Extension Size typically 80-100 bytes
 ```typescript
 OFFSET | FIELD                     | SIZE | DESCRIPTION
 -------|---------------------------|------|------------
@@ -554,7 +554,7 @@ OFFSET | FIELD                     | SIZE | DESCRIPTION
 *Note: These fields are only present if byte at offset 20 `(ByteArray[extStart + 20])` ≠ 0
 If this byte is 0, the structure from offset 0x0A to 0x21 may be omitted or contain different data.
 
-### **Version 7 (Windows Vista)** - Extension Size typically 70-90 bytes
+**Version 7 (Windows Vista)** - Extension Size typically 70-90 bytes
 ```typescript
 OOFFSET | FIELD                     | SIZE | DESCRIPTION
 -------|---------------------------|------|------------
@@ -571,7 +571,7 @@ OOFFSET | FIELD                     | SIZE | DESCRIPTION
 [XX+2]-   | Localized Name String  | Var  | UTF-16LE localized name (null-terminated, optional)
 ```
 
-### **Version 3 (Windows 2000)** - Minimal structure
+**Version 3 (Windows 2000)** - Minimal structure
 ```typescript
 OFFSET | FIELD                     | SIZE | DESCRIPTION
 -------|---------------------------|------|------------
@@ -585,13 +585,13 @@ OFFSET | FIELD                     | SIZE | DESCRIPTION
 
 ## **Reparse Point Tag Details**
 
-### **Presence Conditions**
+**Presence Conditions**
 The Reparse Point Tag is present when:
 1. **Extension version is 7, 8, or 9**
 2. **File attributes in the base ItemID indicate a reparse point** (FILE_ATTRIBUTE_REPARSE_POINT flag set)
 3. **For Version 8 only**: When `ByteArray[extStart + 20] ≠ 0` (MFT data present)
 
-### **Offset and Format**
+**Offset and Format**
 - **Offset from extension start**: 32 bytes (0x20)
 - **Size**: 4 bytes (32-bit)
 - **Endianness**: Little-endian, but displayed in reversed hex order
@@ -602,26 +602,31 @@ The Reparse Point Tag is present when:
 ## **64-Bit File Size Reconstruction**
 
 ### **Two-Part Storage**
+
 Large files (>4GB) store their size in two parts:
 
-1. **Low 32 bits**: Stored in the Shell Link Header at offset 52-55 (0x34-0x37) 
-   ```csharp
+**Low 32 bits:** Stored in:
+1. **Shell Link Header** at offset 52-55 (0x34-0x37)
+   ```
    // From ShellLinkHeader
    +0x34: DWORD FileSize;  // Low 32 bits of file size
    ```
-   or in the base ItemID at offset 0x02-0x05 *(standard filesize field)*
-   ```csharp
-   // From ItemID
-   +0x02: DWORD  FileSize // Low 32 bits of file size
+ 
+2. **Base ItemID** at offset 0x02-0x05 for types 0x32, 0x36, and 0x3A
+   ```
+   // From ItemID (types 0x32, 0x36, 0x3A)
+   +0x02: DWORD FileSize  // Low 32 bits of file size
    ```
 
-3. **High 32 bits**: Stored in BEEF0004 extension at offset 28-31 (0x1C-0x1F)
-   ```powershell
-   // In extension parsing code
-   $unknown_1 = "0x$([System.BitConverter]::ToString($ByteArray[($idx + 20) .. ($idx + 23)]) -replace '-', '')"
-   $fsraw = $ByteArray[($idx + 20) .. ($idx + 23)]  // 4-byte array
+**High 32 bits:** Stored in **BEEF0004 extension** at offset 20-23 (0x14-0x17) from BEEF0004 start
    ```
+   // In extension parsing code
+   $fsraw = $ByteArray[($idx + 20) .. ($idx + 23)]  // 4-byte array
+   // Note: $idx is the start of BEEF0004 block
+   ```
+
 ### **Reconstruction Algorithm**
+
 ```powershell
 # PowerShell implementation example
 $lowSize = [System.BitConverter]::ToUInt32($ByteArray[2..5], 0)  # From base ItemID
@@ -631,16 +636,36 @@ $fullSize = ($highSize -shl 32) -bor $lowSize
 ```
 
 ### **File Size Examples**
-```
-Example 1: 45.7GB File
-  Low 32 bits (from ItemID):    0x9E8DB700 = 2,661,376,000
-  High 32 bits (from BEEF0004): 0x0000000B = 11
-  Full size: (11 << 32) | 2,661,376,000 = 47,244,357,376 bytes ≈ 45.7GB
 
-Example 2: 1.5GB File (<4GB)
-  Low 32 bits: 0x60000000 = 1,610,612,736
-  High 32 bits: 0x00000000
-  Full size: 1,610,612,736 bytes = 1.5GB
+**Example 1: Large File (>4GB)**
+```
+Low 32 bits (from ItemID):    0x9E8DB700 = 2,661,376,000
+High 32 bits (from BEEF0004): 0x0000000B = 11
+Full size: (11 << 32) | 2,661,376,000 = (11 × 4,294,967,296) + 2,661,376,000
+                                      = 47,244,640,256 + 2,661,376,000
+                                      = 49,906,016,256 bytes
+                                      = 49,906,016,256 ÷ 1,073,741,824 ≈ 46.48 GB
+```
+
+**Example 2: Small File (<4GB)**
+```
+Low 32 bits: 0x60000000 = 1,610,612,736
+High 32 bits: 0x00000000
+Full size: 1,610,612,736 bytes = 1.5 GB
+```
+
+### **Important Notes:**
+
+1. **BEEF0004 is universal** - Appears with file ItemIDs across all Windows versions
+2. **Offsets are consistent** - FileSizeHigh is always at offset 0x14-0x17 from BEEF0004 start
+3. **Multiple low-bit sources** - Same low 32 bits appear in both LNK header and ItemID
+4. **Combine properly** - Use bitwise shift/OR, not arithmetic addition
+5. For files ≤4 GB, the high part is zero (0x00 00 00 00).
+
+### **Visual Representation:**
+```
+64-bit File Size = [HIGH 32 bits from BEEF0004@0x14-0x17] + [LOW 32 bits from ItemID@0x02-0x05]
+                = (FileSizeHigh << 32) | FileSizeLow
 ```
 
 ## **4.5 BEEF0005 - Embedded IDList**
