@@ -507,68 +507,71 @@ BEEF0004 EXTENSION (Variable Length)
 
 **Version 9 (Windows 8/10/11)** - Extension Size ≥ 92 bytes
 ```typescript
-OFFSET | FIELD                     | SIZE | DESCRIPTION
--------|---------------------------|------|------------
-0x00-0x03 | Signature              | 4    | Always 0xBEEF0004 ("File Entry Extension Block")
-0x04-0x07 | Extension Size         | 4    | Total size of this extension in bytes
-0x08-0x09 | Version                | 2    | Version number (0x0009 for Win8+)
-0x0A-0x0B | MFT Record Number (High) | 2    | High 2 bytes of 64-bit MFT record number
-0x0C-0x11 | MFT Record Number (Low)  | 6    | Low 6 bytes of 64-bit MFT record number
-0x12-0x13 | MFT Sequence Number    | 2    | MFT entry sequence number (16-bit)
-0x14-0x17 | File Size High Bits    | 4    | High 32 bits of 64-bit file size
-0x18-0x1B | Reparse Point Tag      | 4    | NTFS reparse point tag (if applicable)
-0x1C-0x21 | Unknown/Reserved 1      | 6    | Typically 0x000000000000
-0x22-0x25 | Unknown/Reserved 2      | 4    | Typically 0x00000000
-0x26-0x29 | DOS Creation Date/Time  | 4    | Old DOS format creation timestamp (optional)
-0x2A-0x2D | DOS Access Date        | 2+2  | Old DOS format access date (2 bytes) + padding (2 bytes)
-0x2E-0x2F | Host OS Hint           | 2    | Windows version that created the item (see OS codes above)
-0x30-XX   | Unicode Name String    | Var  | UTF-16LE filename (null-terminated)
-[XX+2]-   | Localized Name String  | Var  | UTF-16LE localized name (null-terminated, optional)
+| OFFSET (hex) | FIELD                     | SIZE | DESCRIPTION |
+|--------------|---------------------------|------|-------------|
+| 0x00–0x03    | Signature                 | 4    | Always `0xBEEF0004` ("File Entry Extension Block") |
+| 0x04–0x07    | Extension Size            | 4    | Total size of this extension in bytes |
+| 0x08–0x09    | Version                   | 2    | Version number (`0x0009` for Windows 8+) |
+| 0x0A–0x0B    | Unknown / Reserved        | 2    | Usually `0x0000`; exact purpose unknown |
+| 0x0C–0x0F    | MFT Record Number (Low)   | 4    | Low 32 bits of the 48‑bit MFT record number |
+| 0x10–0x11    | MFT Record Number (High)  | 2    | High 16 bits of the 48‑bit MFT record number |
+| 0x12–0x13    | MFT Sequence Number       | 2    | 16‑bit sequence number (from `MFT_SEGMENT_REFERENCE`) |
+| 0x14–0x17    | File Size High Bits       | 4    | High 32 bits of 64‑bit file size (0 for files ≤4 GB) |
+| 0x18–0x1B    | Reparse Point Tag         | 4    | NTFS reparse point tag (if applicable) |
+| 0x1C–0x21    | Unknown / Reserved 1      | 6    | Typically `0x000000000000` |
+| 0x22–0x25    | Unknown / Reserved 2      | 4    | Typically `0x00000000` |
+| 0x26–0x29    | DOS Creation Date/Time    | 4    | Old DOS format creation timestamp (optional) |
+| 0x2A–0x2D    | DOS Access Date           | 2+2  | Old DOS format access date (2 bytes) + padding (2 bytes) |
+| 0x2E–0x2F    | Host OS Hint              | 2    | Windows version that created the item (see OS codes) |
+| 0x30–XX      | Unicode Name String       | Var  | UTF‑16LE filename (null‑terminated) |
+| [XX+2]–      | Localized Name String     | Var  | UTF‑16LE localized name (null‑terminated, optional) |
 ```
-*Notes for Version 9:
-
-- The MFT Record Number is stored as 8 bytes total, split into:
-   - High 2 bytes at offset 0x0A-0x0B (bytes 10-11)
-   - Low 6 bytes at offset 0x0C-0x11 (bytes 12-17)
-- When concatenated as [bytes 12-17] + [bytes 10-11], this forms the complete 64-bit MFT record number
-- MFT values of 0 indicate the target is not on an NTFS volume or MFT info wasn't stored
-
+*Notes for Version 9:**
+- The 48‑bit MFT record number is reconstructed as:  
+  `$mftRecordNumber = ($highPart -shl 32) -bor $lowPart`  
+  where `$lowPart` is read as a 32‑bit little‑endian value from offsets `0x0C–0x0F`, and `$highPart` as a 16‑bit little‑endian value from offsets `0x10–0x11`.
+- The full 64‑bit NTFS file reference (as used by Windows) is:  
+  `($SequenceNumber -shl 48) -bor $mftRecordNumber`.  
+  This matches the [FILE_REFERENCE](https://learn.microsoft.com/en-us/windows/win32/devnotes/mft-segment-reference) data type.
+- If the target is not on an NTFS volume, the MFT record fields are typically zero.
 
 
 **Version 8 (Windows 7)** - Extension Size typically 80-100 bytes
 ```typescript
-OFFSET | FIELD                     | SIZE | DESCRIPTION
--------|---------------------------|------|------------
-0x00-0x03 | Signature              | 4    | Always 0xBEEF0004
-0x04-0x07 | Extension Size         | 4    | Total size of this extension
-0x08-0x09 | Version                | 2    | Version number (0x0008 for Win7)
-0x0A-0x0B | MFT Record Number (High)* | 2    | High 2 bytes of MFT record number (if present)
-0x0C-0x11 | MFT Record Number (Low)*  | 6    | Low 6 bytes of MFT record number (if present)
-0x12-0x13 | MFT Sequence Number*   | 2    | MFT entry sequence number (if present)
-0x14-0x17 | File Size High Bits*   | 4    | High 32 bits of 64-bit file size (if present)
-0x18-0x1B | Reparse Point Tag*     | 4    | NTFS reparse point tag (if applicable)
-0x1C-0x21 | Unknown/Reserved*      | 6    | Additional data (if present)
-0x22-XX   | Unicode Name String    | Var  | UTF-16LE filename (null-terminated)
-[XX+2]-   | Localized Name String  | Var  | UTF-16LE localized name (null-terminated, optional)
+| OFFSET (hex) | FIELD                     | SIZE | DESCRIPTION |
+|--------------|---------------------------|------|-------------|
+| 0x00–0x03    | Signature                 | 4    | Always `0xBEEF0004` |
+| 0x04–0x07    | Extension Size            | 4    | Total size of this extension |
+| 0x08–0x09    | Version                   | 2    | Version number (`0x0008` for Windows 7) |
+| 0x0A–0x0B    | Unknown / Reserved*       | 2    | May be present; check byte at offset 20 (see note) |
+| 0x0C–0x0F    | MFT Record Number (Low)*  | 4    | Low 32 bits of MFT record number (if present) |
+| 0x10–0x11    | MFT Record Number (High)* | 2    | High 16 bits of MFT record number (if present) |
+| 0x12–0x13    | MFT Sequence Number*      | 2    | 16‑bit sequence number (if present) |
+| 0x14–0x17    | File Size High Bits*      | 4    | High 32 bits of 64‑bit file size (if present) |
+| 0x18–0x1B    | Reparse Point Tag*        | 4    | NTFS reparse point tag (if applicable) |
+| 0x1C–0x21    | Unknown / Reserved*       | 6    | Additional data (if present) |
+| 0x22–XX      | Unicode Name String       | Var  | UTF‑16LE filename (null‑terminated) |
+| [XX+2]–      | Localized Name String     | Var  | UTF‑16LE localized name (null‑terminated, optional) |
 ```
-*Note: These fields are only present if byte at offset 20 `(ByteArray[extStart + 20])` ≠ 0
-If this byte is 0, the structure from offset 0x0A to 0x21 may be omitted or contain different data.
+*Note: These fields are only present if the byte at offset `0x14` (i.e., `ByteArray[extStart + 0x14]`) is non‑zero. If that byte is zero, the structure from offset `0x0A` to `0x21` may be omitted or contain different data. 
+
 
 **Version 7 (Windows Vista)** - Extension Size typically 70-90 bytes
 ```typescript
-OOFFSET | FIELD                     | SIZE | DESCRIPTION
--------|---------------------------|------|------------
-0x00-0x03 | Signature              | 4    | Always 0xBEEF0004
-0x04-0x07 | Extension Size         | 4    | Total size of this extension
-0x08-0x09 | Version                | 2    | Version number (0x0007 for Vista)
-0x0A-0x0B | MFT Record Number (High) | 2    | High 2 bytes of 64-bit MFT record number
-0x0C-0x11 | MFT Record Number (Low)  | 6    | Low 6 bytes of 64-bit MFT record number
-0x12-0x13 | MFT Sequence Number    | 2    | MFT entry sequence number (16-bit)
-0x14-0x17 | File Size High Bits    | 4    | High 32 bits of 64-bit file size
-0x18-0x1B | Reparse Point Tag      | 4    | NTFS reparse point tag (if applicable)
-0x1C-0x1D | Unknown/Reserved       | 2    | Typically 0x0000
-0x1E-XX   | Unicode Name String    | Var  | UTF-16LE filename (null-terminated)
-[XX+2]-   | Localized Name String  | Var  | UTF-16LE localized name (null-terminated, optional)
+| OFFSET (hex) | FIELD                     | SIZE | DESCRIPTION |
+|--------------|---------------------------|------|-------------|
+| 0x00–0x03    | Signature                 | 4    | Always `0xBEEF0004` |
+| 0x04–0x07    | Extension Size            | 4    | Total size of this extension |
+| 0x08–0x09    | Version                   | 2    | Version number (`0x0007` for Windows Vista) |
+| 0x0A–0x0B    | Unknown / Reserved        | 2    | Typically `0x0000` |
+| 0x0C–0x0F    | MFT Record Number (Low)   | 4    | Low 32 bits of 48‑bit MFT record number |
+| 0x10–0x11    | MFT Record Number (High)  | 2    | High 16 bits of 48‑bit MFT record number |
+| 0x12–0x13    | MFT Sequence Number       | 2    | 16‑bit sequence number |
+| 0x14–0x17    | File Size High Bits       | 4    | High 32 bits of 64‑bit file size |
+| 0x18–0x1B    | Reparse Point Tag         | 4    | NTFS reparse point tag (if applicable) |
+| 0x1C–0x1D    | Unknown / Reserved        | 2    | Typically `0x0000` |
+| 0x1E–XX      | Unicode Name String       | Var  | UTF‑16LE filename (null‑terminated) |
+| [XX+2]–      | Localized Name String     | Var  | UTF‑16LE localized name (null‑terminated, optional) |
 ```
 
 **Version 3 (Windows 2000)** - Minimal structure
