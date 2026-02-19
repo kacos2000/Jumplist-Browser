@@ -662,11 +662,6 @@ Full size: 1,610,612,736 bytes = 1.5 GB
 4. **Combine properly** - Use bitwise shift/OR, not arithmetic addition
 5. For files ≤4 GB, the high part is zero (0x00 00 00 00).
 
-### **Visual Representation:**
-```
-64-bit File Size = [HIGH 32 bits from BEEF0004@0x14-0x17] + [LOW 32 bits from ItemID@0x02-0x05]
-                = (FileSizeHigh << 32) | FileSizeLow
-```
 
 ## **4.5 BEEF0005 - Embedded IDList**
 **Purpose**: Contain nested shell namespace paths (Nested ItemID list)
