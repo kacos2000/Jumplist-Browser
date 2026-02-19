@@ -99,17 +99,27 @@ $PropertyTypeNames = [System.Collections.Hashtable]@{
     0x101D = "VT_VECTOR | VT_LPSTR"
     0x101E = "VT_VECTOR | VT_LPWSTR"
     
+    # Combined types - Record/pointer types with VT_VECTOR modifier
+    0x1024 = "VT_VECTOR | VT_RECORD"
+    0x1025 = "VT_VECTOR | VT_INT_PTR"
+    0x1026 = "VT_VECTOR | VT_UINT_PTR"
+    
     # Combined types - Extended types with VT_VECTOR modifier
-    0x1020 = "VT_VECTOR | VT_FILETIME"
-    0x1021 = "VT_VECTOR | VT_BLOB"
-    0x1022 = "VT_VECTOR | VT_STREAM"
-    0x1023 = "VT_VECTOR | VT_STORAGE"
-    0x1024 = "VT_VECTOR | VT_STREAMED_OBJECT"
-    0x1025 = "VT_VECTOR | VT_STORED_OBJECT"
-    0x1026 = "VT_VECTOR | VT_BLOB_OBJECT"
-    0x1027 = "VT_VECTOR | VT_CF"
-    0x1028 = "VT_VECTOR | VT_CLSID"
-    0x1029 = "VT_VECTOR | VT_VERSIONED_STREAM"
+    0x1040 = "VT_VECTOR | VT_FILETIME"
+    0x1041 = "VT_VECTOR | VT_BLOB"
+    0x1042 = "VT_VECTOR | VT_STREAM"
+    0x1043 = "VT_VECTOR | VT_STORAGE"
+    0x1044 = "VT_VECTOR | VT_STREAMED_OBJECT"
+    0x1045 = "VT_VECTOR | VT_STORED_OBJECT"
+    0x1046 = "VT_VECTOR | VT_BLOB_OBJECT"
+    0x1047 = "VT_VECTOR | VT_CF"
+    0x1048 = "VT_VECTOR | VT_CLSID"
+    0x1049 = "VT_VECTOR | VT_VERSIONED_STREAM"
+    
+    # Combined types - Shell-specific types with VT_VECTOR modifier
+    0x104B = "VT_VECTOR | VT_SHELL_I2_VERSIONED_STREAM"
+    0x104E = "VT_VECTOR | VT_SHELL_CY_CLSID"
+    0x1054 = "VT_VECTOR | VT_SHELL_I1_STREAMED_OBJECT"
     
     # Combined types - Basic types with VT_ARRAY modifier
     0x2002 = "VT_ARRAY | VT_I2"
@@ -142,17 +152,27 @@ $PropertyTypeNames = [System.Collections.Hashtable]@{
     0x201D = "VT_ARRAY | VT_LPSTR"
     0x201E = "VT_ARRAY | VT_LPWSTR"
     
+    # Combined types - Record/pointer types with VT_ARRAY modifier
+    0x2024 = "VT_ARRAY | VT_RECORD"
+    0x2025 = "VT_ARRAY | VT_INT_PTR"
+    0x2026 = "VT_ARRAY | VT_UINT_PTR"
+    
     # Combined types - Extended types with VT_ARRAY modifier
-    0x2020 = "VT_ARRAY | VT_FILETIME"
-    0x2021 = "VT_ARRAY | VT_BLOB"
-    0x2022 = "VT_ARRAY | VT_STREAM"
-    0x2023 = "VT_ARRAY | VT_STORAGE"
-    0x2024 = "VT_ARRAY | VT_STREAMED_OBJECT"
-    0x2025 = "VT_ARRAY | VT_STORED_OBJECT"
-    0x2026 = "VT_ARRAY | VT_BLOB_OBJECT"
-    0x2027 = "VT_ARRAY | VT_CF"
-    0x2028 = "VT_ARRAY | VT_CLSID"
-    0x2029 = "VT_ARRAY | VT_VERSIONED_STREAM"
+    0x2040 = "VT_ARRAY | VT_FILETIME"
+    0x2041 = "VT_ARRAY | VT_BLOB"
+    0x2042 = "VT_ARRAY | VT_STREAM"
+    0x2043 = "VT_ARRAY | VT_STORAGE"
+    0x2044 = "VT_ARRAY | VT_STREAMED_OBJECT"
+    0x2045 = "VT_ARRAY | VT_STORED_OBJECT"
+    0x2046 = "VT_ARRAY | VT_BLOB_OBJECT"
+    0x2047 = "VT_ARRAY | VT_CF"
+    0x2048 = "VT_ARRAY | VT_CLSID"
+    0x2049 = "VT_ARRAY | VT_VERSIONED_STREAM"
+    
+    # Combined types - Shell-specific types with VT_ARRAY modifier
+    0x204B = "VT_ARRAY | VT_SHELL_I2_VERSIONED_STREAM"
+    0x204E = "VT_ARRAY | VT_SHELL_CY_CLSID"
+    0x2054 = "VT_ARRAY | VT_SHELL_I1_STREAMED_OBJECT"
     
     # Combined types - Basic types with VT_BYREF modifier
     0x4002 = "VT_BYREF | VT_I2"
@@ -185,19 +205,29 @@ $PropertyTypeNames = [System.Collections.Hashtable]@{
     0x401D = "VT_BYREF | VT_LPSTR"
     0x401E = "VT_BYREF | VT_LPWSTR"
     
-    # Combined types - Extended types with VT_BYREF modifier
-    0x4020 = "VT_BYREF | VT_FILETIME"
-    0x4021 = "VT_BYREF | VT_BLOB"
-    0x4022 = "VT_BYREF | VT_STREAM"
-    0x4023 = "VT_BYREF | VT_STORAGE"
-    0x4024 = "VT_BYREF | VT_STREAMED_OBJECT"
-    0x4025 = "VT_BYREF | VT_STORED_OBJECT"
-    0x4026 = "VT_BYREF | VT_BLOB_OBJECT"
-    0x4027 = "VT_BYREF | VT_CF"
-    0x4028 = "VT_BYREF | VT_CLSID"
-    0x4029 = "VT_BYREF | VT_VERSIONED_STREAM"
+    # Combined types - Record/pointer types with VT_BYREF modifier
+    0x4024 = "VT_BYREF | VT_RECORD"
+    0x4025 = "VT_BYREF | VT_INT_PTR"
+    0x4026 = "VT_BYREF | VT_UINT_PTR"
     
-    # Combined modifier types
+    # Combined types - Extended types with VT_BYREF modifier
+    0x4040 = "VT_BYREF | VT_FILETIME"
+    0x4041 = "VT_BYREF | VT_BLOB"
+    0x4042 = "VT_BYREF | VT_STREAM"
+    0x4043 = "VT_BYREF | VT_STORAGE"
+    0x4044 = "VT_BYREF | VT_STREAMED_OBJECT"
+    0x4045 = "VT_BYREF | VT_STORED_OBJECT"
+    0x4046 = "VT_BYREF | VT_BLOB_OBJECT"
+    0x4047 = "VT_BYREF | VT_CF"
+    0x4048 = "VT_BYREF | VT_CLSID"
+    0x4049 = "VT_BYREF | VT_VERSIONED_STREAM"
+    
+    # Combined types - Shell-specific types with VT_BYREF modifier
+    0x404B = "VT_BYREF | VT_SHELL_I2_VERSIONED_STREAM"
+    0x404E = "VT_BYREF | VT_SHELL_CY_CLSID"
+    0x4054 = "VT_BYREF | VT_SHELL_I1_STREAMED_OBJECT"
+    
+    # Combined modifier types (VT_VECTOR + VT_ARRAY, etc.)
     0x3000 = "VT_VECTOR | VT_ARRAY"
     0x5000 = "VT_VECTOR | VT_BYREF"
     0x6000 = "VT_ARRAY | VT_BYREF"
@@ -205,8 +235,21 @@ $PropertyTypeNames = [System.Collections.Hashtable]@{
     
     # Illegal values
     0xFFFF = "VT_ILLEGAL"
+    
+    # Note: There are more possible combinations with VT_RESERVED flag (0x8000)
+    # but these are rarely used in practice
+    0x9000 = "VT_RESERVED | VT_VECTOR"
+    0xA000 = "VT_RESERVED | VT_ARRAY"
+    0xC000 = "VT_RESERVED | VT_BYREF"
+    0xB000 = "VT_RESERVED | VT_VECTOR | VT_ARRAY"
+    0xD000 = "VT_RESERVED | VT_VECTOR | VT_BYREF"
+    0xE000 = "VT_RESERVED | VT_ARRAY | VT_BYREF"
+    0xF000 = "VT_RESERVED | VT_VECTOR | VT_ARRAY | VT_BYREF"
 }
 ```
+- [*PropertyType enumeration*](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/2a4589eb-9a23-4a8b-adbd-3e368233c099)
+- *..\Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h*
+
 ## Helper function to dynamically generate type names for unknown types
 
 ```powershell
@@ -217,8 +260,8 @@ function Get-VTTypeName {
     
     .DESCRIPTION
     This function converts a VT_* type code (VARENUM value) to its string
-    representation. If the exact type code is not found in the lookup table,
-    it dynamically constructs the name using bitwise decomposition.
+    representation. It first checks the comprehensive lookup table, and if
+    not found, dynamically constructs the name using bitwise decomposition.
     
     .PARAMETER TypeCode
     The VT_* type code as a 16-bit unsigned integer.
@@ -297,27 +340,24 @@ function Get-VTTypeName {
     return $result
 }
 
-# Alternative: Function to dynamically build type names without precomputed combinations
-function Get-VTTypeNameDynamic {
+# Function to generate all possible combinations programmatically
+function Initialize-PropertyTypeNames {
     <#
     .SYNOPSIS
-    Dynamically constructs VT_* type names without precomputed combinations.
+    Initializes the global PropertyTypeNames hashtable with all known VT_* types.
     
     .DESCRIPTION
-    This is a more efficient version that doesn't require precomputing all
-    combinations. It's useful when memory is a concern or when dealing with
-    custom/unknown type codes.
-    
-    .PARAMETER TypeCode
-    The VT_* type code as a 16-bit unsigned integer.
+    This function creates a comprehensive hashtable of VT_* type codes and their
+    string representations, including all possible combinations of base types
+    with modifiers (VT_VECTOR, VT_ARRAY, VT_BYREF, VT_RESERVED).
     #>
-    param(
-        [Parameter(Mandatory = $true)]
-        [uint16]$TypeCode
-    )
     
-    # Base type names (without modifiers)
+    # Clear any existing hashtable
+    $script:PropertyTypeNames = @{}
+    
+    # Base type definitions (without modifiers)
     $baseTypes = @{
+        # Basic types (0x0000 - 0x001F)
         0x0000="VT_EMPTY"; 0x0001="VT_NULL"; 0x0002="VT_I2"; 0x0003="VT_I4"
         0x0004="VT_R4"; 0x0005="VT_R8"; 0x0006="VT_CY"; 0x0007="VT_DATE"
         0x0008="VT_BSTR"; 0x0009="VT_DISPATCH"; 0x000A="VT_ERROR"; 0x000B="VT_BOOL"
@@ -326,66 +366,75 @@ function Get-VTTypeNameDynamic {
         0x0014="VT_UI8"; 0x0015="VT_INT"; 0x0016="VT_UINT"; 0x0017="VT_VOID"
         0x0018="VT_HRESULT"; 0x0019="VT_PTR"; 0x001A="VT_SAFEARRAY"; 0x001B="VT_CARRAY"
         0x001C="VT_USERDEFINED"; 0x001D="VT_LPSTR"; 0x001E="VT_LPWSTR"
+        
+        # Record and pointer types (0x0024-0x0026)
         0x0024="VT_RECORD"; 0x0025="VT_INT_PTR"; 0x0026="VT_UINT_PTR"
+        
+        # Extended types (0x0040-0x0049)
         0x0040="VT_FILETIME"; 0x0041="VT_BLOB"; 0x0042="VT_STREAM"; 0x0043="VT_STORAGE"
         0x0044="VT_STREAMED_OBJECT"; 0x0045="VT_STORED_OBJECT"; 0x0046="VT_BLOB_OBJECT"
         0x0047="VT_CF"; 0x0048="VT_CLSID"; 0x0049="VT_VERSIONED_STREAM"
+        
+        # Shell-specific types
         0x004B="VT_SHELL_I2_VERSIONED_STREAM"
         0x004E="VT_SHELL_CY_CLSID"
         0x0054="VT_SHELL_I1_STREAMED_OBJECT"
+        
+        # Special types
         0x0FFF="VT_BSTR_BLOB"
     }
     
-    # Modifier names
-    $modifierNames = @{
+    # Modifier definitions
+    $modifiers = @{
         0x1000="VT_VECTOR"
-        0x2000="VT_ARRAY" 
+        0x2000="VT_ARRAY"
         0x4000="VT_BYREF"
         0x8000="VT_RESERVED"
     }
     
-    # Get the base type (bits 0-11)
-    $baseType = $TypeCode -band 0x0FFF
+    # Add base types
+    foreach ($key in $baseTypes.Keys) {
+        $script:PropertyTypeNames[$key] = $baseTypes[$key]
+    }
     
-    # Build list of modifiers
-    $modifiers = @()
-    foreach ($modCode in 0x1000, 0x2000, 0x4000, 0x8000) {
-        if ($TypeCode -band $modCode) {
-            $modifiers += $modifierNames[$modCode]
+    # Add modifiers alone
+    foreach ($key in $modifiers.Keys) {
+        $script:PropertyTypeNames[$key] = $modifiers[$key]
+    }
+    
+    # Add combined modifier types
+    $script:PropertyTypeNames[0x3000] = "VT_VECTOR | VT_ARRAY"
+    $script:PropertyTypeNames[0x5000] = "VT_VECTOR | VT_BYREF"
+    $script:PropertyTypeNames[0x6000] = "VT_ARRAY | VT_BYREF"
+    $script:PropertyTypeNames[0x7000] = "VT_VECTOR | VT_ARRAY | VT_BYREF"
+    $script:PropertyTypeNames[0x9000] = "VT_RESERVED | VT_VECTOR"
+    $script:PropertyTypeNames[0xA000] = "VT_RESERVED | VT_ARRAY"
+    $script:PropertyTypeNames[0xC000] = "VT_RESERVED | VT_BYREF"
+    $script:PropertyTypeNames[0xB000] = "VT_RESERVED | VT_VECTOR | VT_ARRAY"
+    $script:PropertyTypeNames[0xD000] = "VT_RESERVED | VT_VECTOR | VT_BYREF"
+    $script:PropertyTypeNames[0xE000] = "VT_RESERVED | VT_ARRAY | VT_BYREF"
+    $script:PropertyTypeNames[0xF000] = "VT_RESERVED | VT_VECTOR | VT_ARRAY | VT_BYREF"
+    
+    # Generate all combinations of base types with modifiers
+    foreach ($baseKey in $baseTypes.Keys) {
+        foreach ($modKey in $modifiers.Keys) {
+            $combined = $baseKey -bor $modKey
+            if (-not $script:PropertyTypeNames.ContainsKey($combined)) {
+                $script:PropertyTypeNames[$combined] = "$($modifiers[$modKey]) | $($baseTypes[$baseKey])"
+            }
         }
     }
     
-    # Get base type name
-    if ($baseTypes.ContainsKey($baseType)) {
-        $baseName = $baseTypes[$baseType]
-    } else {
-        $baseName = "VT_UNKNOWN_0x{0:X4}" -f $baseType
-    }
+    # Add VT_ILLEGAL
+    $script:PropertyTypeNames[0xFFFF] = "VT_ILLEGAL"
     
-    # Combine
-    if ($modifiers.Count -eq 0) {
-        return $baseName
-    } else {
-        return ($modifiers -join " | ") + " | " + $baseName
-    }
+    Write-Output "Initialized PropertyTypeNames with $($script:PropertyTypeNames.Count) entries"
 }
 
-# Usage examples:
-# Get-VTTypeName -TypeCode 0x001F  # Returns: "VT_LPWSTR"
-# Get-VTTypeName -TypeCode 0x1011  # Returns: "VT_VECTOR | VT_UI1" 
-# Get-VTTypeName -TypeCode 0x004B  # Returns: "VT_SHELL_I2_VERSIONED_STREAM"
-# Get-VTTypeName -TypeCode 0x201E  # Returns: "VT_ARRAY | VT_LPWSTR"
-
-# Helper function to test type codes
-function Test-VTTypeName {
-    param([uint16[]]$TypeCodes = @(0x001F, 0x1011, 0x004B, 0x201E, 0x9999))
-    
-    foreach ($code in $TypeCodes) {
-        $hex = "0x{0:X4}" -f $code
-        $name = Get-VTTypeName -TypeCode $code
-        Write-Host "$hex : $name"
-    }
-}
+# Example usage:
+# Initialize-PropertyTypeNames
+# Get-VTTypeName -TypeCode 0x1011  # Returns: "VT_VECTOR | VT_UI1"
+# Get-VTTypeName -TypeCode 0x404B  # Returns: "VT_BYREF | VT_SHELL_I2_VERSIONED_STREAM"
 
 ```
 
@@ -845,3 +894,4 @@ function Parse-VT_BSTR {
     return $string.TrimEnd([char]0)
 }
 ```
+
