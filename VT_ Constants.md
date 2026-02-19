@@ -3,71 +3,72 @@
 ## Hashtable for Serialized Property Store
 
 ```powershell
-$PropertyTypeNames = [System.collections.hashtable]@{
-    # Basic types
-    0x0000 = "VT_EMPTY"                     # Empty
-    0x0001 = "VT_NULL"                      # Null
-    0x0002 = "VT_I2"                        # 2-byte signed integer (short)
-    0x0003 = "VT_I4"                        # 4-byte signed integer (int)
-    0x0004 = "VT_R4"                        # 4-byte real (float)
-    0x0005 = "VT_R8"                        # 8-byte real (double)
-    0x0006 = "VT_CY"                        # Currency (64-bit integer scaled by 10,000)
-    0x0007 = "VT_DATE"                      # Date/time (OLE Automation Date)
-    0x0008 = "VT_BSTR"                      # Binary string (length-prefixed Unicode)
-    0x0009 = "VT_DISPATCH"                  # IDispatch pointer
-    0x000A = "VT_ERROR"                     # HRESULT/SCODE
-    0x000B = "VT_BOOL"                      # Boolean (True = -1, False = 0)
-    0x000C = "VT_VARIANT"                   # Variant (must be combined with VT_ARRAY or VT_VECTOR)
-    0x000D = "VT_UNKNOWN"                   # IUnknown pointer
-    0x000E = "VT_DECIMAL"                   # 16-byte decimal
-    0x000F = "VT_I1"                        # 1-byte signed integer (char)
-    0x0010 = "VT_UI1"                       # 1-byte unsigned integer (byte)
-    0x0011 = "VT_UI2"                       # 2-byte unsigned integer (ushort)
-    0x0012 = "VT_UI4"                       # 4-byte unsigned integer (uint)
-    0x0013 = "VT_I8"                        # 8-byte signed integer (long)
-    0x0014 = "VT_UI8"                       # 8-byte unsigned integer (ulong)
-    0x0015 = "VT_INT"                       # Signed machine integer
-    0x0016 = "VT_UINT"                      # Unsigned machine integer
-    0x0017 = "VT_VOID"                      # C-style void
-    0x0018 = "VT_HRESULT"                   # HRESULT
-    0x0019 = "VT_PTR"                       # Pointer type
-    0x001A = "VT_SAFEARRAY"                 # Safe array (use VT_ARRAY instead)
-    0x001B = "VT_CARRAY"                    # C-style array
-    0x001C = "VT_USERDEFINED"               # User-defined type
-    0x001D = "VT_LPSTR"                     # Null-terminated ANSI string
-    0x001E = "VT_LPWSTR"                    # Null-terminated Unicode string
-    0x001F = "VT_RECORD"                    # User-defined type (record)
-    0x0020 = "VT_INT_PTR"                   # Signed machine pointer
-    0x0021 = "VT_UINT_PTR"                  # Unsigned machine pointer
-    0x0022 = "VT_FILETIME"                  # FILETIME (64-bit value representing # of 100ns intervals since Jan 1, 1601 UTC)
-    0x0023 = "VT_BLOB"                      # Length-prefixed bytes (no string terminator)
-    0x0024 = "VT_STREAM"                    # Stream (has name)
-    0x0025 = "VT_STORAGE"                   # Storage (has name)
-    0x0026 = "VT_STREAMED_OBJECT"           # Stream that contains an object
-    0x0027 = "VT_STORED_OBJECT"             # Storage that contains an object
-    0x0028 = "VT_BLOB_OBJECT"               # Blob that contains an object
-    0x0029 = "VT_CF"                        # Clipboard format
-    0x002A = "VT_CLSID"                     # Class ID (GUID)
-    0x002B = "VT_VERSIONED_STREAM"          # Versioned stream with GUID
-    0x002C = "VT_BSTR_BLOB"                 # Reserved for system use
-    0x002D = "VT_VECTOR"                    # Simple counted array (not a SAFEARRAY)
-    0x002E = "VT_ARRAY"                     # SAFEARRAY pointer
-    0x002F = "VT_BYREF"                     # Indicates that a value is a reference
+$PropertyTypeNames = [System.Collections.Hashtable]@{
+    # Basic types (0x0000 - 0x001F)
+    0x0000 = "VT_EMPTY"            # Empty
+    0x0001 = "VT_NULL"             # Null
+    0x0002 = "VT_I2"               # 2-byte signed integer
+    0x0003 = "VT_I4"               # 4-byte signed integer
+    0x0004 = "VT_R4"               # 4-byte floating point
+    0x0005 = "VT_R8"               # 8-byte floating point
+    0x0006 = "VT_CY"               # Currency (8-byte integer / 10000)
+    0x0007 = "VT_DATE"             # OLE Automation date
+    0x0008 = "VT_BSTR"             # COM BSTR string
+    0x0009 = "VT_DISPATCH"         # IDispatch pointer
+    0x000A = "VT_ERROR"            # HRESULT error code
+    0x000B = "VT_BOOL"             # Boolean
+    0x000C = "VT_VARIANT"          # Variant
+    0x000D = "VT_UNKNOWN"          # IUnknown pointer
+    0x000E = "VT_DECIMAL"          # 16-byte decimal
+    0x000F = "VT_I1"               # 1-byte signed integer
+    0x0010 = "VT_UI1"              # 1-byte unsigned integer
+    0x0011 = "VT_UI2"              # 2-byte unsigned integer
+    0x0012 = "VT_UI4"              # 4-byte unsigned integer
+    0x0013 = "VT_I8"               # 8-byte signed integer
+    0x0014 = "VT_UI8"              # 8-byte unsigned integer
+    0x0015 = "VT_INT"              # Signed machine integer
+    0x0016 = "VT_UINT"             # Unsigned machine integer
+    0x0017 = "VT_VOID"             # C-style void
+    0x0018 = "VT_HRESULT"          # HRESULT
+    0x0019 = "VT_PTR"              # Pointer type
+    0x001A = "VT_SAFEARRAY"        # Safe array
+    0x001B = "VT_CARRAY"           # C-style array
+    0x001C = "VT_USERDEFINED"      # User-defined type
+    0x001D = "VT_LPSTR"            # Null-terminated ANSI string
+    0x001E = "VT_LPWSTR"           # Null-terminated Unicode string
     
-    # Extended types (0x0040 and above)
-    0x0040 = "VT_FILETIME"                  # FILETIME (duplicate of 0x0022, but appears in some docs)
-    0x0041 = "VT_BLOB"                      # BLOB (duplicate of 0x0023, but appears in some docs)
-    0x0042 = "VT_STREAM"                    # STREAM (duplicate of 0x0024, but appears in some docs)
-    0x0043 = "VT_STORAGE"                   # STORAGE (duplicate of 0x0025, but appears in some docs)
-    0x0044 = "VT_STREAMED_OBJECT"           # STREAMED_OBJECT (duplicate of 0x0026)
-    0x0045 = "VT_STORED_OBJECT"             # STORED_OBJECT (duplicate of 0x0027)
-    0x0046 = "VT_BLOB_OBJECT"               # BLOB_OBJECT (duplicate of 0x0028)
-    0x0047 = "VT_CF"                        # CF (duplicate of 0x0029)
-    0x0048 = "VT_CLSID"                     # CLSID (duplicate of 0x002A)
-    0x0049 = "VT_VERSIONED_STREAM"          # VERSIONED_STREAM (duplicate of 0x002B)
+    # Record and pointer types (0x0020-0x002F)
+    0x0024 = "VT_RECORD"           # User-defined record type
+    0x0025 = "VT_INT_PTR"          # Signed machine pointer
+    0x0026 = "VT_UINT_PTR"         # Unsigned machine pointer
     
-    # Vector types (VT_VECTOR mask = 0x1000)
-    0x1000 = "VT_VECTOR"                    # Base vector type (not used alone)
+    # Extended types (0x0040-0x0049) - Property set specific
+    0x0040 = "VT_FILETIME"         # 64-bit FILETIME
+    0x0041 = "VT_BLOB"             # Binary large object
+    0x0042 = "VT_STREAM"           # Stream object
+    0x0043 = "VT_STORAGE"          # Storage object
+    0x0044 = "VT_STREAMED_OBJECT"  # Streamed object
+    0x0045 = "VT_STORED_OBJECT"    # Stored object
+    0x0046 = "VT_BLOB_OBJECT"      # Blob object
+    0x0047 = "VT_CF"               # Clipboard format
+    0x0048 = "VT_CLSID"            # Class ID (GUID)
+    0x0049 = "VT_VERSIONED_STREAM" # Versioned stream
+    
+    # Shell-specific custom types (not in standard VARENUM)
+    0x004B = "VT_SHELL_I2_VERSIONED_STREAM"
+    0x004E = "VT_SHELL_CY_CLSID"
+    0x0054 = "VT_SHELL_I1_STREAMED_OBJECT"
+    
+    # Special types
+    0x0FFF = "VT_BSTR_BLOB"        # Reserved for system use
+    
+    # Modifier flags
+    0x1000 = "VT_VECTOR"           # Simple counted array
+    0x2000 = "VT_ARRAY"            # SAFEARRAY pointer
+    0x4000 = "VT_BYREF"            # Reference type
+    0x8000 = "VT_RESERVED"         # Reserved flag
+    
+    # Combined types - Basic types with VT_VECTOR modifier
     0x1002 = "VT_VECTOR | VT_I2"
     0x1003 = "VT_VECTOR | VT_I4"
     0x1004 = "VT_VECTOR | VT_R4"
@@ -97,7 +98,8 @@ $PropertyTypeNames = [System.collections.hashtable]@{
     0x101C = "VT_VECTOR | VT_USERDEFINED"
     0x101D = "VT_VECTOR | VT_LPSTR"
     0x101E = "VT_VECTOR | VT_LPWSTR"
-    0x101F = "VT_VECTOR | VT_RECORD"
+    
+    # Combined types - Extended types with VT_VECTOR modifier
     0x1020 = "VT_VECTOR | VT_FILETIME"
     0x1021 = "VT_VECTOR | VT_BLOB"
     0x1022 = "VT_VECTOR | VT_STREAM"
@@ -108,10 +110,8 @@ $PropertyTypeNames = [System.collections.hashtable]@{
     0x1027 = "VT_VECTOR | VT_CF"
     0x1028 = "VT_VECTOR | VT_CLSID"
     0x1029 = "VT_VECTOR | VT_VERSIONED_STREAM"
-    0x102A = "VT_VECTOR | VT_BSTR_BLOB"
     
-    # Array types (VT_ARRAY mask = 0x2000)
-    0x2000 = "VT_ARRAY"                     # Base array type (not used alone)
+    # Combined types - Basic types with VT_ARRAY modifier
     0x2002 = "VT_ARRAY | VT_I2"
     0x2003 = "VT_ARRAY | VT_I4"
     0x2004 = "VT_ARRAY | VT_R4"
@@ -141,7 +141,8 @@ $PropertyTypeNames = [System.collections.hashtable]@{
     0x201C = "VT_ARRAY | VT_USERDEFINED"
     0x201D = "VT_ARRAY | VT_LPSTR"
     0x201E = "VT_ARRAY | VT_LPWSTR"
-    0x201F = "VT_ARRAY | VT_RECORD"
+    
+    # Combined types - Extended types with VT_ARRAY modifier
     0x2020 = "VT_ARRAY | VT_FILETIME"
     0x2021 = "VT_ARRAY | VT_BLOB"
     0x2022 = "VT_ARRAY | VT_STREAM"
@@ -152,9 +153,8 @@ $PropertyTypeNames = [System.collections.hashtable]@{
     0x2027 = "VT_ARRAY | VT_CF"
     0x2028 = "VT_ARRAY | VT_CLSID"
     0x2029 = "VT_ARRAY | VT_VERSIONED_STREAM"
-    0x202A = "VT_ARRAY | VT_BSTR_BLOB"
     
-    # ByRef types (VT_BYREF mask = 0x4000)
+    # Combined types - Basic types with VT_BYREF modifier
     0x4002 = "VT_BYREF | VT_I2"
     0x4003 = "VT_BYREF | VT_I4"
     0x4004 = "VT_BYREF | VT_R4"
@@ -184,7 +184,8 @@ $PropertyTypeNames = [System.collections.hashtable]@{
     0x401C = "VT_BYREF | VT_USERDEFINED"
     0x401D = "VT_BYREF | VT_LPSTR"
     0x401E = "VT_BYREF | VT_LPWSTR"
-    0x401F = "VT_BYREF | VT_RECORD"
+    
+    # Combined types - Extended types with VT_BYREF modifier
     0x4020 = "VT_BYREF | VT_FILETIME"
     0x4021 = "VT_BYREF | VT_BLOB"
     0x4022 = "VT_BYREF | VT_STREAM"
@@ -195,56 +196,194 @@ $PropertyTypeNames = [System.collections.hashtable]@{
     0x4027 = "VT_BYREF | VT_CF"
     0x4028 = "VT_BYREF | VT_CLSID"
     0x4029 = "VT_BYREF | VT_VERSIONED_STREAM"
-    0x402A = "VT_BYREF | VT_BSTR_BLOB"
     
-    # Combined types (VT_VECTOR | VT_ARRAY mask = 0x3000)
-    0x3000 = "VT_VECTOR | VT_ARRAY"         # Base vector array type (not used alone)
+    # Combined modifier types
+    0x3000 = "VT_VECTOR | VT_ARRAY"
+    0x5000 = "VT_VECTOR | VT_BYREF"
+    0x6000 = "VT_ARRAY | VT_BYREF"
+    0x7000 = "VT_VECTOR | VT_ARRAY | VT_BYREF"
     
-    # Combined types (VT_ARRAY | VT_BYREF mask = 0x6000)
-    0x6000 = "VT_ARRAY | VT_BYREF"          # Base array byref type (not used alone)
-    
-    # Combined types (VT_VECTOR | VT_BYREF mask = 0x5000)
-    0x5000 = "VT_VECTOR | VT_BYREF"         # Base vector byref type (not used alone)
-    
-    # Combined types (VT_VECTOR | VT_ARRAY | VT_BYREF mask = 0x7000)
-    0x7000 = "VT_VECTOR | VT_ARRAY | VT_BYREF" # Base vector array byref type (not used alone)
-    
-    # Reserved types
-    0x0FFF = "VT_RESERVED"                  # Reserved for future use
-    0x8000 = "VT_ILLEGAL"                   # Illegal value
-    0x8001 = "VT_ILLEGALMASKED"             # Illegal masked value
-    0x8002 = "VT_TYPEMASK"                  # Type mask for extracting base type
+    # Illegal values
+    0xFFFF = "VT_ILLEGAL"
 }
+```
+## Helper function to dynamically generate type names for unknown types
 
-# Helper function to dynamically generate type names for unknown types
+```powershell
 function Get-VTTypeName {
-    param([int]$TypeCode)
+    <#
+    .SYNOPSIS
+    Returns the string representation of a VT_* type code.
     
-    # Check if type is in the hashtable
+    .DESCRIPTION
+    This function converts a VT_* type code (VARENUM value) to its string
+    representation. If the exact type code is not found in the lookup table,
+    it dynamically constructs the name using bitwise decomposition.
+    
+    .PARAMETER TypeCode
+    The VT_* type code as a 16-bit unsigned integer.
+    
+    .EXAMPLE
+    Get-VTTypeName -TypeCode 0x001F
+    Returns: "VT_LPWSTR"
+    
+    .EXAMPLE
+    Get-VTTypeName -TypeCode 0x1011
+    Returns: "VT_VECTOR | VT_UI1"
+    
+    .EXAMPLE
+    Get-VTTypeName -TypeCode 0x004B
+    Returns: "VT_SHELL_I2_VERSIONED_STREAM"
+    
+    .EXAMPLE
+    Get-VTTypeName -TypeCode 0x9999
+    Returns: "VT_UNKNOWN_0x1999 (VT_VECTOR | VT_BYREF | VT_UNKNOWN_0x0999)"
+    #>
+    param(
+        [Parameter(Mandatory = $true)]
+        [uint16]$TypeCode
+    )
+    
+    # First, check if we have an exact match in the lookup table
     if ($PropertyTypeNames.ContainsKey($TypeCode)) {
         return $PropertyTypeNames[$TypeCode]
     }
     
-    # Generate name based on flags
-    $baseType = $TypeCode -band 0x0FFF
-    $vectorFlag = if ($TypeCode -band 0x1000) { "VT_VECTOR | " } else { "" }
-    $arrayFlag = if ($TypeCode -band 0x2000) { "VT_ARRAY | " } else { "" }
-    $byrefFlag = if ($TypeCode -band 0x4000) { "VT_BYREF | " } else { "" }
+    # If not found, try to decompose the type code
+    $baseType = $TypeCode -band 0x0FFF  # Mask off modifiers (bits 0-11)
+    $modifiers = @()
     
-    $baseName = if ($PropertyTypeNames.ContainsKey($baseType)) {
-        $PropertyTypeNames[$baseType]
-    } elseif ($baseType -eq 0x000C) {
-        "VT_VARIANT"  # Special case: variant without flags
-    } else {
-        "VT_UNKNOWN (0x$($baseType.ToString('X4')))"
+    # Check for VT_VECTOR modifier (bit 12)
+    if ($TypeCode -band 0x1000) {
+        $modifiers += "VT_VECTOR"
     }
     
-    $combinedFlags = $vectorFlag + $arrayFlag + $byrefFlag
+    # Check for VT_ARRAY modifier (bit 13)
+    if ($TypeCode -band 0x2000) {
+        $modifiers += "VT_ARRAY"
+    }
     
-    if ($combinedFlags -ne "") {
-        return $combinedFlags + $baseName
+    # Check for VT_BYREF modifier (bit 14)
+    if ($TypeCode -band 0x4000) {
+        $modifiers += "VT_BYREF"
+    }
+    
+    # Check for VT_RESERVED modifier (bit 15)
+    if ($TypeCode -band 0x8000) {
+        $modifiers += "VT_RESERVED"
+    }
+    
+    # Get the base type name
+    if ($PropertyTypeNames.ContainsKey($baseType)) {
+        $baseName = $PropertyTypeNames[$baseType]
     } else {
+        # Unknown base type - create a descriptive name
+        $baseName = "VT_UNKNOWN_0x{0:X4}" -f $baseType
+    }
+    
+    # If there are no modifiers, just return the base name
+    if ($modifiers.Count -eq 0) {
         return $baseName
+    }
+    
+    # Combine modifiers and base type
+    $result = ($modifiers -join " | ") + " | " + $baseName
+    
+    # If the base type was unknown, also show the full hex value
+    if ($baseName.StartsWith("VT_UNKNOWN_")) {
+        $result = "VT_UNKNOWN_0x{0:X4} ({1})" -f $TypeCode, $result
+    }
+    
+    return $result
+}
+
+# Alternative: Function to dynamically build type names without precomputed combinations
+function Get-VTTypeNameDynamic {
+    <#
+    .SYNOPSIS
+    Dynamically constructs VT_* type names without precomputed combinations.
+    
+    .DESCRIPTION
+    This is a more efficient version that doesn't require precomputing all
+    combinations. It's useful when memory is a concern or when dealing with
+    custom/unknown type codes.
+    
+    .PARAMETER TypeCode
+    The VT_* type code as a 16-bit unsigned integer.
+    #>
+    param(
+        [Parameter(Mandatory = $true)]
+        [uint16]$TypeCode
+    )
+    
+    # Base type names (without modifiers)
+    $baseTypes = @{
+        0x0000="VT_EMPTY"; 0x0001="VT_NULL"; 0x0002="VT_I2"; 0x0003="VT_I4"
+        0x0004="VT_R4"; 0x0005="VT_R8"; 0x0006="VT_CY"; 0x0007="VT_DATE"
+        0x0008="VT_BSTR"; 0x0009="VT_DISPATCH"; 0x000A="VT_ERROR"; 0x000B="VT_BOOL"
+        0x000C="VT_VARIANT"; 0x000D="VT_UNKNOWN"; 0x000E="VT_DECIMAL"; 0x000F="VT_I1"
+        0x0010="VT_UI1"; 0x0011="VT_UI2"; 0x0012="VT_UI4"; 0x0013="VT_I8"
+        0x0014="VT_UI8"; 0x0015="VT_INT"; 0x0016="VT_UINT"; 0x0017="VT_VOID"
+        0x0018="VT_HRESULT"; 0x0019="VT_PTR"; 0x001A="VT_SAFEARRAY"; 0x001B="VT_CARRAY"
+        0x001C="VT_USERDEFINED"; 0x001D="VT_LPSTR"; 0x001E="VT_LPWSTR"
+        0x0024="VT_RECORD"; 0x0025="VT_INT_PTR"; 0x0026="VT_UINT_PTR"
+        0x0040="VT_FILETIME"; 0x0041="VT_BLOB"; 0x0042="VT_STREAM"; 0x0043="VT_STORAGE"
+        0x0044="VT_STREAMED_OBJECT"; 0x0045="VT_STORED_OBJECT"; 0x0046="VT_BLOB_OBJECT"
+        0x0047="VT_CF"; 0x0048="VT_CLSID"; 0x0049="VT_VERSIONED_STREAM"
+        0x004B="VT_SHELL_I2_VERSIONED_STREAM"
+        0x004E="VT_SHELL_CY_CLSID"
+        0x0054="VT_SHELL_I1_STREAMED_OBJECT"
+        0x0FFF="VT_BSTR_BLOB"
+    }
+    
+    # Modifier names
+    $modifierNames = @{
+        0x1000="VT_VECTOR"
+        0x2000="VT_ARRAY" 
+        0x4000="VT_BYREF"
+        0x8000="VT_RESERVED"
+    }
+    
+    # Get the base type (bits 0-11)
+    $baseType = $TypeCode -band 0x0FFF
+    
+    # Build list of modifiers
+    $modifiers = @()
+    foreach ($modCode in 0x1000, 0x2000, 0x4000, 0x8000) {
+        if ($TypeCode -band $modCode) {
+            $modifiers += $modifierNames[$modCode]
+        }
+    }
+    
+    # Get base type name
+    if ($baseTypes.ContainsKey($baseType)) {
+        $baseName = $baseTypes[$baseType]
+    } else {
+        $baseName = "VT_UNKNOWN_0x{0:X4}" -f $baseType
+    }
+    
+    # Combine
+    if ($modifiers.Count -eq 0) {
+        return $baseName
+    } else {
+        return ($modifiers -join " | ") + " | " + $baseName
+    }
+}
+
+# Usage examples:
+# Get-VTTypeName -TypeCode 0x001F  # Returns: "VT_LPWSTR"
+# Get-VTTypeName -TypeCode 0x1011  # Returns: "VT_VECTOR | VT_UI1" 
+# Get-VTTypeName -TypeCode 0x004B  # Returns: "VT_SHELL_I2_VERSIONED_STREAM"
+# Get-VTTypeName -TypeCode 0x201E  # Returns: "VT_ARRAY | VT_LPWSTR"
+
+# Helper function to test type codes
+function Test-VTTypeName {
+    param([uint16[]]$TypeCodes = @(0x001F, 0x1011, 0x004B, 0x201E, 0x9999))
+    
+    foreach ($code in $TypeCodes) {
+        $hex = "0x{0:X4}" -f $code
+        $name = Get-VTTypeName -TypeCode $code
+        Write-Host "$hex : $name"
     }
 }
 
@@ -385,38 +524,60 @@ function Get-VTTypeName {
 - **Range**: ±79,228,162,514,264,337,593,543,950,335 (with 28 decimal places)
 - **Example**: Decimal value = integer × 10⁻ˢᶜᵃˡᵉ
 
-## String Types
+### VT_RECORD (0x0024) - User-Defined Record
+- **Description**: User-defined structure or record
+- **Structure**: Variable, defined by the record type
+- **Size**: Variable
+- **Format**: Depends on the record definition
+- **Note**: Rare in property stores
 
-### VT_BSTR (0x0008) - Binary String
-- **Description**: Length-prefixed Unicode string (COM BSTR)
+### VT_INT_PTR (0x0025) - Signed Machine Pointer
+- **Description**: Signed pointer-sized integer
+- **Structure**: 4 or 8 bytes depending on platform (32/64-bit)
+- **Size**: Pointer size
+- **Format**: Native pointer representation
+- **Note**: Size depends on the architecture (32-bit vs 64-bit)
+
+### VT_UINT_PTR (0x0026) - Unsigned Machine Pointer
+- **Description**: Unsigned pointer-sized integer
+- **Structure**: 4 or 8 bytes depending on platform (32/64-bit)
+- **Size**: Pointer size
+- **Format**: Native pointer representation
+- **Note**: Size depends on the architecture (32-bit vs 64-bit)
+
+## String Types (1SPS Serialized Format)
+
+### VT_BSTR (0x0008) - Binary String (OLE BSTR)
+- **Description**: Length-prefixed Unicode string with null terminator
 - **Structure**: 
-  - 4 bytes: length (in bytes, includes null terminator)
-  - N bytes: UTF-16LE characters (including null terminator)
-- **Size**: 4 + length bytes
-- **Format**: `[UInt32 length][UTF-16LE chars...][UInt16 0x0000]`
-- **Important**: Length is in bytes (not characters), includes null terminator
-- **Example**: "Hello" = `0x0C000000` (12 bytes) + `0x4800 6500 6C00 6C00 6F00 0000` (H e l l o null)
+  - 4 bytes: length in bytes (EXCLUDES null terminator)
+  - N bytes: UTF-16LE characters (INCLUDES null terminator)
+- **Size**: 4 + length + 2 bytes
+- **Format**: `[UInt32 byteLength][UTF-16LE chars...][UInt16 0x0000]`
 - **Character Count**: (length / 2) - 1
+- **Example**: "Hello" = `0x0A000000` (10 bytes) + `0x4800 6500 6C00 6C00 6F00 0000` (H e l l o null)
+- **Note**: Rare in 1SPS; VT_LPWSTR is more common
 
 ### VT_LPSTR (0x001E) - Null-Terminated ANSI String
-- **Description**: Length-prefixed ANSI string
+- **Description**: Length-prefixed ANSI string in 1SPS format
 - **Structure**: 
-  - 4 bytes: length (in bytes, includes null terminator)
-  - N bytes: ANSI characters (including null terminator)
-- **Size**: 4 + length bytes
-- **Format**: `[UInt32 length][ANSI chars...][Byte 0x00]`
+  - 4 bytes: character count (NOT byte count)
+  - N bytes: ANSI characters (NO null terminator)
+- **Size**: 4 + character count bytes
+- **Format**: `[UInt32 charCount][ANSI chars...]` (no null terminator)
 - **Encoding**: Current system ANSI code page (Windows-1252 on Western systems)
-- **Example**: "Hello" = `0x06000000` (6 bytes) + `0x48 65 6C 6C 6F 00` (H e l l o null)
+- **Example**: "Hello" = `0x05000000` (5 chars) + `0x48 65 6C 6C 6F` (H e l l o)
+- **Note**: This differs from OLE VT_LPSTR which is null-terminated
 
 ### VT_LPWSTR (0x001F) - Null-Terminated Unicode String
-- **Description**: Length-prefixed Unicode string
+- **Description**: Length-prefixed Unicode string in 1SPS format
 - **Structure**:
-  - 4 bytes: length (in bytes, includes null terminator)
-  - N bytes: UTF-16LE characters (including null terminator)
-- **Size**: 4 + length bytes
-- **Format**: `[UInt32 length][UTF-16LE chars...][UInt16 0x0000]`
-- **Example**: "Hello" = `0x0C000000` (12 bytes) + `0x4800 6500 6C00 6C00 6F00 0000`
-- **Difference from VT_BSTR**: VT_BSTR is a COM BSTR, VT_LPWSTR is just a length-prefixed Unicode string
+  - 4 bytes: character count (NOT byte count)
+  - N×2 bytes: UTF-16LE characters (NO null terminator)
+- **Size**: 4 + (character count × 2) bytes
+- **Format**: `[UInt32 charCount][UTF-16LE chars...]` (no null terminator)
+- **Example**: "Hello" = `0x05000000` (5 chars) + `0x4800 6500 6C00 6C00 6F00`
+- **Note**: This is the standard string type in property stores; differs from OLE VT_LPWSTR
 
 ## Date/Time Types
 
@@ -441,18 +602,18 @@ function Get-VTTypeName {
   - 4 bytes: length (in bytes)
   - N bytes: raw data
 - **Size**: 4 + length bytes
-- **Format**: `[UInt32 length][raw bytes...]`
+- **Format**: `[UInt32 byteLength][raw bytes...]`
 - **Note**: No null terminator, pure binary data
 - **Example**: Image data, serialized objects
 
 ### VT_CF (0x0047) - Clipboard Format
 - **Description**: Clipboard data format
 - **Structure**:
-  - 4 bytes: total size (including this header)
+  - 4 bytes: total size (including this header + data)
   - 4 bytes: clipboard format ID
   - N bytes: format-specific data
 - **Size**: Variable (8 + data size)
-- **Format**: `[UInt32 size][UInt32 format][data...]`
+- **Format**: `[UInt32 totalSize][UInt32 format][data...]`
 - **Common Formats**:
   - 1 = CF_TEXT (ANSI text)
   - 13 = CF_UNICODETEXT (Unicode text)
@@ -462,12 +623,44 @@ function Get-VTTypeName {
 
 ### VT_CLSID (0x0048) - Class ID (GUID)
 - **Description**: 128-bit Globally Unique Identifier
-- **Structure**: 16 bytes in standard GUID format
+- **Structure**: 16 bytes in standard Windows GUID format
 - **Size**: 16 bytes
-- **Format**: `[UInt32 Data1][UInt16 Data2][UInt16 Data3][UInt8 Data4[8]]`
-- **Layout**: Little-endian except Data4 which is byte array
+- **Format**: Mixed-endian:
+  - 4 bytes: Data1 (big-endian)
+  - 2 bytes: Data2 (big-endian)
+  - 2 bytes: Data3 (big-endian)
+  - 8 bytes: Data4 (byte array, big-endian for first 2 bytes)
 - **String Format**: `{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}`
 - **Example**: `0xDEADBEEFFEEDFACE1234567890ABCDEF`
+- **Note**: .NET's `Guid` constructor handles the endian conversion automatically
+
+## Stream and Storage Types
+
+### VT_STREAM (0x0042) - Stream Object
+- **Description**: Reference to an IStream object
+- **Structure**: Variable, stream-specific
+- **Format**: Stream name followed by stream data
+- **Note**: Contains persistent stream object
+
+### VT_STORAGE (0x0043) - Storage Object
+- **Description**: Reference to an IStorage object
+- **Structure**: Variable, storage-specific
+- **Format**: Storage structure with substorages and streams
+
+### VT_STREAMED_OBJECT (0x0044) - Streamed Object
+- **Description**: Object saved in a stream
+- **Structure**: Stream containing serialized object
+- **Format**: Class ID followed by object data
+
+### VT_STORED_OBJECT (0x0045) - Stored Object
+- **Description**: Object saved in a storage
+- **Structure**: Storage containing object data
+- **Format**: Class ID followed by storage structure
+
+### VT_BLOB_OBJECT (0x0046) - Blob Object
+- **Description**: Object saved in a BLOB
+- **Structure**: Class ID followed by BLOB data
+- **Format**: `[CLSID][BLOB data]`
 
 ### VT_VERSIONED_STREAM (0x0049) - Versioned Stream
 - **Description**: Stream with version GUID
@@ -478,27 +671,59 @@ function Get-VTTypeName {
 - **Format**: `[GUID version][stream data...]`
 - **Common Uses**: Versioned serialization formats
 
+## Shell-Specific Custom Types (Not in Standard VARENUM)
+
+### VT_SHELL_I2_VERSIONED_STREAM (0x004B)
+- **Description**: Shell extension type combining VT_I2 with versioned stream
+- **Structure**: Custom shell format (exact structure undocumented)
+- **Note**: Appears in Shell Item property stores, not standard VARENUM
+
+### VT_SHELL_CY_CLSID (0x004E)
+- **Description**: Shell extension type combining VT_CY with CLSID
+- **Structure**: Custom shell format (exact structure undocumented)
+- **Note**: Appears in Shell Item property stores, not standard VARENUM
+
+### VT_SHELL_I1_STREAMED_OBJECT (0x0054)
+- **Description**: Shell extension type combining VT_I1 with streamed object
+- **Structure**: Custom shell format (exact structure undocumented)
+- **Note**: Appears in Shell Item property stores, not standard VARENUM
+
 ## Complex/Structured Types
 
 ### VT_VARIANT (0x000C) - Variant
 - **Description**: Can contain any other VT type
-- **Structure**:
+- **Structure** (when used in 1SPS):
   - 2 bytes: VT type code
   - 6 bytes: reserved/padding (often 0)
   - Variable: data based on type
 - **Size**: 8 + data size
 - **Format**: `[UInt16 type][UInt16 wReserved1][UInt32 wReserved2][data...]`
-- **Used In**: VT_VECTOR | VT_VARIANT, VT_ARRAY | VT_VARIANT
+- **Used In**: `VT_VECTOR | VT_VARIANT`, `VT_ARRAY | VT_VARIANT`
+- **Note**: Rare as standalone type in property stores
 
 ### VT_VECTOR (Base: 0x1000) - Simple Counted Array
 - **Description**: Counted array of items (not a SAFEARRAY)
-- **Structure for VT_VECTOR | VT_TYPE**:
+- **Structure for `VT_VECTOR | VT_TYPE`**:
   - 4 bytes: count of elements
-  - N × element_size: array elements
+  - For each element: element data (format depends on VT_TYPE)
 - **Size**: 4 + (count × element_size)
 - **Format**: `[UInt32 count][element1][element2]...[elementN]`
-- **Example VT_VECTOR | VT_I4**: `[UInt32 count=3][Int32 1][Int32 2][Int32 3]`
-- **Example VT_VECTOR | VT_LPWSTR**: Each string has its own length prefix
+
+#### Specific Vector Types:
+
+**`VT_VECTOR | VT_I4` (0x1003)**:
+- Format: `[UInt32 count][Int32 elem1][Int32 elem2]...`
+
+**`VT_VECTOR | VT_UI1` (0x1011)**:
+- Format: `[UInt32 count][Byte elem1][Byte elem2]...`
+
+**`VT_VECTOR | VT_LPWSTR` (0x101F)**:
+- Format: `[UInt32 count]`
+  - Then for each string: `[UInt32 charCount][UTF-16LE chars...]` (no null terminator)
+
+**`VT_VECTOR | VT_VARIANT` (0x100C)**:
+- Format: `[UInt32 count]`
+  - Then for each variant: `[UInt16 type][6 bytes reserved][data...]`
 
 ### VT_ARRAY (Base: 0x2000) - SAFEARRAY
 - **Description**: Multi-dimensional array with bounds information
@@ -530,48 +755,20 @@ function Get-VTTypeName {
 - **Format**: Binary pointer
 - **Note**: For OLE Automation objects
 
-## Stream/Storage Types
-
-### VT_STREAM (0x0042) - Stream Object
-- **Description**: Reference to an IStream object
-- **Structure**: Variable, stream-specific
-- **Format**: Stream name followed by stream data
-- **Note**: Contains persistent stream object
-
-### VT_STORAGE (0x0043) - Storage Object
-- **Description**: Reference to an IStorage object
-- **Structure**: Variable, storage-specific
-- **Format**: Storage structure with substorages and streams
-
-### VT_STREAMED_OBJECT (0x0044) - Streamed Object
-- **Description**: Object saved in a stream
-- **Structure**: Stream containing serialized object
-- **Format**: Class ID followed by object data
-
-### VT_STORED_OBJECT (0x0045) - Stored Object
-- **Description**: Object saved in a storage
-- **Structure**: Storage containing object data
-- **Format**: Class ID followed by storage structure
-
-### VT_BLOB_OBJECT (0x0046) - Blob Object
-- **Description**: Object saved in a BLOB
-- **Structure**: Class ID followed by BLOB data
-- **Format**: `[CLSID][BLOB data]`
-
 ## Flag Combinations
 
 ### VT_BYREF (Mask: 0x4000) - By Reference
 - **Description**: Value is a pointer/reference
-- **Usage**: Combined with other types (e.g., VT_BYREF | VT_I4)
+- **Usage**: Combined with other types (e.g., `VT_BYREF | VT_I4`)
 - **Structure**: Pointer to the actual data
-- **Example**: `0x4003` = VT_BYREF | VT_I4 (pointer to 32-bit integer)
+- **Example**: `0x4003` = `VT_BYREF | VT_I4` (pointer to 32-bit integer)
 
 ### Common Combinations:
-- **VT_VECTOR | VT_I4** (0x1003): Array of 32-bit integers
-- **VT_VECTOR | VT_BSTR** (0x1008): Array of BSTR strings
-- **VT_VECTOR | VT_VARIANT** (0x100C): Array of variants (can be mixed types)
-- **VT_ARRAY | VT_UI1** (0x2011): Byte array (SAFEARRAY of bytes)
-- **VT_BYREF | VT_BOOL** (0x400B): Pointer to boolean
+- **`VT_VECTOR | VT_I4`** (0x1003): Array of 32-bit integers
+- **`VT_VECTOR | VT_LPWSTR`** (0x101F): Array of Unicode strings
+- **`VT_VECTOR | VT_VARIANT`** (0x100C): Array of variants (can be mixed types)
+- **`VT_ARRAY | VT_UI1`** (0x2011): Byte array (SAFEARRAY of bytes)
+- **`VT_BYREF | VT_BOOL`** (0x400B): Pointer to boolean
 
 ## Implementation Notes for Property Store:
 
@@ -582,7 +779,7 @@ function Get-VTTypeName {
 
 2. **Alignment**: Values are often padded to 4-byte boundaries
 
-3. **String Handling**: Most strings in property stores are VT_LPWSTR (Unicode)
+3. **String Handling**: Most strings in property stores are VT_LPWSTR (Unicode) with character count, not null-terminated
 
 4. **Common Types in Shell Property Stores**:
    - VT_LPWSTR: File names, paths, strings
@@ -594,11 +791,9 @@ function Get-VTTypeName {
 
 5. **Vector Usage**: Used for multi-valued properties (e.g., multiple authors, keywords)
 
-## Helper Functions for Parsing:
+## Helper Functions for Parsing (1SPS Format):
 
 ```powershell
-# Example parsing for common types:
-
 # VT_I4 (4-byte integer)
 $value = [System.BitConverter]::ToInt32($bytes, 0)
 
@@ -609,14 +804,44 @@ $value = [System.BitConverter]::ToUInt32($bytes, 0)
 $fileTime = [System.BitConverter]::ToInt64($bytes, 0)
 $dateTime = [DateTime]::FromFileTimeUtc($fileTime)
 
-# VT_LPWSTR (Unicode string)
-$length = [System.BitConverter]::ToUInt32($bytes, 0)
-$string = [System.Text.Encoding]::Unicode.GetString($bytes, 4, $length - 2)
+# VT_LPWSTR (Unicode string in 1SPS format)
+$charCount = [System.BitConverter]::ToUInt32($bytes, 0)
+$string = [System.Text.Encoding]::Unicode.GetString($bytes, 4, $charCount * 2)
+
+# VT_LPSTR (ANSI string in 1SPS format)
+$charCount = [System.BitConverter]::ToUInt32($bytes, 0)
+$string = [System.Text.Encoding]::Default.GetString($bytes, 4, $charCount)
 
 # VT_CLSID (16-byte GUID)
-$guid = [Guid]::new($bytes)
+$guid = [Guid]::new($bytes)  # .NET handles endian conversion
 
 # VT_BLOB (binary data)
-$length = [System.BitConverter]::ToUInt32($bytes, 0)
-$data = $bytes[4..($length + 3)]
+$byteCount = [System.BitConverter]::ToUInt32($bytes, 0)
+$data = $bytes[4..($byteCount + 3)]
 
+# VT_VECTOR | VT_LPWSTR (array of Unicode strings)
+function Parse-VT_VECTOR_LPWSTR {
+    param([byte[]]$bytes)
+    $offset = 0
+    $count = [BitConverter]::ToUInt32($bytes, $offset)
+    $offset += 4
+    $strings = @()
+    for ($i = 0; $i -lt $count; $i++) {
+        $charCount = [BitConverter]::ToUInt32($bytes, $offset)
+        $offset += 4
+        $string = [Text.Encoding]::Unicode.GetString($bytes, $offset, $charCount * 2)
+        $offset += $charCount * 2
+        $strings += $string
+    }
+    return $strings
+}
+
+# VT_BSTR (OLE BSTR format)
+function Parse-VT_BSTR {
+    param([byte[]]$bytes)
+    $byteLength = [BitConverter]::ToUInt32($bytes, 0)
+    # BSTR includes null terminator, so length in chars = (byteLength / 2) - 1
+    $string = [Text.Encoding]::Unicode.GetString($bytes, 4, $byteLength)
+    return $string.TrimEnd([char]0)
+}
+```
