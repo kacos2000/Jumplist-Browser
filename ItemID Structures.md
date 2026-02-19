@@ -1,12 +1,40 @@
-# **MS-SHLLINK ItemID Structure Document**
-## **Combined with ItemID Extension Analysis**
+# **MS-SHLLINK ItemID Structures**
+## **Combined with ItemID Extension Details**
 
 ---
 
 ## **1. OVERVIEW**
 The **LinkTargetIDList** structure in MS-SHLLINK files contains a sequence of **ItemID** structures that collectively define a shell namespace path. Each ItemID can be followed by optional extension blocks that provide additional metadata. This document details both the base ItemID structure and the various extension types.
 
----
+Example: typical file system path: `C:\Users\JohnDoe\Documents\file.txt`
+
+In the Shell namespace, this might be represented by the following ItemIDs:
+
+```text
+	My Computer (or Desktop) - a virtual folder that is the root of the file system.
+	Drive C: - represents the C: drive.
+	Users - a folder on C:.
+	JohnDoe - a folder in Users.
+	Documents - a folder in JohnDoe.
+	file.txt - the target file.
+```
+Each of these is represented by an ItemID. The ItemIDList in the LNK file is a sequence of these ItemIDs, terminated by a zero (0x0000).
+
+The structure of each ItemID varies by type. For example:
+
+```typescript
+	- My Computer might be of type 0x1F (ShellDesktop) with a specific CLSID.
+	- Drive C: might be of type 0x2F (Volume) and include the drive letter.
+	- Folders (Users, JohnDoe, Documents) might be of type 0x35 (Folder with Unicode name) or 0x31 (Folder with Ansi name).
+	- File (file.txt) might be of type 0x36 (File with Unicode name) or 0x32 (File with Ansi name).
+```
+
+The path is constructed by concatenating the names (or drive letter) in order:
+
+  "C:" + "\" + "Users" + "\" + "JohnDoe" + "\" + "Documents" + "\" + "file.txt"
+
+Result: "C:\Users\JohnDoe\Documents\file.txt"
+
 
 ## **2. BASE ITEMID STRUCTURE**
 
@@ -319,11 +347,10 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 
 ## **Serialized Property Store (1SPS) Structure**
 ```typescript
-+0x00: DWORD     TotalSize
-+0x04: CHAR[4]   Signature = "1SPS"
-+0x08: DWORD     Version (usually 0x53505331)
-+0x0C: DWORD     FormatIDCount
-+0x10: FORMATID_ENTRY[] FormatIDs
++0x00: DWORD     - TotalSize (size of entire property store)
++0x04: DWORD     - Version/Signature = 0x53505331 ("1SPS")
++0x08: DWORD     - FormatIDCount (number of format IDs)
++0x0C: FORMATID  - First FormatID structure (16-byte GUID + property IDs)
 ```
 
 ### **FormatID Entry:**
@@ -343,7 +370,6 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 +0x? : BYTE[]    PropertyValue
 ```
 
-
 ## **Notes**
 1. All numeric fields are **little-endian**
 2. String encodings vary: ANSI (CP1252), UTF-8, or Unicode (UTF-16LE)
@@ -351,9 +377,16 @@ Based on the provided PowerShell code analysis, here's a comprehensive breakdown
 4. The actual implementation may have additional types and variants not shown in this code
 5. Some ItemID types support multiple structure versions based on size or flags
 6. Property Store structures can be deeply nested with complex type systems
+7. Property Store structures also in the ExtraData Section when the EnableTargetMetadata flag is set in LinkFlags. It's stored in a PropertyStoreDataBlock with signature 0xA0000009:
+   ```
+	+0x00: DWORD  - BlockSize
+	+0x04: DWORD  - BlockSignature = 0xA0000009
+	+0x08: DWORD  - SerializedPropertyStorageSize
+	+0x0C: BYTE[] - SerializedPropertyStorage (1SPS format)
+   ```
 
-This breakdown represents the ItemID structures as implemented in the Windows Shell based on the coed of JumplistBroswer. 
-The actual Windows implementation may contain additional types and variations.
+*This breakdown represents the ItemID structures as implemented in the Windows Shell based on the coed of JumplistBroswer. 
+The actual Windows implementation may contain additional types and variations.*
 
 ---
 
