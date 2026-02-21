@@ -4,79 +4,71 @@
 
 ```powershell
 $PropertyTypeNames = [System.Collections.Hashtable]@{
-    # Basic types (0x0000 - 0x001F)
-    0x0000 = "VT_EMPTY"            # Empty
-    0x0001 = "VT_NULL"             # Null
-    0x0002 = "VT_I2"               # 2-byte signed integer
-    0x0003 = "VT_I4"               # 4-byte signed integer
-    0x0004 = "VT_R4"               # 4-byte floating point
-    0x0005 = "VT_R8"               # 8-byte floating point
-    0x0006 = "VT_CY"               # Currency (8-byte integer / 10000)
-    0x0007 = "VT_DATE"             # OLE Automation date
-    0x0008 = "VT_BSTR"             # COM BSTR string
-    0x0009 = "VT_DISPATCH"         # IDispatch pointer
-    0x000A = "VT_ERROR"            # HRESULT error code
-    0x000B = "VT_BOOL"             # Boolean
-    0x000C = "VT_VARIANT"          # Variant
-    0x000D = "VT_UNKNOWN"          # IUnknown pointer
-    0x000E = "VT_DECIMAL"          # 16-byte decimal
-    0x000F = "VT_I1"               # 1-byte signed integer
-    0x0010 = "VT_UI1"              # 1-byte unsigned integer  
-    0x0011 = "VT_UI2"              # 2-byte unsigned integer  
-    0x0012 = "VT_UI4"              # 4-byte unsigned integer  
-    0x0013 = "VT_I8"               # 8-byte signed integer    
-    0x0014 = "VT_UI8"              # 8-byte unsigned integer  
-    0x0015 = "VT_INT"              # Signed machine integer   
-    0x0016 = "VT_UINT"             # Unsigned machine integer 
-    0x0017 = "VT_VOID"             # C-style void
-    0x0018 = "VT_HRESULT"          # HRESULT
-    0x0019 = "VT_PTR"              # Pointer type
-    0x001A = "VT_SAFEARRAY"        # Safe array
-    0x001B = "VT_CARRAY"           # C-style array
-    0x001C = "VT_USERDEFINED"      # User-defined type
-    0x001D = "VT_LPSTR"            # Null-terminated ANSI string
-    0x001E = "VT_LPWSTR"           # Null-terminated Unicode string
-  
-    # Record and pointer types (0x0020-0x002F)
-    0x0024 = "VT_RECORD"           # User-defined record type
-    0x0025 = "VT_INT_PTR"          # Signed machine pointer
-    0x0026 = "VT_UINT_PTR"         # Unsigned machine pointer
-  
-    # Extended types (0x0040-0x0049) - Property set specific
-    0x0040 = "VT_FILETIME"         # 64-bit FILETIME
-    0x0041 = "VT_BLOB"             # Binary large object
-    0x0042 = "VT_STREAM"           # Stream object
-    0x0043 = "VT_STORAGE"          # Storage object
-    0x0044 = "VT_STREAMED_OBJECT"  # Streamed object
-    0x0045 = "VT_STORED_OBJECT"    # Stored object
-    0x0046 = "VT_BLOB_OBJECT"      # Blob object
-    0x0047 = "VT_CF"               # Clipboard format
-    0x0048 = "VT_CLSID"            # Class ID (GUID)
-    0x0049 = "VT_VERSIONED_STREAM" # Versioned stream
-  
-    # Shell-specific custom types (not in standard VARENUM)
-    # Note: These are not in MS-OLEPS but observed in Windows Shell
+    # Basic VARENUM types
+    0x0000 = "VT_EMPTY"
+    0x0001 = "VT_NULL"
+    0x0002 = "VT_I2"
+    0x0003 = "VT_I4"
+    0x0004 = "VT_R4"
+    0x0005 = "VT_R8"
+    0x0006 = "VT_CY"
+    0x0007 = "VT_DATE"
+    0x0008 = "VT_BSTR"
+    0x0009 = "VT_DISPATCH"
+    0x000A = "VT_ERROR"
+    0x000B = "VT_BOOL"
+    0x000C = "VT_VARIANT"
+    0x000D = "VT_UNKNOWN"
+    0x000E = "VT_DECIMAL"
+    0x0010 = "VT_I1"
+    0x0011 = "VT_UI1"
+    0x0012 = "VT_UI2"
+    0x0013 = "VT_UI4"
+    0x0014 = "VT_I8"
+    0x0015 = "VT_UI8"
+    0x0016 = "VT_INT"
+    0x0017 = "VT_UINT"
+    0x0018 = "VT_VOID"
+    0x0019 = "VT_HRESULT"
+    0x001A = "VT_PTR"
+    0x001B = "VT_SAFEARRAY"
+    0x001C = "VT_CARRAY"
+    0x001D = "VT_USERDEFINED"
+    0x001E = "VT_LPSTR"    
+    0x001F = "VT_LPWSTR"   
+
+    # Record types
+    0x0024 = "VT_RECORD"
+    0x0025 = "VT_INT_PTR"
+    0x0026 = "VT_UINT_PTR"
+
+    # Extended property set types
+    0x0040 = "VT_FILETIME"
+    0x0041 = "VT_BLOB"
+    0x0042 = "VT_STREAM"
+    0x0043 = "VT_STORAGE"
+    0x0044 = "VT_STREAMED_OBJECT"
+    0x0045 = "VT_STORED_OBJECT"
+    0x0046 = "VT_BLOB_OBJECT"
+    0x0047 = "VT_CF"
+    0x0048 = "VT_CLSID"
+    0x0049 = "VT_VERSIONED_STREAM"
+
+    # Shell-specific types (observed)
     0x004B = "VT_SHELL_I2_VERSIONED_STREAM"
     0x004E = "VT_SHELL_CY_CLSID"
     0x0054 = "VT_SHELL_I1_STREAMED_OBJECT"
-  
-    # Search/Windows Property System specific types (extended)
-    0x0055 = "VT_UNKNOWN_0x0055"   # Observed in Windows Search
-    0x0056 = "VT_UNKNOWN_0x0056"   # Observed in Windows Search
-    0x0057 = "VT_UNKNOWN_0x0057"   # Observed in Windows Search
-    0x0058 = "VT_UNKNOWN_0x0058"   # Observed in Windows Search
-    0x0059 = "VT_UNKNOWN_0x0059"   # Observed in Windows Search
-  
+
     # Special types
-    0x0FFF = "VT_BSTR_BLOB"        # Reserved for system use
-  
+    0x0FFF = "VT_BSTR_BLOB"
+    
     # Modifier flags
-    0x1000 = "VT_VECTOR"           # Simple counted array
-    0x2000 = "VT_ARRAY"            # SAFEARRAY pointer
-    0x4000 = "VT_BYREF"            # Reference type
-    0x8000 = "VT_RESERVED"         # Reserved flag
-  
-    # Illegal values
+    0x1000 = "VT_VECTOR"
+    0x2000 = "VT_ARRAY"
+    0x4000 = "VT_BYREF"
+    0x8000 = "VT_RESERVED"
+    
+    # Illegal value
     0xFFFF = "VT_ILLEGAL"
 }
 ```
@@ -85,81 +77,35 @@ $PropertyTypeNames = [System.Collections.Hashtable]@{
 
 ```powershell
 function Get-VTTypeName {
-    <#
-    .SYNOPSIS
-    Returns the string representation of a VT_* type code.
-  
-    .DESCRIPTION
-    This function converts a VT_* type code (VARENUM value) to its string
-    representation. It first checks the comprehensive lookup table, and if
-    not found, dynamically constructs the name using bitwise decomposition.
-  
-    .PARAMETER TypeCode
-    The VT_* type code as a 16-bit unsigned integer.
-  
-    .EXAMPLE
-    Get-VTTypeName -TypeCode 0x001F
-    Returns: "VT_LPWSTR"
-  
-    .EXAMPLE
-    Get-VTTypeName -TypeCode 0x1011
-    Returns: "VT_VECTOR | VT_UI2"
-  
-    .EXAMPLE
-    Get-VTTypeName -TypeCode 0x004B
-    Returns: "VT_SHELL_I2_VERSIONED_STREAM"
-    #>
-    param(
-        [Parameter(Mandatory = $true)]
-        [uint16]$TypeCode
-    )
-  
-    # First, check if we have an exact match in the lookup table
+    param([uint16]$TypeCode)
+    
+    # Check for exact match first
     if ($PropertyTypeNames.Contains([int]$TypeCode)) {
         return $PropertyTypeNames[[int]$TypeCode]
     }
-  
-    # If not found, try to decompose the type code
-    $baseType = $TypeCode -band 0x0FFF  # Mask off modifiers (bits 0-11)
+    
+    # Decompose into base type and modifiers
+    $baseType = $TypeCode -band 0x0FFF
     $modifiers = @()
-  
-    # Check for VT_VECTOR modifier (bit 12)
-    if ($TypeCode -band 0x1000) {
-        $modifiers += "VT_VECTOR"
-    }
-  
-    # Check for VT_ARRAY modifier (bit 13)
-    if ($TypeCode -band 0x2000) {
-        $modifiers += "VT_ARRAY"
-    }
-  
-    # Check for VT_BYREF modifier (bit 14)
-    if ($TypeCode -band 0x4000) {
-        $modifiers += "VT_BYREF"
-    }
-  
-    # Check for VT_RESERVED modifier (bit 15)
-    if ($TypeCode -band 0x8000) {
-        $modifiers += "VT_RESERVED"
-    }
-  
-    # Get the base type name
-    if ($PropertyTypeNames.ContainsKey($baseType)) {
-        $baseName = $PropertyTypeNames[$baseType]
+    
+    if ($TypeCode -band 0x1000) { $modifiers += "VT_VECTOR" }
+    if ($TypeCode -band 0x2000) { $modifiers += "VT_ARRAY" }
+    if ($TypeCode -band 0x4000) { $modifiers += "VT_BYREF" }
+    if ($TypeCode -band 0x8000) { $modifiers += "VT_RESERVED" }
+    
+    # Get base type name
+    $baseName = if ($PropertyTypeNames.ContainsKey([int]$baseType)) {
+        $PropertyTypeNames[[int]$baseType]
     } else {
-        # Unknown base type - create a descriptive name
-        $baseName = "VT_UNKNOWN_0x{0:X4}" -f $baseType
+        "VT_UNKNOWN_0x{0:X4}" -f $baseType
     }
-  
-    # If there are no modifiers, just return the base name
+    
+    # Return combined name
     if ($modifiers.Count -eq 0) {
         return $baseName
+    } else {
+        return ($modifiers -join " | ") + " | " + $baseName
     }
-  
-    # Combine modifiers and base type
-    $result = ($modifiers -join " | ") + " | " + $baseName
-  
-    return $result
 }
 ```
 
@@ -325,5 +271,6 @@ function Get-VTTypeName {
 - **[VARENUM enumeration (wtypes.h)](https://learn.microsoft.com/en-us/windows/win32/api/wtypes/ne-wtypes-varenum)**
 - **Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h**
 - **Windows Kits\10\Include\10.0.22621.0\shared\propvarutil.h**
+
 
 
