@@ -895,3 +895,10 @@ function Parse-VT_BSTR {
 }
 ```
 
+## References:
+- [Object Linking and Embedding (OLE) - PropertyType](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/2a4589eb-9a23-4a8b-adbd-3e368233c099)
+- [Object Linking and Embedding (OLE) - TypedPropertyValue](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/f122b9d7-e5cf-4484-8466-83f6fd94b3cc)
+- [Object Linking and Embedding (OLE) - Property Types in Variable-Typed Vectors and Arrays](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/8e6b33cd-3fb2-4329-9c6b-cb3a6c976e0f)
+- [Object Linking and Embedding (OLE) - Non-Simple Property Set Storage Format](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/83b0f831-6adf-48c5-8bef-b62e7ac1cc1e)
+- [Object Linking and Embedding (OLE) - SummaryInformation](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-oleps/f7933d28-2cc4-4b36-bc23-8861cbcd37c4)
+- [VARENUM enumeration (wtypes.h)](https://learn.microsoft.com/en-us/windows/win32/api/wtypes/ne-wtypes-varenum)
