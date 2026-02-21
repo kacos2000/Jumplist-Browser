@@ -115,8 +115,8 @@ function Get-VTTypeName {
     )
   
     # First, check if we have an exact match in the lookup table
-    if ($PropertyTypeNames.ContainsKey($TypeCode)) {
-        return $PropertyTypeNames[$TypeCode]
+    if ($PropertyTypeNames.Contains([int]$TypeCode)) {
+        return $PropertyTypeNames[[int]$TypeCode]
     }
   
     # If not found, try to decompose the type code
@@ -325,4 +325,5 @@ function Get-VTTypeName {
 - **[VARENUM enumeration (wtypes.h)](https://learn.microsoft.com/en-us/windows/win32/api/wtypes/ne-wtypes-varenum)**
 - **Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h**
 - **Windows Kits\10\Include\10.0.22621.0\shared\propvarutil.h**
+
 
