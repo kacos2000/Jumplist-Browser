@@ -62,11 +62,15 @@ Following the header are zero or more property entries. Parsing continues until 
 
 **Used for collections of multiple property storages**
 
-### Container Header (4 bytes)
+### Container Header (4 bytes *followed by 1+ PropertyStores*)
 
 | Offset | Size | Type | Field | Description |
 | --- | --- | --- | --- | --- |
 | 0x00 | 4   | UInt32 | `StoreSize` | Total size of entire container |
+| *followed by*                                |
+| 0x04 | 4   | UInt32 | `Storage1 Size` | Total size of storage1 |
+| 0x08 | 4   | UInt32 | `Version`| Signature: `0x53505331` (little-endian "1SPS")  |
+| 0x08 | 16  | GUID | `FormatId` | Property set identifier GUID | Shell Property Set GUID |
 
 ### Storage Entries
 
@@ -302,5 +306,6 @@ Offset 0x20: [Variable] Property entries...
     
 
 ---
+
 
 *Documentation based on [securifybv](https://github.com/securifybv/PropertyStore) PropertyStore .NET library v1.0 and Windows Shell property system analysis. Format variations exist in different Windows versions.*
