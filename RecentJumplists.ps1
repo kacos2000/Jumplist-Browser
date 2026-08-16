@@ -5,6 +5,7 @@
     --------------------------------------------------------------------------------
 #>
 
+#region Source: Startup.pss
 #----------------------------------------------
 #region Import Assemblies
 #----------------------------------------------
@@ -3863,7 +3864,15 @@ function Show-MainForm_psf
 		"00430000" = "WNNC_NET_GOOGLE"
 		"00440000" = "WNNC_NET_NDFS"
 	}
-	$AppIDs = @{
+	$AppIDs = [Ordered]@{
+		"DF17AA00DC3A8572" = "Bambu Studio"
+		"4631290B7017DB5D" = "ASUS ArmouryCrate"
+		"6A19055025EDB725" = "ms-availablenetworks"
+		"E8C65855A731E95F" = "ms-controlcenter"
+		"EFBB5B49815A2656" = "Adobe Acrobat Reader x64"
+		"BA71E00D2166EF5D" = "Microsoft GamingApp"
+		"65AB89E829C98E2A" = "Microsoft GamingServices"
+		"6AECF41F5F071308" = "PDF-XChange Editor"
 		"20D94B01E6C046BB" = "Opera"
 		"7228FD8C2BDE108C" = "Explorer++"
 		"64B3F20643DF6708" = "CSV Buddy" # csv-buddy.com
@@ -6857,6 +6866,26 @@ function Show-MainForm_psf
 	    #"37FFFFFF" # Possibly Malicious
 	)
 	
+	function Trim-LeadingZeros
+	{
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[byte[]]$bytes
+		)
+		
+		if ($bytes -eq $null -or $bytes.Length -eq 0) { return @() }
+		# Find first index where byte is not 0
+		$firstNonZero = 0
+		while ($firstNonZero -lt $bytes.Length -and $bytes[$firstNonZero] -eq 0)
+		{
+			$firstNonZero++
+		}
+		if ($firstNonZero -eq $bytes.Length) { return @() } # all zeros
+		return $bytes[$firstNonZero .. ($bytes.Length - 1)]
+	}
+	
+	
 	function Get-Ext_00 # Variants
 	{
 		param
@@ -6970,6 +6999,53 @@ function Show-MainForm_psf
 						$null = $EmbeddedIdList.Add($linkItem)
 					}
 					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'EmbeddedIdList' -Value $EmbeddedIdList
+				}
+			}
+		}
+		elseif ($Signature -eq '37FFFFFF') # Path/Description - possible malware
+		{
+			# Parse the specific structure from your example
+			$ItemIdListProperties = [PSCustomObject]@{
+				'ItemIDSize' = $ItemIDSize
+				'ItemIDType' = $ItemIDType
+				'Signature'  = "0x$($Signature)"
+			}
+			
+			try
+			{
+				# Parse the network path structure
+				# Bytes 6-17: Unknown data (possibly flags/offsets)
+				
+				# String length
+				$pathSize = [System.BitConverter]::ToUInt16($ByteArray[18 .. 19], 0) # unicode
+				$DescriptionSize = [System.BitConverter]::ToUInt16($ByteArray[20 .. 21], 0)
+				$uriStart = 22
+				
+				# Network path (Unicode)
+				if ($pathSize -gt 0 -and ($uriStart + $pathSize * 2) -le $ItemIDSize)
+				{
+					$Path = Convert-OLEPString -Bytes $ByteArray[$uriStart .. ($uriStart + $pathSize * 2 - 1)]
+					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'PathSize' -Value $pathSize
+					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'Path' -Value $Path
+					
+					try
+					{
+						if ($DescriptionSize -gt 0 -and $DescriptionSize -le ($ItemIDSize - $uriStart - $pathSize))
+						{
+							$DescriptionStart = $uriStart + $pathSize * 2
+							$Description = Convert-OLEPString -Bytes (Trim-LeadingZeros -bytes $ByteArray[$DescriptionStart .. ($DescriptionStart + $DescriptionSize - 1)])
+							$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'Description' -Value $Description
+						}
+					}
+					catch { }
+				}
+			}
+			catch
+			{
+				$ItemIdListProperties = [PSCustomObject]@{
+					'ItemIDSize' = $ItemIDSize
+					'ItemIDType' = $ItemIDType
+					'Signature'  = "0x$($Signature)"
 				}
 			}
 		}
@@ -7507,57 +7583,6 @@ function Show-MainForm_psf
 				}
 			}
 			
-		}
-		elseif ($Signature -eq '37FFFFFF') # URI/NetworkProvider - possible malware
-		{
-			# Parse the specific structure from your example
-			$ItemIdListProperties = [PSCustomObject]@{
-				'ItemIDSize' = $ItemIDSize
-				'ItemIDType' = $ItemIDType
-				'Signature'  = "0x$($Signature)"
-			}
-			
-			try
-			{
-				# Parse the network path structure
-				# Bytes 6-21: Unknown data (possibly flags/offsets)
-				
-				# String length
-				$pathSize = [System.BitConverter]::ToUInt16($ByteArray[18 .. 19], 0)
-				$NetworkProviderSize = [System.BitConverter]::ToUInt16($ByteArray[20 .. 21], 0)
-				$uriStart = 22
-				
-				# Network path (Unicode)
-				if ($pathSize -gt 0 -and (18 + $pathSize * 2) -le $ByteArray.Count)
-				{
-					$Path = Convert-OLEPString -Bytes $ByteArray[$uriStart .. ($uriStart + $pathSize * 2 - 1)]
-					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'UriSize' -Value $pathSize
-					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'URI' -Value $Path
-				}
-				
-				if (($uriStart + $pathSize * 2 + $NetworkProviderSize) -le $ItemIDSize)
-				{
-					$providerStart = $uriStart + $pathSize * 2
-					
-					# trim leadind zero's
-					# Simple loop - this is what you need
-					$restofbytes = $ByteArray[$providerStart .. ($providerStart + $NetworkProviderSize - 1)]
-					# Find first non-zero
-					for ($i = 0; $restofbytes[$i] -eq 0 -and $i -lt $restofbytes.Count; $i++) { }
-					$trimmed = $restofbytes[$i .. ($restofbytes.Count - 1)]
-					$NetworkProvider = Convert-OLEPString -Bytes $trimmed[0 .. ($NetworkProviderSize - 1)]
-					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name 'NetworkProviderSize' -Value $NetworkProviderSize
-					$ItemIdListProperties | Add-Member -MemberType NoteProperty -Name "NetworkProvider" -Value $NetworkProvider
-				}
-			}
-			catch
-			{
-				$ItemIdListProperties = [PSCustomObject]@{
-					'ItemIDSize' = $ItemIDSize
-					'ItemIDType' = $ItemIDType
-					'Signature'  = "0x$($Signature)"
-				}
-			}
 		}
 		elseif ([System.BitConverter]::ToString($ByteArray[0 .. 15]).Replace('-', '') -ne '00000000000000000000000000000000' -and $Signature -notin $unknown_sigs)
 		{
@@ -9265,6 +9290,21 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				}
 			} # End BEEF001E
+			elseif ($itemIdExtType -eq 'BEEF001F') # Application Name
+			{
+				try
+				{
+					$Application = [System.Text.Encoding]::Unicode.GetString($ByteArray[($extStart + 10) .. ($extStart + $extLength - 5)])
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Application" -Value $Application
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+				catch
+				{
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+			} # End BEEF001F
 			elseif ($itemIdExtType -eq 'BEEF0013') # Attribute (and maybe guid ?)
 			{
 				try
@@ -9467,6 +9507,21 @@ function Show-MainForm_psf
 					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
 				}
 			} # End BEEF0027
+			elseif ($itemIdExtType -eq 'BEEF0028') # Application Name
+			{
+				try
+				{
+					$Application = [System.Text.Encoding]::Unicode.GetString($ByteArray[($extStart + 10) .. ($extStart + $extLength - 5)])
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "Application" -Value $Application
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+				catch
+				{
+					$extData = [System.BitConverter]::ToString($ByteArray[($extStart) .. ($extStart + $extLength - 1)]) -replace '-', ''
+					$ItemIdExtension | Add-Member -MemberType NoteProperty -Name "extData" -Value $extData
+				}
+			} # End BEEF0028
 			elseif ($itemIdExtType -eq 'BEEF0029') # File Attributes
 			{
 				try
@@ -10568,7 +10623,7 @@ function Show-MainForm_psf
 			return
 		}
 	
-		
+	
 		try
 		{
 			try
@@ -11204,24 +11259,24 @@ function Show-MainForm_psf
 			}
 			
 			$KEYQUERYVALUE = 0x1
-		$KEYREAD = 0x19
-		$KEYALLACCESS = 0x3F
-	}
-	PROCESS
-	{
-		foreach ($computer in $ComputerName)
+			$KEYREAD = 0x19
+			$KEYALLACCESS = 0x3F
+		}
+		PROCESS
 		{
-			
-			$sig0 = @'
+			foreach ($computer in $ComputerName)
+			{
+				
+				$sig0 = @'
 [DllImport("advapi32.dll", SetLastError = true)]
   public static extern int RegConnectRegistry(
   	string lpMachineName,
 	int hkey,
 	ref int phkResult);
 '@
-			$type0 = Add-Type -MemberDefinition $sig0 -Name Win32Utils -Namespace RegConnectRegistry -Using System.Text -PassThru
-			
-			$sig1 = @'
+				$type0 = Add-Type -MemberDefinition $sig0 -Name Win32Utils -Namespace RegConnectRegistry -Using System.Text -PassThru
+				
+				$sig1 = @'
 [DllImport("advapi32.dll", CharSet = CharSet.Auto)]
   public static extern int RegOpenKeyEx(
     int hKey,
@@ -11230,10 +11285,10 @@ function Show-MainForm_psf
     int samDesired,
     out int hkResult);
 '@
-			$type1 = Add-Type -MemberDefinition $sig1 -Name Win32Utils `
-							  -Namespace RegOpenKeyEx -Using System.Text -PassThru
-			
-			$sig2 = @'
+				$type1 = Add-Type -MemberDefinition $sig1 -Name Win32Utils `
+								  -Namespace RegOpenKeyEx -Using System.Text -PassThru
+				
+				$sig2 = @'
 [DllImport("advapi32.dll", EntryPoint = "RegEnumKeyEx")]
 extern public static int RegEnumKeyEx(
     int hkey,
@@ -11247,367 +11302,367 @@ extern public static int RegEnumKeyEx(
 
 
 '@
-			$type2 = Add-Type -MemberDefinition $sig2 -Name Win32Utils `
-							  -Namespace RegEnumKeyEx -Using System.Text -PassThru
-			
-			$sig3 = @'
+				$type2 = Add-Type -MemberDefinition $sig2 -Name Win32Utils `
+								  -Namespace RegEnumKeyEx -Using System.Text -PassThru
+				
+				$sig3 = @'
 [DllImport("advapi32.dll", SetLastError=true)]
 public static extern int RegCloseKey(
     int hKey);
 '@
-			$type3 = Add-Type -MemberDefinition $sig3 -Name Win32Utils -Namespace RegCloseKey -Using System.Text -PassThru
-			
-			
-			$hKey = new-object int
-			$hKeyref = new-object int
-			$searchKeyRemote = $type0::RegConnectRegistry($computer, $searchKey, [ref]$hKey)
-			$result = $type1::RegOpenKeyEx($hKey, $SubKey, 0, $KEYREAD, [ref]$hKeyref)
-			
-			#initialize variables            
-			$builder = New-Object System.Text.StringBuilder 1024
-			$index = 0
-			$length = [int] 1024
-			$time = New-Object Long
-			$Timestamps = [System.Collections.Hashtable]::new()
-			#234 means more info, 0 means success. Either way, keep reading            
-			while (0, 234 -contains $type2::RegEnumKeyEx($hKeyref, $index++ , $builder, [ref]$length, $null, $null, $null, [ref]$time))
-			{
-				#create output object            
-				$o = "" | Select Key, LastWriteTime
-				# Don't need the Computername
-				# $o.ComputerName = "$computer"
-				$o.Key = $builder.ToString() # key name 
-				$o.LastWriteTime = [datetime]::FromFileTimeUtc($time).ToString("dd-MMM-yyyy HH:mm:ss.fffffff")
-				$null = $Timestamps.Add($o.Key, $o.LastWriteTime)
-				#reinitialize for next time through the loop            
-				$length = [int] 1024
+				$type3 = Add-Type -MemberDefinition $sig3 -Name Win32Utils -Namespace RegCloseKey -Using System.Text -PassThru
+				
+				
+				$hKey = new-object int
+				$hKeyref = new-object int
+				$searchKeyRemote = $type0::RegConnectRegistry($computer, $searchKey, [ref]$hKey)
+				$result = $type1::RegOpenKeyEx($hKey, $SubKey, 0, $KEYREAD, [ref]$hKeyref)
+				
+				#initialize variables            
 				$builder = New-Object System.Text.StringBuilder 1024
-			}
-			
-			$result = $type3::RegCloseKey($hKey)
-			return $Timestamps
-		}
-	}
-} # End Get-RegKeyLastWriteTime function
-
-function Get-Files
-{
-	[CmdletBinding()]
-	param
-	(
-		[Parameter(Mandatory = $true)]
-		$Folder
-	)
-	
-	try
-	{
-		$Status.Text = "Please wait ..."
-		$dirFiles = [System.IO.Directory]::GetFiles("$($Folder)", "*", [System.IO.SearchOption]::AllDirectories).Where{ [System.IO.FileInfo]::new($_).Extension -in ('.lnk', '.customDestinations-ms', '.automaticDestinations-ms', '.temp') }
-		# Get File Properties
-		$Script:AppListIdx = [System.Collections.Hashtable]::New()
-		$Tree1Search.Visible = $false
-		$Tree1Search.Text = "Select Jumplist by App Name"
-		if ($Tree1Search.Items.Count -gt 0)
-		{
-			$Tree1Search.Items.Clear()
-		}
-		$files = @(foreach ($file in $dirFiles)
-		{
-			[System.Windows.Forms.Application]::DoEvents()
-			
-			if (![System.IO.FileInfo]::new($file).Exists)
-			{
-				continue
-			}
-			
-			# Replace known AppID with it's Name
-			$fname = [System.IO.Path]::GetFileName($file)
-			$ext = [System.IO.Path]::GetExtension($fname)
-			$AppName = $null
-			$AUMIDHash = $null
-			if ($ext -in ('.customDestinations-ms', '.automaticDestinations-ms'))
-			{
-				$AUMIDHash = [System.IO.Path]::GetFileNameWithoutExtension($file)
-				# Add known App Name
-				if ($AUMIDHash -in $AppIDs.Keys)
+				$index = 0
+				$length = [int] 1024
+				$time = New-Object Long
+				$Timestamps = [System.Collections.Hashtable]::new()
+				#234 means more info, 0 means success. Either way, keep reading            
+				while (0, 234 -contains $type2::RegEnumKeyEx($hKeyref, $index++ , $builder, [ref]$length, $null, $null, $null, [ref]$time))
 				{
-					$AppName = $AppIDs[$AUMIDHash].ToString()
-					$t = $Tree1Search.Items.Add($AppName)
-					$null = $Script:AppListIdx.Add($t, $file)
-				} # end for each Appid
-			}
-
-			# Add A.D.Streams
-			try
-			{
-				$StreamName = [System.Collections.ArrayList]::new()
-				if (!!((Get-Item $file -Stream * -Force -ErrorAction SilentlyContinue).Stream -ne ':$DATA'))
-				{
-					$null = $StreamName.Add((Get-Item $file -Stream * -Force -ErrorAction SilentlyContinue).Stream -ne ':$DATA')
+					#create output object            
+					$o = "" | Select Key, LastWriteTime
+					# Don't need the Computername
+					# $o.ComputerName = "$computer"
+					$o.Key = $builder.ToString() # key name 
+					$o.LastWriteTime = [datetime]::FromFileTimeUtc($time).ToString("dd-MMM-yyyy HH:mm:ss.fffffff")
+					$null = $Timestamps.Add($o.Key, $o.LastWriteTime)
+					#reinitialize for next time through the loop            
+					$length = [int] 1024
+					$builder = New-Object System.Text.StringBuilder 1024
 				}
+				
+				$result = $type3::RegCloseKey($hKey)
+				return $Timestamps
 			}
-			catch { $StreamName = [System.Collections.ArrayList]::new() }
-			
-			[PSCustomObject][Ordered]@{
-				'FileName'   = $file
-				'Name'	     = $fname
-				'AppName'    = $AppName
-				'AUMIDHash'  = $AUMIDHash
-				'Parent'     = Split-Path -Path $file -Parent
-				'CreationTimeUtc'   = [System.IO.File]::GetCreationTimeUtc($file)
-				'LastAccessTimeUtc' = [System.IO.File]::GetLastAccessTimeUtc($file)
-				'LastWriteTimeUtc'  = [System.IO.File]::GetLastWriteTimeUtc($file)
-				'Attributes'        = [System.IO.File]::GetAttributes($file)
-				'Size'	            = [System.IO.FileInfo]::new($file).Length
-				'ADS_Stream'        = if (!!$StreamName) { $StreamName } else { $null }
-			}
-			
-		}) # end for each
-		
-	} # end try
-	catch { $files = $null }
-	
-	if ($files.Count -ge 1)
-	{
-		$Status.Text = "LNK/*-ms Files: $($files.count) "
-		Add-fileNodes -Files $files -RootFolder "$($Folder)"
-		
-		if ($Tree1Search.Items.Count -ge 1)
-		{
-			$Tree1Search.Visible = $true
 		}
-		else
+	} # End Get-RegKeyLastWriteTime function
+	
+	function Get-Files
+	{
+		[CmdletBinding()]
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			$Folder
+		)
+		
+		try
 		{
+			$Status.Text = "Please wait ..."
+			$dirFiles = [System.IO.Directory]::GetFiles("$($Folder)", "*", [System.IO.SearchOption]::AllDirectories).Where{ [System.IO.FileInfo]::new($_).Extension -in ('.lnk', '.customDestinations-ms', '.automaticDestinations-ms', '.temp') }
+			# Get File Properties
+			$Script:AppListIdx = [System.Collections.Hashtable]::New()
 			$Tree1Search.Visible = $false
-		}
-		return $true
-	}
-	else
-	{
-		$Status.Text = "NO LNK/*-ms Files found in $($Folder)"
-		[System.Console]::Beep(500, 150)
-		return $false
-	}
-	
-} # End get-files
-
-function Add-Directories
-{
-	param
-	(
-		[Parameter(Mandatory = $true)]
-		$RootNode,
-		[Parameter(Mandatory = $true)]
-		$Directories
-	)
-	
-	foreach ($Directory in $Directories)
-	{
-		$lastNode = $null
-		$subPathAgg = ""
-		$Status.Text = "Please wait - Creating Directory structure"
-		foreach ($subPath in $Directory.split('\\'))
-		{
-			$subPathAgg += ($subPath + '\')
-			$nodes = $RootNode.Nodes.Find($subPathAgg.TrimEnd('\'), $true)
-			[System.Windows.Forms.Application]::DoEvents()
-			if ($nodes.Length -eq 0)
+			$Tree1Search.Text = "Select Jumplist by App Name"
+			if ($Tree1Search.Items.Count -gt 0)
 			{
-				if ($lastNode -eq $null)
+				$Tree1Search.Items.Clear()
+			}
+			$files = @(foreach ($file in $dirFiles)
+			{
+				[System.Windows.Forms.Application]::DoEvents()
+				
+				if (![System.IO.FileInfo]::new($file).Exists)
 				{
-					$lastNode = $RootNode.Nodes.Add($subPathAgg.TrimEnd('\'), $subPath)
-					$lastNode.TooltipText = "$($subPathAgg.TrimEnd('\'))"
-					$lastNode.NodeFont = [System.Drawing.Font]::New($treeview1.Font, [Drawing.FontStyle]::Bold)
-					$lastNode.ForeColor = 'DodgerBlue'
-					$lastNode.ImageIndex = 1
-					$lastNode.SelectedImageIndex = 2
+					continue
 				}
-				else
+				
+				# Replace known AppID with it's Name
+				$fname = [System.IO.Path]::GetFileName($file)
+				$ext = [System.IO.Path]::GetExtension($fname)
+				$AppName = $null
+				$AUMIDHash = $null
+				if ($ext -in ('.customDestinations-ms', '.automaticDestinations-ms'))
 				{
-					$lastNode = $lastNode.Nodes.Add($subPathAgg.TrimEnd('\'), $subPath)
-					$lastNode.TooltipText = "$($subPathAgg.TrimEnd('\'))"
-					$lastNode.NodeFont = [System.Drawing.Font]::New($treeview1.Font, [Drawing.FontStyle]::Bold)
-					$lastNode.ForeColor = 'DodgerBlue'
-					$lastNode.ImageIndex = 1
-					$lastNode.SelectedImageIndex = 2
+					$AUMIDHash = [System.IO.Path]::GetFileNameWithoutExtension($file)
+					# Add known App Name
+					if ($AUMIDHash -in $AppIDs.Keys)
+					{
+						$AppName = $AppIDs[$AUMIDHash].ToString()
+						$t = $Tree1Search.Items.Add($AppName)
+						$null = $Script:AppListIdx.Add($t, $file)
+					} # end for each Appid
 				}
-				if ($subPath -match 'CustomDestinations')
+	
+				# Add A.D.Streams
+				try
 				{
-					$lastNode.ToolTipText = 'Tasks + Features'
+					$StreamName = [System.Collections.ArrayList]::new()
+					if (!!((Get-Item $file -Stream * -Force -ErrorAction SilentlyContinue).Stream -ne ':$DATA'))
+					{
+						$null = $StreamName.Add((Get-Item $file -Stream * -Force -ErrorAction SilentlyContinue).Stream -ne ':$DATA')
+					}
 				}
-				elseif ($subPath -match 'AutomaticDestinations')
-				{
-					$lastNode.ToolTipText = 'Recent + Pinned'
+				catch { $StreamName = [System.Collections.ArrayList]::new() }
+				
+				[PSCustomObject][Ordered]@{
+					'FileName'   = $file
+					'Name'	     = $fname
+					'AppName'    = $AppName
+					'AUMIDHash'  = $AUMIDHash
+					'Parent'     = Split-Path -Path $file -Parent
+					'CreationTimeUtc'   = [System.IO.File]::GetCreationTimeUtc($file)
+					'LastAccessTimeUtc' = [System.IO.File]::GetLastAccessTimeUtc($file)
+					'LastWriteTimeUtc'  = [System.IO.File]::GetLastWriteTimeUtc($file)
+					'Attributes'        = [System.IO.File]::GetAttributes($file)
+					'Size'	            = [System.IO.FileInfo]::new($file).Length
+					'ADS_Stream'        = if (!!$StreamName) { $StreamName } else { $null }
 				}
+				
+			}) # end for each
+			
+		} # end try
+		catch { $files = $null }
+		
+		if ($files.Count -ge 1)
+		{
+			$Status.Text = "LNK/*-ms Files: $($files.count) "
+			Add-fileNodes -Files $files -RootFolder "$($Folder)"
+			
+			if ($Tree1Search.Items.Count -ge 1)
+			{
+				$Tree1Search.Visible = $true
 			}
 			else
 			{
-				$lastNode = $nodes[0]
-				$lastNode.TooltipText = "$($subPathAgg.TrimEnd('\'))"
-				$lastNode.NodeFont = [System.Drawing.Font]::New($treeview1.Font, [Drawing.FontStyle]::Bold)
-				$lastNode.ForeColor = 'DodgerBlue'
-				$lastNode.ImageIndex = 1
-				$lastNode.SelectedImageIndex = 2
+				$Tree1Search.Visible = $false
 			}
+			return $true
 		}
-	}
-} # End Add-Directories
-
-function Add-fileNodes
-{
-	[CmdletBinding()]
-	param
-	(
-		[Parameter(Mandatory = $true)]
-		$Files,
-		[Parameter(Mandatory = $true)]
-		$RootFolder
-	)
-	
-	$treeview1.BeginUpdate()
-	$treeview1.Nodes.Clear()
-	$treeview2.Nodes.Clear()
-	$treeview2.ImageList = $null
-	[System.GC]::Collect()
-	$rootfoldername = Split-Path -Path $RootFolder -Leaf
-	$Root = $treeview1.Nodes.Add("$($RootFolder)", "$($RootFolder)")
-	$Root.NodeFont = [System.Drawing.Font]::New($treeview1.Font, [Drawing.FontStyle]::Bold)
-	$Root.ForeColor = 'DarkTurquoise'
-	$Root.ImageIndex = 1
-	$Root.SelectedImageIndex = 2
-	
-	if ($files.Count -ge 1) # <===============
-	{
-		# Get Directories
-		$dirs = foreach ($dir in $Files.Parent)
+		else
 		{
-			if ([System.IO.DirectoryInfo]::new($dir).Exists)
-			{
-				try { $dir.Replace("$(Split-Path -path $RootFolder -Parent)", '').Trimstart("\") }
-				catch { continue }
-			}
-		}
-		$dirs = $dirs | sort -Unique
-		# Add Directories
-		if ($dirs.count -ge 1)
-		{
-			Add-Directories -RootNode $Root -Directories $dirs
+			$Status.Text = "NO LNK/*-ms Files found in $($Folder)"
+			[System.Console]::Beep(500, 150)
+			return $false
 		}
 		
-		# Add Files
-		$i = 1
-		$files = ($files | sort -Property LastWriteTimeUtc -Descending)
-		foreach ($file in $files)
+	} # End get-files
+	
+	function Add-Directories
+	{
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			$RootNode,
+			[Parameter(Mandatory = $true)]
+			$Directories
+		)
+		
+		foreach ($Directory in $Directories)
 		{
-			$fname = $file.Name
-			$parent = $file.Parent
-			try { $filep = $parent.Replace("$(Split-Path -path $RootFolder -Parent)", '').Trimstart("\") }
-			catch { $filep = $parent }
-			$node = $Root.Nodes.Find("$($filep)", $true)
-			if (!!$node) { $ParentNode = $node[0] }
-			else { $ParentNode = $Root }
-			
-			# Add File
-			$filenode = $ParentNode.Nodes.Add("$($file.Filename)", "$($fname)")
-			$filenode.Tag = @("$($file.Filename)")
-			$Status.Text = "Please wait - Populating Directory Tree with Files: $($i)/$($files.count)"
-			$i++
-			[System.Windows.Forms.Application]::DoEvents()
-			
-			# Get associated icon for the file
-			try
+			$lastNode = $null
+			$subPathAgg = ""
+			$Status.Text = "Please wait - Creating Directory structure"
+			foreach ($subPath in $Directory.split('\\'))
 			{
-				$fullPath = Join-Path $file.Parent $file.Filename
-				if ($fullPath -le 240 -and $file.Attributes -notmatch 'Directory')
+				$subPathAgg += ($subPath + '\')
+				$nodes = $RootNode.Nodes.Find($subPathAgg.TrimEnd('\'), $true)
+				[System.Windows.Forms.Application]::DoEvents()
+				if ($nodes.Length -eq 0)
 				{
-					$handle = [System.Drawing.Icon]::ExtractAssociatedIcon("$($file.Filename)").Handle
-					$icon = [System.Drawing.Icon]::FromHandle($handle)
+					if ($lastNode -eq $null)
+					{
+						$lastNode = $RootNode.Nodes.Add($subPathAgg.TrimEnd('\'), $subPath)
+						$lastNode.TooltipText = "$($subPathAgg.TrimEnd('\'))"
+						$lastNode.NodeFont = [System.Drawing.Font]::New($treeview1.Font, [Drawing.FontStyle]::Bold)
+						$lastNode.ForeColor = 'DodgerBlue'
+						$lastNode.ImageIndex = 1
+						$lastNode.SelectedImageIndex = 2
+					}
+					else
+					{
+						$lastNode = $lastNode.Nodes.Add($subPathAgg.TrimEnd('\'), $subPath)
+						$lastNode.TooltipText = "$($subPathAgg.TrimEnd('\'))"
+						$lastNode.NodeFont = [System.Drawing.Font]::New($treeview1.Font, [Drawing.FontStyle]::Bold)
+						$lastNode.ForeColor = 'DodgerBlue'
+						$lastNode.ImageIndex = 1
+						$lastNode.SelectedImageIndex = 2
+					}
+					if ($subPath -match 'CustomDestinations')
+					{
+						$lastNode.ToolTipText = 'Tasks + Features'
+					}
+					elseif ($subPath -match 'AutomaticDestinations')
+					{
+						$lastNode.ToolTipText = 'Recent + Pinned'
+					}
+				}
+				else
+				{
+					$lastNode = $nodes[0]
+					$lastNode.TooltipText = "$($subPathAgg.TrimEnd('\'))"
+					$lastNode.NodeFont = [System.Drawing.Font]::New($treeview1.Font, [Drawing.FontStyle]::Bold)
+					$lastNode.ForeColor = 'DodgerBlue'
+					$lastNode.ImageIndex = 1
+					$lastNode.SelectedImageIndex = 2
 				}
 			}
-			catch
+		}
+	} # End Add-Directories
+	
+	function Add-fileNodes
+	{
+		[CmdletBinding()]
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			$Files,
+			[Parameter(Mandatory = $true)]
+			$RootFolder
+		)
+		
+		$treeview1.BeginUpdate()
+		$treeview1.Nodes.Clear()
+		$treeview2.Nodes.Clear()
+		$treeview2.ImageList = $null
+		[System.GC]::Collect()
+		$rootfoldername = Split-Path -Path $RootFolder -Leaf
+		$Root = $treeview1.Nodes.Add("$($RootFolder)", "$($RootFolder)")
+		$Root.NodeFont = [System.Drawing.Font]::New($treeview1.Font, [Drawing.FontStyle]::Bold)
+		$Root.ForeColor = 'DarkTurquoise'
+		$Root.ImageIndex = 1
+		$Root.SelectedImageIndex = 2
+		
+		if ($files.Count -ge 1) # <===============
+		{
+			# Get Directories
+			$dirs = foreach ($dir in $Files.Parent)
 			{
-				Show-ErrorMessage -ErrorMessage "$($file.Filename)`n$($Error[0].Exception.InnerException.Message)"
-				$Error.Clear()
+				if ([System.IO.DirectoryInfo]::new($dir).Exists)
+				{
+					try { $dir.Replace("$(Split-Path -path $RootFolder -Parent)", '').Trimstart("\") }
+					catch { continue }
+				}
 			}
-			if (!!$icon -and $icon.Height -ne 0)
+			$dirs = $dirs | sort -Unique
+			# Add Directories
+			if ($dirs.count -ge 1)
 			{
+				Add-Directories -RootNode $Root -Directories $dirs
+			}
+			
+			# Add Files
+			$i = 1
+			$files = ($files | sort -Property LastWriteTimeUtc -Descending)
+			foreach ($file in $files)
+			{
+				$fname = $file.Name
+				$parent = $file.Parent
+				try { $filep = $parent.Replace("$(Split-Path -path $RootFolder -Parent)", '').Trimstart("\") }
+				catch { $filep = $parent }
+				$node = $Root.Nodes.Find("$($filep)", $true)
+				if (!!$node) { $ParentNode = $node[0] }
+				else { $ParentNode = $Root }
+				
+				# Add File
+				$filenode = $ParentNode.Nodes.Add("$($file.Filename)", "$($fname)")
+				$filenode.Tag = @("$($file.Filename)")
+				$Status.Text = "Please wait - Populating Directory Tree with Files: $($i)/$($files.count)"
+				$i++
+				[System.Windows.Forms.Application]::DoEvents()
+				
+				# Get associated icon for the file
 				try
 				{
-					$newkey = $handle.ToString()
-					if (!$treeview1.ImageList.Images.ContainsKey($newkey))
+					$fullPath = Join-Path $file.Parent $file.Filename
+					if ($fullPath -le 240 -and $file.Attributes -notmatch 'Directory')
 					{
-						$null = $treeview1.ImageList.Images.Add($newkey, $icon.ToBitmap())
+						$handle = [System.Drawing.Icon]::ExtractAssociatedIcon("$($file.Filename)").Handle
+						$icon = [System.Drawing.Icon]::FromHandle($handle)
 					}
-					$filenode.ImageIndex = $treeview1.ImageList.Images.IndexOfKey($newkey)
-					$filenode.SelectedImageIndex = $treeview1.ImageList.Images.IndexOfKey($newkey)
 				}
 				catch
+				{
+					Show-ErrorMessage -ErrorMessage "$($file.Filename)`n$($Error[0].Exception.InnerException.Message)"
+					$Error.Clear()
+				}
+				if (!!$icon -and $icon.Height -ne 0)
+				{
+					try
+					{
+						$newkey = $handle.ToString()
+						if (!$treeview1.ImageList.Images.ContainsKey($newkey))
+						{
+							$null = $treeview1.ImageList.Images.Add($newkey, $icon.ToBitmap())
+						}
+						$filenode.ImageIndex = $treeview1.ImageList.Images.IndexOfKey($newkey)
+						$filenode.SelectedImageIndex = $treeview1.ImageList.Images.IndexOfKey($newkey)
+					}
+					catch
+					{
+						$filenode.ImageIndex = 11
+						$filenode.SelectedImageIndex = 12
+					}
+				}
+				else
 				{
 					$filenode.ImageIndex = 11
 					$filenode.SelectedImageIndex = 12
 				}
-			}
-			else
-			{
-				$filenode.ImageIndex = 11
-				$filenode.SelectedImageIndex = 12
-			}
-			if ($file.AppName -ne $null)
-			{
-				$filenode.ToolTipText = "$($file.AppName)"
-				$filenode.ForeColor = 'LightGreen'
-				$filenode.Text = "$($file.AppName) [$($file.AUMIDHash.ToUpper())]"
-				$null = $filenode.Nodes.Add("FileName", "FileName: $($fname)")
-				$AppNameNode = $filenode.Nodes.Add("AppName", "AppName: $($file.AppName)")
-				$AppNameNode.ForeColor = 'Yellow'
-			}
-			
-			if ($file.Size -lt 76)
-			{
-				$filenode.ForeColor = 'DimGray'
-				$filenode.Tooltiptext = "$($file.Name) is too small"
-			}
-			# Add the FileSystem Info Properties
-			try
-			{
-				$CreationTimeUtc = $file.CreationTimeUtc.ToString("dd-MMM-yyyy HH:mm:ss.fffffff")
-				$LastAccessTimeUtc = $file.LastAccessTimeUtc.ToString("dd-MMM-yyyy HH:mm:ss.fffffff")
-				$LastWriteTimeUtc = $file.LastWriteTimeUtc.ToString("dd-MMM-yyyy HH:mm:ss.fffffff")
-				$Attributes = $file.Attributes
-				$Length = $file.Size.Tostring('N0')
-				
-				# Add Child Nodes
-				if (!!$file.AUMIDHash)
+				if ($file.AppName -ne $null)
 				{
-					$null = $filenode.Nodes.Add("AUMIDHash", "AUMID Hash: $($file.AUMIDHash.ToUpper())")
+					$filenode.ToolTipText = "$($file.AppName)"
+					$filenode.ForeColor = 'LightGreen'
+					$filenode.Text = "$($file.AppName) [$($file.AUMIDHash.ToUpper())]"
+					$null = $filenode.Nodes.Add("FileName", "FileName: $($fname)")
+					$AppNameNode = $filenode.Nodes.Add("AppName", "AppName: $($file.AppName)")
+					$AppNameNode.ForeColor = 'Yellow'
 				}
-				$null = $filenode.Nodes.Add("CreationTimeUtc", "CreationTimeUtc: $($CreationTimeUtc)")
-				$null = $filenode.Nodes.Add("LastAccessTimeUtc", "LastAccessTimeUtc: $($LastAccessTimeUtc)")
-				$null = $filenode.Nodes.Add("LastWriteTimeUtc", "LastWriteTimeUtc: $($LastWriteTimeUtc)")
-				$null = $filenode.Nodes.Add("Attributes", "Attributes: $($Attributes) ")
-				$null = $filenode.Nodes.Add("Length", "File Size: $($Length)")
-				$filenode.Nodes["CreationTimeUtc"].ImageIndex = 17
-				$filenode.Nodes["LastAccessTimeUtc"].ImageIndex = 17
-				$filenode.Nodes["LastWriteTimeUtc"].ImageIndex = 17
-				$filenode.Nodes["Attributes"].ImageIndex = 13
-				$filenode.Nodes["Length"].ImageIndex = 13
-				$filenode.Nodes["CreationTimeUtc"].SelectedImageIndex = 18
-				$filenode.Nodes["LastAccessTimeUtc"].SelectedImageIndex = 18
-				$filenode.Nodes["LastWriteTimeUtc"].SelectedImageIndex = 18
-				$filenode.Nodes["Attributes"].SelectedImageIndex = 13
-				$filenode.Nodes["Length"].SelectedImageIndex = 13
 				
-				try # Add ADSStreams
+				if ($file.Size -lt 76)
 				{
-					if (!!$file.ADS_Stream)
+					$filenode.ForeColor = 'DimGray'
+					$filenode.Tooltiptext = "$($file.Name) is too small"
+				}
+				# Add the FileSystem Info Properties
+				try
+				{
+					$CreationTimeUtc = $file.CreationTimeUtc.ToString("dd-MMM-yyyy HH:mm:ss.fffffff")
+					$LastAccessTimeUtc = $file.LastAccessTimeUtc.ToString("dd-MMM-yyyy HH:mm:ss.fffffff")
+					$LastWriteTimeUtc = $file.LastWriteTimeUtc.ToString("dd-MMM-yyyy HH:mm:ss.fffffff")
+					$Attributes = $file.Attributes
+					$Length = $file.Size.Tostring('N0')
+					
+					# Add Child Nodes
+					if (!!$file.AUMIDHash)
 					{
-						$sc = $file.ADS_Stream.count
-						$scc = 0
-						foreach ($stream in $file.ADS_Stream)
+						$null = $filenode.Nodes.Add("AUMIDHash", "AUMID Hash: $($file.AUMIDHash.ToUpper())")
+					}
+					$null = $filenode.Nodes.Add("CreationTimeUtc", "CreationTimeUtc: $($CreationTimeUtc)")
+					$null = $filenode.Nodes.Add("LastAccessTimeUtc", "LastAccessTimeUtc: $($LastAccessTimeUtc)")
+					$null = $filenode.Nodes.Add("LastWriteTimeUtc", "LastWriteTimeUtc: $($LastWriteTimeUtc)")
+					$null = $filenode.Nodes.Add("Attributes", "Attributes: $($Attributes) ")
+					$null = $filenode.Nodes.Add("Length", "File Size: $($Length)")
+					$filenode.Nodes["CreationTimeUtc"].ImageIndex = 17
+					$filenode.Nodes["LastAccessTimeUtc"].ImageIndex = 17
+					$filenode.Nodes["LastWriteTimeUtc"].ImageIndex = 17
+					$filenode.Nodes["Attributes"].ImageIndex = 13
+					$filenode.Nodes["Length"].ImageIndex = 13
+					$filenode.Nodes["CreationTimeUtc"].SelectedImageIndex = 18
+					$filenode.Nodes["LastAccessTimeUtc"].SelectedImageIndex = 18
+					$filenode.Nodes["LastWriteTimeUtc"].SelectedImageIndex = 18
+					$filenode.Nodes["Attributes"].SelectedImageIndex = 13
+					$filenode.Nodes["Length"].SelectedImageIndex = 13
+					
+					try # Add ADSStreams
+					{
+						if (!!$file.ADS_Stream)
 						{
-							if ($sc -gt 1)
+							$sc = $file.ADS_Stream.count
+							$scc = 0
+							foreach ($stream in $file.ADS_Stream)
 							{
-								$null = $filenode.Nodes.Add("StreamName_$($stream)_$($scc)", "`$Data Stream Name #$($scc): $($stream)")
+								if ($sc -gt 1)
+								{
+									$null = $filenode.Nodes.Add("StreamName_$($stream)_$($scc)", "`$Data Stream Name #$($scc): $($stream)")
 								}
 								else
 								{
@@ -12114,466 +12169,467 @@ function Add-fileNodes
 			$LNKNode = $Node.Nodes.Add("LNK #$($o)", $LNKNodeText)
 			$LNKNode.ForeColor = 'Orange'
 		}
-		
-		$LNKNode.ImageIndex = 11
-		$LNKNode.SelectedImageIndex = 12
-		$draw = @([System.BitConverter]::ToString($Data).Replace('-', ''))
-		$LNKNode.Tag = @($draw, $null, $null, $null, $LNKData)
-		# Header
-		$SizeNode = $LNKNode.Nodes.Add('Shortcut Size', "Shortcut Size: $($LNKData.'Shortcut Size')")
-		if ($LNKData.'Shortcut Size' -eq '76')
-		{
-			$SizeNode.ToolTipText = "Invalid LNK - Header only"
-			$SizeNode.BackColor = 'DarkRed'
-			$SizeNode.ForeColor = 'White'
-		}
-		$null = $SizeNode.Nodes.Add('Header Block Size', "Header Block Size: $($LNKData.'Header Block Size')")
-		$SizeNode.Nodes['Header Block Size'].Tag = @([System.BitConverter]::ToString($data[0 .. 75]).Replace('-', ''))
-		$SizeNode.Nodes['Header Block Size'].ToolTipText = "Right click to copy the raw (Hex) data (76)"
-		$SizeNode.Nodes['Header Block Size'].ForeColor = 'Peru'
-		
-		if (!!$LNKData.'Link Info Block Size')
-		{
-			$null = $SizeNode.Nodes.Add('Link Info Block Size', "Link Info Block Size: $($LNKData.'Link Info Block Size')")
-			if ($LNKData.LinkInfoData.count -gt 0)
+	
+			$LNKNode.ImageIndex = 11
+			$LNKNode.SelectedImageIndex = 12
+			$draw = @([System.BitConverter]::ToString($Data).Replace('-', ''))
+			$LNKNode.Tag = @($draw, $null, $null, $null, $LNKData)
+			# Header
+			$SizeNode = $LNKNode.Nodes.Add('Shortcut Size', "Shortcut Size: $($LNKData.'Shortcut Size')")
+			if ($LNKData.'Shortcut Size' -eq '76')
 			{
-				$SizeNode.Nodes['Link Info Block Size'].Tag = @([System.BitConverter]::ToString($LNKData.LinkInfoData).Replace('-', ''))
-				$SizeNode.Nodes['Link Info Block Size'].ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.LinkInfoData.count))"
-				$SizeNode.Nodes['Link Info Block Size'].ForeColor = 'Peru'
+				$SizeNode.ToolTipText = "Invalid LNK - Header only"
+				$SizeNode.BackColor = 'DarkRed'
+				$SizeNode.ForeColor = 'White'
 			}
-		}
-		if (!!$LNKData.'TargetID Block Size')
-		{
-			$null = $SizeNode.Nodes.Add('TargetID Block Size', "TargetID Block Size: $($LNKData.'TargetID Block Size' + 2)")
-			if ($LNKData.LinkTargetIDListData.count -gt 0)
+			$null = $SizeNode.Nodes.Add('Header Block Size', "Header Block Size: $($LNKData.'Header Block Size')")
+			$SizeNode.Nodes['Header Block Size'].Tag = @([System.BitConverter]::ToString($data[0 .. 75]).Replace('-', ''))
+			$SizeNode.Nodes['Header Block Size'].ToolTipText = "Right click to copy the raw (Hex) data (76)"
+			$SizeNode.Nodes['Header Block Size'].ForeColor = 'Peru'
+			
+			if (!!$LNKData.'Link Info Block Size')
 			{
-				$SizeNode.Nodes['TargetID Block Size'].Tag = @([System.BitConverter]::ToString($LNKData.LinkTargetIDListData).Replace('-', ''))
-				$SizeNode.Nodes['TargetID Block Size'].ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.LinkTargetIDListData.count + 2))"
-				$SizeNode.Nodes['TargetID Block Size'].ForeColor = 'Peru'
+				$null = $SizeNode.Nodes.Add('Link Info Block Size', "Link Info Block Size: $($LNKData.'Link Info Block Size')")
+				if ($LNKData.LinkInfoData.count -gt 0)
+				{
+					$SizeNode.Nodes['Link Info Block Size'].Tag = @([System.BitConverter]::ToString($LNKData.LinkInfoData).Replace('-', ''))
+					$SizeNode.Nodes['Link Info Block Size'].ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.LinkInfoData.count))"
+					$SizeNode.Nodes['Link Info Block Size'].ForeColor = 'Peru'
+				}
 			}
-		}
-		if (!!$LNKData.'StringData Block Size')
-		{
-			$null = $SizeNode.Nodes.Add('StringData Block Size', "StringData Block Size: $($LNKData.'StringData Block Size')")
-			if ($LNKData.StringDataData.count -gt 0)
+			if (!!$LNKData.'TargetID Block Size')
 			{
-				$SizeNode.Nodes['StringData Block Size'].Tag = @([System.BitConverter]::ToString($LNKData.StringDataData).Replace('-', ''))
-				$SizeNode.Nodes['StringData Block Size'].ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.StringDataData.count))"
-				$SizeNode.Nodes['StringData Block Size'].ForeColor = 'Peru'
+				$null = $SizeNode.Nodes.Add('TargetID Block Size', "TargetID Block Size: $($LNKData.'TargetID Block Size' + 2)")
+				if ($LNKData.LinkTargetIDListData.count -gt 0)
+				{
+					$SizeNode.Nodes['TargetID Block Size'].Tag = @([System.BitConverter]::ToString($LNKData.LinkTargetIDListData).Replace('-', ''))
+					$SizeNode.Nodes['TargetID Block Size'].ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.LinkTargetIDListData.count + 2))"
+					$SizeNode.Nodes['TargetID Block Size'].ForeColor = 'Peru'
+				}
 			}
-		}
-		if (!!$LNKData.'ExtraData Block Size')
-		{
-			$null = $SizeNode.Nodes.Add('ExtraData Block Size', "ExtraData Block Size: $($LNKData.'ExtraData Block Size')")
-			if ($LNKData.ExtraDataData.count -gt 0)
+			if (!!$LNKData.'StringData Block Size')
 			{
-				$SizeNode.Nodes['ExtraData Block Size'].Tag = @([System.BitConverter]::ToString($LNKData.ExtraDataData).Replace('-', ''))
-				$SizeNode.Nodes['ExtraData Block Size'].ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.ExtraDataData.count))"
-				$SizeNode.Nodes['ExtraData Block Size'].ForeColor = 'Peru'
+				$null = $SizeNode.Nodes.Add('StringData Block Size', "StringData Block Size: $($LNKData.'StringData Block Size')")
+				if ($LNKData.StringDataData.count -gt 0)
+				{
+					$SizeNode.Nodes['StringData Block Size'].Tag = @([System.BitConverter]::ToString($LNKData.StringDataData).Replace('-', ''))
+					$SizeNode.Nodes['StringData Block Size'].ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.StringDataData.count))"
+					$SizeNode.Nodes['StringData Block Size'].ForeColor = 'Peru'
+				}
 			}
-		}
-		if (!!$slackStart -and ($offset.Length - $slackStart) -gt 0)
-		{
-			$null = $LNKNode.Nodes.Add("$('LinkSlack')", "LNK Slack: $($offset.Length - $slackStart)")
-			$linkSlack = [System.BitConverter]::ToString($data[($slackStart) .. ($offset.Length - 1)]).Replace('-', '')
-			$LNKNode.Nodes["$('LinkSlack')"].ForeColor = 'Red'
-			$LNKNode.Nodes["$('LinkSlack')"].Tag = @($linkSlack)
-			$LNKNode.Nodes["$('LinkSlack')"].ToolTipText = "Right click to copy the raw (Hex) Slack data $($linkSlack.Length)"
-		}
-		
-		# Header 
-		$null = $LNKNode.Nodes.Add("$('LinkCLSID')", "Link CLSID: $($LNKData.'LinkCLSID')")
-		$flagnodes = $LNKNode.Nodes.Add("Link_Flags", "Link Flags")
-		$l = 0
-		foreach ($flag in $LNKData.Link_Flags.split(','))
-		{
-			$null = $flagnodes.Nodes.Add("$($flag)_$($l)", "Link Flag [$($l)]: $($flag.Replace(' ', ''))")
-			if (!!$LinkFlagsTT["$($flag.Replace(' ', ''))"]) { $flagnodes.Nodes["$($flag)_$($l)"].ToolTipText = $LinkFlagsTT["$($flag.Replace(' ', ''))"] }
-			$l++
-		}
-		$AttributesNode = $LNKNode.Nodes.Add("$('FileAttributes')", "File Attributes")
-		$y = 0
-		$cult = [cultureinfo]::GetCultureInfo("en-US").TextInfo
-		foreach ($attribute in $LNKData.'FileAttributes')
-		{
-			$SingleAttribute = $attribute.replace('FILE_ATTRIBUTE_', '').Replace(' ', '')
-			$null = $AttributesNode.Nodes.Add("$($attribute)_$($y)", "Attribute [$($y)]: $($cult.ToTitleCase($SingleAttribute))")
-			$y++
-		}
-		if ($null -ne $LNKData.CreationTime)
-		{
-			$CreationTime = $LNKNode.Nodes.Add("$('CreationTime')", "Creation Time (UTC): $($LNKData.CreationTime)")
-			$CreationTime.ForeColor = 'Cyan'
-		}
-		if ($null -ne $LNKData.AccessTime)
-		{
-			$AccessTime = $LNKNode.Nodes.Add("$('AccessTime')", "Access   Time (UTC): $($LNKData.AccessTime)")
-			$AccessTime.ForeColor = 'Cyan'
-		}
-		if ($null -ne $LNKData.WriteTime)
-		{
-			$WriteTime = $LNKNode.Nodes.Add("$('WriteTime')", "Write    Time (UTC): $($LNKData.WriteTime)")
-			$WriteTime.ForeColor = 'Cyan'
-		}
-		if (!!$LNKData.'Target File Size')
-		{
-			$null = $LNKNode.Nodes.Add("$('Target File Size')", "Target File Size (32bit): $($LNKData.'Target File Size')")
-			$LNKNode.Nodes['Target File Size'].ToolTipText = "If the link target file is larger than 0xFFFFFFFF, this value specifies the least significant 32 bits of the link
+			if (!!$LNKData.'ExtraData Block Size')
+			{
+				$null = $SizeNode.Nodes.Add('ExtraData Block Size', "ExtraData Block Size: $($LNKData.'ExtraData Block Size')")
+				if ($LNKData.ExtraDataData.count -gt 0)
+				{
+					$SizeNode.Nodes['ExtraData Block Size'].Tag = @([System.BitConverter]::ToString($LNKData.ExtraDataData).Replace('-', ''))
+					$SizeNode.Nodes['ExtraData Block Size'].ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.ExtraDataData.count))"
+					$SizeNode.Nodes['ExtraData Block Size'].ForeColor = 'Peru'
+				}
+			}
+			if (!!$slackStart -and ($offset.Length - $slackStart) -gt 0)
+			{
+				$null = $LNKNode.Nodes.Add("$('LinkSlack')", "LNK Slack: $($offset.Length - $slackStart)")
+				$linkSlack = [System.BitConverter]::ToString($data[($slackStart) .. ($offset.Length - 1)]).Replace('-', '')
+				$LNKNode.Nodes["$('LinkSlack')"].ForeColor = 'Red'
+				$LNKNode.Nodes["$('LinkSlack')"].Tag = @($linkSlack)
+				$LNKNode.Nodes["$('LinkSlack')"].ToolTipText = "Right click to copy the raw (Hex) Slack data $($linkSlack.Length)"
+			}
+			
+			# Header 
+			$null = $LNKNode.Nodes.Add("$('LinkCLSID')", "Link CLSID: $($LNKData.'LinkCLSID')")
+			$flagnodes = $LNKNode.Nodes.Add("Link_Flags", "Link Flags")
+			$l = 0
+			foreach ($flag in $LNKData.Link_Flags.split(','))
+			{
+				$null = $flagnodes.Nodes.Add("$($flag)_$($l)", "Link Flag [$($l)]: $($flag.Replace(' ', ''))")
+				if (!!$LinkFlagsTT["$($flag.Replace(' ', ''))"]) { $flagnodes.Nodes["$($flag)_$($l)"].ToolTipText = $LinkFlagsTT["$($flag.Replace(' ', ''))"] }
+				$l++
+			}
+			$AttributesNode = $LNKNode.Nodes.Add("$('FileAttributes')", "File Attributes")
+			$y = 0
+			$cult = [cultureinfo]::GetCultureInfo("en-US").TextInfo
+			foreach ($attribute in $LNKData.'FileAttributes')
+			{
+				$SingleAttribute = $attribute.replace('FILE_ATTRIBUTE_', '').Replace(' ', '')
+				$null = $AttributesNode.Nodes.Add("$($attribute)_$($y)", "Attribute [$($y)]: $($cult.ToTitleCase($SingleAttribute))")
+				$y++
+			}
+			if ($null -ne $LNKData.CreationTime)
+			{
+				$CreationTime = $LNKNode.Nodes.Add("$('CreationTime')", "Creation Time (UTC): $($LNKData.CreationTime)")
+				$CreationTime.ForeColor = 'Cyan'
+			}
+			if ($null -ne $LNKData.AccessTime)
+			{
+				$AccessTime = $LNKNode.Nodes.Add("$('AccessTime')", "Access   Time (UTC): $($LNKData.AccessTime)")
+				$AccessTime.ForeColor = 'Cyan'
+			}
+			if ($null -ne $LNKData.WriteTime)
+			{
+				$WriteTime = $LNKNode.Nodes.Add("$('WriteTime')", "Write    Time (UTC): $($LNKData.WriteTime)")
+				$WriteTime.ForeColor = 'Cyan'
+			}
+			if (!!$LNKData.'Target File Size')
+			{
+				$null = $LNKNode.Nodes.Add("$('Target File Size')", "Target File Size (32bit): $($LNKData.'Target File Size')")
+				$LNKNode.Nodes['Target File Size'].ToolTipText = "If the link target file is larger than 0xFFFFFFFF, this value specifies the least significant 32 bits of the link
 target file size."
-		}
-		$null = $LNKNode.Nodes.Add("$('Icon Idx')", "Icon Idx: $($LNKData.'Icon Idx')")
-		$null = $LNKNode.Nodes.Add("$('ShowCommand')", "ShowCommand: $($LNKData.'ShowCommand')")
-		$null = $LNKNode.Nodes.Add("$('HotKey')", "HotKey: $($LNKData.'HotKey')")
-		
-		if (!!$LNKData.Link_Flags -and $LNKData.'Shortcut Size' -gt 76)
-		{
-			# LinkTargetIDList
-			if ($LNKData.Link_Flags.contains('HasLinkTargetIDList'))
+			}
+			$null = $LNKNode.Nodes.Add("$('Icon Idx')", "Icon Idx: $($LNKData.'Icon Idx')")
+			$null = $LNKNode.Nodes.Add("$('ShowCommand')", "ShowCommand: $($LNKData.'ShowCommand')")
+			$null = $LNKNode.Nodes.Add("$('HotKey')", "HotKey: $($LNKData.'HotKey')")
+			
+			if (!!$LNKData.Link_Flags -and $LNKData.'Shortcut Size' -gt 76)
 			{
-				if (!!$LNKData.'Display Name' -or !!$LNKData.'Path')
+				# LinkTargetIDList
+				if ($LNKData.Link_Flags.contains('HasLinkTargetIDList'))
 				{
-					$null = $LNKNode.Nodes.Add("$('Display Name')", "Display Name: $($LNKData.'Display Name')")
-					$null = $LNKNode.Nodes.Add("$('TargetPath')", "Target Path: $($LNKData.'Path')")
-				}
-			}
-			if ($LNKData.ItemIdListItems)
-			{
-				Populate-ItemIdListItems -ItemIDListNode $LNKNode -ItemIdList @($LNKData.ItemIdListItems)
-			}
-			
-			# StringData - HasName
-			if ($LNKData.Link_Flags.contains('HasName'))
-			{
-				$NameStringnode = $LNKNode.Nodes.Add("$('NameString')", "LNK Name: $($LNKData.'NameString')")
-				$NameStringnode.ForeColor = 'PaleGreen'
-			}
-			
-			# StringData - HasWorkingDir
-			if ($LNKData.Link_Flags.contains('HasWorkingDir'))
-			{
-				$null = $LNKNode.Nodes.Add("$('Working Dir.')", "Working Dir.: $($LNKData.'Working Dir.')")
-			}
-			
-			# StringData - HasRelativePath
-			if ($LNKData.Link_Flags.contains('HasRelativePath'))
-			{
-				$null = $LNKNode.Nodes.Add("$('Relative Path')", "Relative Path: $($LNKData.'Relative Path')")
-			}
-			# StringData - HasArguments
-			if ($LNKData.Link_Flags.contains('HasArguments'))
-			{
-				$argsnode = $LNKNode.Nodes.Add("$('Command Args')", "Command Arguments [$($LNKData.'Command Args Length')]: $($LNKData.'Command Args')")
-				$argsnode.ToolTipText = [System.Text.RegularExpressions.Regex]::Replace($LNKData.'Command Args', '(.){100}', "$('$0')`n")
-				$argsnode.ForeColor = 'Gold'
-			}
-			
-			# Link Info
-			if ($LNKData.Link_Flags.contains('HasLinkInfo'))
-			{
-				$liflagnodes = $LNKNode.Nodes.Add("$('LinkInfoFlags')", "Link Info Flags")
-				$li = 0
-				if (![System.String]::IsNullOrEmpty($LNKData.'Link Info Flags'))
-				{
-					$liflags = @($LNKData.'Link Info Flags'.ToString().split(',').foreach{ $_ -split ("And", 2, [System.StringSplitOptions]::RemoveEmptyEntries) })
-					foreach ($liflag in $liflags)
+					if (!!$LNKData.'Display Name' -or !!$LNKData.'Path')
 					{
-						$null = $liflagnodes.Nodes.Add("$($liflag)_$($li)", "Info Flag [$($li)]: $($liflag.Replace(' ', ''))")
-						$li++
+						$null = $LNKNode.Nodes.Add("$('Display Name')", "Display Name: $($LNKData.'Display Name')")
+						$null = $LNKNode.Nodes.Add("$('TargetPath')", "Target Path: $($LNKData.'Path')")
 					}
 				}
-				# VolumeID
-				if ($LNKData.'Link Info Flags'.Contains('VolumeID'))
+				if ($LNKData.ItemIdListItems)
 				{
-					$null = $LNKNode.Nodes.Add("$('Drive Type')", "Drive Type: $($LNKData.'Drive Type')")
-					if (!!$DriveTypes["$($LNKData.'Drive Type')"])
-					{
-						$LNKNode.Nodes["$('Drive Type')"].ToolTipText = $DriveTypes["$($LNKData.'Drive Type')"]
-					}
-					$null = $LNKNode.Nodes.Add("$('Drive s/n')", "Drive Serial Number: $($LNKData.'Drive s/n')")
-					$null = $LNKNode.Nodes.Add("$('VolumeLabel')", "Volume Label: $($LNKData.'Volume Label')")
+					Populate-ItemIdListItems -ItemIDListNode $LNKNode -ItemIdList @($LNKData.ItemIdListItems)
 				}
 				
-				# LocalBasePath
-				if ($LNKData.'Link Info Flags'.Contains('LocalBasePath'))
+				# StringData - HasName
+				if ($LNKData.Link_Flags.contains('HasName'))
 				{
-					if ($null -ne $LNKData.'Local Base Path')
-					{
-						$null = $LNKNode.Nodes.Add("$('Local Base Path')", "Local Base Path: $($LNKData.'Local Base Path')")
-					}
-					if ($null -ne $LNKData.'Local Base Path Unicode')
-					{
-						$null = $LNKNode.Nodes.Add("$('Local Base Path Unicode')", "Local Base Path Unicode: $($LNKData.'Local Base Path Unicode')")
-					}
-				}
-				# CommonPathSuffix
-				if ($LNKData.'Link Info Flags'.Contains('PathSuffix'))
-				{
-					if ($null -ne $LNKData.CommonPathSuffix)
-					{
-						$null = $LNKNode.Nodes.Add("$('CommonPathSuffix')", "Common Path Suffix: $($LNKData.CommonPathSuffix)")
-					}
-					if ($null -ne $LNKData.CommonPathSuffixUnicode)
-					{
-						$null = $LNKNode.Nodes.Add("$('CommonPathSuffixUnicode')", "Common Path Suffix Unicode: $($LNKData.CommonPathSuffixUnicode)")
-					}
+					$NameStringnode = $LNKNode.Nodes.Add("$('NameString')", "LNK Name: $($LNKData.'NameString')")
+					$NameStringnode.ForeColor = 'PaleGreen'
 				}
 				
-				# CommonNetworkRelativeLink
-				if ($LNKData.'Link Info Flags'.Contains('CommonNetworkRelativeLink'))
+				# StringData - HasWorkingDir
+				if ($LNKData.Link_Flags.contains('HasWorkingDir'))
 				{
-					$CommonNetworkRelativeLinkFlagsNode = $LNKNode.Nodes.Add("$('CommonNetworkRelativeLinkFlags')", "Common Network Relative Link Flags")
-					if (![System.String]::IsNullOrEmpty($LNKData.'CommonNetworkRelativeLinkFlags'))
+					$null = $LNKNode.Nodes.Add("$('Working Dir.')", "Working Dir.: $($LNKData.'Working Dir.')")
+				}
+				
+				# StringData - HasRelativePath
+				if ($LNKData.Link_Flags.contains('HasRelativePath'))
+				{
+					$null = $LNKNode.Nodes.Add("$('Relative Path')", "Relative Path: $($LNKData.'Relative Path')")
+				}
+				# StringData - HasArguments
+				if ($LNKData.Link_Flags.contains('HasArguments'))
+				{
+					$argsnode = $LNKNode.Nodes.Add("$('Command Args')", "Command Arguments [$($LNKData.'Command Args Length')]: $($LNKData.'Command Args')")
+					$argsnode.ToolTipText = [System.Text.RegularExpressions.Regex]::Replace($LNKData.'Command Args', '(.){100}', "$('$0')`n")
+					$argsnode.ForeColor = 'Gold'
+				}
+				
+				# Link Info
+				if ($LNKData.Link_Flags.contains('HasLinkInfo'))
+				{
+					$liflagnodes = $LNKNode.Nodes.Add("$('LinkInfoFlags')", "Link Info Flags")
+					$li = 0
+					if (![System.String]::IsNullOrEmpty($LNKData.'Link Info Flags'))
 					{
-						$CommonNetworkflags = @($LNKData.'Common Network Relative Link Flags'.split(',', [System.StringSplitOptions]::RemoveEmptyEntries))
-						foreach ($cnflag in $CommonNetworkflags)
+						$liflags = @($LNKData.'Link Info Flags'.ToString().split(',').foreach{ $_ -split ("And", 2, [System.StringSplitOptions]::RemoveEmptyEntries) })
+						foreach ($liflag in $liflags)
 						{
-							$null = $CommonNetworkRelativeLinkFlagsNode.Nodes.Add("$($cnflag)", "Relative Link Flag: $($cnflag.Replace(' ', ''))")
+							$null = $liflagnodes.Nodes.Add("$($liflag)_$($li)", "Info Flag [$($li)]: $($liflag.Replace(' ', ''))")
+							$li++
 						}
 					}
-					# ValidNetType
-					if ($LNKData.'Common Network Relative Link Flags'.Contains('ValidNetType'))
+					# VolumeID
+					if ($LNKData.'Link Info Flags'.Contains('VolumeID'))
 					{
-						$null = $LNKNode.Nodes.Add("$('NetworkProviderType')", "Network Provider Type: $($LNKData.NetworkProviderType)")
+						$null = $LNKNode.Nodes.Add("$('Drive Type')", "Drive Type: $($LNKData.'Drive Type')")
+						if (!!$DriveTypes["$($LNKData.'Drive Type')"])
+						{
+							$LNKNode.Nodes["$('Drive Type')"].ToolTipText = $DriveTypes["$($LNKData.'Drive Type')"]
+						}
+						$null = $LNKNode.Nodes.Add("$('Drive s/n')", "Drive Serial Number: $($LNKData.'Drive s/n')")
+						$null = $LNKNode.Nodes.Add("$('VolumeLabel')", "Volume Label: $($LNKData.'Volume Label')")
 					}
 					
-					$null = $LNKNode.Nodes.Add("$('NetName')", "NetName: $($LNKData.'NetName')")
-					$null = $LNKNode.Nodes.Add("$('NetName Unicode')", "NetName Unicode: $($LNKData.'NetName Unicode')")
-					# ValidDevice
-					if ($LNKData.'Common Network Relative Link Flags'.Contains('ValidDevice'))
+					# LocalBasePath
+					if ($LNKData.'Link Info Flags'.Contains('LocalBasePath'))
 					{
-						$null = $LNKNode.Nodes.Add("$('Device Name')", "Device Name: $($LNKData.'Device Name')")
-						$null = $LNKNode.Nodes.Add("$('Device Name Unicode')", "Device Name Unicode: $($LNKData.'Device Name Unicode')")
+						if ($null -ne $LNKData.'Local Base Path')
+						{
+							$null = $LNKNode.Nodes.Add("$('Local Base Path')", "Local Base Path: $($LNKData.'Local Base Path')")
+						}
+						if ($null -ne $LNKData.'Local Base Path Unicode')
+						{
+							$null = $LNKNode.Nodes.Add("$('Local Base Path Unicode')", "Local Base Path Unicode: $($LNKData.'Local Base Path Unicode')")
+						}
+					}
+					# CommonPathSuffix
+					if ($LNKData.'Link Info Flags'.Contains('PathSuffix'))
+					{
+						if ($null -ne $LNKData.CommonPathSuffix)
+						{
+							$null = $LNKNode.Nodes.Add("$('CommonPathSuffix')", "Common Path Suffix: $($LNKData.CommonPathSuffix)")
+						}
+						if ($null -ne $LNKData.CommonPathSuffixUnicode)
+						{
+							$null = $LNKNode.Nodes.Add("$('CommonPathSuffixUnicode')", "Common Path Suffix Unicode: $($LNKData.CommonPathSuffixUnicode)")
+						}
+					}
+					
+					# CommonNetworkRelativeLink
+					if ($LNKData.'Link Info Flags'.Contains('CommonNetworkRelativeLink'))
+					{
+						$CommonNetworkRelativeLinkFlagsNode = $LNKNode.Nodes.Add("$('CommonNetworkRelativeLinkFlags')", "Common Network Relative Link Flags")
+						if (![System.String]::IsNullOrEmpty($LNKData.'CommonNetworkRelativeLinkFlags'))
+						{
+							$CommonNetworkflags = @($LNKData.'Common Network Relative Link Flags'.split(',', [System.StringSplitOptions]::RemoveEmptyEntries))
+							foreach ($cnflag in $CommonNetworkflags)
+							{
+								$null = $CommonNetworkRelativeLinkFlagsNode.Nodes.Add("$($cnflag)", "Relative Link Flag: $($cnflag.Replace(' ', ''))")
+							}
+						}
+						# ValidNetType
+						if ($LNKData.'Common Network Relative Link Flags'.Contains('ValidNetType'))
+						{
+							$null = $LNKNode.Nodes.Add("$('NetworkProviderType')", "Network Provider Type: $($LNKData.NetworkProviderType)")
+						}
+						
+						$null = $LNKNode.Nodes.Add("$('NetName')", "NetName: $($LNKData.'NetName')")
+						$null = $LNKNode.Nodes.Add("$('NetName Unicode')", "NetName Unicode: $($LNKData.'NetName Unicode')")
+						# ValidDevice
+						if ($LNKData.'Common Network Relative Link Flags'.Contains('ValidDevice'))
+						{
+							$null = $LNKNode.Nodes.Add("$('Device Name')", "Device Name: $($LNKData.'Device Name')")
+							$null = $LNKNode.Nodes.Add("$('Device Name Unicode')", "Device Name Unicode: $($LNKData.'Device Name Unicode')")
+						}
 					}
 				}
-			}
-			
-			# HasDarwinID
-			if ($LNKData.Link_Flags.contains('HasDarwinID'))
-			{
-				$null = $LNKNode.Nodes.Add("$('DarwinDataAnsi')", "Darwin Data Ansi: $($LNKData.'DarwinDataAnsi')")
-				$null = $LNKNode.Nodes.Add("$('DarwinDataUnicode')", "Darwin Data Unicode: $($LNKData.'DarwinDataUnicode')")
-			}
-			
-			# RunWithShimLayer
-			if ($LNKData.Link_Flags.contains('RunWithShimLayer'))
-			{
-				$null = $LNKNode.Nodes.Add("$('ShimLayerName')", "Shim Layer Name: $($LNKData.'ShimLayerName')")
-			}
-			
-			# HasExpString
-			if ($LNKData.Link_Flags.contains('HasExpString'))
-			{
-				if ($null -ne $LNKData.TargetAnsi)
+				
+				# HasDarwinID
+				if ($LNKData.Link_Flags.contains('HasDarwinID'))
 				{
-					$null = $LNKNode.Nodes.Add("$('TargetAnsi')", "Target Ansi: $($LNKData.'TargetAnsi')")
+					$null = $LNKNode.Nodes.Add("$('DarwinDataAnsi')", "Darwin Data Ansi: $($LNKData.'DarwinDataAnsi')")
+					$null = $LNKNode.Nodes.Add("$('DarwinDataUnicode')", "Darwin Data Unicode: $($LNKData.'DarwinDataUnicode')")
 				}
-				if ($null -ne $LNKData.TargetUnicode)
+				
+				# RunWithShimLayer
+				if ($LNKData.Link_Flags.contains('RunWithShimLayer'))
 				{
-					$null = $LNKNode.Nodes.Add("$('TargetUnicode')", "Target Unicode: $($LNKData.TargetUnicode)")
+					$null = $LNKNode.Nodes.Add("$('ShimLayerName')", "Shim Layer Name: $($LNKData.'ShimLayerName')")
 				}
-			}
-			
-			# EnableTargetMetadata
-			if ($LNKData.Link_Flags.contains('EnableTargetMetadata') -and !!$LNKData.PropertyStoreEntries)
-			{
-				$TargetMetadataNode = $LNKNode.Nodes.Add("TargetMetadata", "Target Metadata")
-				$TargetMetadataNode.ForeColor = 'Violet'
-				Populate-SPS1 -Node $TargetMetadataNode -SPS1properties @($LNKData.PropertyStoreEntries)
-			}
-			
-			# 	Extradata - KnownFolderDataBlock
-			if (!!$LNKData.'Known Folder BlockSignature')
-			{
-				# $null = $LNKNode.Nodes.Add("$('KnBlockSignature')", "Known Folder BlockSignature: $($LNKData.'Known Folder BlockSignature')")
-				$null = $LNKNode.Nodes.Add("$('KnownFolderID')", "Known Folder GUID: $($LNKData.'Known Folder ID')")
-				if ($null -ne $LNKData.'Known Folder DisplayName')
+				
+				# HasExpString
+				if ($LNKData.Link_Flags.contains('HasExpString'))
 				{
-					$null = $LNKNode.Nodes.Add("$('KnownFolderDisplayName')", "Known Folder Display Name: $($LNKData.'Known Folder DisplayName')")
-				}
-				# $null = $LNKNode.Nodes.Add("$('KnownFolderIDOffset')", "Known FolderID Offset: $($LNKData.'Known FolderID Offset')")
-			}
-			
-			# Extradata - SpecialFolderDataBlock
-			if (!!$LNKData.'Special Folder BlockSignature')
-			{
-				# $null = $LNKNode.Nodes.Add("$('SpBlockSignature')", "Special Folder BlockSignature: $($LNKData.'Special Folder BlockSignature')")
-				if ($null -ne $LNKData.'Special Folder ID')
-				{
-					$null = $LNKNode.Nodes.Add("$('SpecialFolderID')", "Special Folder ID: 0x$($LNKData.'Special Folder ID'.ToString('X'))")
-				}
-				# $null = $LNKNode.Nodes.Add("$('SpecialFolderIDOffset')", "Special Folder Offset: $($LNKData.'Special Folder Offset')")
-			}
-			
-			# Extradata - EnvironmentVariableDataBlock
-			if (!!$LNKData.'Environment Variable BlockSignature')
-			{
-				# $null = $LNKNode.Nodes.Add("$('EnvBlockSignature')", "Environment Variable BlockSignature: $($LNKData.'Environment Variable BlockSignature')")
-				if ($null -ne $LNKData.'Environment Variable TargetAnsi')
-				{
-					$null = $LNKNode.Nodes.Add("$('EnvTargetAnsi')", "Environment Variable TargetAnsi: $($LNKData.'Environment Variable TargetAnsi')")
-				}
-				if ($null -ne $LNKData.'Environment Variable TargetUnicode')
-				{
-					$null = $LNKNode.Nodes.Add("$('EnvTargetUnicode')", "Environment Variable TargetUnicode: $($LNKData.'Environment Variable TargetUnicode')")
-				}
-			}
-			
-			# Extradata - ConsoleDataBlock
-			if (!!$LNKData.'Console Data Block')
-			{
-				$consolenode = $LNKNode.Nodes.Add("ConsoleNode", "Console Properties")
-				foreach ($consoleprop in ($LNKData.'Console Data Block' | Get-Member -MemberType NoteProperty).Name)
-				{
-					$null = $consolenode.Nodes.Add("Console$($consoleprop)", "$($consoleprop): $($LNKData.'Console Data Block'.$consoleprop)")
-				}
-			}
-			
-			# Extradata - ConsoleFEDataBlock
-			if (!!$LNKData.'Console CodePage ID')
-			{
-				$null = $LNKNode.Nodes.Add("$('CodePage')", "Console Code Page ID: $($LNKData.'Console CodePage ID')")
-				$LNKNode.Nodes['CodePage'].ToolTipText = "LCID Structure`nhttps://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/63d3d639-7fd2-4afb-abbe-0d5b5551eef8"
-			}
-			# Extradata - TrackerDataBlock
-			# https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/df8e3748-fba5-4524-968a-f72be06d71fc
-			if (!!$LNKData.'Machine ID')
-			{
-				$null = $LNKNode.Nodes.Add("$('Machine ID')", "Machine ID: $($LNKData.'Machine ID')")
-			}
-			if (!!$LNKData.'Guid 1')
-			{
-				$Guid1Node = $LNKNode.Nodes.Add("$('Guid 1')", "VolumeID: $($LNKData.'Guid 1'.ObjectID)")
-				$Null = $Guid1Node.Nodes.Add("version", "GUID Version: $($LNKData.'Guid 1'.version)")
-				$Null = $Guid1Node.Nodes.Add("variant", "GUID Variant: $($LNKData.'Guid 1'.variant)")
-				$Null = $Guid1Node.Nodes.Add("Sequence", "GUID Sequence: $($LNKData.'Guid 1'.Sequence)")
-				if (!!$LNKData.'Guid 1'.MAC)
-				{
-					# Add to tree
-					$Null = $Guid1Node.Nodes.Add("GUIDcreated", "GUID created at: $($LNKData.'Guid 1'.Created)")
-					$Guid1Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
-					$Null = $Guid1Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Guid 1'.MAC)")
-					$Guid1Node.Nodes["MAC Address"].Tag = $LNKData.'Guid 1'.MAC
-					$Guid1Node.Nodes["MAC Address"].ForeColor = 'LightGreen'
-					$man1 = Get-MACManufacturer -MacAddress "$($LNKData.'Guid 1'.MAC)"
-					if (!!$man1)
+					if ($null -ne $LNKData.TargetAnsi)
 					{
-						$Null = $Guid1Node.Nodes.Add("MACManufacturer", "MAC Company: $($man1)")
-						$Guid1Node.Nodes["MACManufacturer"].ForeColor = 'Gold'
+						$null = $LNKNode.Nodes.Add("$('TargetAnsi')", "Target Ansi: $($LNKData.'TargetAnsi')")
+					}
+					if ($null -ne $LNKData.TargetUnicode)
+					{
+						$null = $LNKNode.Nodes.Add("$('TargetUnicode')", "Target Unicode: $($LNKData.TargetUnicode)")
 					}
 				}
-			}
-			if (!!$LNKData.'Birth Guid 1')
-			{
-				$BGuid1Node = $LNKNode.Nodes.Add("$('Birth Guid 1')", "Birth VolumeID: $($LNKData.'Birth Guid 1'.ObjectID)")
-				$Null = $BGuid1Node.Nodes.Add("version", "GUID Version: $($LNKData.'Birth Guid 1'.version)")
-				$Null = $BGuid1Node.Nodes.Add("variant", "GUID Variant: $($LNKData.'Birth Guid 1'.variant)")
-				$Null = $BGuid1Node.Nodes.Add("Sequence", "GUID Sequence: $($LNKData.'Birth Guid 1'.Sequence)")
-				if (!!$LNKData.'Birth Guid 1'.MAC)
+				
+				# EnableTargetMetadata
+				if ($LNKData.Link_Flags.contains('EnableTargetMetadata') -and !!$LNKData.PropertyStoreEntries)
 				{
-					# Add to tree
-					$Null = $BGuid1Node.Nodes.Add("GUIDcreated", "GUID created at: $($LNKData.'Birth Guid 1'.Created)")
-					$BGuid1Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
-					$Null = $BGuid1Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Birth Guid 1'.MAC)")
-					$BGuid1Node.Nodes["MAC Address"].Tag = $LNKData.'Birth Guid 1'.MAC
-					$BGuid1Node.Nodes["MAC Address"].ForeColor = 'LightGreen'
-					$bman1 = Get-MACManufacturer -MacAddress "$($LNKData.'Birth Guid 1'.MAC)"
-					if (!!$bman1)
+					$TargetMetadataNode = $LNKNode.Nodes.Add("TargetMetadata", "Target Metadata")
+					$TargetMetadataNode.ForeColor = 'Violet'
+					Populate-SPS1 -Node $TargetMetadataNode -SPS1properties @($LNKData.PropertyStoreEntries)
+				}
+				
+				# 	Extradata - KnownFolderDataBlock
+				if (!!$LNKData.'Known Folder BlockSignature')
+				{
+					# $null = $LNKNode.Nodes.Add("$('KnBlockSignature')", "Known Folder BlockSignature: $($LNKData.'Known Folder BlockSignature')")
+					$null = $LNKNode.Nodes.Add("$('KnownFolderID')", "Known Folder GUID: $($LNKData.'Known Folder ID')")
+					if ($null -ne $LNKData.'Known Folder DisplayName')
 					{
-						$Null = $BGuid1Node.Nodes.Add("MACManufacturer", "MAC Company: $($bman1)")
-						$BGuid1Node.Nodes["MACManufacturer"].ForeColor = 'Gold'
+						$null = $LNKNode.Nodes.Add("$('KnownFolderDisplayName')", "Known Folder Display Name: $($LNKData.'Known Folder DisplayName')")
+					}
+					# $null = $LNKNode.Nodes.Add("$('KnownFolderIDOffset')", "Known FolderID Offset: $($LNKData.'Known FolderID Offset')")
+				}
+				
+				# Extradata - SpecialFolderDataBlock
+				if (!!$LNKData.'Special Folder BlockSignature')
+				{
+					# $null = $LNKNode.Nodes.Add("$('SpBlockSignature')", "Special Folder BlockSignature: $($LNKData.'Special Folder BlockSignature')")
+					if ($null -ne $LNKData.'Special Folder ID')
+					{
+						$null = $LNKNode.Nodes.Add("$('SpecialFolderID')", "Special Folder ID: 0x$($LNKData.'Special Folder ID'.ToString('X'))")
+					}
+					# $null = $LNKNode.Nodes.Add("$('SpecialFolderIDOffset')", "Special Folder Offset: $($LNKData.'Special Folder Offset')")
+				}
+				
+				# Extradata - EnvironmentVariableDataBlock
+				if (!!$LNKData.'Environment Variable BlockSignature')
+				{
+					# $null = $LNKNode.Nodes.Add("$('EnvBlockSignature')", "Environment Variable BlockSignature: $($LNKData.'Environment Variable BlockSignature')")
+					if ($null -ne $LNKData.'Environment Variable TargetAnsi')
+					{
+						$null = $LNKNode.Nodes.Add("$('EnvTargetAnsi')", "Environment Variable TargetAnsi: $($LNKData.'Environment Variable TargetAnsi')")
+					}
+					if ($null -ne $LNKData.'Environment Variable TargetUnicode')
+					{
+						$null = $LNKNode.Nodes.Add("$('EnvTargetUnicode')", "Environment Variable TargetUnicode: $($LNKData.'Environment Variable TargetUnicode')")
 					}
 				}
-			}
-			if (!!$LNKData.'Guid 2')
-			{
-				$Guid2Node = $LNKNode.Nodes.Add("$('Guid 2')", "File ObjectID: $($LNKData.'Guid 2'.ObjectID)")
-				$Null = $Guid2Node.Nodes.Add("version", "GUID Version: $($LNKData.'Guid 2'.version)")
-				$Null = $Guid2Node.Nodes.Add("variant", "GUID Variant: $($LNKData.'Guid 2'.variant)")
-				$Null = $Guid2Node.Nodes.Add("Sequence", "GUID Sequence: $($LNKData.'Guid 2'.Sequence)")
-				if (!!$LNKData.'Guid 2'.MAC)
+				
+				# Extradata - ConsoleDataBlock
+				if (!!$LNKData.'Console Data Block')
 				{
-					# Add to tree
-					$Null = $Guid2Node.Nodes.Add("GUIDcreated", "GUID created at: $($LNKData.'Guid 2'.Created)")
-					$Guid2Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
-					$Null = $Guid2Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Guid 2'.MAC)")
-					$Guid2Node.Nodes["MAC Address"].Tag = $LNKData.'Guid 2'.MAC
-					$Guid2Node.Nodes["MAC Address"].ForeColor = 'LightGreen'
-					$man2 = Get-MACManufacturer -MacAddress "$($LNKData.'Guid 2'.MAC)"
-					if (!!$man2)
+					$consolenode = $LNKNode.Nodes.Add("ConsoleNode", "Console Properties")
+					foreach ($consoleprop in ($LNKData.'Console Data Block' | Get-Member -MemberType NoteProperty).Name)
 					{
-						$Null = $Guid2Node.Nodes.Add("MACManufacturer", "MAC Company: $($man2)")
-						$Guid2Node.Nodes["MACManufacturer"].ForeColor = 'Gold'
+						$null = $consolenode.Nodes.Add("Console$($consoleprop)", "$($consoleprop): $($LNKData.'Console Data Block'.$consoleprop)")
 					}
 				}
-			}
-			if (!!$LNKData.'Birth Guid 2')
-			{
-				$BGuid2Node = $LNKNode.Nodes.Add("$('Birth Guid 2')", "Birth File ObjectID: $($LNKData.'Birth Guid 2'.ObjectID)")
-				$Null = $BGuid2Node.Nodes.Add("version", "GUID Version: $($LNKData.'Birth Guid 2'.version)")
-				$Null = $BGuid2Node.Nodes.Add("variant", "GUID Variant: $($LNKData.'Birth Guid 2'.variant)")
-				$Null = $BGuid2Node.Nodes.Add("Sequence", "GUID Sequence: $($LNKData.'Birth Guid 2'.Sequence)")
-				if (!!$LNKData.'Birth Guid 2'.MAC)
+				
+				# Extradata - ConsoleFEDataBlock
+				if (!!$LNKData.'Console CodePage ID')
 				{
-					# Add to tree
-					$Null = $BGuid2Node.Nodes.Add("GUIDcreated", "GUID created at: $($LNKData.'Birth Guid 2'.Created)")
-					$BGuid2Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
-					$Null = $BGuid2Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Birth Guid 2'.MAC)")
-					$BGuid2Node.Nodes["MAC Address"].Tag = $LNKData.'Birth Guid 2'.MAC
-					$BGuid2Node.Nodes["MAC Address"].ForeColor = 'LightGreen'
-					$bman2 = Get-MACManufacturer -MacAddress "$($LNKData.'Birth Guid 2'.MAC)"
-					if (!!$bman2)
+					$null = $LNKNode.Nodes.Add("$('CodePage')", "Console Code Page ID: $($LNKData.'Console CodePage ID')")
+					$LNKNode.Nodes['CodePage'].ToolTipText = "LCID Structure`nhttps://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/63d3d639-7fd2-4afb-abbe-0d5b5551eef8"
+				}
+				# Extradata - TrackerDataBlock
+				# https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/df8e3748-fba5-4524-968a-f72be06d71fc
+				if (!!$LNKData.'Machine ID')
+				{
+					$null = $LNKNode.Nodes.Add("$('Machine ID')", "Machine ID: $($LNKData.'Machine ID')")
+				}
+				if (!!$LNKData.'Guid 1')
+				{
+					$Guid1Node = $LNKNode.Nodes.Add("$('Guid 1')", "VolumeID: $($LNKData.'Guid 1'.ObjectID)")
+					$Null = $Guid1Node.Nodes.Add("version", "GUID Version: $($LNKData.'Guid 1'.version)")
+					$Null = $Guid1Node.Nodes.Add("variant", "GUID Variant: $($LNKData.'Guid 1'.variant)")
+					$Null = $Guid1Node.Nodes.Add("Sequence", "GUID Sequence: $($LNKData.'Guid 1'.Sequence)")
+					if (!!$LNKData.'Guid 1'.MAC)
 					{
-						$Null = $BGuid2Node.Nodes.Add("MACManufacturer", "MAC Company: $($bman2)")
-						$BGuid2Node.Nodes["MACManufacturer"].ForeColor = 'Gold'
+						# Add to tree
+						$Null = $Guid1Node.Nodes.Add("GUIDcreated", "GUID created at: $($LNKData.'Guid 1'.Created)")
+						$Guid1Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
+						$Null = $Guid1Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Guid 1'.MAC)")
+						$Guid1Node.Nodes["MAC Address"].Tag = $LNKData.'Guid 1'.MAC
+						$Guid1Node.Nodes["MAC Address"].ForeColor = 'LightGreen'
+						$man1 = Get-MACManufacturer -MacAddress "$($LNKData.'Guid 1'.MAC)"
+						if (!!$man1)
+						{
+							$Null = $Guid1Node.Nodes.Add("MACManufacturer", "MAC Company: $($man1)")
+							$Guid1Node.Nodes["MACManufacturer"].ForeColor = 'Gold'
+						}
 					}
 				}
+				if (!!$LNKData.'Birth Guid 1')
+				{
+					$BGuid1Node = $LNKNode.Nodes.Add("$('Birth Guid 1')", "Birth VolumeID: $($LNKData.'Birth Guid 1'.ObjectID)")
+					$Null = $BGuid1Node.Nodes.Add("version", "GUID Version: $($LNKData.'Birth Guid 1'.version)")
+					$Null = $BGuid1Node.Nodes.Add("variant", "GUID Variant: $($LNKData.'Birth Guid 1'.variant)")
+					$Null = $BGuid1Node.Nodes.Add("Sequence", "GUID Sequence: $($LNKData.'Birth Guid 1'.Sequence)")
+					if (!!$LNKData.'Birth Guid 1'.MAC)
+					{
+						# Add to tree
+						$Null = $BGuid1Node.Nodes.Add("GUIDcreated", "GUID created at: $($LNKData.'Birth Guid 1'.Created)")
+						$BGuid1Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
+						$Null = $BGuid1Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Birth Guid 1'.MAC)")
+						$BGuid1Node.Nodes["MAC Address"].Tag = $LNKData.'Birth Guid 1'.MAC
+						$BGuid1Node.Nodes["MAC Address"].ForeColor = 'LightGreen'
+						$bman1 = Get-MACManufacturer -MacAddress "$($LNKData.'Birth Guid 1'.MAC)"
+						if (!!$bman1)
+						{
+							$Null = $BGuid1Node.Nodes.Add("MACManufacturer", "MAC Company: $($bman1)")
+							$BGuid1Node.Nodes["MACManufacturer"].ForeColor = 'Gold'
+						}
+					}
+				}
+				if (!!$LNKData.'Guid 2')
+				{
+					$Guid2Node = $LNKNode.Nodes.Add("$('Guid 2')", "File ObjectID: $($LNKData.'Guid 2'.ObjectID)")
+					$Null = $Guid2Node.Nodes.Add("version", "GUID Version: $($LNKData.'Guid 2'.version)")
+					$Null = $Guid2Node.Nodes.Add("variant", "GUID Variant: $($LNKData.'Guid 2'.variant)")
+					$Null = $Guid2Node.Nodes.Add("Sequence", "GUID Sequence: $($LNKData.'Guid 2'.Sequence)")
+					if (!!$LNKData.'Guid 2'.MAC)
+					{
+						# Add to tree
+						$Null = $Guid2Node.Nodes.Add("GUIDcreated", "GUID created at: $($LNKData.'Guid 2'.Created)")
+						$Guid2Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
+						$Null = $Guid2Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Guid 2'.MAC)")
+						$Guid2Node.Nodes["MAC Address"].Tag = $LNKData.'Guid 2'.MAC
+						$Guid2Node.Nodes["MAC Address"].ForeColor = 'LightGreen'
+						$man2 = Get-MACManufacturer -MacAddress "$($LNKData.'Guid 2'.MAC)"
+						if (!!$man2)
+						{
+							$Null = $Guid2Node.Nodes.Add("MACManufacturer", "MAC Company: $($man2)")
+							$Guid2Node.Nodes["MACManufacturer"].ForeColor = 'Gold'
+						}
+					}
+				}
+				if (!!$LNKData.'Birth Guid 2')
+				{
+					$BGuid2Node = $LNKNode.Nodes.Add("$('Birth Guid 2')", "Birth File ObjectID: $($LNKData.'Birth Guid 2'.ObjectID)")
+					$Null = $BGuid2Node.Nodes.Add("version", "GUID Version: $($LNKData.'Birth Guid 2'.version)")
+					$Null = $BGuid2Node.Nodes.Add("variant", "GUID Variant: $($LNKData.'Birth Guid 2'.variant)")
+					$Null = $BGuid2Node.Nodes.Add("Sequence", "GUID Sequence: $($LNKData.'Birth Guid 2'.Sequence)")
+					if (!!$LNKData.'Birth Guid 2'.MAC)
+					{
+						# Add to tree
+						$Null = $BGuid2Node.Nodes.Add("GUIDcreated", "GUID created at: $($LNKData.'Birth Guid 2'.Created)")
+						$BGuid2Node.Nodes["GUIDcreated"].ForeColor = 'Cyan'
+						$Null = $BGuid2Node.Nodes.Add("MAC Address", "MAC Address: $($LNKData.'Birth Guid 2'.MAC)")
+						$BGuid2Node.Nodes["MAC Address"].Tag = $LNKData.'Birth Guid 2'.MAC
+						$BGuid2Node.Nodes["MAC Address"].ForeColor = 'LightGreen'
+						$bman2 = Get-MACManufacturer -MacAddress "$($LNKData.'Birth Guid 2'.MAC)"
+						if (!!$bman2)
+						{
+							$Null = $BGuid2Node.Nodes.Add("MACManufacturer", "MAC Company: $($bman2)")
+							$BGuid2Node.Nodes["MACManufacturer"].ForeColor = 'Gold'
+						}
+					}
+				}
+				
+				# Extradata -VistaAndAboveIDListDataBlock
+				if (!!$LNKData.VistaItemIdListItems)
+				{
+					$VistaNode = $LNKNode.Nodes.Add("VistaPath", "Vista And Above IDList Items")
+					$VistaNode.ForeColor = 'Violet'
+					$null = $VistaNode.Nodes.Add("VistaDisplayName", "VistaAndAbove DisplayName: $($LNKData.Vista_DisplayName)")
+					$null = $VistaNode.Nodes.Add("VistaPath", "VistaAndAbove Path: $($LNKData.Vista_Path)")
+					Populate-ItemIdListItems -ItemIDListNode $VistaNode -ItemIdList @($LNKData.VistaItemIdListItems)
+				}
+				
+				# HasIconLocation
+				if ($LNKData.Link_Flags.contains('HasIconLocation'))
+				{
+					$null = $LNKNode.Nodes.Add("$('Icon Location')", "Icon Location: $($LNKData.'Icon Location')")
+				}
+				# HasIconLocation
+				if ($LNKData.Link_Flags.contains('HasExpIcon'))
+				{
+					$null = $LNKNode.Nodes.Add("$('iconTargetAnsi')", "Icon Target Ansi: $($LNKData.iconTargetAnsi)")
+					$null = $LNKNode.Nodes.Add("$('iconTargetUnicode')", "Icon Target Unicode: $($LNKData.iconTargetUnicode)")
+				}
+			} # End if FLAGS
+			
+			$raw = $LNKNode.Nodes.Add("RawHexData", "LNK Data")
+			$raw.ForeColor = 'Peru'
+			if ($offsets.count -gt 1)
+			{
+				$raw.Tag = @([System.BitConverter]::ToString($ShellLink_data[0 .. ($LNKData.'Shortcut Size' -1)]).Replace('-', ''))
+				$raw.ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.'Shortcut Size'))"
+			}
+			else
+			{
+				$raw.Tag = @([System.BitConverter]::ToString($ShellLink_data).Replace('-', ''))
+				$raw.ToolTipText = "Right click to copy the raw (Hex) data ($($ShellLink_data.count))"
+			}
+			if (!!$Step_data)
+			{
+				$stepDataNode = $LNKNode.Nodes.Add("RawData", "Raw Data")
+				$stepDataNode.Tag = @([System.BitConverter]::ToString($Step_data).Replace('-', ''))
+				$stepDataNode.ToolTipText = "Right click to copy the raw (Hex) data ($($Step_data.count))"
+				$stepDataNode.ForeColor = 'Peru'
 			}
 			
-			# Extradata -VistaAndAboveIDListDataBlock
-			if (!!$LNKData.VistaItemIdListItems)
-			{
-				$VistaNode = $LNKNode.Nodes.Add("VistaPath", "Vista And Above IDList Items")
-				$VistaNode.ForeColor = 'Violet'
-				$null = $VistaNode.Nodes.Add("VistaDisplayName", "VistaAndAbove DisplayName: $($LNKData.Vista_DisplayName)")
-				$null = $VistaNode.Nodes.Add("VistaPath", "VistaAndAbove Path: $($LNKData.Vista_Path)")
-				Populate-ItemIdListItems -ItemIDListNode $VistaNode -ItemIdList @($LNKData.VistaItemIdListItems)
-			}
-			
-			# HasIconLocation
-			if ($LNKData.Link_Flags.contains('HasIconLocation'))
-			{
-				$null = $LNKNode.Nodes.Add("$('Icon Location')", "Icon Location: $($LNKData.'Icon Location')")
-			}
-			# HasIconLocation
-			if ($LNKData.Link_Flags.contains('HasExpIcon'))
-			{
-				$null = $LNKNode.Nodes.Add("$('iconTargetAnsi')", "Icon Target Ansi: $($LNKData.iconTargetAnsi)")
-				$null = $LNKNode.Nodes.Add("$('iconTargetUnicode')", "Icon Target Unicode: $($LNKData.iconTargetUnicode)")
-			}
-		} # End if FLAGS
+			$Status.Text = ''
 		
-		$raw = $LNKNode.Nodes.Add("RawHexData", "LNK Data")
-		$raw.ForeColor = 'Peru'
-		if ($offsets.count -gt 1)
-		{
-			$raw.Tag = @([System.BitConverter]::ToString($ShellLink_data[0 .. ($LNKData.'Shortcut Size' -1)]).Replace('-', ''))
-			$raw.ToolTipText = "Right click to copy the raw (Hex) data ($($LNKData.'Shortcut Size'))"
-		}
-		else
-		{
-			$raw.Tag = @([System.BitConverter]::ToString($ShellLink_data).Replace('-', ''))
-			$raw.ToolTipText = "Right click to copy the raw (Hex) data ($($ShellLink_data.count))"
-		}
-		if (!!$Step_data)
-		{
-			$stepDataNode = $LNKNode.Nodes.Add("RawData", "Raw Data")
-			$stepDataNode.Tag = @([System.BitConverter]::ToString($Step_data).Replace('-', ''))
-			$stepDataNode.ToolTipText = "Right click to copy the raw (Hex) data ($($Step_data.count))"
-			$stepDataNode.ForeColor = 'Peru'
-		}
-		
-		$Status.Text = ''
-	} # End opulate-LNKData
+	} # End populate-LNKData
 	
 	function Process-Custom
 	{
@@ -12784,6 +12840,9 @@ target file size."
 			return
 		}
 		
+		# clear tree
+		$treeview2.Nodes.Clear()
+		
 		#Open file & read the Header
 		$ReadHeader = [System.IO.File]::Open("$($File)", ([IO.FileMode]::Open), ([IO.FileAccess]::Read), ([IO.FileShare]::ReadWrite))
 		$Header = [System.Byte[]]::new([Int]8)
@@ -12819,6 +12878,7 @@ target file size."
 				$Status.Text = "$($fname) has $($count) streams"
 				$treeview2.BeginUpdate()
 				$TreeSearch.Visible = $false
+				
 				# Get each Stream
 				$r = 0
 				$streams = @(ForEach ($stream in $result.GetStreams())
@@ -12826,7 +12886,10 @@ target file size."
 					$data = $null
 					$reader = [System.IO.BinaryReader]::New($stream.GetStream())
 					$data = $reader.ReadBytes($reader.BaseStream.Length)
+					$reader.Close()
+					$Status.Owner.Refresh()
 					$Status.Text = "Please wait - Processing Streams $($r)/$($count)"
+					
 					[System.Windows.Forms.Application]::DoEvents()
 					$shellLnk = if ($data.Length -ge 20 -and $stream.Name -notmatch "DestList") { Get-ShellLinkfrombyteArray -ByteArray $data }
 					else { $null }
@@ -12838,12 +12901,13 @@ target file size."
 						'DataLength' = $data.count
 						'Data'	     = $data
 					}
-					$reader.Close()
+					
 					$r++
 				})
 				$reader.Dispose()
 				# Close Microsoft Compound File Binary File Format, Version 4'
 				$result = $storageRootType.InvokeMember("Close", [System.Reflection.BindingFlags]::Static -bor [System.Reflection.BindingFlags]::Instance -bor [System.Reflection.BindingFlags]::Public -bor [System.Reflection.BindingFlags]::NonPublic -bor [System.Reflection.BindingFlags]::InvokeMethod, $null, $result, $null)
+			
 				# Add Root Node
 				$Root2 = $treeview2.Nodes.Add("Root", "$($fname)")
 				$Root2.ToolTipText = "$($File)"
@@ -13391,6 +13455,7 @@ target file size."
 					
 				}
 				# [System.Console]::Beep(2500, 300)
+				$treeview2.Visible = $true
 				$TreeSearch.Visible = $true
 				$Status.Text = "Selected file: $($fname) - Ready"
 			}
@@ -14424,7 +14489,7 @@ target file size."
 			for ($idx = 1; $idx -lt $ValueData.count)
 			{
 				$Status.Text = "Please wait - Reading entry #$($n) at offset #$($idx)"
-				[System.Windows.Forms.Application]::DoEvents()
+				
 				$size = [System.BitConverter]::ToUInt32($ValueData[($idx) .. ($idx + 3)], 0)
 				$itemidlist = Get-EmbeddedIDList -ByteArray ($ValueData[($idx + 4) .. ($idx + 4 + $size - 1)]) -Index 0
 				# Add to tree
@@ -16898,9 +16963,9 @@ target file size."
 	$Jumplist_Browser.Controls.Add($splitcontainer1)
 	$Jumplist_Browser.Controls.Add($menustrip1)
 	$Jumplist_Browser.Controls.Add($statusstrip1)
-	$Jumplist_Browser.AutoScaleDimensions = New-Object System.Drawing.SizeF(10, 22)
+	$Jumplist_Browser.AutoScaleDimensions = New-Object System.Drawing.SizeF(10, 20)
 	$Jumplist_Browser.AutoScaleMode = 'Font'
-	$Jumplist_Browser.ClientSize = New-Object System.Drawing.Size(1883, 1423)
+	$Jumplist_Browser.ClientSize = New-Object System.Drawing.Size(1883, 1294)
 	#region Binary Data
 	$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
 	$System_IO_MemoryStream = New-Object System.IO.MemoryStream (,[byte[]][System.Convert]::FromBase64String('
@@ -17222,8 +17287,8 @@ AP/AAAD/4AAA//8AAAs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Jumplist_Browser.MainMenuStrip = $menustrip1
-	$Jumplist_Browser.Margin = '6, 7, 6, 7'
-	$Jumplist_Browser.MinimumSize = New-Object System.Drawing.Size(1905, 1476)
+	$Jumplist_Browser.Margin = '6, 6, 6, 6'
+	$Jumplist_Browser.MinimumSize = New-Object System.Drawing.Size(1905, 1347)
 	$Jumplist_Browser.Name = 'Jumplist_Browser'
 	$Jumplist_Browser.StartPosition = 'CenterScreen'
 	$Jumplist_Browser.Text = 'Jumplist Browser'
@@ -17237,14 +17302,14 @@ AP/AAAD/4AAA//8AAAs='))
 	$splitcontainer1.CausesValidation = $False
 	$splitcontainer1.ContextMenuStrip = $contextmenustrip2
 	$splitcontainer1.Dock = 'Fill'
-	$splitcontainer1.Location = New-Object System.Drawing.Point(0, 38)
-	$splitcontainer1.Margin = '0, 0, 0, 55'
+	$splitcontainer1.Location = New-Object System.Drawing.Point(0, 35)
+	$splitcontainer1.Margin = '0, 0, 0, 50'
 	$splitcontainer1.Name = 'splitcontainer1'
 	[void]$splitcontainer1.Panel1.Controls.Add($treeview1)
-	$splitcontainer1.Panel1.Margin = '0, 0, 0, 7'
+	$splitcontainer1.Panel1.Margin = '0, 0, 0, 5'
 	[void]$splitcontainer1.Panel2.Controls.Add($treeview2)
-	$splitcontainer1.Panel2.Margin = '0, 0, 0, 7'
-	$splitcontainer1.Size = New-Object System.Drawing.Size(1883, 1354)
+	$splitcontainer1.Panel2.Margin = '0, 0, 0, 5'
+	$splitcontainer1.Size = New-Object System.Drawing.Size(1883, 1231)
 	$splitcontainer1.SplitterDistance = 625
 	$splitcontainer1.SplitterWidth = 7
 	$splitcontainer1.TabIndex = 2
@@ -17263,7 +17328,7 @@ AP/AAAD/4AAA//8AAAs='))
 	$menustrip1.Padding = '10, 3, 0, 3'
 	$menustrip1.RenderMode = 'System'
 	$menustrip1.ShowItemToolTips = $True
-	$menustrip1.Size = New-Object System.Drawing.Size(1883, 38)
+	$menustrip1.Size = New-Object System.Drawing.Size(1883, 35)
 	$menustrip1.TabIndex = 0
 	#
 	# statusstrip1
@@ -17272,13 +17337,13 @@ AP/AAAD/4AAA//8AAAs='))
 	$statusstrip1.Font = [System.Drawing.Font]::new('Segoe UI', '10')
 	$statusstrip1.GripStyle = 'Visible'
 	[void]$statusstrip1.Items.Add($Status)
-	$statusstrip1.Location = New-Object System.Drawing.Point(0, 1392)
-	$statusstrip1.Margin = '0, 6, 0, 0'
-	$statusstrip1.MinimumSize = New-Object System.Drawing.Size(0, 31)
+	$statusstrip1.Location = New-Object System.Drawing.Point(0, 1266)
+	$statusstrip1.Margin = '0, 5, 0, 0'
+	$statusstrip1.MinimumSize = New-Object System.Drawing.Size(0, 28)
 	$statusstrip1.Name = 'statusstrip1'
 	$statusstrip1.Padding = '2, 0, 23, 0'
 	$statusstrip1.ShowItemToolTips = $True
-	$statusstrip1.Size = New-Object System.Drawing.Size(1883, 31)
+	$statusstrip1.Size = New-Object System.Drawing.Size(1883, 28)
 	$statusstrip1.TabIndex = 1
 	$statusstrip1.add_ItemClicked($statusstrip1_ItemClicked)
 	#
@@ -17322,7 +17387,7 @@ q2D+HDCEUqnEPG7G5rNj9dj54rfjxY7FYiJEGcKg/oj0/hhZ0JQnwPkKfAZY1Uo/gqxrl1Fr1Lhx
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$OpenFile.Name = 'OpenFile'
-	$OpenFile.Size = New-Object System.Drawing.Size(78, 32)
+	$OpenFile.Size = New-Object System.Drawing.Size(74, 29)
 	$OpenFile.Text = '&File'
 	$OpenFile.ToolTipText = 'Open LNK, Jumplist or Raw Image file'
 	#
@@ -17337,7 +17402,7 @@ AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBD
 dWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0
 ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAsQIAAAKJUE5HDQoaCgAA
 AA1JSERSAAAAEAAAABAIBgAAAB/z/2EAAAABc1JHQgCuzhzpAAAABGdBTUEAALGPC/xhBQAAAAlw
-SFlzAAAXrgAAF64BQufg6AAAAkZJREFUOE/Fkl1Ik2EYhr+DDjqyyIpCKLA88GQQFFEdhBRRKIpl
+SFlzAAAWJQAAFiUBSVIk8AAAAkZJREFUOE/Fkl1Ik2EYhr+DDjqyyIpCKLA88GQQFFEdhBRRKIpl
 FiRpQs0fKoyFOX/a1HRzc3PqV7qsbbqmTivLKOxHKhSJmKaONFOzorAUM0Ml/65wA3Up1Vk33Acv
 z3Nfz/O+vILwj1IabFxQW8gW7fxe+6uiZKJHKN1gc50jZYUIH/veUG3VL3JHy5M/TgqLzyUkNg9h
 trmrzcz4cJXLP4dsTA6YsFty6Wh9uiTkUJyOkBgDQdIChKpSHWND5R7h6f4iJp0JlF9XU1achakw
@@ -17355,7 +17420,7 @@ AfnZiVRZ1DjvxuHQC3Nu0i6jXrWce+krqExZgynRh8vnNhKxcPqs9Jnn0StOkZ0URfKZI5yNDuZE
 	$OpenFolder.ImageTransparentColor = [System.Drawing.Color]::Magenta 
 	$OpenFolder.Name = 'OpenFolder'
 	$OpenFolder.ShortcutKeys = [System.Windows.Forms.Keys]::F -bor [System.Windows.Forms.Keys]::Control 
-	$OpenFolder.Size = New-Object System.Drawing.Size(277, 32)
+	$OpenFolder.Size = New-Object System.Drawing.Size(260, 30)
 	$OpenFolder.Text = 'Open &Folder'
 	$OpenFolder.ToolTipText = 'Open folder with LNKs and/or Jumplists'
 	$OpenFolder.add_Click($openfolder_Click)
@@ -17363,7 +17428,7 @@ AfnZiVRZ1DjvxuHQC3Nu0i6jXrWce+krqExZgynRh8vnNhKxcPqs9Jnn0StOkZ0URfKZI5yNDuZE
 	# toolStripSeparator
 	#
 	$toolStripSeparator.Name = 'toolStripSeparator'
-	$toolStripSeparator.Size = New-Object System.Drawing.Size(274, 6)
+	$toolStripSeparator.Size = New-Object System.Drawing.Size(257, 6)
 	#
 	# exitToolStripMenuItem
 	#
@@ -17383,7 +17448,7 @@ R19iZ+Z6ra+xc2cSCE0HIIj+oTcIogU+nykcQRDOZ/qlXuWSu6DWh2HcAAAAAElFTkSuQmCCCw=='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$exitToolStripMenuItem.Name = 'exitToolStripMenuItem'
-	$exitToolStripMenuItem.Size = New-Object System.Drawing.Size(277, 32)
+	$exitToolStripMenuItem.Size = New-Object System.Drawing.Size(260, 30)
 	$exitToolStripMenuItem.Text = 'E&xit'
 	$exitToolStripMenuItem.add_Click($exitToolStripMenuItem_Click)
 	#
@@ -17422,7 +17487,7 @@ gMiNmdfyB/Ke+o3G9OSzAAAAAElFTkSuQmCCCw=='))
 	$System_IO_MemoryStream = $null
 	$Status.Margin = '0, 0, 0, 0'
 	$Status.Name = 'Status'
-	$Status.Size = New-Object System.Drawing.Size(16, 31)
+	$Status.Size = New-Object System.Drawing.Size(16, 28)
 	$Status.TextAlign = 'MiddleLeft'
 	#
 	# treeview1
@@ -17435,10 +17500,10 @@ gMiNmdfyB/Ke+o3G9OSzAAAAAElFTkSuQmCCCw=='))
 	$treeview1.ForeColor = [System.Drawing.SystemColors]::Window 
 	$treeview1.HideSelection = $False
 	$treeview1.Location = New-Object System.Drawing.Point(0, 0)
-	$treeview1.Margin = '5, 6, 5, 6'
+	$treeview1.Margin = '5, 5, 5, 5'
 	$treeview1.Name = 'treeview1'
 	$treeview1.ShowNodeToolTips = $True
-	$treeview1.Size = New-Object System.Drawing.Size(625, 1354)
+	$treeview1.Size = New-Object System.Drawing.Size(625, 1231)
 	$treeview1.TabIndex = 0
 	$treeview1.add_AfterSelect($treeview1_AfterSelect)
 	$treeview1.add_NodeMouseClick($treeview1_NodeMouseClick)
@@ -17453,10 +17518,10 @@ gMiNmdfyB/Ke+o3G9OSzAAAAAElFTkSuQmCCCw=='))
 	$treeview2.ForeColor = [System.Drawing.SystemColors]::Window 
 	$treeview2.HideSelection = $False
 	$treeview2.Location = New-Object System.Drawing.Point(0, 0)
-	$treeview2.Margin = '5, 6, 5, 6'
+	$treeview2.Margin = '5, 5, 5, 5'
 	$treeview2.Name = 'treeview2'
 	$treeview2.ShowNodeToolTips = $True
-	$treeview2.Size = New-Object System.Drawing.Size(1251, 1354)
+	$treeview2.Size = New-Object System.Drawing.Size(1251, 1231)
 	$treeview2.TabIndex = 0
 	$treeview2.add_AfterSelect($treeview2_AfterSelect)
 	$treeview2.add_NodeMouseClick($treeview2_NodeMouseClick)
@@ -17479,7 +17544,7 @@ gMiNmdfyB/Ke+o3G9OSzAAAAAElFTkSuQmCCCw=='))
 	[void]$contextmenustrip1.Items.Add($toolstripseparator5)
 	[void]$contextmenustrip1.Items.Add($Exit1)
 	$contextmenustrip1.Name = 'contextmenustrip1'
-	$contextmenustrip1.Size = New-Object System.Drawing.Size(344, 408)
+	$contextmenustrip1.Size = New-Object System.Drawing.Size(331, 408)
 	#
 	# CopyNode1
 	#
@@ -17500,19 +17565,19 @@ RU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$CopyNode1.Name = 'CopyNode1'
-	$CopyNode1.Size = New-Object System.Drawing.Size(343, 38)
+	$CopyNode1.Size = New-Object System.Drawing.Size(330, 38)
 	$CopyNode1.Text = 'Copy Selected Node Text'
 	$CopyNode1.add_Click($CopyNode1_Click)
 	#
 	# toolstripseparator6
 	#
 	$toolstripseparator6.Name = 'toolstripseparator6'
-	$toolstripseparator6.Size = New-Object System.Drawing.Size(340, 6)
+	$toolstripseparator6.Size = New-Object System.Drawing.Size(327, 6)
 	#
 	# toolstripseparator7
 	#
 	$toolstripseparator7.Name = 'toolstripseparator7'
-	$toolstripseparator7.Size = New-Object System.Drawing.Size(340, 6)
+	$toolstripseparator7.Size = New-Object System.Drawing.Size(327, 6)
 	#
 	# Exit1
 	#
@@ -17532,14 +17597,14 @@ R19iZ+Z6ra+xc2cSCE0HIIj+oTcIogU+nykcQRDOZ/qlXuWSu6DWh2HcAAAAAElFTkSuQmCCCw=='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Exit1.Name = 'Exit1'
-	$Exit1.Size = New-Object System.Drawing.Size(343, 38)
+	$Exit1.Size = New-Object System.Drawing.Size(330, 38)
 	$Exit1.Text = 'Exit'
 	$Exit1.add_Click($Exit1_Click)
 	#
 	# toolstripseparator8
 	#
 	$toolstripseparator8.Name = 'toolstripseparator8'
-	$toolstripseparator8.Size = New-Object System.Drawing.Size(340, 6)
+	$toolstripseparator8.Size = New-Object System.Drawing.Size(327, 6)
 	$toolstripseparator8.Visible = $False
 	#
 	# contextmenustrip2
@@ -17563,7 +17628,7 @@ R19iZ+Z6ra+xc2cSCE0HIIj+oTcIogU+nykcQRDOZ/qlXuWSu6DWh2HcAAAAAElFTkSuQmCCCw=='))
 	[void]$contextmenustrip2.Items.Add($toolstripseparator3)
 	[void]$contextmenustrip2.Items.Add($Exit2)
 	$contextmenustrip2.Name = 'contextmenustrip2'
-	$contextmenustrip2.Size = New-Object System.Drawing.Size(410, 490)
+	$contextmenustrip2.Size = New-Object System.Drawing.Size(394, 490)
 	#
 	# CopyNode2
 	#
@@ -17589,7 +17654,7 @@ kcFfFnDX2M9roqcAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$CopyNode2.Name = 'CopyNode2'
-	$CopyNode2.Size = New-Object System.Drawing.Size(409, 38)
+	$CopyNode2.Size = New-Object System.Drawing.Size(393, 38)
 	$CopyNode2.Text = 'Copy Selected Node Text'
 	$CopyNode2.add_Click($CopyNode2_Click)
 	#
@@ -17612,7 +17677,7 @@ RU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$CopyAll2.Name = 'CopyAll2'
-	$CopyAll2.Size = New-Object System.Drawing.Size(409, 38)
+	$CopyAll2.Size = New-Object System.Drawing.Size(393, 38)
 	$CopyAll2.Text = 'Copy Selected Node''s Child Nodes'
 	$CopyAll2.ToolTipText = 'Copy all the Child Nodes of the selected Node'
 	$CopyAll2.add_Click($CopyAll2_Click)
@@ -17620,7 +17685,7 @@ RU5ErkJgggs='))
 	# toolstripseparator9
 	#
 	$toolstripseparator9.Name = 'toolstripseparator9'
-	$toolstripseparator9.Size = New-Object System.Drawing.Size(406, 6)
+	$toolstripseparator9.Size = New-Object System.Drawing.Size(390, 6)
 	#
 	# Expand2
 	#
@@ -17643,7 +17708,7 @@ JjCwMhgwMDBIAAD+TaoQbaiYRAAAAABJRU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Expand2.Name = 'Expand2'
-	$Expand2.Size = New-Object System.Drawing.Size(409, 38)
+	$Expand2.Size = New-Object System.Drawing.Size(393, 38)
 	$Expand2.Text = 'Expand'
 	$Expand2.ToolTipText = 'The Selected Node'
 	$Expand2.add_Click($Expand2_Click)
@@ -17651,7 +17716,7 @@ JjCwMhgwMDBIAAD+TaoQbaiYRAAAAABJRU5ErkJgggs='))
 	# toolstripseparator10
 	#
 	$toolstripseparator10.Name = 'toolstripseparator10'
-	$toolstripseparator10.Size = New-Object System.Drawing.Size(406, 6)
+	$toolstripseparator10.Size = New-Object System.Drawing.Size(390, 6)
 	#
 	# Exit2
 	#
@@ -17671,7 +17736,7 @@ R19iZ+Z6ra+xc2cSCE0HIIj+oTcIogU+nykcQRDOZ/qlXuWSu6DWh2HcAAAAAElFTkSuQmCCCw=='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Exit2.Name = 'Exit2'
-	$Exit2.Size = New-Object System.Drawing.Size(409, 38)
+	$Exit2.Size = New-Object System.Drawing.Size(393, 38)
 	$Exit2.Text = 'Exit'
 	$Exit2.add_Click($Exit2_Click)
 	#
@@ -17705,7 +17770,7 @@ YIIL'))
 	$System_IO_MemoryStream = $null
 	$Open.Name = 'Open'
 	$Open.ShortcutKeys = [System.Windows.Forms.Keys]::O -bor [System.Windows.Forms.Keys]::Control 
-	$Open.Size = New-Object System.Drawing.Size(277, 32)
+	$Open.Size = New-Object System.Drawing.Size(260, 30)
 	$Open.Text = '&Open File'
 	$Open.add_Click($Open_Click)
 	#
@@ -17731,7 +17796,7 @@ nrilRLMdA/h9HUAbQmybSddp7apfrZ3d4S5RqZYnsQ1ivUa2FxR9JrE6iq0Nz57l3P4vod7n0QOw
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$About.Name = 'About'
-	$About.Size = New-Object System.Drawing.Size(103, 32)
+	$About.Size = New-Object System.Drawing.Size(98, 29)
 	$About.Text = 'About'
 	$About.add_Click($About_Click)
 	#
@@ -17756,7 +17821,7 @@ JjCwMhgwMDBIAAD+TaoQbaiYRAAAAABJRU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Expand1.Name = 'Expand1'
-	$Expand1.Size = New-Object System.Drawing.Size(343, 38)
+	$Expand1.Size = New-Object System.Drawing.Size(330, 38)
 	$Expand1.Text = 'Expand'
 	$Expand1.add_Click($Expand1_Click)
 	#
@@ -17781,14 +17846,14 @@ sPAN5fqgNkHNY9wAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Collapse1.Name = 'Collapse1'
-	$Collapse1.Size = New-Object System.Drawing.Size(343, 38)
+	$Collapse1.Size = New-Object System.Drawing.Size(330, 38)
 	$Collapse1.Text = 'Collapse'
 	$Collapse1.add_Click($Collapse1_Click)
 	#
 	# toolstripseparator5
 	#
 	$toolstripseparator5.Name = 'toolstripseparator5'
-	$toolstripseparator5.Size = New-Object System.Drawing.Size(340, 6)
+	$toolstripseparator5.Size = New-Object System.Drawing.Size(327, 6)
 	#
 	# ExpandAll1
 	#
@@ -17814,7 +17879,7 @@ iwAAAABJRU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$ExpandAll1.Name = 'ExpandAll1'
-	$ExpandAll1.Size = New-Object System.Drawing.Size(343, 38)
+	$ExpandAll1.Size = New-Object System.Drawing.Size(330, 38)
 	$ExpandAll1.Text = 'Expand All'
 	$ExpandAll1.add_Click($ExpandAll1_Click)
 	#
@@ -17842,7 +17907,7 @@ YIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$CollapseAll1.Name = 'CollapseAll1'
-	$CollapseAll1.Size = New-Object System.Drawing.Size(343, 38)
+	$CollapseAll1.Size = New-Object System.Drawing.Size(330, 38)
 	$CollapseAll1.Text = 'Collapse All'
 	$CollapseAll1.add_Click($CollapseAll1_Click)
 	#
@@ -17867,14 +17932,14 @@ sPAN5fqgNkHNY9wAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Collapse2.Name = 'Collapse2'
-	$Collapse2.Size = New-Object System.Drawing.Size(409, 38)
+	$Collapse2.Size = New-Object System.Drawing.Size(393, 38)
 	$Collapse2.Text = 'Collapse'
 	$Collapse2.add_Click($Collapse2_Click)
 	#
 	# toolstripseparator4
 	#
 	$toolstripseparator4.Name = 'toolstripseparator4'
-	$toolstripseparator4.Size = New-Object System.Drawing.Size(406, 6)
+	$toolstripseparator4.Size = New-Object System.Drawing.Size(390, 6)
 	#
 	# ExpandAll2
 	#
@@ -17901,7 +17966,7 @@ iwAAAABJRU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$ExpandAll2.Name = 'ExpandAll2'
-	$ExpandAll2.Size = New-Object System.Drawing.Size(409, 38)
+	$ExpandAll2.Size = New-Object System.Drawing.Size(393, 38)
 	$ExpandAll2.Text = 'Expand All'
 	$ExpandAll2.add_Click($ExpandAll2_Click)
 	#
@@ -17929,7 +17994,7 @@ YIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$CollapseAll2.Name = 'CollapseAll2'
-	$CollapseAll2.Size = New-Object System.Drawing.Size(409, 38)
+	$CollapseAll2.Size = New-Object System.Drawing.Size(393, 38)
 	$CollapseAll2.Text = 'Collapse All'
 	$CollapseAll2.add_Click($CollapseAll2_Click)
 	#
@@ -17958,7 +18023,7 @@ emwAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$SaveNodestoTxt.Name = 'SaveNodestoTxt'
-	$SaveNodestoTxt.Size = New-Object System.Drawing.Size(409, 38)
+	$SaveNodestoTxt.Size = New-Object System.Drawing.Size(393, 38)
 	$SaveNodestoTxt.Text = 'Save Nodes to TXT'
 	$SaveNodestoTxt.Visible = $False
 	$SaveNodestoTxt.add_Click($SaveNodestoTxt_Click)
@@ -17966,7 +18031,7 @@ emwAAAAASUVORK5CYIIL'))
 	# toolstripseparator3
 	#
 	$toolstripseparator3.Name = 'toolstripseparator3'
-	$toolstripseparator3.Size = New-Object System.Drawing.Size(406, 6)
+	$toolstripseparator3.Size = New-Object System.Drawing.Size(390, 6)
 	$toolstripseparator3.Visible = $False
 	#
 	# savefiledialog1
@@ -18000,7 +18065,7 @@ Y828cS3mBazwwUJPg7BIrWosVGBlxAKz5RBMh2AqBNMgepVCRxKl+RZYaoOg/bc3vZfoKzs1WZrS
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$OpenFileWith.Name = 'OpenFileWith'
-	$OpenFileWith.Size = New-Object System.Drawing.Size(343, 38)
+	$OpenFileWith.Size = New-Object System.Drawing.Size(330, 38)
 	$OpenFileWith.Text = 'Open File with'
 	$OpenFileWith.ToolTipText = 'Open the selected file with another tool '
 	$OpenFileWith.Visible = $False
@@ -18009,7 +18074,7 @@ Y828cS3mBazwwUJPg7BIrWosVGBlxAKz5RBMh2AqBNMgepVCRxKl+RZYaoOg/bc3vZfoKzs1WZrS
 	# CopyFullFilePath
 	#
 	$CopyFullFilePath.Name = 'CopyFullFilePath'
-	$CopyFullFilePath.Size = New-Object System.Drawing.Size(343, 38)
+	$CopyFullFilePath.Size = New-Object System.Drawing.Size(330, 38)
 	$CopyFullFilePath.Text = 'Copy Full File Path'
 	$CopyFullFilePath.Visible = $False
 	$CopyFullFilePath.add_Click($CopyFullFilePath_Click)
@@ -18039,7 +18104,7 @@ kcFfFnDX2M9roqcAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$CopyNode2Tag.Name = 'CopyNode2Tag'
-	$CopyNode2Tag.Size = New-Object System.Drawing.Size(409, 38)
+	$CopyNode2Tag.Size = New-Object System.Drawing.Size(393, 38)
 	$CopyNode2Tag.Text = 'Copy Selected Node''s Tag Data (Hex)'
 	$CopyNode2Tag.Visible = $False
 	$CopyNode2Tag.add_Click($CopyNode2Tag_Click)
@@ -18068,7 +18133,7 @@ SUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$SaveStreamToFile.Name = 'SaveStreamToFile'
-	$SaveStreamToFile.Size = New-Object System.Drawing.Size(409, 38)
+	$SaveStreamToFile.Size = New-Object System.Drawing.Size(393, 38)
 	$SaveStreamToFile.Text = 'Save Stream to File'
 	$SaveStreamToFile.Visible = $False
 	$SaveStreamToFile.add_Click($SaveStreamToFile_Click)
@@ -18096,7 +18161,7 @@ RQOffQNecjMnoABcRAAAAABJRU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$toolstripRefresh.Name = 'toolstripRefresh'
-	$toolstripRefresh.Size = New-Object System.Drawing.Size(111, 33)
+	$toolstripRefresh.Size = New-Object System.Drawing.Size(106, 33)
 	$toolstripRefresh.Text = 'Refresh'
 	$toolstripRefresh.ToolTipText = 'Refresh selected folder'
 	$toolstripRefresh.Visible = $False
@@ -18120,7 +18185,7 @@ CaYDQvIE0wEheYLpgJA8wXRASJ5gOiAkTzAdgEIbnzwAW/SimMRCu+kAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$GetMRUlist.Name = 'GetMRUlist'
-	$GetMRUlist.Size = New-Object System.Drawing.Size(277, 32)
+	$GetMRUlist.Size = New-Object System.Drawing.Size(260, 30)
 	$GetMRUlist.Text = 'Get MRU lists'
 	$GetMRUlist.ToolTipText = 'Read Curent User''s MRU from HKCU'
 	$GetMRUlist.add_Click($GetMRUlist_Click)
@@ -18128,7 +18193,7 @@ CaYDQvIE0wEheYLpgJA8wXRASJ5gOiAkTzAdgEIbnzwAW/SimMRCu+kAAAAASUVORK5CYIIL'))
 	# toolstripseparator2
 	#
 	$toolstripseparator2.Name = 'toolstripseparator2'
-	$toolstripseparator2.Size = New-Object System.Drawing.Size(274, 6)
+	$toolstripseparator2.Size = New-Object System.Drawing.Size(257, 6)
 	#
 	# imagelist1
 	#
@@ -18138,7 +18203,7 @@ CaYDQvIE0wEheYLpgJA8wXRASJ5gOiAkTzAdgEIbnzwAW/SimMRCu+kAAAAASUVORK5CYIIL'))
 AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAu
 MC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAA
 ACZTeXN0ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkD
-AAAADwMAAACOoQAAAk1TRnQBSQFMAgEBFAEAAVABAgFQAQIBGAEAARgBAAT/ASEBAAj/AUIBTQE2
+AAAADwMAAACOoQAAAk1TRnQBSQFMAgEBFAEAAWgBAgFoAQIBGAEAARgBAAT/ASEBAAj/AUIBTQE2
 BwABNgMAASgDAAFgAwABkAMAAQEBAAEgBgAB2P8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/
 AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AHIAAwYBCAMbASYBVwFZ
 AVcBuQEhAV4BIQH7A1EB9wNPAZkDDwEUAwUBBhgAAwYBBwMPARQDKgFAAzwBZQNHAYIDTQGRA04B
@@ -18159,7 +18224,7 @@ AQABZgELAf8BAAGJARcB/wEAAXMBCQX/AQABewEOAf8BAAGJARcB/wEAAYkBFwH/AQABYwEKAf8M
 AAQBAwIBAwM2AVcDVAGpA2gB+QNAAf0DXAH/A2AB/wNwAf8DeAH/A3gB/wNoAf8DXgH/A1oB/wNe
 AfsDXgHSA0kBhQMhAS8DAgEDGAAEAgMNAREDRAF5AX4CKwH8Ad4BlQF1Av8BwwGbAv8BwQGWAv8B
 xQGcAv8ByQGgAv8ByAGfAf8B1QG6AXgB/wGGAawBOQH/AXYBqAEtAf8BnwHCAWwB/wHPAeEBtgH/
-A4AB/gKAAXoB/gKAAXUB/gF1AX4BKwH8AmABXQHOAycBOgQAAbABdwEJAf8B4AGkASMB/wHgAaQB
+A4AB/gKAAX0B/gKAAXgB/gF1AX4BKwH8AmABXQHOAycBOgQAAbABdwEJAf8B4AGkASMB/wHgAaQB
 IwH/AeABpAEjAf8B4AGkASMB/wHgAaQBIwH/AbwBhwEbAf8DAgEDAeABpAEjAf8B4AGkASMB/wHg
 AaQBIwH/AeABpAEjAf8B4AGkASMB/wHcAaIBJQH/AwsBDgGwAXcBCQH/AeABpAEjAf8B4AGkASMB
 /wHgAaQBIwH/AeABpAEjAf8B4AGkASMB/wG8AYcBGwH/AwIBAwgAAwkBCyz/AaQB0AG0Af8BAAGa
@@ -18167,7 +18232,7 @@ AR4B/wEAAYQBEA3/AQABjAEVAf8BAAGaAR4B/wEAAZoBHgH/AUABQQFAAXEEAAQBAx0BKANCAXQD
 VwG1A2AB4gNAAf0DgAH+A64B/wPHAf8DzgH/A9IB/wPSAf8DywH/A7sB/wOjAf8DgAH+A14B8ANc
 AdYDTwGXAzMBUAMCAQMEAQwABAIDGQEiAVICUQGkAmoBaAH5Af8BwQGZAv8BzAGjAf8B/AHMAaYB
 /wHsAcIBoQH/AeABuAGaAf8B2wGyAZUB/wHcAbQBlgH/AaABtgFbAf8BfQGsATcB/wGfAcMBbQH/
-AeAB6wHPAf8B9gH5AfIB/wHlAe0B2AH/A4AB/gOAAf4CgAF1Af4CbwFgAfMCSwFKAYoEAAG6AYEB
+AeAB6wHPAf8B9gH5AfIB/wHlAe0B2AH/A4AB/gOAAf4CgAF4Af4CbwFgAfMCSwFKAYoEAAG6AYEB
 DQL/AcYBPgL/AcYBPgL/AcYBPgL/AcYBPgL/AcYBPgH/AcIBjAEiAf8DAgEDAf8BxgE+Av8BxgE+
 Av8BxgE+Av8BxgE+Av8BxgE+Af8B/AHBAToB/wMLAQ4BugGBAQ0C/wHGAT4C/wHGAT4C/wHGAT4C
 /wHGAT4C/wHGAT4B/wHCAYwBIgH/AwIBAwgAAwkBCyz/AQABYgEcAf8BAAGmASIJ/wEiAacBRwX/
@@ -18898,7 +18963,7 @@ AQcD/wEAAQ8C/wH8AQABwAEAAQ8D/wGAAR8D/wEHAcABAAEPCf8B8AEAAT8M/ws='))
 AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAu
 MC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAA
 ACZTeXN0ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkD
-AAAADwMAAABCQgAAAk1TRnQBSQFMAgEBFAEAAQgBBQEIAQUBEAEAARABAAT/ASEBAAj/AUIBTQE2
+AAAADwMAAAA+QgAAAk1TRnQBSQFMAgEBFAEAASABBQEgAQUBEAEAARABAAT/ASEBAAj/AUIBTQE2
 BwABNgMAASgDAAFAAwABYAMAAQEBAAEgBgABYP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/
 AP8ASgADBAEFASEBXgEhAfsBAAFvAQsB/wEAAWkBCgH/A0sBjBQAAxYBHgNHAYEDXAHDA1sB5ANb
 AeQDWwHEA0cBggMYASAgAAMVARwDLQFEA1MBqQNcAdkDWwHYA1MBqQNdAcwCagFBAfkCXwEsAfsC
@@ -18907,12 +18972,12 @@ AwsBDgMLAQ4DCwEOAwUEBgEHAxMBGQFxAW8BbAH/AXEBbwFsAf8BcQFvAWwB/wFxAW8BbAH/AXEB
 bwFsAf8BcQFvAWwB/wFxAW8BbAH/AXEBbwFsAf8BAAFmAQsB/wEAAYcBFQX/AQABiQEXAf8BAAGJ
 ARcB/wFKAUsBSgGKCAADAgEDA0cBgQNoAfkDWgH/A2AB/wN4Af8DeAH/A2AB/wNaAf8DaAH5A0kB
 hQMDAQQQAAQCAxkBIgF+AisB/AH/AboBkwL/AcEBlgL/AcgBnwL/AcgBnwH/AZsBrwFJAf8BdgGo
-AS0B/wHGAdoBpwH/A4AB/gKAAXUB/gF1AX4BKwH8Ak8BTgGXBAAB4AGkASMB/wHgAaQBIwH/AeAB
+AS0B/wHGAdoBpwH/A4AB/gKAAXgB/gF1AX4BKwH8Ak8BTgGXBAAB4AGkASMB/wHgAaQBIwH/AeAB
 pAEjAf8B4AGkASMB/wMLAQ4B4AGkASMB/wHgAaQBIwH/AeABpAEjAf8B4AGkASMB/wMLAQ4B4AGk
 ASMB/wHgAaQBIwH/AeABpAEjAf8B4AGkASMB/wMLAQ4IACD/AQABpAEiDf8BAAGkASIB/wEAAYwB
 GgH/BAADAgEDA1UBrQNaAf8DcAH/A8YB/wP7Cf8D+wH/A8gB/wNxAf8DWgH/A1cBsQMDAQQIAAQB
 AzUBVgHjAZoBeAL/AcUBmgL/AdwBtwH/AcYBfgFmAf8BlQFEATAB/wGWAUUBMwH/AXcBpwEuAf8B
-xwHcAaoB/wH5AfsB9gH/AfcB+QHzAf8DgAH+AoABdQH+AmcBWQHvBAAB/wHQAUoC/wHQAUoC/wHQ
+xwHcAaoB/wH5AfsB9gH/AfcB+QHzAf8DgAH+AoABeAH+AmcBWQHvBAAB/wHQAUoC/wHQAUoC/wHQ
 AUoC/wHQAUoB/wMLAQ4B/wHQAUoC/wHQAUoC/wHQAUoC/wHQAUoB/wMLAQ4B/wHQAUoC/wHQAUoC
 /wHQAUoC/wHQAUoB/wMLAQ4IAAT/AwAF/wMAAf8DAAH/AwAB/wMAAf8DdgH/AQABvgEyAf8BhQHc
 AZ0B/wEAAb4BMgX/Ae8B/wH4Af8BAAGxASwB/wQAA0kBhgNaAf8DggH/A/UZ/wP2Af8DhAH/A1oB
@@ -19116,86 +19181,86 @@ TgHJAe4B/wFMAcgB7gH/AUoBxwHtAf8BSAHGAe0B/wFHAcYB7QH/AUcBxgHtAf8BSQF4AawB/wQB
 DAADCwEOAfwB/wH5Af8B9QH/AfEB/wHyAf8B7QH/Ae8B/wHqAf8B7QH/AecB/wHoAf8B4wH/AeYB
 /wHgAf8B4wH/Ad0B/wHhAf8B2gH/Ad4B/wHXAf8B/AH/AfkB/wMCAQNEAAEUAXoBoQH/AZwB4wH9
 Af8BnAHjAf0B/wGcAeMB/QH/AZwB4wH9Af8BnAHjAf0B/wGcAeMB/QH/AZwB4wH9Af8BnAHjAf0B
-/wGcAeMB/QH/AZwB4wH9Af8BnAHjAf0B/wGcAeMB/QH/AZwB4wH9Af8BnwHkAf0B/wFcAoAB/gQC
+/wGcAeMB/QH/AZwB4wH9Af8BnAHjAf0B/wGcAeMB/QH/AZwB4wH9Af8BnwHkAf0B/wFfAoAB/gQC
 AY0B0QHdAf8BrAHyAfcB/wFiAdAB8QH/AV8BzwHwAf8BXAHOAfAB/wFZAc0B8AH/AVYBzAHvAf8B
 UwHKAe8B/wFQAckB7gH/AU4ByAHuAf8BTAHIAe4B/wFKAccB7QH/AUgBtQHgAf8EAQwAAwsBDgH7
 Af8B9QH/AfEB/wHrAf8B7gH/AegB/wHqAf8B5AH/AeYB/wHgAf8B4wH/AdwB/wHeAf8B1wH/AdoB
 /wHTAf8B1wH/AdAB/wHVAf8BzQH/Af4B/wH7Af8DAgEDRAABGQGAAaYB/wGAAdkB+gH/AYAB2QH6
 Af8BgAHZAfoB/wGAAdkB+gH/AYAB2QH6Af8BgAHZAfoB/wGAAdkB+gH/AYAB2QH6Af8BgAHZAfoB
-/wGAAdkB+gH/AYAB2QH6Af8BgAHZAfoB/wGAAdkB+gH/AYMB2gH6Af8BYQKAAf4EAAGYAd4B6QH/
+/wGAAdkB+gH/AYAB2QH6Af8BgAHZAfoB/wGAAdkB+gH/AYMB2gH6Af8BZAKAAf4EAAGYAd4B6QH/
 AWABmwHUAf8BawHUAfIB/wFoAdMB8gH/AWUB0gHxAf8BYgHQAfEB/wFfAc8B8AH/AVsBzgHwAf8B
 WQHNAfAB/wFWAcwB7wH/AVMBygHvAf8BUAHJAe4B/wFOAcgB7gH/AUkBdgGqAf8MAAMLAQ4B/gH/
 AfkB/wH1Af8B7wH/AfEB/wHrAf8B7gH/AegB/wHqAf8B5AH/AeYB/wHgAf8B4wH/AdwB/wHeAf8B
 1wH/AdoB/wHTAf8B1wH/AdAD/wH8Af8DAgEDRAABHgGGAa0B/wFjAc8B9wH/AWMBzwH3Af8BYwHP
 AfcB/wFjAc8B9wH/AWMBzwH3Af8BYwHPAfcB/wFjAc8B9wH/AWMBzwH3Af8BYwHPAfcB/wFjAc8B
-9wH/AWMBzwH3Af8BYwHPAfcB/wFjAc8B9wH/AWYB0AH4Af8BZwKAAf4EAAGiAegB8wH/AXgBwgHY
+9wH/AWMBzwH3Af8BYwHPAfcB/wFjAc8B9wH/AWYB0AH4Af8BagKAAf4EAAGiAegB8wH/AXgBwgHY
 Af8BoQHtAfcB/wFxAdYB8wH/AW4B1QHyAf8BawHUAfIB/wFoAdMB8gH/AWUB0QHxAf8BYQHQAfEB
 /wFeAc8B8AH/AVsBzgHwAf8BWAHNAe8B/wFVAcsB7wH/AU0BrwHaAf8MAAMLAQ4C/wH7Af8B+AH/
 AfIB/wH1Af8B7wH/AfEB/wHrAf8B7gH/AegB/wHqAf8B5AH/AeYB/wHgAf8B4wH/AdwB/wHeAf8B
 1wH/AdoB/wHTA/8B/AH/AwIBA0QAASUBjQGzAf8BTgHIAfYB/wFOAcgB9gH/AU4ByAH2Af8BTgHI
 AfYB/wFOAcgB9gH/AU4ByAH2Af8BTgHIAfYB/wFOAcgB9gH/AU4ByAH2Af8BTgHIAfYB/wFOAcgB
-9gH/AU4ByAH2Af8BTgHIAfYB/wFSAckB9gH/AW0CgAH+BAABqAHuAfkB/wGFAc8B5AH/AWIBngHX
+9gH/AU4ByAH2Af8BTgHIAfYB/wFSAckB9gH/AXACgAH+BAABqAHuAfkB/wGFAc8B5AH/AWIBngHX
 Af8BeAHZAfQB/wF2AdgB9AH/AXMB1wHzAf8BcAHWAfMB/wFuAdUB8gH/AWsB1AHyAf8BaAHTAfIB
 /wFkAdEB8QH/AWEB0AHxAf8BXgHPAfAB/wFbAc4B8AH/AV0CZwHqCAADCwEOAv8B/gH/AfsB/wH1
 Af8B+AH/AfIB/wH1Af8B7wH/AfEB/wHrAf8B7gH/AegB/wHqAf8B5AH/AeYB/wHgAf8B4wH/AdwB
 /wHeAf8B1wP/Af4B/wMCAQNEAAErAZMBugH/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/
-AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXwB3AL/AXMC
+AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXoB2wL/AXwB3AL/AXYC
 gAH+BAABrAHwAfoB/wGTAd0B8gH/AW4BrQHXAf8BggHeAfUB/wF8AdsB9QH/AXoB2gH0Af8BeAHZ
 AfQB/wF2AdgB9AH/AXMB1wHzAf8BcAHWAfMB/wFtAdUB8gH/AWoB1AHyAf8BZwHTAfIB/wFkAdEB
 8QH/AVsBlAHMAf8IAAMLAQ4E/wH+Af8B+AH/AfsB/wH1Af8B+AH/AfIB/wH1Af8B7wH/AfEB/wHr
 Af8B7gH/AegB/wHqAf8B5AH/AeYB/wHgAf8B4wH/AdwF/wMCAQMIAAMxAUwDMQFMAzEBTAMxAUwD
 MQFMAzEBTAMxAUwDMQFMAzEBTAMxAUwDMQFMAzEBTAMxAUwDMQFMA0sBigEwAZkBvwH/AYYB3QH+
 Af8BhgHdAf4B/wGGAd0B/gH/AYYB3QH+Af8BhgHdAf4B/wGGAd0B/gH/AYYB3QH+Af8BhgHdAf4B
-/wGGAd0B/gH/AYYB3QH+Af8BhgHdAf4B/wGGAd0B/gH/AYYB3QH+Af8BiAHeAf4B/wF5AoAB/gQA
+/wGGAd0B/gH/AYYB3QH+Af8BhgHdAf4B/wGGAd0B/gH/AYYB3QH+Af8BiAHeAf4B/wF8AoAB/gQA
 Aa8B8QH7Af8BnQHmAfoB/wGLAc8B4QH/AbAB9AH4Af8BgAHcAfUB/wGAAdwB9QH/AX4B3AH1Af8B
 fAHbAfUB/wF6AdoB9AH/AXgB2QH0Af8BdgHYAfQB/wFzAdcB8wH/AXAB1gHzAf8BbQHVAfIB/wFe
 Ab4B4wH/CAADCwEOBv8B+wH/Af4B/wH4Af8B+wH/AfUB/wH4Af8B8gH/AfUB/wHvAf8B8QH/AesB
 /wHuAf8B6AH/AeoB/wHkAf8B5gH/AeAF/wMCAQNEAAE0AZwBxAH/AZMB4AH8Af8BkwHgAfwB/wGT
 AeAB/AH/AZMB4AH8Af8BkwHgAfwB/wGTAeAB/AH/AZMB4AH8Af8BkwHgAfwB/wGTAeAB/AH/AZMB
-4AH8Af8BkwHgAfwB/wGTAeAB/AH/AZMB4AH8Af8BlQHgAfwB/wF9AoAB/gQAAbIB8wH8Af8BpAHq
-Af0B/wGcAeAB8wH/AYYBxgHiAf8BYgGeAdcB/wFiAZ4B1wH/AWIBngHXAf8BYgGeAdcB/wFiAZ4B
-1wH/AWIBngHXAf8BYgGeAdcB/wFiAZ4B1wH/AWIBngHXAf8BYgGeAdcB/wFiAZ4B1wH/CAADCwEO
-Bv8B+wP/AfsB/wH+Af8B+AH/AfsB/wH1Af8B+AH/AfIB/wH1Af8B7wH/AfEB/wHrAf8B7gH/AegB
-/wHqAf8B5AX/AwIBA0QAATQBnQHEAf8BogHiAfoB/wGiAeIB+gH/AaIB4gH6Af8BogHiAfoB/wGi
-AeIB+gH/AaIB4gH6Af8BogHiAfoB/wGiAeIB+gH/AaIB4gH6Af8BogHiAfoB/wGiAeIB+gH/AaIB
-4gH6Af8BogHiAfoB/wGkAeMB+gH/AX0CgAH+BAABtAH0AfwB/wGoAewB/gH/AacB6wH+Af8BpAHq
-Af0B/wGjAekB/AH/AaEB6AH8Af8BnwHnAfsB/wGdAecB+wH/AZsB5gH7Af8BmQHlAfoB/wGXAeQB
-+gH/AZQB4wH5Af8DDAEPEAADCwEOBv8B+wP/AfsD/wH7Af8B/gH/AfgB/wH7Af8B9QH/AfgB/wHy
-Af8B9QH/Ae8B/wHxAf8B6wH/Ae4B/wHoBf8DAgEDRAABKwJ+AfwBLQGZAcIB/wEtAZkBwgH/AS0B
-mQHCAf8BLQGZAcIB/wEtAZkBwgH/AS0BmQHCAf8BLQGZAcIB/wEtAZkBwgH/AS0BmQHCAf8BLQGZ
-AcIB/wEtAZkBwgH/AS0BmQHCAf8BLQGZAcIB/wEtAZkBwgH/AWQCaAH0BAABtAHzAfoB/wGsAe4C
-/wGrAe0C/wGqAe0C/wGoAewB/gH/AacB6wH+Af8BZAGdAdMB/wFiAZkBzwH/AWABlQHKAf8BXgGR
-AcQB/wFbAYwBvgH/AVgBhwG5Af8EAQMEAQUDBAEFCAADCwEOBv8B+wP/AfsD/wH7A/8B+wH/Af4B
-/wH4Af8B+wH/AfUB/wH4Af8B8gH/AfUB/wHvAf8B8QH/AesF/wMCAQNEAANfAfsB/QHvAeEB/wH9
-AfEB5gH/Af0B8gHnAf8B/QHyAecB/wH9AfMB5wH/Af0B8wHnAf8B/QHtAd4B/wH9AfYB8AH/Af0B
-9gHwAf8B/QH2AfAB/wH9AfYB8AH/Af0B9gHwAf8B/QH2AfAB/wH9AfYB8AH/A2oB7QQAAWUBngHV
-Af8BuAH2AfsB/wG4AfYB+wH/AbgB9gH7Af8BuAH2AfsB/wG2AfQB/AH/BAIUAAEgAcMBSAH/ASAB
-wgFHAf8BHwG/AUcB/wgAAwsBDgb/AfsD/wH7A/8B+wP/AfsD/wH7Af8B/gH/AfgB/wH7Af8B9w3/
-BAFEAAN8AfgB/wHzAegC/wHUAa8C/wHXAbEC/wHcAbMC/wHhAbUC/wHoAcQB/wHsAecB4QH/AxMB
-GQwACAFAAAEmAc4BSgH/ASQBywFJAf8IAAMLAQ4G/wH7A/8B+wP/AfsD/wH7A/8B+wP/AfsB/wH+
-Af8B+QH/AfsB/wH3Bf8DMQFNSAADHQEoA4AB/gGzAaUBmAH/AbMBpQGYAf8BswGlAZgB/wGzAaUB
-mAH/AbMBpQGYAf8DRAF3SAABDQG4AUwB/wMFAQYDCgENAQ4BqgFHAf8BBwGcAT8B/wEkAcsBSQH/
-CAADCwEOBv8B+wP/AfsD/wH7A/8B+wP/AfsD/wH7A/8B+wX/AzEBTrgAAyMBMwECAawBQgH/GAAD
-agHmA2oB5gNqAeYDagHmA2oB5gNqAeYDagHmA2oB5gMxAU7/ABEAAUIBTQE+BwABPgMAASgDAAFA
-AwABYAMAAQEBAAEBBgABAxYAA/+BAAH/AcEB8AEPAfABAQGAAwABwAEDAcABAAGAAQABwAEAAYAB
-AQGAAQABgAEAAcABAAGAAQEBgAEAAYABAAHABQABgAEAAcAFAAGAAR8BwAEDBAABgAEfAcABBwQA
-AYABHwHAAQcEAAGAAR8BwAEHBAABgAEDAcABBwQAAYMBwQHAAQcCAAGAAQABgwLAAQcBgAEBAYAB
-AQGDAcEBwAEHAYABAQHAAQMBgwHjAv8BwAEDAeABBwGDAfcC/wHwAQ8B+AEfA/8BwQH/AR8CwQH/
-AcEBgAEAAf8BDwKAAgABwAGAAf4BBwKAAcABAAGAAQAB/AEDAoABwAEAAYgBAAH4AQECgAHAAQAB
-gAEAAfABAAKBAcABAAHAAQMB4AEBAvcBwAEDAeABBwHAAQEB8AEHAcABBwHwAQMBwAEDAf8BfwHA
-AQcB/gEBAYABBwH4AQ8BwAEHAf4BAQGAAQ8B+AEPAcABBwH+AREBgAEfAfgBDwHAAQcB/wEBAcAB
-PwH4AQ8BwAEHAf8BgwHAAX8B+AEPAcABBwH/Ac8O/wHAAQEB4AEBAeABAQHxAf8BwAEBAfgBAAH4
-AQAB4AH/Af4BfwHgAQAB4AEAAcAB/wH+AR8BwAEAAcABAAHAAX8BgAEBAcABAAHAAQABgAE/AYAB
-AQGAAQABgAEAAcABPwGAAQEBgAEBAYABAQHgAQ8BgAEBAYEBgAGBAYAB8AEHAYABAQGAAYEBgAGB
-AfgBAwGAAQEBgAEBAYABAQH+AQEBgAEBAcABAQHAAQEB/gEAAYABAQHAAQMBwAEDAf8BAQHAAQEB
-4AEDAeABAwH/AYEC/wHwAQcB8AEHAf8BwwL/AfwBHwH8AR8K/wHgAQEB8AEHAfABAwHAAQEBwAEB
-Af4BPwHwAQcBwAEBAcABAQHgAQMB8AEHAf4BfwHAAQEBwAEDAsEB/gE/AYABAQHgAQMBwAHwAYAB
-AQGAAQEB4AEDAQABeQGAAQEBgAEBAYEBgAEAATgBgAEBAYABAQGBAcABAAE4AYABAQGAAQEBgQHA
-AQABOAGAAQEBgAEBAeABAwEAAXkBgAEBAcABAQHgAQMBgAHwAYABAQHAAQEBwAEDAcEB4QGAAQEB
-wAEBAeABAwHwAQUBwAEBAcABAQH2ATcB8AEDAv8B4AEDAf4BPwH6AS8M/wGAAQEBgAEBAeABAQL/
-AwABAQHAAQEC/wMAAQEBwAEBAv8CAAGAAQEBwAEBAv8CAAGAAQEBwAEBAv8CAAGAAQABwAEBAv8C
-AAGAAQABwAEBAYADAAGAAQABwAEBAv8CAAGAAQABwAEBAv8CAAGAAQMBwAEBAv8CAAGAAQABwAEB
-Av8CAAGAAfgBwAEBAv8BAAFzAf8B/AHAAQMC/wEAAv8CwAEHBf8B5wHgAQ8I/ws='))
+4AH8Af8BkwHgAfwB/wGTAeAB/AH/AZMB4AH8Af8BlQHgAfwB/wOAAf4EAAGyAfMB/AH/AaQB6gH9
+Af8BnAHgAfMB/wGGAcYB4gH/AWIBngHXAf8BYgGeAdcB/wFiAZ4B1wH/AWIBngHXAf8BYgGeAdcB
+/wFiAZ4B1wH/AWIBngHXAf8BYgGeAdcB/wFiAZ4B1wH/AWIBngHXAf8BYgGeAdcB/wgAAwsBDgb/
+AfsD/wH7Af8B/gH/AfgB/wH7Af8B9QH/AfgB/wHyAf8B9QH/Ae8B/wHxAf8B6wH/Ae4B/wHoAf8B
+6gH/AeQF/wMCAQNEAAE0AZ0BxAH/AaIB4gH6Af8BogHiAfoB/wGiAeIB+gH/AaIB4gH6Af8BogHi
+AfoB/wGiAeIB+gH/AaIB4gH6Af8BogHiAfoB/wGiAeIB+gH/AaIB4gH6Af8BogHiAfoB/wGiAeIB
++gH/AaIB4gH6Af8BpAHjAfoB/wOAAf4EAAG0AfQB/AH/AagB7AH+Af8BpwHrAf4B/wGkAeoB/QH/
+AaMB6QH8Af8BoQHoAfwB/wGfAecB+wH/AZ0B5wH7Af8BmwHmAfsB/wGZAeUB+gH/AZcB5AH6Af8B
+lAHjAfkB/wMMAQ8QAAMLAQ4G/wH7A/8B+wP/AfsB/wH+Af8B+AH/AfsB/wH1Af8B+AH/AfIB/wH1
+Af8B7wH/AfEB/wHrAf8B7gH/AegF/wMCAQNEAAErAn4B/AEtAZkBwgH/AS0BmQHCAf8BLQGZAcIB
+/wEtAZkBwgH/AS0BmQHCAf8BLQGZAcIB/wEtAZkBwgH/AS0BmQHCAf8BLQGZAcIB/wEtAZkBwgH/
+AS0BmQHCAf8BLQGZAcIB/wEtAZkBwgH/AS0BmQHCAf8BZAJoAfQEAAG0AfMB+gH/AawB7gL/AasB
+7QL/AaoB7QL/AagB7AH+Af8BpwHrAf4B/wFkAZ0B0wH/AWIBmQHPAf8BYAGVAcoB/wFeAZEBxAH/
+AVsBjAG+Af8BWAGHAbkB/wQBAwQBBQMEAQUIAAMLAQ4G/wH7A/8B+wP/AfsD/wH7Af8B/gH/AfgB
+/wH7Af8B9QH/AfgB/wHyAf8B9QH/Ae8B/wHxAf8B6wX/AwIBA0QAA18B+wH9Ae8B4QH/Af0B8QHm
+Af8B/QHyAecB/wH9AfIB5wH/Af0B8wHnAf8B/QHzAecB/wH9Ae0B3gH/Af0B9gHwAf8B/QH2AfAB
+/wH9AfYB8AH/Af0B9gHwAf8B/QH2AfAB/wH9AfYB8AH/Af0B9gHwAf8DagHtBAABZQGeAdUB/wG4
+AfYB+wH/AbgB9gH7Af8BuAH2AfsB/wG4AfYB+wH/AbYB9AH8Af8EAhQAASABwwFIAf8BIAHCAUcB
+/wEfAb8BRwH/CAADCwEOBv8B+wP/AfsD/wH7A/8B+wP/AfsB/wH+Af8B+AH/AfsB/wH3Df8EAUQA
+A3wB+AH/AfMB6AL/AdQBrwL/AdcBsQL/AdwBswL/AeEBtQL/AegBxAH/AewB5wHhAf8DEwEZDAAI
+AUAAASYBzgFKAf8BJAHLAUkB/wgAAwsBDgb/AfsD/wH7A/8B+wP/AfsD/wH7A/8B+wH/Af4B/wH5
+Af8B+wH/AfcF/wMxAU1IAAMdASgDgAH+AbMBpQGYAf8BswGlAZgB/wGzAaUBmAH/AbMBpQGYAf8B
+swGlAZgB/wNEAXdIAAENAbgBTAH/AwUBBgMKAQ0BDgGqAUcB/wEHAZwBPwH/ASQBywFJAf8IAAML
+AQ4G/wH7A/8B+wP/AfsD/wH7A/8B+wP/AfsD/wH7Bf8DMQFOuAADIwEzAQIBrAFCAf8YAANqAeYD
+agHmA2oB5gNqAeYDagHmA2oB5gNqAeYDagHmAzEBTv8AEQABQgFNAT4HAAE+AwABKAMAAUADAAFg
+AwABAQEAAQEGAAEDFgAD/4EAAf8BwQHwAQ8B8AEBAYADAAHAAQMBwAEAAYABAAHAAQABgAEBAYAB
+AAGAAQABwAEAAYABAQGAAQABgAEAAcAFAAGAAQABwAUAAYABHwHAAQMEAAGAAR8BwAEHBAABgAEf
+AcABBwQAAYABHwHAAQcEAAGAAQMBwAEHBAABgwHBAcABBwIAAYABAAGDAsABBwGAAQEBgAEBAYMB
+wQHAAQcBgAEBAcABAwGDAeMC/wHAAQMB4AEHAYMB9wL/AfABDwH4AR8D/wHBAf8BHwLBAf8BwQGA
+AQAB/wEPAoACAAHAAYAB/gEHAoABwAEAAYABAAH8AQMCgAHAAQABiAEAAfgBAQKAAcABAAGAAQAB
+8AEAAoEBwAEAAcABAwHgAQEC9wHAAQMB4AEHAcABAQHwAQcBwAEHAfABAwHAAQMB/wF/AcABBwH+
+AQEBgAEHAfgBDwHAAQcB/gEBAYABDwH4AQ8BwAEHAf4BEQGAAR8B+AEPAcABBwH/AQEBwAE/AfgB
+DwHAAQcB/wGDAcABfwH4AQ8BwAEHAf8Bzw7/AcABAQHgAQEB4AEBAfEB/wHAAQEB+AEAAfgBAAHg
+Af8B/gF/AeABAAHgAQABwAH/Af4BHwHAAQABwAEAAcABfwGAAQEBwAEAAcABAAGAAT8BgAEBAYAB
+AAGAAQABwAE/AYABAQGAAQEBgAEBAeABDwGAAQEBgQGAAYEBgAHwAQcBgAEBAYABgQGAAYEB+AED
+AYABAQGAAQEBgAEBAf4BAQGAAQEBwAEBAcABAQH+AQABgAEBAcABAwHAAQMB/wEBAcABAQHgAQMB
+4AEDAf8BgQL/AfABBwHwAQcB/wHDAv8B/AEfAfwBHwr/AeABAQHwAQcB8AEDAcABAQHAAQEB/gE/
+AfABBwHAAQEBwAEBAeABAwHwAQcB/gF/AcABAQHAAQMCwQH+AT8BgAEBAeABAwHAAfABgAEBAYAB
+AQHgAQMBAAF5AYABAQGAAQEBgQGAAQABOAGAAQEBgAEBAYEBwAEAATgBgAEBAYABAQGBAcABAAE4
+AYABAQGAAQEB4AEDAQABeQGAAQEBwAEBAeABAwGAAfABgAEBAcABAQHAAQMBwQHhAYABAQHAAQEB
+4AEDAfABBQHAAQEBwAEBAfYBNwHwAQMC/wHgAQMB/gE/AfoBLwz/AYABAQGAAQEB4AEBAv8DAAEB
+AcABAQL/AwABAQHAAQEC/wIAAYABAQHAAQEC/wIAAYABAQHAAQEC/wIAAYABAAHAAQEC/wIAAYAB
+AAHAAQEBgAMAAYABAAHAAQEC/wIAAYABAAHAAQEC/wIAAYABAwHAAQEC/wIAAYABAAHAAQEC/wIA
+AYAB+AHAAQEC/wEAAXMB/wH8AcABAwL/AQAC/wLAAQcF/wHnAeABDwj/Cw=='))
 	#endregion
 	$imagelist2.ImageStream = $Formatter_binaryFomatter.Deserialize($System_IO_MemoryStream)
 	$Formatter_binaryFomatter = $null
@@ -19225,7 +19290,7 @@ Av8CAAGAAfgBwAEBAv8BAAFzAf8B/AHAAQMC/wEAAv8CwAEHBf8B5wHgAQ8I/ws='))
 	# toolstripseparator1
 	#
 	$toolstripseparator1.Name = 'toolstripseparator1'
-	$toolstripseparator1.Size = New-Object System.Drawing.Size(274, 6)
+	$toolstripseparator1.Size = New-Object System.Drawing.Size(257, 6)
 	#
 	# SaveTreeToJson
 	#
@@ -19258,7 +19323,7 @@ AABJRU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$SaveTreeToJson.Name = 'SaveTreeToJson'
-	$SaveTreeToJson.Size = New-Object System.Drawing.Size(409, 38)
+	$SaveTreeToJson.Size = New-Object System.Drawing.Size(393, 38)
 	$SaveTreeToJson.Text = 'Save Tree to Json'
 	$SaveTreeToJson.Visible = $False
 	$SaveTreeToJson.add_Click($SaveTreeToJson_Click)
@@ -19289,7 +19354,7 @@ emwAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$SaveStream.Name = 'SaveStream'
-	$SaveStream.Size = New-Object System.Drawing.Size(343, 38)
+	$SaveStream.Size = New-Object System.Drawing.Size(330, 38)
 	$SaveStream.Text = 'Save AlternateDataStream As'
 	$SaveStream.ToolTipText = 'Export the ADS to a file'
 	$SaveStream.Visible = $False
@@ -19635,7 +19700,7 @@ AP/AAAD/4AAA//8AAAs='))
 	[void]$contextmenustrip3.Items.Add($toolstripseparator13)
 	[void]$contextmenustrip3.Items.Add($toolstrip3_Exit)
 	$contextmenustrip3.Name = 'contextmenustrip3'
-	$contextmenustrip3.Size = New-Object System.Drawing.Size(254, 212)
+	$contextmenustrip3.Size = New-Object System.Drawing.Size(243, 212)
 	#
 	# toolstrip3_About
 	#
@@ -19663,7 +19728,7 @@ eyHVMsdkDxCX//wR6YhnmVz5gJ7VlbwgBvmSIXnd2PmbXy3PGZR3QHxlHVb26d7lV39ppbfAeuuV
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$toolstrip3_About.Name = 'toolstrip3_About'
-	$toolstrip3_About.Size = New-Object System.Drawing.Size(253, 38)
+	$toolstrip3_About.Size = New-Object System.Drawing.Size(242, 38)
 	$toolstrip3_About.Text = 'About'
 	$toolstrip3_About.add_Click($toolstrip3_About_Click)
 	#
@@ -19688,19 +19753,19 @@ qEQFeTsF9Jk/wdeuBF7MUNBH4ACGnnmeCiXQR+BAoXwx58dRUgJ9BA4Uyd0zD70TBSXQR+CARn9U
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$toolstrip3_Exit.Name = 'toolstrip3_Exit'
-	$toolstrip3_Exit.Size = New-Object System.Drawing.Size(253, 38)
+	$toolstrip3_Exit.Size = New-Object System.Drawing.Size(242, 38)
 	$toolstrip3_Exit.Text = 'Exit'
 	$toolstrip3_Exit.add_Click($toolstrip3_Exit_Click)
 	#
 	# toolstripseparator12
 	#
 	$toolstripseparator12.Name = 'toolstripseparator12'
-	$toolstripseparator12.Size = New-Object System.Drawing.Size(250, 6)
+	$toolstripseparator12.Size = New-Object System.Drawing.Size(239, 6)
 	#
 	# toolstripseparator13
 	#
 	$toolstripseparator13.Name = 'toolstripseparator13'
-	$toolstripseparator13.Size = New-Object System.Drawing.Size(250, 6)
+	$toolstripseparator13.Size = New-Object System.Drawing.Size(239, 6)
 	#
 	# toolstrip3_GitHub
 	#
@@ -19748,7 +19813,7 @@ K1tH6ZT3f2N4EdLUaAcyeEQUuQEGGGCAAXZV/AOzJeL1BlATUgAAAABJRU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$toolstrip3_GitHub.Name = 'toolstrip3_GitHub'
-	$toolstrip3_GitHub.Size = New-Object System.Drawing.Size(253, 38)
+	$toolstrip3_GitHub.Size = New-Object System.Drawing.Size(242, 38)
 	$toolstrip3_GitHub.Text = 'Visit Github'
 	$toolstrip3_GitHub.add_Click($toolstrip3_GitHub_Click)
 	#
@@ -19761,7 +19826,7 @@ K1tH6ZT3f2N4EdLUaAcyeEQUuQEGGGCAAXZV/AOzJeL1BlATUgAAAABJRU5ErkJgggs='))
 	$TreeSearch.Margin = '1, 0, 50, 0'
 	$TreeSearch.MaxLength = 50
 	$TreeSearch.Name = 'TreeSearch'
-	$TreeSearch.Size = New-Object System.Drawing.Size(400, 32)
+	$TreeSearch.Size = New-Object System.Drawing.Size(400, 29)
 	$TreeSearch.Text = 'Search'
 	$TreeSearch.ToolTipText = 'Type Text and press ENTER to search
 or click to clear'
@@ -19800,7 +19865,7 @@ CaYDQvIE0wEheYLpgJA8wXRASJ5gOiAkTzAdgEIbnzwAW/SimMRCu+kAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$GetNavPane.Name = 'GetNavPane'
-	$GetNavPane.Size = New-Object System.Drawing.Size(277, 32)
+	$GetNavPane.Size = New-Object System.Drawing.Size(260, 30)
 	$GetNavPane.Text = 'Get NavPane'
 	$GetNavPane.ToolTipText = 'Read Current User''s Explorer NavPane from HKCU'
 	$GetNavPane.Visible = $False
@@ -19837,7 +19902,7 @@ MzNXxQOyplgsdqOhoUEF4Afw1OqO75VPkitiB58A8DiALwDcLC8v/zoYDBZVVFRUATgN4GUA+1bD
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$MinimizeWindow.Name = 'MinimizeWindow'
-	$MinimizeWindow.Size = New-Object System.Drawing.Size(253, 38)
+	$MinimizeWindow.Size = New-Object System.Drawing.Size(242, 38)
 	$MinimizeWindow.Text = 'Minimize Window'
 	$MinimizeWindow.add_Click($MinimizeWindow_Click)
 	#
@@ -19876,14 +19941,14 @@ ggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$RestoreWindow.Name = 'RestoreWindow'
-	$RestoreWindow.Size = New-Object System.Drawing.Size(253, 38)
+	$RestoreWindow.Size = New-Object System.Drawing.Size(242, 38)
 	$RestoreWindow.Text = 'Restore Window'
 	$RestoreWindow.add_Click($RestoreWindow_Click)
 	#
 	# toolstripseparator14
 	#
 	$toolstripseparator14.Name = 'toolstripseparator14'
-	$toolstripseparator14.Size = New-Object System.Drawing.Size(250, 6)
+	$toolstripseparator14.Size = New-Object System.Drawing.Size(239, 6)
 	#
 	# GetTaskBand
 	#
@@ -19903,7 +19968,7 @@ CaYDQvIE0wEheYLpgJA8wXRASJ5gOiAkTzAdgEIbnzwAW/SimMRCu+kAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$GetTaskBand.Name = 'GetTaskBand'
-	$GetTaskBand.Size = New-Object System.Drawing.Size(277, 32)
+	$GetTaskBand.Size = New-Object System.Drawing.Size(260, 30)
 	$GetTaskBand.Text = 'Get Task Band'
 	$GetTaskBand.ToolTipText = 'Read Current User''s LNKs Pinned to Taskbar Items from HKCU'
 	$GetTaskBand.Visible = $False
@@ -19927,7 +19992,7 @@ CaYDQvIE0wEheYLpgJA8wXRASJ5gOiAkTzAdgEIbnzwAW/SimMRCu+kAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$GetStartPage2.Name = 'GetStartPage2'
-	$GetStartPage2.Size = New-Object System.Drawing.Size(277, 32)
+	$GetStartPage2.Size = New-Object System.Drawing.Size(260, 30)
 	$GetStartPage2.Text = 'Get StartPage2'
 	$GetStartPage2.ToolTipText = 'Read Current User''s LNKs Pinned to StartMenu from HKCU'
 	$GetStartPage2.Visible = $False
@@ -19951,7 +20016,7 @@ CaYDQvIE0wEheYLpgJA8wXRASJ5gOiAkTzAdgEIbnzwAW/SimMRCu+kAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$GetLockScreen.Name = 'GetLockScreen'
-	$GetLockScreen.Size = New-Object System.Drawing.Size(277, 32)
+	$GetLockScreen.Size = New-Object System.Drawing.Size(260, 30)
 	$GetLockScreen.Text = 'Get LockScreen'
 	$GetLockScreen.ToolTipText = 'Read Current User''s Lockscreen Wallpaper info from HKCU'
 	$GetLockScreen.add_Click($GetLockScreen_Click)
@@ -19974,7 +20039,7 @@ CaYDQvIE0wEheYLpgJA8wXRASJ5gOiAkTzAdgEIbnzwAW/SimMRCu+kAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$GetSearchMRU.Name = 'GetSearchMRU'
-	$GetSearchMRU.Size = New-Object System.Drawing.Size(277, 32)
+	$GetSearchMRU.Size = New-Object System.Drawing.Size(260, 30)
 	$GetSearchMRU.Text = 'Get Search MRU'
 	$GetSearchMRU.ToolTipText = 'Current User''s Search MRU from HKCU'
 	$GetSearchMRU.Visible = $False
@@ -20002,7 +20067,7 @@ zJRuAAAAAElFTkSuQmCCCw=='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$CarveBEEF0004.Name = 'CarveBEEF0004'
-	$CarveBEEF0004.Size = New-Object System.Drawing.Size(277, 32)
+	$CarveBEEF0004.Size = New-Object System.Drawing.Size(260, 30)
 	$CarveBEEF0004.Text = 'Carve BEEF0004'
 	$CarveBEEF0004.ToolTipText = 'Carve BEEF0004 ItemID Extensions from a raw image file'
 	$CarveBEEF0004.add_Click($CarveBEEF0004_Click)
@@ -20010,7 +20075,7 @@ zJRuAAAAAElFTkSuQmCCCw=='))
 	# toolstripseparator15
 	#
 	$toolstripseparator15.Name = 'toolstripseparator15'
-	$toolstripseparator15.Size = New-Object System.Drawing.Size(274, 6)
+	$toolstripseparator15.Size = New-Object System.Drawing.Size(257, 6)
 	#
 	# SaveNodeToJson
 	#
@@ -20053,7 +20118,7 @@ AAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$SaveNodeToJson.Name = 'SaveNodeToJson'
-	$SaveNodeToJson.Size = New-Object System.Drawing.Size(409, 38)
+	$SaveNodeToJson.Size = New-Object System.Drawing.Size(393, 38)
 	$SaveNodeToJson.Text = 'Save Selected Node to Json'
 	$SaveNodeToJson.Visible = $False
 	$SaveNodeToJson.add_Click($SaveNodeToJson_Click)
@@ -20061,7 +20126,7 @@ AAAASUVORK5CYIIL'))
 	# toolstripseparator16
 	#
 	$toolstripseparator16.Name = 'toolstripseparator16'
-	$toolstripseparator16.Size = New-Object System.Drawing.Size(406, 6)
+	$toolstripseparator16.Size = New-Object System.Drawing.Size(390, 6)
 	$toolstripseparator16.Visible = $False
 	#
 	# SaveTreeToJson1
@@ -20095,7 +20160,7 @@ AABJRU5ErkJgggs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$SaveTreeToJson1.Name = 'SaveTreeToJson1'
-	$SaveTreeToJson1.Size = New-Object System.Drawing.Size(343, 38)
+	$SaveTreeToJson1.Size = New-Object System.Drawing.Size(330, 38)
 	$SaveTreeToJson1.Text = 'Save Tree to Json'
 	$SaveTreeToJson1.Visible = $False
 	$SaveTreeToJson1.add_Click($SaveTreeToJson1_Click)
@@ -20438,10 +20503,10 @@ param
 	$GridForm.Controls.Add($datagridview)
 	$GridForm.Controls.Add($statusstrip1)
 	$GridForm.Controls.Add($menustrip1)
-	$GridForm.AutoScaleDimensions = New-Object System.Drawing.SizeF(10, 22)
+	$GridForm.AutoScaleDimensions = New-Object System.Drawing.SizeF(10, 20)
 	$GridForm.AutoScaleMode = 'Font'
 	$GridForm.BackColor = [System.Drawing.Color]::DimGray 
-	$GridForm.ClientSize = New-Object System.Drawing.Size(1632, 946)
+	$GridForm.ClientSize = New-Object System.Drawing.Size(1632, 860)
 	$GridForm.ForeColor = [System.Drawing.Color]::White 
 	#region Binary Data
 	$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
@@ -20764,8 +20829,8 @@ AP/AAAD/4AAA//8AAAs='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$GridForm.MainMenuStrip = $menustrip1
-	$GridForm.Margin = '8, 9, 8, 9'
-	$GridForm.MinimumSize = New-Object System.Drawing.Size(1654, 1002)
+	$GridForm.Margin = '8, 8, 8, 8'
+	$GridForm.MinimumSize = New-Object System.Drawing.Size(1654, 916)
 	$GridForm.Name = 'GridForm'
 	$GridForm.ShowInTaskbar = $False
 	$GridForm.StartPosition = 'CenterParent'
@@ -20805,7 +20870,7 @@ AP/AAAD/4AAA//8AAAs='))
 	$datagridview.EditMode = 'EditProgrammatically'
 	$datagridview.GridColor = [System.Drawing.Color]::DarkGray 
 	$datagridview.Location = New-Object System.Drawing.Point(0, 35)
-	$datagridview.Margin = '5, 6, 5, 6'
+	$datagridview.Margin = '5, 5, 5, 5'
 	$datagridview.Name = 'datagridview'
 	$datagridview.ReadOnly = $True
 	$System_Windows_Forms_DataGridViewCellStyle_3 = New-Object 'System.Windows.Forms.DataGridViewCellStyle'
@@ -20826,7 +20891,7 @@ AP/AAAD/4AAA//8AAAs='))
 	$datagridview.ShowCellErrors = $False
 	$datagridview.ShowEditingIcon = $False
 	$datagridview.ShowRowErrors = $False
-	$datagridview.Size = New-Object System.Drawing.Size(1632, 889)
+	$datagridview.Size = New-Object System.Drawing.Size(1632, 803)
 	$datagridview.TabIndex = 2
 	$datagridview.TabStop = $False
 	$datagridview.add_CellEnter($datagridview_CellEnter)
@@ -20838,7 +20903,7 @@ AP/AAAD/4AAA//8AAAs='))
 	$statusstrip1.Font = [System.Drawing.Font]::new('Segoe UI', '10')
 	$statusstrip1.GripStyle = 'Visible'
 	[void]$statusstrip1.Items.Add($Status)
-	$statusstrip1.Location = New-Object System.Drawing.Point(0, 924)
+	$statusstrip1.Location = New-Object System.Drawing.Point(0, 838)
 	$statusstrip1.Name = 'statusstrip1'
 	$statusstrip1.Padding = '2, 0, 23, 0'
 	$statusstrip1.ShowItemToolTips = $True
@@ -20866,7 +20931,7 @@ AP/AAAD/4AAA//8AAAs='))
 	[void]$contextmenustrip3.Items.Add($toolstripseparator5)
 	[void]$contextmenustrip3.Items.Add($Exit3)
 	$contextmenustrip3.Name = 'contextmenustrip3'
-	$contextmenustrip3.Size = New-Object System.Drawing.Size(163, 100)
+	$contextmenustrip3.Size = New-Object System.Drawing.Size(160, 100)
 	$contextmenustrip3.add_ItemClicked($contextmenustrip3_ItemClicked)
 	#
 	# Copy3
@@ -20900,7 +20965,7 @@ APZYMK7D0f8EAMDfDev+B5EakMlGoH3lAAAAAElFTkSuQmCCCw=='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Copy3.Name = 'Copy3'
-	$Copy3.Size = New-Object System.Drawing.Size(162, 30)
+	$Copy3.Size = New-Object System.Drawing.Size(159, 30)
 	$Copy3.Text = 'Copy'
 	$Copy3.ToolTipText = 'Copy Selerction'
 	#
@@ -20935,14 +21000,14 @@ APZYMK7D0f8EAMDfDev+B5EakMlGoH3lAAAAAElFTkSuQmCCCw=='))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$CopyAll3.Name = 'CopyAll3'
-	$CopyAll3.Size = New-Object System.Drawing.Size(162, 30)
+	$CopyAll3.Size = New-Object System.Drawing.Size(159, 30)
 	$CopyAll3.Text = 'Copy All'
 	$CopyAll3.ToolTipText = 'Copies the whole table (formated) so that it can be pasted to a text file or spreadsheet etc'
 	#
 	# toolstripseparator5
 	#
 	$toolstripseparator5.Name = 'toolstripseparator5'
-	$toolstripseparator5.Size = New-Object System.Drawing.Size(159, 6)
+	$toolstripseparator5.Size = New-Object System.Drawing.Size(156, 6)
 	#
 	# Exit3
 	#
@@ -20965,7 +21030,7 @@ qEQFeTsF9Jk/wdeuBF7MUNBH4ACGnnmeCiXQR+BAoXwx58dRUgJ9BA4Uyd0zD70TBSXQR+CARn9U
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Exit3.Name = 'Exit3'
-	$Exit3.Size = New-Object System.Drawing.Size(162, 30)
+	$Exit3.Size = New-Object System.Drawing.Size(159, 30)
 	$Exit3.Text = 'Close'
 	$Exit3.add_Click($Exit3_Click)
 	#
@@ -21048,7 +21113,7 @@ AV7Ld5CmKSRJAmF4q9ZVGgVl1b+CqYwCz/Nu6n9dE/sHHfgG0tPbIhRTVz8AAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$ExportTable.Name = 'ExportTable'
-	$ExportTable.Size = New-Object System.Drawing.Size(143, 29)
+	$ExportTable.Size = New-Object System.Drawing.Size(136, 29)
 	$ExportTable.Text = 'Export Table'
 	$ExportTable.ToolTipText = 'Export Table to CSV ot TXT'
 	$ExportTable.add_Click($ExportTable_Click)
@@ -21082,7 +21147,7 @@ gC83gHAGOPEfzoCL/FbMmUQAAAAASUVORK5CYIIL'))
 	$Formatter_binaryFomatter = $null
 	$System_IO_MemoryStream = $null
 	$Exit.Name = 'Exit'
-	$Exit.Size = New-Object System.Drawing.Size(161, 29)
+	$Exit.Size = New-Object System.Drawing.Size(154, 29)
 	$Exit.Text = 'Close Window'
 	$Exit.ToolTipText = 'Close this Window'
 	$Exit.add_Click($Exit_Click)
